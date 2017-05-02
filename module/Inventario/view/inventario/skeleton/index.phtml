@@ -1,3 +1,15 @@
+<?= $this->headLink()
+        ->appendStylesheet($this->basePath() . '/assets/plugins/dataTables/dataTables.bootstrap.css'); ?>
+
+<?= $this->headScript()
+         ->appendFile($this->basePath() . '/assets/plugins/dataTables/jquery.dataTables.js') 
+         ->appendFile($this->basePath() . '/assets/plugins/dataTables/dataTables.bootstrap.js'); ?>
+<script>
+    $(document).ready(function () {
+        $('#dataTables-example').dataTable();
+    });
+</script>
+
 <div class="inner">
     <div class="row">
         <div class="col-lg-12">

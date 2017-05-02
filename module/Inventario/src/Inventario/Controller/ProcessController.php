@@ -8,13 +8,16 @@
 namespace Inventario\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
-class SkeletonController extends AbstractActionController
+class ProcessController extends AbstractActionController
 {
     public function indexAction()
     {
-       
+        
+        $view = new ViewModel();
         
         return [];
+        
     }
 }

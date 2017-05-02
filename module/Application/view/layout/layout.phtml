@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php echo $this->doctype(); ?>
 <!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
@@ -6,24 +6,35 @@
  <!-- BEGIN HEAD -->
 <head>
      <meta charset="UTF-8" />
-    <title> Admin Dashboard </title>
-     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-	<meta content="" name="description" />
-	<meta content="" name="author" />
+    
+    <?php echo $this->headTitle($this->translate('Admin Dashboard'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    
+     <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>    
+        
+        
      <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <![endif]-->
     <!-- GLOBAL STYLES -->
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="assets/css/main.css" />
     
-    <link rel="stylesheet" href="assets/css/MoneAdmin.css" />
-    <link rel="stylesheet" href="assets/plugins/Font-Awesome/css/font-awesome.css" />
+    <?php echo $this->headLink(array(
+                                    'rel' => 'shortcut icon', 
+                                    'type' => 'image/vnd.microsoft.icon', 
+                                    'href' => $this->basePath() . '/img/favicon.ico'))
+                ->appendStylesheet($this->basePath('assets/plugins/bootstrap/css/bootstrap.css'))
+                ->appendStylesheet($this->basePath('assets/css/main.css'))
+                ->appendStylesheet($this->basePath('assets/css/MoneAdmin.css'))
+                ->appendStylesheet($this->basePath('assets/plugins/Font-Awesome/css/font-awesome.css'))?>
+
+    
+    
     <!--END GLOBAL STYLES -->
 
     <!-- PAGE LEVEL STYLES -->
-    <link href="assets/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <!--<link href="assets/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />-->
     <!-- END PAGE LEVEL  STYLES -->
     
        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -31,6 +42,32 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+
+    <!-- GLOBAL SCRIPTS -->
+    
+    <?php echo $this->headScript()
+            ->appendFile($this->basePath('assets/plugins/jquery-2.0.3.min.js'))
+            ->appendFile($this->basePath('assets/plugins/bootstrap/js/bootstrap.min.js'))
+            ->appendFile($this->basePath('assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js')); ?>    
+    
+    
+<!--    <script src="assets/plugins/jquery-2.0.3.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script>-->
+    
+    
+    <!-- END GLOBAL SCRIPTS -->
+    
+    <!-- PAGE LEVEL SCRIPTS -->
+    <!--    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
+            <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#dataTables-example').dataTable();
+                });
+            </script>-->
+     <!-- END PAGE LEVEL SCRIPTS -->
+
 </head>
      <!-- END HEAD -->
      <!-- BEGIN BODY -->
@@ -61,12 +98,15 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#"><i class="icon-user"></i> User Profile </a>
+                            <li>
+                                <a href="<?php echo $this->url('application') ?>"><i class="icon-user"></i> User Profile </a>
                             </li>
-                            <li><a href="#"><i class="icon-gear"></i> Settings </a>
+                            <li>
+                                <a href="<?php echo $this->url('application') ?>"><i class="icon-gear"></i> Settings </a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="users/logout"><i class="icon-signout"></i> Logout </a>
+                            <li>
+                                <a href="users/logout"><i class="icon-signout"></i> Logout </a>
                             </li>
                         </ul>
 
@@ -126,12 +166,12 @@
                     </a>
                     <ul class="collapse" id="component-nav">
                        
-                        <li class=""><a href="button.html"><i class="icon-angle-right"></i> Generar Factura Pre. </a></li>
-                         <li class=""><a href="icon.html"><i class="icon-angle-right"></i> Carregar Factura Pro. </a></li>
-                        <li class=""><a href="progress.html"><i class="icon-angle-right"></i> Esborrar Periode Facturació </a></li>
-                        <li class=""><a href="tabs_panels.html"><i class="icon-angle-right"></i> Sumatoris per Lot </a></li>
-                        <li class=""><a href="notifications.html"><i class="icon-angle-right"></i> Direcció d'Entitats </a></li>
-                         <li class=""><a href="more_notifications.html"><i class="icon-angle-right"></i> Llistat d'Usuaris Lot3 </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Generar Factura Pre. </a></li>
+                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Carregar Factura Pro. </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Esborrar Periode Facturació </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Sumatoris per Lot </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Direcció d'Entitats </a></li>
+                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Llistat d'Usuaris Lot3 </a></li>
                     </ul>
                 </li>
 
@@ -157,16 +197,16 @@
                             </a>
                             <ul class="collapse" id="DDL1-nav">
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i> XIC </a>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XIC </a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i> XEM </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XEM </a></li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i> XB </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XB </a></li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i> XPN </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XPN </a></li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i> Quadre Resum </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Quadre Resum </a></li>
                                 
                             </ul>
                         </li>
@@ -184,8 +224,8 @@
                     </a>
                     <ul class="collapse" id="provisio-nav">
                        
-                        <li class=""><a href="button.html"><i class="icon-angle-right"></i> Seguimiento Datos </a></li>
-                         <li class=""><a href="icon.html"><i class="icon-angle-right"></i> Seguimiento Moviles </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Seguimiento Datos </a></li>
+                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Seguimiento Moviles </a></li>
                     </ul>
                 </li>
 
@@ -204,8 +244,9 @@
                         <a href="<?php echo $this->url('inventario') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Planta Instal lada') ?></a>
                         
                         </li>
-                    
-                    
+                        <li class="">
+                            <a href="<?php echo $this->url('tramite') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Process') ?></a>
+                        </li>
                     </ul>
                 </li>
                 
@@ -235,20 +276,7 @@
         <p>&copy;  Diputació Barcelona &nbsp;2017 &nbsp;</p>
     </div>
     <!--END FOOTER -->
-     <!-- GLOBAL SCRIPTS -->
-    <script src="assets/plugins/jquery-2.0.3.min.js"></script>
-    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    <!-- END GLOBAL SCRIPTS -->
-        <!-- PAGE LEVEL SCRIPTS -->
-    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
-     <script>
-         $(document).ready(function () {
-             $('#dataTables-example').dataTable();
-         });
-    </script>
-     <!-- END PAGE LEVEL SCRIPTS -->
+
 </body>
      <!-- END BODY -->
 </html>

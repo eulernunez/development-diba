@@ -11,7 +11,9 @@ return array(
 //    ],
     'controllers' => array(
         'invokables' => array(
-            'Inventario\Controller\Skeleton' => Controller\SkeletonController::class
+            'Inventario\Controller\Skeleton' => Controller\SkeletonController::class,
+            'Inventario\Controller\Process' => Controller\ProcessController::class
+
         ),
     ),
 
@@ -28,6 +30,19 @@ return array(
                     ),
                 ),
             ),
+            
+            'tramite' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/procedure',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+            
+            
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
