@@ -32,7 +32,7 @@
         <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
     </button>
 </div>
-
+ 
 <table id="sedes"
            data-toggle="table"
            data-buttons-align="right"
@@ -76,7 +76,7 @@
                         <a class="update" href="javascript:void(0)" title="Update">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
-                        
+
                     </td>
                     <!--<td class="noWrap"></td>-->
                 </tr>
@@ -87,3 +87,13 @@
     <div class="clearfix">&nbsp;</div>
     <div id="result"></div>
 </div>
+
+<script>
+
+    var $table = $('#sedes');
+
+    $(function () {
+            $table.bootstrapTable('hideColumn', 'referenceCode');
+    });
+    
+</script>
