@@ -48,4 +48,17 @@ class Module
         );
     }
     
+    public function getServiceConfig() {
+        return array(
+            'factories' => array(
+                'Inventario\Model\SedesTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\SedesTable($dbAdapter);
+                    return $table;
+                },
+            ),
+        );
+    }    
+    
+    
 }

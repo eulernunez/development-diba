@@ -48,7 +48,12 @@
     <?php echo $this->headScript()
             ->appendFile($this->basePath('assets/plugins/jquery-2.0.3.min.js'))
             ->appendFile($this->basePath('assets/plugins/bootstrap/js/bootstrap.min.js'))
-            ->appendFile($this->basePath('assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js')); ?>    
+            ->appendFile($this->basePath('assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js'))
+            ->appendFile($this->basePath('assets/plugins/dataTables/jquery.dataTables.js'))         # Tabla Query
+            ->appendFile($this->basePath('assets/plugins/dataTables/dataTables.bootstrap.js'))
+            ->appendFile($this->basePath('js/bootstrap-table/bootstrap-table.js'))                  # Tabla Bootstrap 
+            ->appendFile($this->basePath('js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js'))
+            ; ?>
     
     
 <!--    <script src="assets/plugins/jquery-2.0.3.min.js"></script>

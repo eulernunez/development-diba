@@ -12,9 +12,30 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Inventario\Controller\Skeleton' => Controller\SkeletonController::class,
-            'Inventario\Controller\Process' => Controller\ProcessController::class
+           # 'Inventario\Controller\Process' => Controller\ProcessController::class
 
         ),
+        
+////////////////        
+        'factories' => array(
+ 			'Inventario\Controller\Process' => function($serviceLocator) {
+ 				$ctr = new \Inventario\Controller\ProcessController();
+				$ctr->setSedesTable(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('modelingService')
+ 				);
+
+			 return $ctr;
+ 		},
+      ),
+///////////////////////        
+        
+        
+        
+        
+        
+        
+        
     ),
 
     
@@ -101,4 +122,15 @@ return array(
             'Inventario' => __DIR__ . '/../view',
         ),
     ),
+    
+    //////////////////////////////
+    'service_manager' => array(
+        'factories' => array(
+            'modelingService' => function ($sm) {
+                return $sm->get('Inventario\Model\SedesTable');            
+            },
+        ),
+    ),
+    /////////////////////////////////                        
+
 );

@@ -12,12 +12,26 @@ use Zend\View\Model\ViewModel;
 
 class ProcessController extends AbstractActionController
 {
+    
+    protected $_sedesTable;
+    
     public function indexAction()
     {
+//        $view = new ViewModel();
+//        return [];
+        $sedes = $this->_sedesTable->fetchAll();
         
-        $view = new ViewModel();
-        
-        return [];
+        return new ViewModel(array(
+                    'sedes' => $this->_sedesTable->fetchAll(),
+                ));
         
     }
+    
+    
+    public function setSedesTable($service) {
+        $this->_sedesTable = $service;
+    }
+
+    
+    
 }

@@ -1,3 +1,74 @@
-<p>
-    Testing nuevo controller en el segundo módulo
-</p>
+<?=  $this->headLink()
+        ->appendStylesheet($this->basePath() . '/css/bootstrap-table/bootstrap-table.min.css'); ?>
+
+<?php # echo $this->headScript()
+      #   ->appendFile($this->basePath() . '/js/bootstrap-table/bootstrap-table.js?9') 
+      #   ->appendFile($this->basePath() . '/js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js?9'); ?>
+
+<style>
+    
+    .btn-primary {
+        width: 110px;
+    }
+    
+    .form-control {
+        width: 350px;
+    }
+    
+</style>
+
+
+<div class="inner">
+<div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
+<div id="toolbar">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">Baja</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">Eliminar</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCancelModal">Exportar</button>
+</div>
+
+<table id="sedes"
+           data-toggle="table"
+           data-buttons-align="right"
+           data-card-visible="true"
+           data-page-list="[10, 15, 30, 50, 100, All]"
+           data-page-size="10"
+           data-pagination="true"
+           data-pagination-detail-h-align="right"
+           data-pagination-h-align="left"
+           data-search="true"
+           data-search-align="right"
+           data-show-refresh="true"
+           data-show-toggle="false"
+           data-smart-display="true"
+           data-toolbar="#toolbar"
+           data-trim-on-search="true"
+           data-undefined-text=""
+           class="bootstrap-table ticketList table-nowrap">
+        <thead>
+            <tr class="ui-state-active noselect">
+                <th data-field="state" data-checkbox="true"></th>
+                <th data-field="referenceCode" data-sortable="true" data-width="10%">ID</th>
+                <th data-field="employeeId" data-sortable="true" data-width="10%">ID SEDE</th>
+                <th data-field="period" data-sortable="true" data-width="10%">CIF</th>
+                <th data-field="amount" data-sortable="true" data-width="70%">SEDE</th>
+                <!--<th data-field="conceptId" data-sortable="true" data-width="50%">POBLACIÓN</th>-->
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->sedes as $sede) : ?>
+            
+                <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
+                    <td></td>
+                    <td class="noWrap"><?= $sede->id; ?></td>
+                    <td class="noWrap"><?= $sede->idSede; ?></td>
+                    <td class="noWrap"><?= $sede->cif; ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($sede->sede)); ?></td>
+                    <!--<td class="noWrap"></td>-->
+                </tr>
+
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <div class="clearfix">&nbsp;</div>
+    <div id="result"></div>
+</div>
