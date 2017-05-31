@@ -63,6 +63,17 @@ return array(
                 ),
             ),
             
+
+            'alta' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/alta',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'alta',
+                    ),
+                ),
+            ),
             
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new

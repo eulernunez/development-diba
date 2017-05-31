@@ -33,5 +33,11 @@ class ProcessController extends AbstractActionController
     }
 
     
+    public function altaAction()
+    {
+        
+        return [];
+        
+    }
     
 }
