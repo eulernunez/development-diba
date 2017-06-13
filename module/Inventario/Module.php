@@ -24,10 +24,10 @@ class Module
 //     public function onBootstrap($e)
 //    {
 //        $app = $e->getApplication();
-//        $em = $app->getEventManager();
+//        #$em = $app->getEventManager();
 //        $sm = $app->getServiceManager();
 //        $config = $sm->get('Config');
-//        die('<pre>' . print_r($config, true) . '</pre>');
+//        die('INVENTARIO: <pre>' . print_r($config, true) . '</pre>');
 //    }
     
     
