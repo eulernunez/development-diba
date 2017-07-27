@@ -153,7 +153,7 @@
                     </a>-->
                     
                     <a href="<?php echo $this->url('application') ?>">
-                        <i class="icon-table"></i> <?php echo $this->translate('Dashboard') ?>
+                        <i class="icon-table"></i> <span style="font-size: 12px;"><?php echo $this->translate('Dashboard') ?></span>
                     </a>
                     
                 </li>
@@ -162,12 +162,13 @@
 
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-                        <i class="icon-tasks"> </i> Administración     
+                        <i class="icon-tasks"> </i> <span style="font-size: 12px;">Administración</span>
 	   
-                        <span class="pull-right">
+<!--                        <span class="pull-right">
                           <i class="icon-angle-left"></i>
                         </span>
-                       &nbsp; <span class="label label-default">6</span>&nbsp;
+                       &nbsp; <span class="label label-default">6</span>&nbsp;-->
+                       
                     </a>
                     <ul class="collapse" id="component-nav">
                        
@@ -183,12 +184,13 @@
 
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#DDL-nav">
-                        <i class=" icon-sitemap"></i> Facturació
+                        <i class=" icon-sitemap"></i> <span style="font-size: 12px;">Facturación</span>
 	   
-                        <span class="pull-right">
+<!--                        <span class="pull-right">
                             <i class="icon-angle-left"></i>
                         </span>
-                        &nbsp; <span class="label label-default">3</span>&nbsp;
+                        &nbsp; <span class="label label-default">3</span>&nbsp;-->
+                        
                     </a>
                     <ul class="collapse" id="DDL-nav">
                         <li>
@@ -221,11 +223,11 @@
 
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#provisio-nav">
-                        <i class="icon-tasks"> </i> Provisio     
-                        <span class="pull-right">
+                        <i class="icon-tasks"> </i> <span style="font-size: 12px;">Provisiones</span>     
+<!--                        <span class="pull-right">
                           <i class="icon-angle-left"></i>
                         </span>
-                       &nbsp; <span class="label label-default">2</span>&nbsp;
+                       &nbsp; <span class="label label-default">2</span>&nbsp;-->
                     </a>
                     <ul class="collapse" id="provisio-nav">
                        
@@ -237,11 +239,11 @@
 
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#inventari-nav">
-                        <i class="icon-bar-chart"> </i> Inventario     
-                        <span class="pull-right">
+                        <i class="icon-bar-chart"> </i> <span style="font-size: 12px;">Inventario</span>     
+<!--                        <span class="pull-right">
                           <i class="icon-angle-left"></i>
                         </span>
-                       &nbsp; <span class="label label-default">1</span>&nbsp;
+                       &nbsp; <span class="label label-default">1</span>&nbsp;-->
                     </a>
                     <ul class="collapse" id="inventari-nav">
                         <li class="">
@@ -261,6 +263,10 @@
                         <li class="">
                             <a href="<?php echo $this->url('alta') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Alta de Planta') ?></a>
                         </li>
+                        <li class="">
+                            <a href="<?php echo $this->url('wizard') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Wizard') ?></a>
+                        </li>
+                        
                     </ul>
                 </li>
                 
