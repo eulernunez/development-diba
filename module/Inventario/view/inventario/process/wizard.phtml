@@ -1,0 +1,910 @@
+<?=  $this->headLink()
+        ->appendStylesheet($this->basePath() . '/css/wizard/smart_wizard.css')
+        ->appendStylesheet($this->basePath() . '/css/wizard/smart_wizard_theme_dots.css')
+        ->appendStylesheet($this->basePath() . '/css/wizard/smart_wizard_theme_arrows.css'); ?>
+
+<?php echo $this->headScript()
+        ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js') 
+        ->appendFile($this->basePath() . '/js/wizard/jquery.smartWizard.js'); ?>
+
+<style>
+
+    fieldset 
+    {
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+    }	
+	
+    legend
+    {
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+    }
+    
+    .form-group
+    {
+     margin-bottom:5px;   
+    }
+    
+    .inner
+    {
+        /*padding: 2px;*/
+       
+    }
+
+    #smartwizard {
+        padding: 8px;
+    }
+
+</style>
+<?php
+
+$form = $this->form;
+#$form->setAttribute('action', $this->url('wizard'));
+$form->setAttribute('id', 'myForm');
+$form->setAttribute('role', 'form');
+$form->setAttribute('data-toggle', 'validator');
+$form->setAttribute('accept-charset', 'utf-8');
+#$form->setAttribute('novalidate', 'novalidate');
+
+$form->prepare();
+
+?>
+<div class="inner">
+ 
+    
+        <?= $this->form()->openTag($form); ?>
+        <!--<form action="/wizard" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8">-->
+                    
+        <!-- SmartWizard html -->
+        <div id="smartwizard" >
+            <ul>
+                <li><a href="#step-1">SEDE&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 1</small></a></li>
+                <li><a href="#step-2">CIRCUITO<br /><small>Step 2</small></a></li>
+                <li><a href="#step-3">EQUIPO GESTIONADO<br /><small>Step 3</small></a></li>
+                <li><a href="#step-4">EQUIPO NO GESTIONADO<br /><small>Step 4</small></a></li>
+                <li><a href="#step-5">FINAL<br /><small>Step 5</small></a></li>
+            </ul>
+           
+            <div style="border-style: none;">
+                <div id="step-1">
+
+<!--                    <h2>Sede</h2>
+                    <div class="col-lg-6">
+                        <div id="form-step-0" role="form" data-toggle="validator">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa el nombre de la sede" required>
+                                <div class="help-block with-errors"></div>
+                            </div>                            
+                            
+                            <div class="form-group">
+                                <label for="email">Email address:</label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Write your email address" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="idescat">Idescat</label>
+                                <input type="text" class="form-control" name="idescat" id="idescat" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="contacto">Contacto</label>
+                                <input type="text" class="form-control" name="contacto" id="contacto">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="text" class="form-control" name="telefono" id="telefono">
+                            </div>
+                    </div>-->
+                    
+        <fieldset class="col-md-12">    	
+            <legend>SEDE</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                <div class="col-lg-6">    
+                <div id="form-step-0" role="form" data-toggle="validator">
+
+                        <div class="form-group">
+                            <label class="control-label" for="nombre">Nombre</label>
+                            <?= $this->formInput($form->get('nombre')); ?>
+                            <!--<input type="text" class="form-control input-sm" id="nombre" name="nombre" aria-describedby="nombreHelp" placeholder="Ingresa el nombre de la sede" required>-->
+                            <!--<div class="help-block with-errors"></div>-->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="idescat">Idescat</label>
+                            <?= $this->formInput($form->get('idescat')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="direccion">Dirección</label>
+                            <?= $this->formTextarea($form->get('direccion')); ?>
+                            <!--<textarea class="form-control input-sm" id="direccion" name="direccion" rows="3" placeholder="Ingresa la dirección de la sede ..." required></textarea>-->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="poblacion">Población</label>
+                            <?= $this->formSelect($form->get('poblacion')); ?>    
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="provincia">Provincia</label>
+                            <?= $this->formSelect($form->get('provincia')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="horario">Horario</label>
+                            <?= $this->formInput($form->get('horario')); ?>
+                        </div>
+                    
+                </div>    
+                </div>    
+                <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                            <label for="contacto">Contacto</label>
+                            <?= $this->formInput($form->get('contacto')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <?= $this->formInput($form->get('telefono')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="observaciones">Observaciones</label>
+                            <?= $this->formTextarea($form->get('observaciones')); ?>
+                        </div>
+<!--
+                        <fieldset class="form-group">
+                          <legend>Mapa de Red</legend>
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                
+                        </fieldset>   
+
+                        <button type="submit" class="btn btn-primary">IMG:Upload galeria de imagenes</button>
+                     -->
+                </div>    
+                
+                </div>
+            </div>
+        </fieldset>    
+    
+                </div>
+                
+
+                <div id="step-2">
+<!--                    <h2>Your Name</h2>
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" name="name" id="email" placeholder="Write your name" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>-->
+                
+                
+        <fieldset class="col-md-12">    	
+            <legend>CIRCUITO</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">
+                    <div id="form-step-1" role="form" data-toggle="validator">    
+
+                            <div class="form-group">
+                                <label class="control-label" for="administrativo">Administrativo</label>
+                                <input type="text" class="form-control input-sm" id="administrativo" name="administrativo" aria-describedby="administrativoHelp" placeholder="Ingresar el administrativo" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="telefono-circuito">Teléfono</label>
+                                <input type="text" class="form-control input-sm" id="telefono-circuito" name="telefono-circuito" aria-describedby="telefonoHelp" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="cliente">Cliente</label>
+                                <select class="form-control input-sm" id="cliente" name="cliente" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">Ajuntament de Baga</option>
+                                    <option value="2">Ajuntament de El Brull</option>
+                                    <option value="3">Ajuntament de Calonge de Segarra</option>
+                                    <option value="4">Diputacion de Barcelona</option>
+                                    <option value="5">Serveis Municipal de Montseny S.L.</option>
+                                    <option value="6">Xarxa Audiovisual Local</option>
+                                </select>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="tecnologia">Tecnología</label>
+                                <select class="form-control input-sm" id="tecnologia" name="tecnologia" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">FO</option>
+                                    <option value="2">FTTH</option>
+                                    <option value="3">xDSL</option>
+                                    <option value="4">UMTS</option>
+                                    <option value="5">LTE</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="velocidad">Velocidad</label>
+                                <select class="form-control input-sm" id="velocidad" name="velocidad" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">10MB</option>
+                                    <option value="2">100MB</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="criticidad">Criticidad</label>
+                                <select class="form-control input-sm" id="criticidad" name="criticidad" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">Crítica</option>
+                                    <option value="2">Normal</option>
+                                </select>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="is-backup" name="is-backup" type="checkbox" class="form-check-input">
+                                  ¿Tiene Backup?
+                                </label>
+                            </div>                        
+
+                    </div>    
+                    </div>
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="factura">Factura</label>
+                            <select class="form-control input-sm" id="factura" name="factura">
+                                <option></option>
+                                <option>AB-526389</option>
+                                <option>HB-958777</option>
+                                <option>GG-956857</option>
+                                <option>KJ-525689</option>
+                                <option>PL-955577</option>
+                                <option>XC-922877</option>    
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="estado">Estado</label>
+                            <select class="form-control input-sm" id="estado" name="estado">
+                                <option>Pre-Alta</option>
+                                <option selected>Alta</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" id="gestionado" name="gestionado" class="form-check-input">
+                                  ¿Es gestionado?
+                                </label>
+                            </div>                        
+                        </div>
+                        
+                        <div class="grid-caudal" style="display: none;">
+                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
+                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
+                            <div class="panel-body">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="" class="form-check-input"></th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Oro</td>
+                                            <td>60</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option selected="">Mb</option>
+                                                    <option>%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Plata</td>
+                                            <td>30</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option selected="">Mb</option>
+                                                    <option>%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+                
+    <div id="circuit-backup" class="panel-body" style="display:none;">
+        <fieldset class="col-md-12">    	
+            <legend>CIRCUITO BACKUP</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                            <div class="form-group">
+                                <label class="control-label" for="administrativo-backup">Administrativo</label>
+                                <input type="text" class="form-control input-sm" id="administrativo-backup" name="administrativo-backup" aria-describedby="administrativo-backupHelp">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="telefono-circuito-backup">Teléfono</label>
+                                <input type="text" class="form-control input-sm" id="telefono-circuito-backup" name="telefono-circuito-backup" aria-describedby="telefono-backupHelp">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="cliente-backup">Cliente</label>
+                                <select class="form-control input-sm" id="cliente-backup" name=cliente-backup"">
+                                    <option></option>
+                                    <option>Ajuntament de Baga</option>
+                                    <option>Ajuntament de El Brull</option>
+                                    <option>Ajuntament de Calonge de Segarra</option>
+                                    <option>Diputacion de Barcelona</option>
+                                    <option>Serveis Municipal de Montseny S.L.</option>
+                                    <option>Xarxa Audiovisual Local</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="tecnologia-backup">Tecnología</label>
+                                <select class="form-control input-sm" id="tecnologia-backup" name="tecnologia-backup">
+                                    <option></option>
+                                    <option>FO</option>
+                                    <option>FTTH</option>
+                                    <option>xDSL</option>
+                                    <option>UMTS</option>
+                                    <option>LTE</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="velocidad-backup">Velocidad</label>
+                                <select class="form-control input-sm" id="velocidad-backup" name="velocidad-backup">
+                                    <option></option>
+                                    <option>10MB</option>
+                                    <option>100MB</option>
+                                </select>
+                            </div>
+
+
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                            <div class="form-group">
+                                <label class="control-label" for="estado-backup">Estado</label>
+                                <select class="form-control input-sm" id="estado-backup" name="estado-backup">
+                                    <option>Pre-Alta</option>
+                                    <option selected>Alta</option>
+                                </select>
+                            </div>   
+                    
+                    
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                      <input type="checkbox" id="gestionado-backup" name="gestionado-backup" class="form-check-input">
+                                      ¿Es gestionado?
+                                    </label>
+                                </div>                        
+                            </div>
+                        
+                        <div class="grid-caudal-backup" style="display: none;">
+                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
+                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
+                            <div class="panel-body">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="" class="form-check-input"></th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Bronce</td>
+                                            <td>60</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option>Mb</option>
+                                                    <option selected="">%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+            </div>
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+                
+            </div>
+            
+            
+            
+        </fieldset>				
+        <div class="clearfix"></div>                
+                
+
+
+
+
+
+
+
+                
+                </div>
+                
+                <div id="step-3">
+<!--                    <h2>Your Address</h2>
+                    <div id="form-step-2" role="form" data-toggle="validator">
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea class="form-control" name="address" id="address" rows="3" placeholder="Write your address..." required></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>-->
+
+
+        <fieldset class="col-md-12">    	
+            <legend>EQUIPO GESTIONADO</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+                        <div id="form-step-2" role="form" data-toggle="validator">
+                         
+                            <div class="form-group">
+                                <label class="control-label" for="servicio">Servicio</label>
+                                <select class="form-control input-sm" id="servicio" name="servicio" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">Macrolan</option>
+                                    <option value="2">DataInternet</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="nemonico">Nemónico</label>
+                                <input type="text" class="form-control" id="nemonico" name="nemonico" aria-describedby="nemonicoHelp" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="ip-gestion">IP Gestión</label>
+                                <input type="text" class="form-control" id="ip-gestion" name="ip-gestion" aria-describedby="ip-gestionHelp" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="nivel">Nivel</label>
+                                <select class="form-control input-sm" id="nivel" name="nivel" required>
+                                    <option></option>
+                                    <option>Nivel 1</option>
+                                    <option>Nivel 2</option>
+                                    <option>Nivel 3</option>
+                                    <option>Nivel 4</option>
+                                    <option>Nivel 5</option>
+                                    <option>Nivel 6</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="nemonico-n1">Nemónico N1</label>
+                                <select class="form-control input-sm" id="nemonico-n1" name="nemonico-n1" required>
+                                    <option>NA</option>
+                                    <option>dipdb-saso</option>
+                                    <option>dipdb-xamo</option>
+                                    <option>dipdb-catp</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
+                                <input type="text" class="form-control input-sm" id="logos-alta" name="logos-alta" aria-describedby="logos-altaHelp" required>
+                            </div>    
+                        
+                            <div class="form-group">
+                                <label class="control-label" for="ubicacion">Ubicación</label>
+                                <input type="text" class="form-control input-sm" id="ubicacion" name="ubicacion" aria-describedby="ubicacionHelp" required>
+                            </div>
+                        </div>
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                                <label class="control-label" for="fabricante">Fabricante</label>
+                                <select class="form-control input-sm" id="fabricante" name="fabricante">
+                                    <option></option>
+                                    <option>CISCO</option>
+                                    <option>Alcatel-Lucent</option>
+                                    <option>Juniper</option>
+                                    <option>Huawei</option>
+                                </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="exampleSelect1">Modelo</label>
+                            <select class="form-control" id="modelo" name="modelo">
+                                <option>HP-98812</option>
+                                <option>XC-1289</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-equipo">Contacto</label>
+                            <input type="text" class="form-control input-sm" id="contacto-equipo" name="contacto-equipo" aria-describedby="contacto-equipoHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-equipo-horario">Horario</label>
+                            <input type="text" class="form-control input-sm" id="contacto-equipo-horario" name="contacto-equipo-horario" aria-describedby="contacto-equipo-horarioHelp">
+                        </div>
+                                                
+                         <div class="form-group">
+                            <label class="control-label" for="estado-equipo">Estado</label>
+                            <select class="form-control input-sm" id="estado-equipo" name="estado-equipo">
+                                <option selected>Pre-Alta</option>
+                                <option>Alta</option>
+                            </select>
+                        </div>
+                        
+                         <div class="form-group">
+                            <label class="control-label" for="observacion-equipo">Observaciones</label>
+                            <textarea class="form-control input-sm" id="observacion-equipo" name="observacion-equipo" rows="5"></textarea>
+                        </div>
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+            </div>
+            
+        </fieldset>				
+
+        </div>
+                
+
+                <div id="step-4" class="">
+                    
+        <fieldset class="col-md-12">    	
+            <legend>EQUIPO NO GESTIONADO</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+                        <div id="form-step-3" role="form" data-toggle="validator">
+                            <div class="form-group">
+                                <label class="control-label" for="servicio-no-gestionado">Servicio</label>
+                                <select class="form-control input-sm" id="servicio-no-gestionado" name="servicio-no-gestionado" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1" selected>Navegación</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="propiedad">Propiedad Router</label>
+                                <select class="form-control input-sm" id="propiedad" name="propiedad" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">Telefónica</option>
+                                    <option value="2">Cliente</option>
+                                </select>
+                            </div>                        
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="tipo-ip">Tipo IP</label>
+                                <select class="form-control input-sm" id="tipo-ip" name="tipo-ip" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">Dinámico</option>
+                                    <option value="2">Estático</option>
+                                </select>
+                            </div>                        
+
+                            <div class="form-group">
+                                <label class="control-label" for="ip-no-gestionado">IP</label>
+                                <input type="text" class="form-control input-sm" id="ip-no-gestionado" name="ip-no-gestionado" aria-describedby="ip-no-gestionadoHelp" required>
+                            </div>
+                        
+                            <div class="form-group">
+                                <label class="control-label" for="red">Red</label>
+                                <select class="form-control input-sm" id="red" name="red" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">Xic</option>
+                                    <option value="2">Xem</option>
+                                    <option value="3">Xal</option>
+                                </select>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="usos">Usos</label>
+                                <select class="form-control input-sm" id="usos" name="usos" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="1">Corporativo</option>
+                                    <option value="2">Usuarios</option>
+                                    <option value="3">parques</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+                    </div>    
+                    
+                    <div class="col-lg-6">
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-no-gestionado">Contacto</label>
+                            <input type="text" class="form-control input-sm" id="contacto-no-gestionado" name="contacto-no-gestionado">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="telefono-no-gestionado">Teléfono</label>
+                            <input type="text" class="form-control input-sm" id="telefono-no-gestionado" name="telefono-no-gestionado">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="horario-no-gestionado">Horario</label>
+                            <input type="text" class="form-control input-sm" id="horario-no-gestionado" name="horario-no-gestionado">
+                        </div>
+                                                
+                        <div class="form-group">
+                            <label class="control-label" for="observacion-no-gestionado">Observaciones</label>
+                            <textarea class="form-control input-sm" id="observacion-no-gestionado" name="observacion-no-gestionado" rows="5"></textarea>
+                        </div>
+                        
+                    </div>    
+                
+                </div>
+                
+            </div>
+            
+        </fieldset>				
+                    
+                    
+                    
+                    
+                </div>
+
+
+                <div id="step-5" class="">
+                    <h2>Final</h2>
+                    <p>
+                        Keep your smile :) 
+                    </p>
+                    <div id="form-step-4" role="form" data-toggle="validator">
+                        <div class="form-group">
+                            <label for="terms">I agree with this prototype.</label>
+                            <input type="checkbox" id="terms" name="terms" data-error="Please accept the Terms and Conditions" required>  
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!--</form>-->
+        <?= $this->form()->closeTag($form); ?>
+        <div id="box" style="border:1px solid #ccc;"></div>
+.        
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+            
+            // Toolbar extra buttons
+            var btnFinish = $('<button></button>').text('Finish')
+                                             .addClass('btn btn-info')
+                                             .on('click', function(){
+                                                    if( !$(this).hasClass('disabled')){ 
+                                                        var elmForm = $("#myForm");
+                                                        if(elmForm){
+                                                            elmForm.validator('validate'); 
+                                                            var elmErr = elmForm.find('.has-error');
+                                                            if(elmErr && elmErr.length > 0){
+                                                                alert('Oops we still have error in the form');
+                                                                return false;    
+                                                            }else{
+                                                                alert('Great! we are ready to submit form');
+                                                                elmForm.submit();
+                                                                return false;
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                });
+            var btnCancel = $('<button></button>').text('Cancel')
+                                             .addClass('btn btn-danger')
+                                             .on('click', function(){ 
+                                                    $('#smartwizard').smartWizard("reset"); 
+                                                    $('#myForm').find("input, textarea, select").val(""); 
+                                                });                         
+            
+            
+            
+            
+            var btnSaveAndOut = $('<button></button>').text('Save&Out')
+                                             .addClass('btn btn-success')
+                                             .on('click', function(){
+                                                 
+                                                var url = 'http://application.localhost/com'
+                                                //var formData = {token: 'XAxdvfr2Jmkp845Gsc#45fdfse4539', idescat: 'HY90O827342'};
+                                    //            var  formData = new FormData("#myForm");
+                                    //            urlPath = baseUrl + '/approvals/pch/submit-manager-approval/'; 
+                                                   $.ajax({
+                                                       type: "POST",
+                                                       url: url,
+                                                       data: $('#myForm').serialize(),
+                                                       cache: false,
+                                                       success: function (html) {
+                                           //                html = "<div class='alert alert-success'>Success!</div>";
+                                                           $("#box").html(html);
+                                    //                       $('.btn').hide();
+                                                       },
+                                                       error: function (xhr, status) {
+                                                           html = "<div class='alert alert-danger'>Error!</div>"
+                                                           $("#box").html(html);
+                                                       }
+                                                   });
+                                                
+                                            });                         
+ 
+            
+            // Smart Wizard
+            $('#smartwizard').smartWizard({ 
+                selected: 0, 
+                theme: 'arrows',
+                transitionEffect:'fade',
+                
+                toolbarSettings: {toolbarPosition: 'top',
+                                  toolbarExtraButtons: [btnFinish, btnCancel, btnSaveAndOut]
+                },
+                anchorSettings: {
+                    markDoneStep: true, // add done css
+                    markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
+                    removeDoneStepOnNavigateBack: true, // While navigate back done step after active step will be cleared
+                    enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
+                }
+            });
+            
+            
+            $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+                
+                
+                
+                var elmForm = $("#form-step-" + stepNumber);
+                
+//                alert('TEST: ' + elmForm);
+                
+                // stepDirection === 'forward' :- this condition allows to do the form validation 
+                // only on forward navigation, that makes easy navigation on backwards still do the validation when going next
+                if(stepDirection === 'forward' && elmForm){
+                    elmForm.validator('validate');
+                    
+                    var elmErr = elmForm.children('.has-error');
+                    
+//                    alert('LONGITUD: ' + elmErr.length);
+                    
+                    if(elmErr && elmErr.length > 0){
+                        // Form validation failed
+                        return false;    
+                    }
+                }
+                return true;
+            });
+            
+            
+            
+            
+            
+            
+            $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
+                // Enable finish button only on last step
+                if(stepNumber == 4){ 
+                    $('.btn-finish').removeClass('disabled');  
+                }else{
+                    $('.btn-finish').addClass('disabled');
+                }
+            });                               
+            
+        }); 
+
+
+
+
+
+
+// Step 2
+    $('#gestionado').click(function(){
+        if (this.checked) {
+            $('.grid-caudal').css('display','block');
+        }
+        else {
+             $('.grid-caudal').css('display','none');
+        }
+    });
+    
+    $('#is-backup').click(function(){
+        if (this.checked) {
+            $('#circuit-backup').css('display','block');
+        }
+        else {
+             $('#circuit-backup').css('display','none');
+        }
+    });
+
+    
+    $('#gestionado-backup').click(function(){
+        if (this.checked) {
+            $('.grid-caudal-backup').css('display','block');
+        }
+        else {
+
+             $('.grid-caudal-backup').css('display','none');
+        }
+    });
+
+//    var $table = $('#sedes');
+//    $(function () {
+//            $table.bootstrapTable('hideColumn', 'referenceCode');
+//    });
+    
+</script>
