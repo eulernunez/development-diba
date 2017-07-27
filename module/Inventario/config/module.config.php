@@ -63,7 +63,40 @@ return array(
                 ),
             ),
             
-
+            'formulario' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/formulario',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'form',
+                    ),
+                ),
+            ),
+            
+            'sede' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/sede',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'sede',
+                    ),
+                ),
+            ),
+            
+            'circuito' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/circuito',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'circuito',
+                    ),
+                ),
+            ),
+            
+            
             'alta' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -74,6 +107,86 @@ return array(
                     ),
                 ),
             ),
+            
+            'wizard' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/wizard',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'wizard',
+                    ),
+                ),
+            ),
+
+            'equipo' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/equipo',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'equipo',
+                    ),
+                ),
+            ),
+            
+            'equipo-no-gestionado' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/equipo-no-gestionado',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'equipo-no-gestionado',
+                    ),
+                ),
+            ),
+            
+            
+            'tabs' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/tabs',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'tabs',
+                    ),
+                ),
+            ),
+
+            'com' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/com',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'com',
+                    ),
+                ),
+            ),
+            
+
+//            'randomAction' => array(
+//                'type' => 'Segment',
+//                'options' => array(
+//                    'route' => '/pricebot/[:brand]/[:max]',
+//                    'constraints' => array(
+//                        'brand' => '[\w\d\-\_\s]+',
+//                        'max' => '\d+',
+//                    ),
+//                    'defaults' => array(
+//                        'controller' => 'Pricebot\Controller\Index',
+//                        'action' => 'random',
+//                    ),
+//                ),
+//            ),
+            
+            
+            
+            
+            
+            
+            
+            
             
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
