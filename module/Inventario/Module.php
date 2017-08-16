@@ -9,8 +9,9 @@ namespace Inventario;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\ModuleManager\Feature\FormElementProviderInterface;
 
-class Module
+class Module #implements FormElementProviderInterface
 {
 
 //    public function onBootstrap(MvcEvent $e)
@@ -56,9 +57,57 @@ class Module
                     $table = new Model\SedesTable($dbAdapter);
                     return $table;
                 },
+                'Inventario\Model\Sede' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Sede($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\Contacto' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Contacto($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\Circuito' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Circuito($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\Caudal' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Caudal($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\Equipo' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Equipo($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\EquipoNoGestionado' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\EquipoNoGestionado($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\IpWan' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\IpWan($dbAdapter);
+                    return $table;
+                },
+                        
+                        
+                        
             ),
         );
     }    
+    
+  
+//    public function getFormElementConfig()
+//    {
+//        return array(
+//            'invokables' => array(
+//                'phone' => 'Inventario\Form\Element\Phone'
+//            )
+//        );
+//    }    
     
     
 }
