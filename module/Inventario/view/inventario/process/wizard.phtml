@@ -48,6 +48,14 @@
         padding: 8px;
     }
 
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 4px;
+       
+        
+    }
+    
+    
+    
 </style>
 <?php
 
@@ -65,60 +73,26 @@ $form->prepare();
 <div class="inner">
  
     
-        <?= $this->form()->openTag($form); ?>
-        <!--<form action="/wizard" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8">-->
-                    
-        <!-- SmartWizard html -->
-        <div id="smartwizard" >
-            <ul>
-                <li><a href="#step-1">SEDE&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 1</small></a></li>
-                <li><a href="#step-2">CIRCUITO<br /><small>Step 2</small></a></li>
-                <li><a href="#step-3">EQUIPO GESTIONADO<br /><small>Step 3</small></a></li>
-                <li><a href="#step-4">EQUIPO NO GESTIONADO<br /><small>Step 4</small></a></li>
-                <li><a href="#step-5">FINAL<br /><small>Step 5</small></a></li>
-            </ul>
-           
-            <div style="border-style: none;">
-                <div id="step-1">
+    <?= $this->form()->openTag($form); ?>
+    <!--<form action="/wizard" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8">-->
 
-<!--                    <h2>Sede</h2>
-                    <div class="col-lg-6">
-                        <div id="form-step-0" role="form" data-toggle="validator">
-                            <div class="form-group">
-                                <label for="nombre">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa el nombre de la sede" required>
-                                <div class="help-block with-errors"></div>
-                            </div>                            
-                            
-                            <div class="form-group">
-                                <label for="email">Email address:</label>
-                                <input type="email" class="form-control" name="email" id="email" placeholder="Write your email address" required>
-                                <div class="help-block with-errors"></div>
-                            </div>
+    <!-- SmartWizard html -->
+    <div id="smartwizard" >
+        <ul>
+            <li><a href="#step-1">SEDE&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 1</small></a></li>
+            <li><a href="#step-2">CIRCUITO<br /><small>Step 2</small></a></li>
+            <li><a href="#step-3">&nbsp;&nbsp;EQUIPO&nbsp;&nbsp;GESTIONADO&nbsp;&nbsp;<br /><small>Step 3</small></a></li>
+            <li><a href="#step-4">EQUIPO RESIDENCIAL<br /><small>Step 4</small></a></li>
+            <li><a href="#step-5">IP WAN&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 5</small></a></li>
+            <li><a href="#step-6">FINAL&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 5</small></a></li>
+        </ul>
 
-                            <div class="form-group">
-                                <label for="idescat">Idescat</label>
-                                <input type="text" class="form-control" name="idescat" id="idescat" required>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="contacto">Contacto</label>
-                                <input type="text" class="form-control" name="contacto" id="contacto">
-                            </div>
-                            <div class="form-group">
-                                <label for="telefono">Teléfono</label>
-                                <input type="text" class="form-control" name="telefono" id="telefono">
-                            </div>
-                    </div>-->
-                    
-        <fieldset class="col-md-12">    	
-            <legend>SEDE</legend>
-            <div class="panel panel-default">
-                <div class="panel-body">
+        <div style="border-style: none;">
+            <div id="step-1">
+                <fieldset class="col-md-12">    	
+                <legend>SEDE</legend>
+                <div class="panel panel-default">
+                    <div class="panel-body">
                     
                 <div class="col-lg-6">    
                 <div id="form-step-0" role="form" data-toggle="validator">
@@ -172,7 +146,7 @@ $form->prepare();
 
                         <div class="form-group">
                             <label for="observaciones">Observaciones</label>
-                            <?= $this->formTextarea($form->get('observaciones')); ?>
+                            <?= $this->formTextarea($form->get('observacion')); ?>
                         </div>
 <!--
                         <fieldset class="form-group">
@@ -197,7 +171,7 @@ $form->prepare();
                 </div>
                 
 
-                <div id="step-2">
+            <div id="step-2">
 <!--                    <h2>Your Name</h2>
                     <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
@@ -208,208 +182,148 @@ $form->prepare();
                     </div>-->
                 
                 
-        <fieldset class="col-md-12">    	
-            <legend>CIRCUITO</legend>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    
-                    <div class="col-lg-6">
-                    <div id="form-step-1" role="form" data-toggle="validator">    
+                <fieldset class="col-md-12">    	
+                    <legend>CIRCUITO</legend>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-lg-6">
+                                <div id="form-step-1" role="form" data-toggle="validator">    
 
-                            <div class="form-group">
-                                <label class="control-label" for="administrativo">Administrativo</label>
-                                <input type="text" class="form-control input-sm" id="administrativo" name="administrativo" aria-describedby="administrativoHelp" placeholder="Ingresar el administrativo" required>
+                                    <div class="form-group">
+                                        <label class="control-label" for="administrativo">Administrativo</label>
+                                        <?= $this->formInput($form->get('cadministrativo')); ?>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="telefono-circuito">Teléfono</label>
+                                        <?= $this->formInput($form->get('ctelefono')); ?>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="cliente">Cliente</label>
+                                        <?= $this->formSelect($form->get('ccliente')); ?>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="tecnologia">Tecnología</label>
+                                        <?= $this->formSelect($form->get('ctecnologia')); ?>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="velocidad">Velocidad</label>
+                                        <?= $this->formSelect($form->get('cvelocidad')); ?>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="criticidad">Criticidad</label>
+                                        <?= $this->formSelect($form->get('ccriticidad')); ?>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input id="cbackup" name="cbackup" type="checkbox" class="form-check-input" value="1">
+                                          ¿Tiene Backup?
+                                        </label>
+                                    </div>                        
+                                </div>    
                             </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="telefono-circuito">Teléfono</label>
-                                <input type="text" class="form-control input-sm" id="telefono-circuito" name="telefono-circuito" aria-describedby="telefonoHelp" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="cliente">Cliente</label>
-                                <select class="form-control input-sm" id="cliente" name="cliente" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Ajuntament de Baga</option>
-                                    <option value="2">Ajuntament de El Brull</option>
-                                    <option value="3">Ajuntament de Calonge de Segarra</option>
-                                    <option value="4">Diputacion de Barcelona</option>
-                                    <option value="5">Serveis Municipal de Montseny S.L.</option>
-                                    <option value="6">Xarxa Audiovisual Local</option>
-                                </select>
-                                
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="tecnologia">Tecnología</label>
-                                <select class="form-control input-sm" id="tecnologia" name="tecnologia" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">FO</option>
-                                    <option value="2">FTTH</option>
-                                    <option value="3">xDSL</option>
-                                    <option value="4">UMTS</option>
-                                    <option value="5">LTE</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="velocidad">Velocidad</label>
-                                <select class="form-control input-sm" id="velocidad" name="velocidad" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">10MB</option>
-                                    <option value="2">100MB</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="criticidad">Criticidad</label>
-                                <select class="form-control input-sm" id="criticidad" name="criticidad" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Crítica</option>
-                                    <option value="2">Normal</option>
-                                </select>
-                            </div>
-
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="is-backup" name="is-backup" type="checkbox" class="form-check-input">
-                                  ¿Tiene Backup?
-                                </label>
-                            </div>                        
-
-                    </div>    
-                    </div>
-                    <div class="col-lg-6">    
+                            <div class="col-lg-6">    
                         
-                        <div class="form-group">
-                            <label class="control-label" for="factura">Factura</label>
-                            <select class="form-control input-sm" id="factura" name="factura">
-                                <option></option>
-                                <option>AB-526389</option>
-                                <option>HB-958777</option>
-                                <option>GG-956857</option>
-                                <option>KJ-525689</option>
-                                <option>PL-955577</option>
-                                <option>XC-922877</option>    
-                            </select>
+                                <div class="form-group">
+                                    <label class="control-label" for="factura">Factura</label>
+                                    <?= $this->formSelect($form->get('cfactura')); ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="estado">Estado</label>
+                                    <?= $this->formSelect($form->get('cestado')); ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" id="cgestionado" name="cgestionado" class="form-check-input" value="1">
+                                          ¿Es gestionado?
+                                        </label>
+                                    </div>                        
+                                </div>
+                        
+                                <div class="grid-caudal" style="display: none;">
+                                    <button id="add" type="button" class="btn btn-primary btn-sm" style="float: right;">Agregar</button>
+                                    <div style="clear:both;"></div>
+                                    <div class="panel-body">
+
+                                        <table id="grid-caudal" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Unidad</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+<!--                                                <tr>
+                                                    <td>Oro</td>
+                                                    <td>60</td>
+                                                    <td>
+                                                        <select class="form-control" id="exampleSelect1">
+                                                            <option selected="">Mb</option>
+                                                            <option>%</option>
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="button" class="borrar" value="Eliminar" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Plata</td>
+                                                    <td>30</td>
+                                                    <td>
+                                                        <select class="form-control" id="exampleSelect1">
+                                                            <option selected="">Mb</option>
+                                                            <option>%</option>
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="button" class="borrar" value="Eliminar" /></td>
+                                                </tr>-->
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>                        
+                            </div>    
                         </div>
+                        <div id="circuit-backup" class="panel-body" style="display:none;">
+                            <fieldset class="col-md-12">    	
+                                <legend>CIRCUITO BACKUP</legend>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
 
-                        <div class="form-group">
-                            <label class="control-label" for="estado">Estado</label>
-                            <select class="form-control input-sm" id="estado" name="estado">
-                                <option>Pre-Alta</option>
-                                <option selected>Alta</option>
-                            </select>
-                        </div>
-                    
-                        <div class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="checkbox" id="gestionado" name="gestionado" class="form-check-input">
-                                  ¿Es gestionado?
-                                </label>
-                            </div>                        
-                        </div>
-                        
-                        <div class="grid-caudal" style="display: none;">
-                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
-                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
-                            <div class="panel-body">
+                                        <div class="col-lg-6">    
 
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" id="" class="form-check-input"></th>
-                                            <th>Nombre</th>
-                                            <th>Cantidad</th>
-                                            <th>Unidad</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="checkbox" id="" class="form-check-input"></td>
-                                            <td>Oro</td>
-                                            <td>60</td>
-                                            <td>
-                                                <select class="form-control" id="exampleSelect1">
-                                                    <option selected="">Mb</option>
-                                                    <option>%</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" id="" class="form-check-input"></td>
-                                            <td>Plata</td>
-                                            <td>30</td>
-                                            <td>
-                                                <select class="form-control" id="exampleSelect1">
-                                                    <option selected="">Mb</option>
-                                                    <option>%</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                                                <div class="form-group">
+                                                    <label class="control-label" for="administrativo-backup">Administrativo</label>
+                                                    <?= $this->formInput($form->get('bcadministrativo')); ?>
+                                                </div>
 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>                        
-                        
-                        
-                    </div>    
-                
-                </div>
-                
-                
-    <div id="circuit-backup" class="panel-body" style="display:none;">
-        <fieldset class="col-md-12">    	
-            <legend>CIRCUITO BACKUP</legend>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    
-                    <div class="col-lg-6">    
-
-                            <div class="form-group">
-                                <label class="control-label" for="administrativo-backup">Administrativo</label>
-                                <input type="text" class="form-control input-sm" id="administrativo-backup" name="administrativo-backup" aria-describedby="administrativo-backupHelp">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="telefono-circuito-backup">Teléfono</label>
-                                <input type="text" class="form-control input-sm" id="telefono-circuito-backup" name="telefono-circuito-backup" aria-describedby="telefono-backupHelp">
-                            </div>
+                                                <div class="form-group">
+                                                    <label class="control-label" for="telefono-circuito-backup">Teléfono</label>
+                                                    <?= $this->formInput($form->get('bctelefono')); ?>
+                                                </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="cliente-backup">Cliente</label>
-                                <select class="form-control input-sm" id="cliente-backup" name=cliente-backup"">
-                                    <option></option>
-                                    <option>Ajuntament de Baga</option>
-                                    <option>Ajuntament de El Brull</option>
-                                    <option>Ajuntament de Calonge de Segarra</option>
-                                    <option>Diputacion de Barcelona</option>
-                                    <option>Serveis Municipal de Montseny S.L.</option>
-                                    <option>Xarxa Audiovisual Local</option>
-                                </select>
+                                <?= $this->formSelect($form->get('bccliente')); ?>                            
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="tecnologia-backup">Tecnología</label>
-                                <select class="form-control input-sm" id="tecnologia-backup" name="tecnologia-backup">
-                                    <option></option>
-                                    <option>FO</option>
-                                    <option>FTTH</option>
-                                    <option>xDSL</option>
-                                    <option>UMTS</option>
-                                    <option>LTE</option>
-                                </select>
+                                <?= $this->formSelect($form->get('bctecnologia')); ?>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="velocidad-backup">Velocidad</label>
-                                <select class="form-control input-sm" id="velocidad-backup" name="velocidad-backup">
-                                    <option></option>
-                                    <option>10MB</option>
-                                    <option>100MB</option>
-                                </select>
+                                <?= $this->formSelect($form->get('bcvelocidad')); ?>
                             </div>
 
 
@@ -419,38 +333,34 @@ $form->prepare();
                         
                             <div class="form-group">
                                 <label class="control-label" for="estado-backup">Estado</label>
-                                <select class="form-control input-sm" id="estado-backup" name="estado-backup">
-                                    <option>Pre-Alta</option>
-                                    <option selected>Alta</option>
-                                </select>
+                                <?= $this->formSelect($form->get('bcestado')); ?>
                             </div>   
                     
                     
                             <div class="form-group">
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                      <input type="checkbox" id="gestionado-backup" name="gestionado-backup" class="form-check-input">
+                                      <input type="checkbox" id="bcgestionado" name="bcgestionado" class="form-check-input" value="1">
                                       ¿Es gestionado?
                                     </label>
                                 </div>                        
                             </div>
                         
                         <div class="grid-caudal-backup" style="display: none;">
-                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
-                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
+                            <button id="add-backup" type="button" class="btn btn-primary btn-sm" style="float: right;">Agregar</button>
+                            <div style="clear:both;"></div>
                             <div class="panel-body">
-
-                                <table class="table table-bordered">
+                                <table id="backup" class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" id="" class="form-check-input"></th>
                                             <th>Nombre</th>
                                             <th>Cantidad</th>
                                             <th>Unidad</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+<!--                                        <tr>
                                             <td><input type="checkbox" id="" class="form-check-input"></td>
                                             <td>Bronce</td>
                                             <td>60</td>
@@ -460,7 +370,7 @@ $form->prepare();
                                                     <option selected="">%</option>
                                                 </select>
                                             </td>
-                                        </tr>
+                                        </tr>-->
                                     </tbody>
                                 </table>
                             </div>
@@ -492,17 +402,19 @@ $form->prepare();
 
 
                 
-                </div>
+            </div>
                 
-                <div id="step-3">
-<!--                    <h2>Your Address</h2>
-                    <div id="form-step-2" role="form" data-toggle="validator">
-                        <div class="form-group">
-                            <label for="address">Address</label>
-                            <textarea class="form-control" name="address" id="address" rows="3" placeholder="Write your address..." required></textarea>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>-->
+            <div id="step-3">
+<!--    
+<h2>Your Address</h2>
+<div id="form-step-2" role="form" data-toggle="validator">
+    <div class="form-group">
+        <label for="address">Address</label>
+        <textarea class="form-control" name="address" id="address" rows="3" placeholder="Write your address..." required></textarea>
+        <div class="help-block with-errors"></div>
+    </div>
+</div>
+-->
 
 
         <fieldset class="col-md-12">    	
@@ -515,100 +427,83 @@ $form->prepare();
                          
                             <div class="form-group">
                                 <label class="control-label" for="servicio">Servicio</label>
-                                <select class="form-control input-sm" id="servicio" name="servicio" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Macrolan</option>
-                                    <option value="2">DataInternet</option>
-                                </select>
+                                <?= $this->formSelect($form->get('eservicio')); ?>
                             </div>
                             
                             <div class="form-group">
                                 <label class="control-label" for="nemonico">Nemónico</label>
-                                <input type="text" class="form-control" id="nemonico" name="nemonico" aria-describedby="nemonicoHelp" required>
+                                <?= $this->formInput($form->get('enemonico')); ?>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="ip-gestion">IP Gestión</label>
-                                <input type="text" class="form-control" id="ip-gestion" name="ip-gestion" aria-describedby="ip-gestionHelp" required>
+                                <?= $this->formInput($form->get('eipgestion')); ?>
                             </div>
                             
                             <div class="form-group">
                                 <label class="control-label" for="nivel">Nivel</label>
-                                <select class="form-control input-sm" id="nivel" name="nivel" required>
-                                    <option></option>
-                                    <option>Nivel 1</option>
-                                    <option>Nivel 2</option>
-                                    <option>Nivel 3</option>
-                                    <option>Nivel 4</option>
-                                    <option>Nivel 5</option>
-                                    <option>Nivel 6</option>
-                                </select>
+                                <?= $this->formSelect($form->get('enivel')); ?>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
-                                <select class="form-control input-sm" id="nemonico-n1" name="nemonico-n1" required>
-                                    <option>NA</option>
-                                    <option>dipdb-saso</option>
-                                    <option>dipdb-xamo</option>
-                                    <option>dipdb-catp</option>
-                                </select>
+                                <?= $this->formSelect($form->get('enemonicon1')); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="fabricante">Fabricante</label>
+                                <?= $this->formSelect($form->get('efabricante')); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="exampleSelect1">Modelo</label>
+                                <?= $this->formSelect($form->get('emodelo')); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="serie">N/S</label>
+                                <?= $this->formInput($form->get('eserie')); ?>
                             </div>
                             
-                            <div class="form-group">
-                                <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
-                                <input type="text" class="form-control input-sm" id="logos-alta" name="logos-alta" aria-describedby="logos-altaHelp" required>
-                            </div>    
-                        
-                            <div class="form-group">
-                                <label class="control-label" for="ubicacion">Ubicación</label>
-                                <input type="text" class="form-control input-sm" id="ubicacion" name="ubicacion" aria-describedby="ubicacionHelp" required>
-                            </div>
-                        </div>
-                    </div>    
+                    </div>
+                </div>    
                     
                     <div class="col-lg-6">    
+
+                        <div class="form-group">
+                            <label class="control-label" for="ubicacion">Ubicación</label>
+                            <?= $this->formInput($form->get('eubicacion')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
+                            <?= $this->formInput($form->get('elogosalta')); ?>
+                        </div>    
+
                         
                         <div class="form-group">
-                                <label class="control-label" for="fabricante">Fabricante</label>
-                                <select class="form-control input-sm" id="fabricante" name="fabricante">
-                                    <option></option>
-                                    <option>CISCO</option>
-                                    <option>Alcatel-Lucent</option>
-                                    <option>Juniper</option>
-                                    <option>Huawei</option>
-                                </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label" for="exampleSelect1">Modelo</label>
-                            <select class="form-control" id="modelo" name="modelo">
-                                <option>HP-98812</option>
-                                <option>XC-1289</option>
-                            </select>
-                        </div>
-                    
-                        <div class="form-group">
                             <label class="control-label" for="contacto-equipo">Contacto</label>
-                            <input type="text" class="form-control input-sm" id="contacto-equipo" name="contacto-equipo" aria-describedby="contacto-equipoHelp">
+                            <?= $this->formInput($form->get('econtacto')); ?>
                         </div>
 
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-equipo-horario">Teléfono</label>
+                            <?= $this->formInput($form->get('etelefono')); ?>
+                        </div>
+                        
                         <div class="form-group">
                             <label class="control-label" for="contacto-equipo-horario">Horario</label>
-                            <input type="text" class="form-control input-sm" id="contacto-equipo-horario" name="contacto-equipo-horario" aria-describedby="contacto-equipo-horarioHelp">
+                            <?= $this->formInput($form->get('ehorario')); ?>
                         </div>
                                                 
                          <div class="form-group">
                             <label class="control-label" for="estado-equipo">Estado</label>
-                            <select class="form-control input-sm" id="estado-equipo" name="estado-equipo">
-                                <option selected>Pre-Alta</option>
-                                <option>Alta</option>
-                            </select>
-                        </div>
+                            <?= $this->formSelect($form->get('eestado')); ?>                        
+                         </div>
                         
                          <div class="form-group">
                             <label class="control-label" for="observacion-equipo">Observaciones</label>
-                            <textarea class="form-control input-sm" id="observacion-equipo" name="observacion-equipo" rows="5"></textarea>
+                            <?= $this->formTextarea($form->get('eobservacion')); ?>
                         </div>
                         
                         
@@ -620,68 +515,46 @@ $form->prepare();
             
         </fieldset>				
 
-        </div>
+            </div>
                 
 
-                <div id="step-4" class="">
+            <div id="step-4" class="">
                     
-        <fieldset class="col-md-12">    	
-            <legend>EQUIPO NO GESTIONADO</legend>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    
-                    <div class="col-lg-6">    
-                        <div id="form-step-3" role="form" data-toggle="validator">
-                            <div class="form-group">
-                                <label class="control-label" for="servicio-no-gestionado">Servicio</label>
-                                <select class="form-control input-sm" id="servicio-no-gestionado" name="servicio-no-gestionado" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1" selected>Navegación</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="control-label" for="propiedad">Propiedad Router</label>
-                                <select class="form-control input-sm" id="propiedad" name="propiedad" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Telefónica</option>
-                                    <option value="2">Cliente</option>
-                                </select>
-                            </div>                        
-                            
+            <fieldset class="col-md-12">    	
+                <legend>EQUIPO NO GESTIONADO</legend>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div class="col-lg-6">    
+                            <div id="form-step-3" role="form" data-toggle="validator">
+                                <div class="form-group">
+                                    <label class="control-label" for="servicio-no-gestionado">Servicio</label>
+                                    <?= $this->formSelect($form->get('engservicio')); ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="propiedad">Propiedad Router</label>
+                                    <?= $this->formSelect($form->get('engpropiedad')); ?>
+                                </div>                        
+
                             <div class="form-group">
                                 <label class="control-label" for="tipo-ip">Tipo IP</label>
-                                <select class="form-control input-sm" id="tipo-ip" name="tipo-ip" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Dinámico</option>
-                                    <option value="2">Estático</option>
-                                </select>
+                                <?= $this->formSelect($form->get('engtipoip')); ?>                            
                             </div>                        
 
                             <div class="form-group">
                                 <label class="control-label" for="ip-no-gestionado">IP</label>
-                                <input type="text" class="form-control input-sm" id="ip-no-gestionado" name="ip-no-gestionado" aria-describedby="ip-no-gestionadoHelp" required>
+                                <?= $this->formInput($form->get('engip')); ?>
                             </div>
                         
                             <div class="form-group">
                                 <label class="control-label" for="red">Red</label>
-                                <select class="form-control input-sm" id="red" name="red" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Xic</option>
-                                    <option value="2">Xem</option>
-                                    <option value="3">Xal</option>
-                                </select>
-                                
+                                <?= $this->formSelect($form->get('engred')); ?>                                
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="usos">Usos</label>
-                                <select class="form-control input-sm" id="usos" name="usos" required>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Corporativo</option>
-                                    <option value="2">Usuarios</option>
-                                    <option value="3">parques</option>
-                                </select>
+                                <?= $this->formSelect($form->get('enguso')); ?>                            
                             </div>
                             
                         </div>
@@ -691,22 +564,22 @@ $form->prepare();
                         
                         <div class="form-group">
                             <label class="control-label" for="contacto-no-gestionado">Contacto</label>
-                            <input type="text" class="form-control input-sm" id="contacto-no-gestionado" name="contacto-no-gestionado">
+                            <?= $this->formInput($form->get('engcontacto')); ?>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label" for="telefono-no-gestionado">Teléfono</label>
-                            <input type="text" class="form-control input-sm" id="telefono-no-gestionado" name="telefono-no-gestionado">
+                            <?= $this->formInput($form->get('engtelefono')); ?>
                         </div>
                         
                         <div class="form-group">
                             <label class="control-label" for="horario-no-gestionado">Horario</label>
-                            <input type="text" class="form-control input-sm" id="horario-no-gestionado" name="horario-no-gestionado">
+                            <?= $this->formInput($form->get('enghorario')); ?>
                         </div>
                                                 
                         <div class="form-group">
                             <label class="control-label" for="observacion-no-gestionado">Observaciones</label>
-                            <textarea class="form-control input-sm" id="observacion-no-gestionado" name="observacion-no-gestionado" rows="5"></textarea>
+                            <?= $this->formTextarea($form->get('engobservacion')); ?>
                         </div>
                         
                     </div>    
@@ -717,105 +590,205 @@ $form->prepare();
             
         </fieldset>				
                     
-                    
-                    
-                    
-                </div>
+            </div>
 
 
-                <div id="step-5" class="">
-                    <h2>Final</h2>
-                    <p>
-                        Keep your smile :) 
-                    </p>
-                    <div id="form-step-4" role="form" data-toggle="validator">
-                        <div class="form-group">
-                            <label for="terms">I agree with this prototype.</label>
-                            <input type="checkbox" id="terms" name="terms" data-error="Please accept the Terms and Conditions" required>  
-                            <div class="help-block with-errors"></div>
-                        </div>
+            <div id="step-5" class="">
+<!--                <h2>Final</h2>
+                <p>Keep your smile :) </p>
+                <div id="form-step-4" role="form" data-toggle="validator">
+                    <div class="form-group">
+                        <label for="terms">I agree with this prototype.</label>
+                        <input type="checkbox" id="terms" name="terms" data-error="Please accept the Terms and Conditions" required>  
+                        <div class="help-block with-errors"></div>
                     </div>
+                </div>  -->
+                
+        <fieldset class="col-md-12">    	
+            <legend>DIRECCIONAMIENTO WAN</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                        <div id="form-step-4" role="form" data-toggle="validator">
+
+
+                            <div class="form-group">
+                                <label class="control-label" for="ipwrpv">RPV</label>
+                                <?= $this->formSelect($form->get('ipwrpv')); ?>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="ipwrouting">Routing</label>
+                                <?= $this->formSelect($form->get('ipwrouting')); ?>                            
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="ipwvlanedc">Vlan EDC</label>
+                                <?= $this->formInput($form->get('ipwvlanedc')); ?>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="ipwvlannacional">Vlan Nacional</label>
+                                <?= $this->formSelect($form->get('ipwvlannacional')); ?>                                
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="ipwred">Red</label>
+                                <?= $this->formSelect($form->get('ipwred')); ?>                            
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="ipwuso">Uso</label>
+                                <?= $this->formSelect($form->get('ipwuso')); ?>                            
+                            </div>
+                            
+                        </div>    
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="ipwipwanedc">IP WAN EDC</label>
+                            <?= $this->formInput($form->get('ipwipwanedc')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="ipwmascara">Máscara</label>
+                            <?= $this->formInput($form->get('ipwmascara')); ?>
+                        </div>
+                                                
+                        <div class="form-group">
+                            <label class="control-label" for="ipwpeppal">PE Ppal</label>
+                            <?= $this->formInput($form->get('ipwpeppal')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="ipwpebackup">PE Backup</label>
+                            <?= $this->formInput($form->get('ipwpebackup')); ?>
+                        </div>
+
+                    </div>    
+                
                 </div>
                 
             </div>
+            
+        </fieldset>				
+                
+                
+            </div>
+                
+            <!-- SET -->
+            
+            <div id="step-6" class="">
+                <h2>Final</h2>
+                <div id="form-step-5" role="form" data-toggle="validator">
+                    <div class="form-group">
+                        <label for="terms">I agree with this development.</label>
+                        <input type="checkbox" id="terms" name="terms" data-error="Please accept the Terms and Conditions" required>  
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>  
+            </div>
+            
+            
+            
+            
+            <!-- SET -->
+            
         </div>
-        
+    </div>
+    <input type="hidden" id="stepwizard" name="stepwizard" value="0">
         <!--</form>-->
         <?= $this->form()->closeTag($form); ?>
         <div id="box" style="border:1px solid #ccc;"></div>
-.        
 </div>
 
 <script type="text/javascript">
 
 $(document).ready(function(){
             
-            // Toolbar extra buttons
-            var btnFinish = $('<button></button>').text('Finish')
-                                             .addClass('btn btn-info')
-                                             .on('click', function(){
-                                                    if( !$(this).hasClass('disabled')){ 
-                                                        var elmForm = $("#myForm");
-                                                        if(elmForm){
-                                                            elmForm.validator('validate'); 
-                                                            var elmErr = elmForm.find('.has-error');
-                                                            if(elmErr && elmErr.length > 0){
-                                                                alert('Oops we still have error in the form');
-                                                                return false;    
-                                                            }else{
-                                                                alert('Great! we are ready to submit form');
-                                                                elmForm.submit();
-                                                                return false;
-                                                            }
-                                                        }
-                                                    }
-                                                    
-                                                });
-            var btnCancel = $('<button></button>').text('Cancel')
-                                             .addClass('btn btn-danger')
-                                             .on('click', function(){ 
-                                                    $('#smartwizard').smartWizard("reset"); 
-                                                    $('#myForm').find("input, textarea, select").val(""); 
-                                                });                         
-            
-            
-            
-            
-            var btnSaveAndOut = $('<button></button>').text('Save&Out')
-                                             .addClass('btn btn-success')
-                                             .on('click', function(){
-                                                 
-                                                var url = 'http://application.localhost/com'
-                                                //var formData = {token: 'XAxdvfr2Jmkp845Gsc#45fdfse4539', idescat: 'HY90O827342'};
-                                    //            var  formData = new FormData("#myForm");
-                                    //            urlPath = baseUrl + '/approvals/pch/submit-manager-approval/'; 
-                                                   $.ajax({
-                                                       type: "POST",
-                                                       url: url,
-                                                       data: $('#myForm').serialize(),
-                                                       cache: false,
-                                                       success: function (html) {
-                                           //                html = "<div class='alert alert-success'>Success!</div>";
-                                                           $("#box").html(html);
-                                    //                       $('.btn').hide();
-                                                       },
-                                                       error: function (xhr, status) {
-                                                           html = "<div class='alert alert-danger'>Error!</div>"
-                                                           $("#box").html(html);
-                                                       }
-                                                   });
+    // Toolbar extra buttons 
+    var btnFinish = $('<button></button>').text('Finish')
+                    .addClass('btn btn-info')
+                    .on('click', function(){
+                        if( !$(this).hasClass('disabled')){ 
+                            var elmForm = $("#myForm");
+                            if(elmForm){
+                                elmForm.validator('validate'); 
+                                var elmErr = elmForm.find('.has-error');
+                                if(elmErr && elmErr.length > 0){
+                                    alert('Oops we still have error in the form');
+                                    return false;    
+                                }else{
+                                    alert('Great! we are ready to submit form');
+                                    elmForm.submit();
+                                    return false;
+                                }
+                            }
+                        }
+                    });
                                                 
-                                            });                         
+    var btnCancel = $('<button></button>').text('Cancel')
+                    .addClass('btn btn-danger')
+                    .on('click', function(){ 
+                           $('#smartwizard').smartWizard("reset"); 
+                           $('#myForm').find("input, textarea, select").val(""); 
+                    });                         
+            
+            
+            
+            
+    var btnSaveAndOut = $('<button></button>').text('Save&Exit')
+                        .addClass('btn btn-success save')
+                        .on('click', function(){
+
+                            var url = 'com'
+                               $.ajax({
+                                   type: "POST",
+                                   url: url,
+                                   data: $('#myForm').serialize(),
+                                   cache: false,
+                                   success: function (json) {
+                                        var obj = jQuery.parseJSON(json);
+                                        var results;
+                                        for(var key in obj){
+                                            console.log(' name= ' + key + ' value= ' + obj[key]);
+                                            results = parseInt(obj[key]);
+                                            console.log('Resultado='+results);
+                                       }
+                                       if(results>0) {
+    //                                                    html = "<div class='alert alert-success'>Success!</div>";
+                                            $("#box").html(json);
+                                            $('.save').hide();
+                                            $('.sw-btn-group-extra').hide();
+                                            $('.sw-btn-prev').addClass('disabled');
+                                            $('.sw-btn-next').addClass('disabled');
+                                        } else {
+                                            html = "<div class='alert alert-danger'>Error!</div>";
+                                            $("#box").html(html);
+                                        }
+
+                                    },
+                                    error: function (xhr, status) {
+                                        html = "<div class='alert alert-danger'>Error!</div>"
+                                        $("#box").html(html);
+                                    }
+                                });
+
+                        });                         
  
             
-            // Smart Wizard
+            // Smart Wizard   btnFinish, btnCancel, 
             $('#smartwizard').smartWizard({ 
                 selected: 0, 
                 theme: 'arrows',
                 transitionEffect:'fade',
                 
                 toolbarSettings: {toolbarPosition: 'top',
-                                  toolbarExtraButtons: [btnFinish, btnCancel, btnSaveAndOut]
+                                  toolbarExtraButtons: [btnSaveAndOut]
                 },
                 anchorSettings: {
                     markDoneStep: true, // add done css
@@ -843,18 +816,17 @@ $(document).ready(function(){
                     
 //                    alert('LONGITUD: ' + elmErr.length);
                     
-                    if(elmErr && elmErr.length > 0){
+                    if(elmErr && elmErr.length > 0) {
                         // Form validation failed
                         return false;    
                     }
                 }
+                
+                $('#stepwizard').val(stepNumber+1);
+                
                 return true;
+
             });
-            
-            
-            
-            
-            
             
             $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
                 // Enable finish button only on last step
@@ -864,6 +836,56 @@ $(document).ready(function(){
                     $('.btn-finish').addClass('disabled');
                 }
             });                               
+
+            
+            $('#add').click(function() {
+
+                var row;
+                var id = $('.row-input').length + 1;
+                var caudal = 'caudal-' + id;
+                var cantidad = 'cantidad-' + id;
+                var unidad = 'unidad-' + id;
+
+                row =   '<tr class="row-input">\n\
+                            <td><input name="' + caudal + '" class="col-xs-12" type="text" value="" /></td>\n\
+                            <td><input name="' + cantidad + '" class="col-xs-12" type="text" value="" /></td>\n\
+                            <td><select name="' + unidad + '" class="col-xs-20" id="exampleSelect1"><option value="1" selected="selected">Mb</option><option value="2">%</option></select></td>\n\
+                            <td><input type="button" class="borrar" value="Eliminar" /></td>\n\
+                        </tr>';
+                $('#grid-caudal tr:last').after(row);
+
+            });
+            
+            
+            $('#add-backup').click(function(){
+
+                var row;
+                var id = $('.row-input-backup').length + 1;
+                var caudalbck = 'caudalbck-' + id;
+                var cantidadbck = 'cantidadbck-' + id;
+                var unidadbck = 'unidadbck-' + id;
+                
+                row =   '<tr class="row-input-backup">\n\
+                            <td><input name="' + caudalbck + '" class="col-xs-12" type="text" value="" /></td>\n\
+                            <td><input name="' + cantidadbck + '"  class="col-xs-12" type="text" value="" /></td>\n\
+                            <td><select name="' + unidadbck + '"  class="col-xs-20" id="exampleSelect1"><option value="1" selected="selected">Mb</option><option value="2">%</option></select></td>\n\
+                            <td><input type="button" class="borrar" value="Eliminar" /></td>\n\
+                        </tr>';
+                $('#backup tr:last').after(row);
+                
+            });
+            
+            
+            
+            $(document).on('click', '.borrar', function (event) {
+                event.preventDefault();
+                $(this).closest('tr').remove();
+            });
+            
+            
+            
+            
+            
             
         }); 
 
@@ -873,16 +895,58 @@ $(document).ready(function(){
 
 
 // Step 2
-    $('#gestionado').click(function(){
+    $('#cgestionado').click(function(){
         if (this.checked) {
             $('.grid-caudal').css('display','block');
+            
+            $('#eservicio').attr('required','required');
+            $('#enemonico').attr('required','required');
+            $('#eipgestion').attr('required','required');
+            $('#efabricante').attr('required','required');
+            $('#emodelo').attr('required','required');
+           
+            $('#engservicio').removeAttr('required');
+            $('#engpropiedad').removeAttr('required');
+            $('#engtipoip').removeAttr('required');
+            $('#engip').removeAttr('required');
+            $('#engred').removeAttr('required');
+            $('#enguso').removeAttr('required');
+            
+            $('#ipwrpv').attr('required','required');
+            $('#ipwrouting').attr('required','required');
+            $('#ipwvlanedc').attr('required','required');
+            $('#ipwvlannacional').attr('required','required');
+            $('#ipwred').attr('required','required');            
+            $('#ipwuso').attr('required','required');
+            
         }
         else {
-             $('.grid-caudal').css('display','none');
-        }
+            $('.grid-caudal').css('display','none');
+
+            $('#eservicio').removeAttr('required');
+            $('#enemonico').removeAttr('required');
+            $('#eipgestion').removeAttr('required');
+            $('#efabricante').removeAttr('required');
+            $('#emodelo').removeAttr('required');
+             
+            $('#engservicio').attr('required','required');
+            $('#engpropiedad').attr('required','required');
+            $('#engtipoip').attr('required','required');
+            $('#engip').attr('required','required');
+            $('#engred').attr('required','required');
+            $('#enguso').attr('required','required');
+            
+            $('#ipwrpv').removeAttr('required');
+            $('#ipwrouting').removeAttr('required');
+            $('#ipwvlanedc').removeAttr('required');
+            $('#ipwvlannacional').removeAttr('required');
+            $('#ipwred').removeAttr('required');
+            $('#ipwuso').removeAttr('required');
+            
+        }    
     });
     
-    $('#is-backup').click(function(){
+    $('#cbackup').click(function(){
         if (this.checked) {
             $('#circuit-backup').css('display','block');
         }
@@ -892,7 +956,7 @@ $(document).ready(function(){
     });
 
     
-    $('#gestionado-backup').click(function(){
+    $('#bcgestionado').click(function(){
         if (this.checked) {
             $('.grid-caudal-backup').css('display','block');
         }

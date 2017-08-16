@@ -15,7 +15,7 @@ use Zend\Db\Sql\Select;
 
 class SedesTable extends AbstractTableGateway {
 
-    protected $table = 'sedes';
+    protected $table = 'sedes_';
 
     public function __construct(Adapter $adapter) {
         $this->adapter = $adapter;
@@ -30,7 +30,7 @@ class SedesTable extends AbstractTableGateway {
                 
         $entities = array();
         foreach ($resultSet as $row) {
-            $entity = new Entity\Sede();
+            $entity = new Entity\SedeOld();
             $entity->setId($row->id)
                     ->setIdSede($row->id_sede)
                     ->setCif($row->cif)

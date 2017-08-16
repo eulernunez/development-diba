@@ -17,6 +17,12 @@ class ProcessController extends AbstractActionController
     
     protected $_sedesTable;
     
+    protected $sedeService;
+    protected $contactoService;
+    protected $circuitoService;
+    
+    protected $wizardService;
+    
     public function indexAction()
     {
 //        $view = new ViewModel();
@@ -24,8 +30,8 @@ class ProcessController extends AbstractActionController
         $sedes = $this->_sedesTable->fetchAll();
         
         return new ViewModel(array(
-                    'sedes' => $this->_sedesTable->fetchAll(),
-                ));
+            'sedes' => $sedes,
+        ));
         
     }
     
@@ -34,6 +40,26 @@ class ProcessController extends AbstractActionController
         $this->_sedesTable = $service;
     }
 
+    public function setSedeService($service)
+    {
+        $this->sedeService = $service;
+    }        
+            
+    public function setContactoService($service)
+    {
+        $this->contactoService = $service;
+    }        
+    
+    public function setCircuitoService($service)
+    {
+        $this->circuitoService = $service;
+    }        
+    
+    public function setWizardService($service)
+    {
+        $this->wizardService = $service;
+    }        
+    
     
     public function altaAction()
     {
@@ -103,13 +129,22 @@ class ProcessController extends AbstractActionController
 
     }        
     
+    public function ipWanAction()
+    {
+        return [];
+    }        
+    
+    
     public function wizardAction()
     {
 
-        $form = new Wizard();
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        
+        $form = new Wizard($dbAdapter);
+        
         if($this->getRequest()->isPost()) {
             $post = $this->getRequest()->getPost();
-            die('<pre>' . print_r($post, true) . '</pre>');
+            die('TTT<pre>' . print_r($post, true) . '</pre>');
         }
         
         return new ViewModel(array(
@@ -119,36 +154,65 @@ class ProcessController extends AbstractActionController
     }        
     
     
+        #$getParams = $this->getRequest()->getQuery(); // OK
+        #$paramValue = $this->params()->fromQuery('token'); // OK
+    
     public function comAction()
     {
         
         $viewmodel = new ViewModel();
         $request = $this->getRequest();
+        $response = $this->getResponse();
         
-        $getParams = $this->getRequest()->getQuery(); // OK
-        #$paramValue = $this->params()->fromQuery('token'); // OK
+//        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+//        $connection = $dbAdapter->getDriver()->getConnection();
+//        echo('<pre>' . print_r($connection, true) . '</pre>');
+        
+        $posts = (array)$this->request->getPost();
+        
+//        echo( 'POST <pre>' . print_r( $posts, true) . '</pre>');        
+        $this->wizardService->setPostParams($posts);
+        $result = $this->wizardService->process();
+        
+//        echo( 'RESPONSE <pre>' . print_r( $result, true) . '</pre>');        
+        
+//        $contacto = new \Inventario\Model\Entity\Contacto();
+//        $sede = new \Inventario\Model\Entity\Sede();
+//        $circuito = new \Inventario\Model\Entity\Circuito();
+//        $backupCircuito = new \Inventario\Model\Entity\BackupCircuito();
+//        
+//        $contacto->setOptions($posts);
+//        $contactoId = $this->contactoService->saveContacto($contacto);
+//        
+//        $sede->setOptions($posts);
+//        $sede->setContactoId($contactoId);
+//        $sedeId = $this->sedeService->saveSede($sede);
+//        
+//        $circuito->setOptions($posts);
+//        $circuito->setSedeId($sedeId);
+//        $circuitoId = $this->circuitoService->saveCircuito($circuito);
+//        
+//        if(isset($posts['cbackup']) && true == $posts['cbackup']) {
+//            $backupCircuito->setOptions($posts);
+//            $backupCircuito->setSedeId($sedeId)->setParentId($circuitoId);
+//            $this->circuitoService->saveBackupCircuito($backupCircuito);
+//            echo ('<pre>' . print_r($circuito, true) . '</pre>');
+//            echo ('<pre>' . print_r($backupCircuito, true) . '</pre>');
+//        }
+//        
+////        echo ('<pre>' . print_r($sedeId, true) . '</pre>');
+////        echo( 'POST<pre>' . print_r( $posts, true) . '</pre>');
+////        echo( 'CONTACTO<pre>' . print_r( $contacto, true) . '</pre>');
+////        echo( 'SEDE <pre>' . print_r( $sede, true) . '</pre>');
+//        echo( 'CIRCUITO <pre>' . print_r($circuitoId, true) . '</pre>');
         
         
+//        $viewmodel->setTerminal($request->isXmlHttpRequest()); # $viewmodel->setTerminal(true)  # 1
         
-        
-        $posts = $this->request->getPost();
-        
-        die( '<pre>' . print_r( $posts, true) . '</pre>');
-       
-        #$token = $this->params()->fromPost('token');
-        
-        $viewmodel->setTerminal($request->isXmlHttpRequest());
-        #$viewmodel->setTerminal(true);
-        
-        echo('POST : <pre>' . print_r($posts, true) . '</pre>');
-        
-        echo('TOKEN: <pre>' . print_r($token, true) . '</pre>');
-       
-//        return $viewmodel(array(
-//            'parameters' => $posts
-//        ));
-        
-        return $viewmodel;
+        $response->setContent(\Zend\Json\Json::encode(array('success' => $result)));  # 2
+        return $response;                                                             # 2  
+
+//        return $viewmodel;                                                                      # 1
 
     }
     
@@ -159,11 +223,34 @@ class ProcessController extends AbstractActionController
         
        return [];
         
-        
     }
     
     
-    
+    public function listadoAction()
+    {
+
+# ONE ELEMENT        
+//        $rowSet = $this->sedeService->select(array('id' => 1));
+//        $row = $rowSet->current();
+
+
+# TWO ELEMENT
+//        $select = $this->sedeService->getSql();
+//        $select->join(array('c' => 'contacto'), 'c.id=sedes.contacto_id'));
+//        
+//        $resultSet = $this->sedeService->selectWith($select);
+
+        $sedes = $this->sedeService->fetchAll();
+        
+        #$sedes = $this->sedeService->experiment();
+        
+        //die('<pre>' . print_r($sedes, true) . '</pre>');
+        return new ViewModel(array(
+                    'sedes' => $sedes,
+                ));
+        
+
+    }        
     
     
     
