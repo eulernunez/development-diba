@@ -24,10 +24,26 @@ return array(
  					$serviceLocator->getServiceLocator()
  					->get('modelingService')
  				);
-
+				$ctr->setSedeService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('sedeService')
+ 				);
+				$ctr->setContactoService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('contactoService')
+ 				);
+				$ctr->setCircuitoService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('circuitoService')
+ 				);
+				$ctr->setWizardService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('wizardService')
+ 				);
+                                
 			 return $ctr;
  		},
-      ),
+        ),
 ///////////////////////        
         
         
@@ -141,6 +157,16 @@ return array(
                 ),
             ),
             
+            'ip-wan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ip-wan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ip-wan',
+                    ),
+                ),
+            ),
             
             'tabs' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -153,6 +179,19 @@ return array(
                 ),
             ),
 
+            'list' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/list',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'listado',
+                    ),
+                ),
+            ),
+            
+            
+            
             'com' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -253,6 +292,30 @@ return array(
             'modelingService' => function ($sm) {
                 return $sm->get('Inventario\Model\SedesTable');            
             },
+            'sedeService' => function ($sm) {
+                return $sm->get('Inventario\Model\Sede');            
+            },
+            'contactoService' => function ($sm) {
+                return $sm->get('Inventario\Model\Contacto');            
+            },
+            'circuitoService' => function ($sm) {
+                return $sm->get('Inventario\Model\Circuito');            
+            },
+            'wizardService' => function ($sm) {
+                $wizardService = new \Inventario\Model\Wizard\WizardService();
+                $wizardService->setAdapter($sm->get('Zend_Adapter'));
+                $wizardService->setContactoTable($sm->get('Inventario\Model\Contacto'));
+                $wizardService->setSedeTable($sm->get('Inventario\Model\Sede'));
+                $wizardService->setCircuitoTable($sm->get('Inventario\Model\Circuito'));
+                $wizardService->setCaudalTable($sm->get('Inventario\Model\Caudal'));
+                $wizardService->setEquipoTable($sm->get('Inventario\Model\Equipo'));
+                $wizardService->setEquipoNoGestionadoTable($sm->get('Inventario\Model\EquipoNoGestionado'));
+                $wizardService->setIpWanTable($sm->get('Inventario\Model\IpWan'));
+                return $wizardService;
+            },
+            'Zend_Adapter' => function($serviceLocator) {
+                return $serviceLocator->get('Zend\Db\Adapter\Adapter');        
+            },      
         ),
     ),
     /////////////////////////////////                        
