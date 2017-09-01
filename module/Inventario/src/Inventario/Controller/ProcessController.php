@@ -343,7 +343,7 @@ class ProcessController extends AbstractActionController
         
             
         } else {
-            echo('<pre>' . print_r($posts, true) . '</pre>');
+           # echo('<pre>' . print_r($posts, true) . '</pre>');
             $this->wizardService->setPostParams($posts);
             $circuitoId = $this->wizardService->updateCircuito();
             $information = $this->circuitoService->getInformationByCircuito($circuitoId);
