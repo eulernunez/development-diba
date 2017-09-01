@@ -205,7 +205,7 @@ function iplanFill() {
     $('#iplan').addClass('disabled');
     
     var data = {id: id, idbck: idbck, view: 1};
-    var    url = '/iplan-fill';
+    var    url = '<?= $this->url('iplan-fill') ?>'; 
     $.ajax({
         type: "POST",
         url: url,
