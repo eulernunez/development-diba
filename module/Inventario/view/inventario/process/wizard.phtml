@@ -765,24 +765,24 @@ $(document).ready(function(){
                                    data: $('#myForm').serialize(),
                                    cache: false,
                                    success: function (json) {
-//                                        var obj = jQuery.parseJSON(json);
-//                                        var results;
-//                                        for(var key in obj){
-//                                            console.log(' name= ' + key + ' value= ' + obj[key]);
-//                                            results = parseInt(obj[key]);
-//                                            console.log('Resultado='+results);
-//                                       }
-//                                       if(results>0) {
+                                        var obj = jQuery.parseJSON(json);
+                                        var results;
+                                        for(var key in obj){
+                                            console.log(' name= ' + key + ' value= ' + obj[key]);
+                                            results = parseInt(obj[key]);
+                                            console.log('Resultado='+results);
+                                       }
+                                       if(results>0) {
     //                                                    html = "<div class='alert alert-success'>Success!</div>";
                                             $("#box").html(json);
-//                                            $('.save').hide();
-//                                            $('.sw-btn-group-extra').hide();
-//                                            $('.sw-btn-prev').addClass('disabled');
-//                                            $('.sw-btn-next').addClass('disabled');
-//                                        } else {
-//                                            html = "<div class='alert alert-danger'>Error!</div>";
-//                                            $("#box").html(html);
-//                                        }
+                                            $('.save').hide();
+                                            $('.sw-btn-group-extra').hide();
+                                            $('.sw-btn-prev').addClass('disabled');
+                                            $('.sw-btn-next').addClass('disabled');
+                                        } else {
+                                            html = "<div class='alert alert-danger'>Error!</div>";
+                                            $("#box").html(html);
+                                        }
 
                                     },
                                     error: function (xhr, status) {

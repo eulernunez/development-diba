@@ -214,7 +214,7 @@ class ProcessController extends AbstractActionController
         
         $posts = (array)$this->request->getPost();
         
-        echo( 'POST <pre>' . print_r( $posts, true) . '</pre>');
+        #echo( 'POST <pre>' . print_r( $posts, true) . '</pre>');
         
         $this->wizardService->setPostParams($posts);
         
@@ -261,12 +261,12 @@ class ProcessController extends AbstractActionController
 //        echo( 'CIRCUITO <pre>' . print_r($circuitoId, true) . '</pre>');
         
         
-        $viewmodel->setTerminal($request->isXmlHttpRequest()); # $viewmodel->setTerminal(true)  # 1
+//        $viewmodel->setTerminal($request->isXmlHttpRequest()); # $viewmodel->setTerminal(true)  # 1
         
-//        $response->setContent(\Zend\Json\Json::encode(array('success' => $result)));  # 2
-//        return $response;                                                             # 2  
+        $response->setContent(\Zend\Json\Json::encode(array('success' => $result)));  # 2
+        return $response;                                                             # 2  
 
-        return $viewmodel;                                                                      # 1
+//        return $viewmodel;                                                                      # 1
 
     }
     
