@@ -30,7 +30,7 @@ legend
 
 function saveIplan() {
             
-    var url = '/save-iplan';
+    var url = '<?= $this->url('save-iplan'); ?>';
     $.ajax({
        type: "POST",
        url: url,

@@ -57,7 +57,7 @@ function addIplan() {
     var idbck = $('#equipoBckId').val();
 
     var data = {id: id, idbck: idbck};
-    var url = '/add-iplan';
+    var url = '<?= $this->url('add-iplan'); ?>';
     
     $.ajax({
         type: "POST",
