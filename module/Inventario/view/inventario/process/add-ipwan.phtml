@@ -30,7 +30,7 @@ legend
 
 function saveIpwan() {
 
-    var url = '/save-ipwan';
+    var url = '<?= $this->url('save-ipwan'); ?>';
     $.ajax({
        type: "POST",
        url: url,

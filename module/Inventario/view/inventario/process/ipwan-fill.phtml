@@ -30,7 +30,7 @@ legend
 
 function updateIpwan() {
 
-    var url = '/save-ipwan';
+    var url = '<?= $this->url('save-ipwan'); ?>';
     $.ajax({
        type: "POST",
        url: url,
@@ -57,7 +57,7 @@ function addIpwan(id) {
     var idbck = $('#equipoBckId').val();
 
     var data = {id: id, idbck: idbck};
-    var url = '/add-ipwan';
+    var url = '<?= $this->url('add-ipwan'); ?>';
     
     $.ajax({
         type: "POST",
@@ -80,7 +80,7 @@ function addIpwan(id) {
 function ipwanoneFill(id) {
     
     var data = {id: id, view: 1};
-    var    url = '/ipwanone-fill';
+    var    url = '<?= $this->url('ipwanone-fill'); ?>';
     $.ajax({
         type: "POST",
         url: url,
