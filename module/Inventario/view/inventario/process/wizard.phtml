@@ -758,7 +758,7 @@ $(document).ready(function(){
                         .addClass('btn btn-success save')
                         .on('click', function(){
 
-                            var url = '/com'
+                            var url = '<?= $this->url('com'); ?>';
                                $.ajax({
                                    type: "POST",
                                    url: url,
