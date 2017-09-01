@@ -277,6 +277,33 @@ form:after {
     display: none
 }
 
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}	
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+
+
+
+
 </style>
 
 <script>
@@ -290,25 +317,66 @@ function init_SmartWizard() {
 	$('#wizard').smartWizard();
 
 	$('#wizard_verticle').smartWizard({
-	  transitionEffect: 'slide'
+	  transitionEffect: 'slide',
+          autoAdjustHeight:true,
+          toolbarSettings: {
+                toolbarPosition: 'top', // none, top, bottom, both
+                toolbarButtonPosition: 'right', // left, right
+                showNextButton: true, // show/hide a Next button
+                showPreviousButton: true, // show/hide a Previous button
+                toolbarExtraButtons: [
+			$('<button></button>').text('Finish')
+					      .addClass('btn btn-info')
+					      .on('click', function(){ 
+						alert('Finsih button click');                            
+					      }),
+			$('<button></button>').text('Cancel')
+					      .addClass('btn btn-danger')
+					      .on('click', function(){ 
+						alert('Cancel button click');                            
+					      })
+                      ]
+            }, 
+          
 	});
 
-	$('.buttonNext').addClass('btn btn-success');
-	$('.buttonPrevious').addClass('btn btn-primary');
-	$('.buttonFinish').addClass('btn btn-default');
+//	$('.buttonNext').addClass('btn btn-success');
+//	$('.buttonPrevious').addClass('btn btn-primary');
+//	$('.buttonFinish').addClass('btn btn-default');
 	
 };
 	   
 $(document).ready(function() {
 			
 	init_SmartWizard();
-			
+        
+        $('#gestionado').click(function(){
+            if (this.checked) {
+              $('.grid-caudal').css('display','block');
+            }
+            else {
+               $('.grid-caudal').css('display','none');
+            }
+            });
+            $('#is-backup').click(function(){
+            if (this.checked) {
+              $('#circuit-backup').css('display','block');
+            }
+            else {
+               $('#circuit-backup').css('display','none');
+            }
+            });
+            $('#gestionado-backup').click(function(){
+            if (this.checked) {
+              $('.grid-caudal-backup').css('display','block');  
+//              $('.stepContainer').css('height','1200px');
+              $('.stepContainer').css('color','red');
+            }
+            else {
+               $('.grid-caudal-backup').css('display','none');
+            }
+        });
 });	
-	
-
-
-
-
 </script>
 
 
@@ -316,7 +384,7 @@ $(document).ready(function() {
     
     <div class="x_panel">
         <div class="x_title">
-            <h2> Alta <small> Servicios </small></h2>
+            <h2> Alta de Planta<small> :: </small></h2>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -327,8 +395,8 @@ $(document).ready(function() {
                         <a href="#step-1">
                             <span class="step_no">1</span>
                             <span class="step_descr">
-                                Step 1<br />
-                                  <small>Step 1 description</small>
+                                
+                                <small>Sede&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small>
                             </span>
                         </a>
                     </li>
@@ -336,8 +404,8 @@ $(document).ready(function() {
                         <a href="#step-2">
                             <span class="step_no">2</span>
                             <span class="step_descr">
-                                Step 2<br />
-                                <small>Step 2 description</small>
+                                
+                                <small>Circuito&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small>
                             </span>
                         </a>
                     </li>
@@ -345,8 +413,8 @@ $(document).ready(function() {
                         <a href="#step-3">
                             <span class="step_no">3</span>
                             <span class="step_descr">
-                                Step 3<br />
-                                <small>Step 3 description</small>
+                                Equipo <br/>
+                                <small>Gestionado</small>
                             </span>
                         </a>
                     </li>
@@ -354,8 +422,8 @@ $(document).ready(function() {
                         <a href="#step-4">
                             <span class="step_no">4</span>
                             <span class="step_descr">
-                                Step 4<br />
-                                <small>Step 4 description</small>
+                                Equipo <br/>
+                                <small>No Gestionado</small>
                             </span>
                         </a>
                     </li>
@@ -363,45 +431,225 @@ $(document).ready(function() {
                         <a href="#step-5">
                             <span class="step_no">5</span>
                             <span class="step_descr">
-                                Step 5<br />
-                                <small>Step 5 LANS</small>
+                                Direccionamiento <br/>
+                                <small>WAN</small>
                             </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="#step-6">
+                            <span class="step_no">6</span>
+                            <span class="step_descr">
+                                Direccionamiento <br/>
+                                <small>LAN</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-7">
+                            <span class="step_no">7</span>
+                            <span class="step_descr">
+                                Hardware <br/>
+                                <small>Adicional</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#step-8">
+                            <span class="step_no">8</span>
+                            <span class="step_descr">
+                                Hardware <br/>
+                                <small>RPV 13918</small>
+                            </span>
+                        </a>
+                    </li>
+                    
                 </ul>
                 <div id="step-1">
-                    <form class="form-horizontal form-label-left">
+
+
+<div class="panel panel-default">
+    <!--<div class="panel-heading">Fieldset Example</div>-->
+    <div class="panel-body">
+        <fieldset class="col-md-12">    	
+            <legend>SEDE</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                <div class="col-lg-6">    
+                    
+                    <form> 
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
+                            <label for="exampleInputEmail1">Nombre</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresa el nombre de la sede">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Idescat</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleTextarea">Dirección</label>
+                            <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                        </div>
+                        
+                        
+<!--                        <div class="form-group">
+                          <label for="exampleInputPassword1">Password</label>
+                          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        </div>-->
+                        
+                        <div class="form-group">
+                            <label for="exampleSelect1">Población</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>Badalona</option>
+                                <option>Rubi</option>
+                                <option>Terrassa</option>
+                                <option>Sabadell</option>
+                                <option>Granollers</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exampleSelect1">Provincia</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>Barcelona</option>
+                                <option>Tarragona</option>
+                                <option>Lérida</option>
+                                <option>Gerona</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Horario</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        </div>
+
+
+<!--                        <div class="form-group">
+                          <label for="exampleSelect2">Example multiple select</label>
+                          <select multiple class="form-control" id="exampleSelect2">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                          </select>
+                        </div>-->
+                        
+                    
+                </div>    
+                    
+                <div class="col-lg-6">    
+                        
+<!--                        <div class="form-group">
+                          <label for="exampleInputFile">File input</label>
+                          <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+                          <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+                        </div>-->
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Contacto</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Teléfono</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleTextarea">Observaciones</label>
+                            <textarea class="form-control" id="exampleTextarea" rows="6"></textarea>
+                        </div>
+
+                        <fieldset class="form-group">
+                          <legend>Mapa de Red</legend>
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="42" width="42" style="border:1px solid black;">
+                                
+                        </fieldset>    
+
+
+
+                        <!--<div class="clearfix"></div>-->
+
+<!--                        <fieldset class="form-group">
+                          <legend>Radio buttons</legend>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                              Option one is this and that&mdash;be sure to include why it's great
                             </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
-                            </div>
+                          </div>
+                          <div class="form-check">
+                          <label class="form-check-label">
+                              <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
+                              Option two can be something else and selecting it will deselect option one
+                            </label>
+                          </div>
+                          <div class="form-check disabled">
+                          <label class="form-check-label">
+                              <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+                              Option three is disabled
+                            </label>
+                          </div>
+                        </fieldset>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input">
+                              Check me out
+                            </label>
+                        </div>-->
+
+                        <button type="submit" class="btn btn-primary">IMG:Upload images</button>
+                        
+                    </form>
+                    
+                </div>    
+                
+                </div>
+            </div>
+            
+            
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+                    
+<!--                    <form class="form-horizontal form-label-left">
+                        <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nombre <span class="required"></span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Idescat <span class="required"></span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Contacto</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Teléfono</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div id="gender" class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                        <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
-                                    </label>
-                                    <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                        <input type="radio" name="gender" value="female"> Female
-                                    </label>
-                                </div>
+                                <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
                             </div>
                         </div>
                         <div class="form-group">
@@ -411,18 +659,325 @@ $(document).ready(function() {
                                 <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
                             </div>
                         </div>
-                    </form>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">GLAN?</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div id="gender" class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        <input type="radio" name="gender" value="male"> &nbsp; Si &nbsp;
+                                    </label>
+                                    <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                        <input type="radio" name="gender" value="female"> No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>-->
+
                 </div>
                 <div id="step-2">
-                    <h2 class="StepTitle">Step 2 Content</h2>
-                    <p>
-                        do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
+                    
+                    
+<div class="panel panel-default">
+    <div class="panel-body">
+        <fieldset class="col-md-12">    	
+            <legend>CIRCUITO</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                        <form> 
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Administrativo</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingrese el nombre de la sede">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Teléfono</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Cliente</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Ajuntament de Baga</option>
+                                    <option>Ajuntament de El Brull</option>
+                                    <option>Ajuntament de Calonge de Segarra</option>
+                                    <option>Diputacion de Barcelona</option>
+                                    <option>Serveis Municipal de Montseny S.L.</option>
+                                    <option>Xarxa Audiovisual Local</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Tecnología</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>FO</option>
+                                    <option>FTTH</option>
+                                    <option>xDSL</option>
+                                    <option>UMTS</option>
+                                    <option>LTE</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Velocidad</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>10MB</option>
+                                    <option>100MB</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Criticidad</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Crítica</option>
+                                    <option>Normal</option>
+                                </select>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                  <input id="is-backup" type="checkbox" class="form-check-input">
+                                  ¿Tiene Backup?
+                                </label>
+                            </div>                        
+
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                            <label for="exampleSelect1">Factura</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>AB-526389</option>
+                                <option>HB-958777</option>
+                                <option>GG-956857</option>
+                                <option>KJ-525689</option>
+                                <option>PL-955577</option>
+                                <option>XC-922877</option>    
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleSelect1">Estado</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>Pre-Alta</option>
+                                <option>Alta</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="checkbox" id="gestionado" class="form-check-input">
+                                  ¿Es gestionado?
+                                </label>
+                            </div>                        
+                        </div>
+                        
+                        <div class="grid-caudal" style="display: none;">
+                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
+                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
+                            <div class="panel-body">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="" class="form-check-input"></th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Oro</td>
+                                            <td>60</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option selected="">Mb</option>
+                                                    <option>%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Plata</td>
+                                            <td>30</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option selected="">Mb</option>
+                                                    <option>%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+                <!-- SET CIRCUIT BACKUP -->
+                
+<!--<div class="panel panel-default">-->
+    <div id="circuit-backup" class="panel-body" style="display:none;">
+        <fieldset class="col-md-12">    	
+            <legend>CIRCUITO BACKUP</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                        <form> 
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Administrativo</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingrese el nombre de la sede">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Teléfono</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Cliente</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Ajuntament de Baga</option>
+                                    <option>Ajuntament de El Brull</option>
+                                    <option>Ajuntament de Calonge de Segarra</option>
+                                    <option>Diputacion de Barcelona</option>
+                                    <option>Serveis Municipal de Montseny S.L.</option>
+                                    <option>Xarxa Audiovisual Local</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Tecnología</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>FO</option>
+                                    <option>FTTH</option>
+                                    <option>xDSL</option>
+                                    <option>UMTS</option>
+                                    <option>LTE</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Velocidad</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>10MB</option>
+                                    <option>100MB</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                            <label for="exampleSelect1">Estado</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>Pre-Alta</option>
+                                <option>Alta</option>
+                            </select>
+                        </div>    
+                            
+                                  
+
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        
+                    
+                    
+                        <div class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="checkbox" id="gestionado-backup" class="form-check-input">
+                                  ¿Es gestionado?
+                                </label>
+                            </div>                        
+                        </div>
+                        
+                        <div class="grid-caudal-backup" style="display: none;">
+                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
+                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
+                            <div class="panel-body">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="" class="form-check-input"></th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Bronce</td>
+                                            <td>60</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option>Mb</option>
+                                                    <option selected="">%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+                <!-- Set -->
+                
+                
+                
+                
+                
+                
+                
+            </div>
+            
+            
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+<!--</div>-->                
+                
+                
+                
+                
+                
+                <!-- SET -->
+                
+            </div>
+            
+            
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+</div>                
+                
+                
+                
+                
+                
                 </div>
                 <div id="step-3">
                     <h2 class="StepTitle">Step 3 Content</h2>
@@ -463,7 +1018,61 @@ $(document).ready(function() {
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
                         in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                     </p>
-                </div>					  
+                </div>
+                
+                <div id="step-6">
+                    <h2 class="StepTitle">Step 6 Content</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+                
+                <div id="step-7">
+                    <h2 class="StepTitle">Step 7 Content</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+                
+                <div id="step-8">
+                    <h2 class="StepTitle">Step 8 Content</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+                
+                
+                
+                
+                
+                
             </div>
             <!-- End SmartWizard Content -->
         </div>

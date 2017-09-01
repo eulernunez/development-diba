@@ -55,10 +55,10 @@
         <thead>
             <tr class="ui-state-active noselect">
                 <th data-field="state" data-checkbox="true"></th>
-                <th data-field="referenceCode" data-sortable="true" data-width="8%">ID</th>
-                <th data-field="employeeId" data-sortable="true" data-width="8%">ID SEDE</th>
-                <th data-field="period" data-sortable="true" data-width="8%">CIF</th>
-                <th data-field="amount" data-sortable="true" data-width="70%">SEDE</th>
+                <th data-field="nombre" data-sortable="true" data-width="25%">SEDE</th>
+                <th data-field="direccion" data-sortable="true" data-width="25%">DIRECCIÓN</th>
+                <th data-field="contacto" data-sortable="true" data-width="25%">CONTACTO</th>
+                <th data-field="fecha" data-sortable="true" data-width="15%">FECHA</th>
                 <th data-field="operation" data-width="6%" data-align="center" data-valign="middle">ACCIONES</th>
                 <!--<th data-field="conceptId" data-sortable="true" data-width="50%">POBLACIÓN</th>-->
             </tr>
@@ -66,21 +66,24 @@
         <tbody>
             <?php foreach ($this->sedes as $sede) : ?>
             
+                
+        
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
                     <td></td>
-                    <td class="noWrap"><?= $sede->id; ?></td>
-                    <td class="noWrap"><?= $sede->idSede; ?></td>
-                    <td class="noWrap"><?= $sede->cif; ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($sede->sede)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($sede->nombre)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($sede->direccion)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($sede->contacto)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($sede->fechaAlta)); ?></td>
                     <td class="noWrap">
-                        <a class="update" href="javascript:void(0)" title="Consultar">
+    
+                        <a class="update" href="/tabs/<?= $sede->id; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
 
                     </td>
                     <!--<td class="noWrap"></td>-->
                 </tr>
-
+          </a>
             <?php endforeach; ?>
         </tbody>
     </table>
@@ -90,10 +93,10 @@
 
 <script>
 
-    var $table = $('#sedes');
-
-    $(function () {
-            $table.bootstrapTable('hideColumn', 'referenceCode');
-    });
+//    var $table = $('#sedes');
+//
+//    $(function () {
+//            $table.bootstrapTable('hideColumn', 'referenceCode');
+//    });
     
 </script>

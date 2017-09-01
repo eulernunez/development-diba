@@ -1,1 +1,62 @@
-<div class='alert alert-success'>Success 2!</div>
+<script>
+
+$(function() {
+
+    $('#grid-ipwan tbody tr').click(function(){
+
+        $("#grid-ipwan tbody tr").each(function () {
+            $(this).removeClass('success');
+        });
+        $(this).addClass('success');
+    });
+
+});
+
+</script>
+
+<div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 109px;">
+    <table id="grid-ipwan" class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th>Routing</th>
+                <th>IP</th>
+                <th>Máscara</th>
+                <th>PE Ppal</th>
+                <th>PE Backup</th>
+                <th>VLAN EDC</th>
+                <th>VLAN PE</th>
+                <th>RPV</th>
+                <th>Red</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php   
+            $total = count($this->information['ipwans']);
+            $row = 1; 
+        ?>
+        <?php foreach($this->information['ipwans'] as $configuration) : ?> 
+        <tr class="fila-grid <?= ($total==$row)?'success':'' ?>">                    
+            <td><?= $configuration['routing'] ?></td>
+            <td><?= $configuration['ip_wan_edc'] ?></td>
+            <td><?= $configuration['mascara'] ?></td>
+            <td><?= $configuration['pe_ppal'] ?></td>
+            <td><?= $configuration['pe_backup'] ?></td>
+            <td><?= $configuration['vlan_edc'] ?></td>
+            <td><?= $configuration['vlan'] ?></td>
+            <td><?= $configuration['rpv'] ?></td>
+            <td><?= $configuration['red'] ?></td>
+            <td> 
+                <a class="btn btn-primary btn-xs" href="#" onclick="ipwanoneFill('<?= $configuration['id'] ?>');" title="Consultar configuración">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                </a>
+                <a class="btn btn-primary btn-xs" href="#" role="button" onclick="alert('Delete');"  title="Eliminar configuración">
+                    <i class="glyphicon glyphicon-minus"></i>
+                </a>
+            </td>  
+        </tr>
+        <?php $row++; ?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>   

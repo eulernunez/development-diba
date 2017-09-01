@@ -1,1 +1,274 @@
-<div class='alert alert-success'>Success 2!</div>
+<style>
+
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>
+
+<script>
+
+function updateIpwan() {
+
+    var url = '/save-ipwan';
+    $.ajax({
+       type: "POST",
+       url: url,
+       data: $('#myForm').serialize(),
+       cache: false,
+       success: function (json) {
+                $("#grid-ipwan-fill").html(json);
+                $('.update-ipwan').addClass('disabled');
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+
+
+
+
+function addIplan() {
+
+    var id = $('#equipoId').val();
+    var idbck = $('#equipoBckId').val();
+
+    var data = {id: id, idbck: idbck};
+    var url = '/add-iplan';
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (json) {
+            $("#ipwanone-fill").html(json);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+    
+    
+
+function ipwanoneFill(id) {
+    
+    var data = {id: id, view: 1};
+    var    url = '/ipwanone-fill';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#ipwanone-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+}
+
+
+
+
+
+
+
+$(function(){
+    
+    $('#grid-iplan tbody tr').click(function(){
+        
+        $("#grid-iplan tbody tr").each(function () {
+                $(this).removeClass('success');
+        });
+        $(this).addClass('success');
+    });
+                
+});
+
+</script>
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        
+        <div style="float:right;">
+            <a class="btn btn-primary btn-sm" href="#" onclick="addIplan();" role="button" title="Agregar direccionamiento Lan">
+                <i class="glyphicon glyphicon-plus"></i>
+            </a>
+        </div>    
+        <div style="clear: both;"></div>
+
+        <div id="grid-iplan-fill">
+        <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 109px;">
+            <table id="grid-iplan" class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Alias</th>
+                        <th>Vlan Lan</th>
+                        <th>IP Lan</th>
+                        <th>Mask Lan</th>
+                        <th>Nat</th>
+                        <th>Int Lan</th>
+                        <th>RPV</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <?php $row = 1; ?>
+                    <?php foreach($this->information['iplans'] as $configuration) : ?> 
+                    <tr class="fila-grid <?= (1==$row)?'success':'' ?>">                    
+                        <td><?= $configuration['alias'] ?></td>
+                        <td><?= $configuration['vlan'] ?></td>
+                        <td><?= $configuration['ip_lan'] ?></td>
+                        <td><?= $configuration['mascara'] ?></td>
+                        <td><?= $configuration['nat'] ?></td>
+                        <td><?= $configuration['interfaz'] ?></td>
+                        <td><?= $configuration['rpv'] ?></td>
+                        <td> 
+                            <a class="btn btn-primary btn-xs" href="#" onclick="iplanoneFill('<?= $configuration['id'] ?>');" title="Consultar configuración">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                            </a>
+                            <a class="btn btn-primary btn-xs" href="#" role="button" onclick="alert('Delete');"  title="Eliminar configuración">
+                                <i class="glyphicon glyphicon-minus"></i>
+                            </a>
+                        </td>  
+                    </tr>
+                    <?php $row++; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+        <div id="ipwanone-fill">
+        <?php if(isset($this->information['iplans']['0'])) : ?>    
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-6">
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="iplequipo">Equipo</label>
+                        <?= $this->information['htmlcombobox']['0']; ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="iplrpv">RPV</label>
+                        <?php $form->get('iplrpv')->setValue($this->information['iplans']['0']['rpv_id']) ?>
+                        <?= $this->formSelect($form->get('iplrpv')); ?>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="iplalias">Alias</label>
+                        <?php $form->get('iplalias')->setValue($this->information['iplans']['0']['alias']) ?>
+                        <?= $this->formInput($form->get('iplalias')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="iplvlan">Vlan</label>
+                        <?php $form->get('iplvlan')->setValue($this->information['iplans']['0']['vlan']) ?>
+                        <?= $this->formInput($form->get('iplvlan')); ?>
+                    </div>                    
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="ipliplan">IP Lan</label>
+                        <?php $form->get('ipliplan')->setValue($this->information['iplans']['0']['ip_lan']) ?>
+                        <?= $this->formInput($form->get('ipliplan')); ?>
+                    </div>
+                    
+                </div>    
+
+                <div class="col-lg-6">
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="iplmascara">Máscara</label>
+                        <?php $form->get('iplmascara')->setValue($this->information['iplans']['0']['mascara']) ?>
+                        <?= $this->formInput($form->get('iplmascara')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="iplnat">Nat</label>
+                        <?php $form->get('iplnat')->setValue($this->information['iplans']['0']['nat']) ?>
+                        <?= $this->formInput($form->get('iplnat')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="iplinterfaz">Interfaz</label>
+                        <?php $form->get('iplinterfaz')->setValue($this->information['iplans']['0']['interfaz']) ?>
+                        <?= $this->formInput($form->get('iplinterfaz')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        &nbsp;
+                    </div>        
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    
+                    <?php if(isset($this->information['iplans']['0']['id'])) : ?>
+                        <input type="hidden" id="iplanId" name="iplanId" value="<?=  $this->information['iplans']['0']['id']; ?>">
+                    <?php  endif; ?>
+                    
+                    <div style="float:right;">
+                        <a class="btn btn-primary btn-sm update-ipwan" href="#" onclick="updateIplan();" role="button" title="Update direccionamiento Wan">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                    </div>
+                
+                </div>    
+            </div>
+        </div>
+        <?php endif; ?>    
+        </div>
+        
+        
+        <div class="clearfix"></div>
+    </div>
+</div>

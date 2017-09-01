@@ -1,1 +1,59 @@
-<div class='alert alert-success'>Success 2!</div>
+<div class="col-lg-3">    
+    <div class="form-group">
+        <label for="exampleInputEmail1">Nombre</label>
+        <?php $form->get('nombre')->setValue($information['sede']['nombre']) ?>
+        <?= $this->formInput($form->get('nombre')); ?>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputEmail1">Idescat</label>
+        <?php $form->get('idescat')->setValue($this->information['sede']['idescat']) ?>
+        <?= $this->formInput($form->get('idescat')); ?>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleTextarea">Dirección</label>
+        <?php $form->get('direccion')->setValue($this->information['sede']['direccion']);
+              $form->get('direccion')->setAttribute('rows', 1); ?>
+        <?= $this->formTextarea($form->get('direccion')); ?>
+    </div>
+</div>    
+                    
+<div class="col-lg-3">    
+    <div class="form-group">
+        <label for="exampleSelect1">Población</label>
+        <?php $form->get('poblacion')->setValue($this->information['sede']['poblacionId']) ?>
+        <?= $this->formSelect($form->get('poblacion')); ?>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleSelect1">Provincia</label>
+        <?php $form->get('provincia')->setValue($this->information['sede']['provinciaId']) ?>
+        <?= $this->formSelect($form->get('provincia')); ?>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputEmail1">Horario</label>
+        <?php $form->get('horario')->setValue($this->information['sede']['horario']) ?>
+        <?= $this->formInput($form->get('horario')); ?>
+    </div>
+</div>    
+                    
+<div class="col-lg-3">    
+    <div class="form-group">
+        <label for="exampleInputEmail1">Contacto</label>
+        <?php $form->get('contacto')->setValue($this->information['sede']['contacto']) ?>
+        <?= $this->formInput($form->get('contacto')); ?>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Teléfono</label>
+        <?php $form->get('telefono')->setValue($this->information['sede']['telefono']) ?>
+        <?= $this->formInput($form->get('telefono')); ?>
+    </div>
+    <div class="form-group">
+        <label for="exampleTextarea">Observación</label>
+        <?php $form->get('observacion')->setValue($this->information['sede']['observacion']);
+              $form->get('observacion')->setAttribute('rows', 1);  ?>
+        <?= $this->formTextarea($form->get('observacion')); ?>
+    </div>
+</div>

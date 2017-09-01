@@ -425,6 +425,14 @@ $form->prepare();
                     <div class="col-lg-6">    
                         <div id="form-step-2" role="form" data-toggle="validator">
                          
+                            <?php if(2==$this->tab) : ?>
+                            <div class="form-group">
+                                <label class="control-label" for="servicio">Circuito</label>
+                                <?= $this->comboBoxCircuito; ?>
+                            </div>
+                            
+                            <?php endif; ?>
+                            
                             <div class="form-group">
                                 <label class="control-label" for="servicio">Servicio</label>
                                 <?= $this->formSelect($form->get('eservicio')); ?>
@@ -700,10 +708,15 @@ $form->prepare();
             
         </div>
     </div>
+    
     <input type="hidden" id="stepwizard" name="stepwizard" value="0">
-        <!--</form>-->
-        <?= $this->form()->closeTag($form); ?>
-        <div id="box" style="border:1px solid #ccc;"></div>
+    <input type="hidden" id="tab" name="tab" value="<?= $this->tab; ?>">
+    <input type="hidden" id="sedeId" name="sedeId" value="<?= $this->sedeId; ?>">
+    <!--<input type="hidden" id="circuitoId" name="circuitoId" value="<?php # $this->circuitoId; ?>">-->
+    
+    <!--</form>-->
+    <?= $this->form()->closeTag($form); ?>
+    <div id="box" style="border:1px solid #ccc;"></div>
 </div>
 
 <script type="text/javascript">
@@ -745,31 +758,31 @@ $(document).ready(function(){
                         .addClass('btn btn-success save')
                         .on('click', function(){
 
-                            var url = 'com'
+                            var url = '/com'
                                $.ajax({
                                    type: "POST",
                                    url: url,
                                    data: $('#myForm').serialize(),
                                    cache: false,
                                    success: function (json) {
-                                        var obj = jQuery.parseJSON(json);
-                                        var results;
-                                        for(var key in obj){
-                                            console.log(' name= ' + key + ' value= ' + obj[key]);
-                                            results = parseInt(obj[key]);
-                                            console.log('Resultado='+results);
-                                       }
-                                       if(results>0) {
+//                                        var obj = jQuery.parseJSON(json);
+//                                        var results;
+//                                        for(var key in obj){
+//                                            console.log(' name= ' + key + ' value= ' + obj[key]);
+//                                            results = parseInt(obj[key]);
+//                                            console.log('Resultado='+results);
+//                                       }
+//                                       if(results>0) {
     //                                                    html = "<div class='alert alert-success'>Success!</div>";
                                             $("#box").html(json);
-                                            $('.save').hide();
-                                            $('.sw-btn-group-extra').hide();
-                                            $('.sw-btn-prev').addClass('disabled');
-                                            $('.sw-btn-next').addClass('disabled');
-                                        } else {
-                                            html = "<div class='alert alert-danger'>Error!</div>";
-                                            $("#box").html(html);
-                                        }
+//                                            $('.save').hide();
+//                                            $('.sw-btn-group-extra').hide();
+//                                            $('.sw-btn-prev').addClass('disabled');
+//                                            $('.sw-btn-next').addClass('disabled');
+//                                        } else {
+//                                            html = "<div class='alert alert-danger'>Error!</div>";
+//                                            $("#box").html(html);
+//                                        }
 
                                     },
                                     error: function (xhr, status) {
@@ -783,10 +796,14 @@ $(document).ready(function(){
             
             // Smart Wizard   btnFinish, btnCancel, 
             $('#smartwizard').smartWizard({ 
-                selected: 0, 
+                selected: <?= $this->tab; ?>, 
                 theme: 'arrows',
                 transitionEffect:'fade',
-                
+                <?php if('1'== $this->tab) : ?>
+                hiddenSteps: ['0', '2', '3', '4', '5'],
+                <?php elseif('2'== $this->tab) : ?>
+                hiddenSteps: ['0', '1', '3', '4', '5'],    
+                <?php endif ; ?>
                 toolbarSettings: {toolbarPosition: 'top',
                                   toolbarExtraButtons: [btnSaveAndOut]
                 },
@@ -883,8 +900,8 @@ $(document).ready(function(){
             });
             
             
-            
-            
+           
+           
             
             
         }); 
