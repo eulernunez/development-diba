@@ -79,8 +79,8 @@ class Circuito extends AbstractTableGateway {
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
-        elseif ($this->getSede($id)) {
-            if (!$this->update($data, array('id' => $id))) { return false; }
+        elseif ($id > 0) {
+            if (!$this->update($data, array('id' => $id))) { return $id; }
             return $id;
         }
         else return false;
@@ -105,6 +105,9 @@ class Circuito extends AbstractTableGateway {
             $data['alta'] = date("Y-m-d H:i:s");
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
+        } elseif ($id > 0) {
+            if (!$this->update($data, array('id' => $id))) { return $id; }
+            return $id;
         }
         else {return false;}
 
@@ -125,10 +128,91 @@ class Circuito extends AbstractTableGateway {
         else {return true;}
     }
     
+    public function getInformationByCircuito($id)
+    {
+        
+        $datos = array();
+        
+        $adapter = $this->adapter->query(
+                "SELECT c.id, c.administrativo, c.telefono, 
+                        cl.id AS clienteId, cl.cliente,  
+                        t.id AS tecnologiaId, t.tecnologia,
+                        v.id AS velocidadId, v.velocidad,
+                        cr.id AS criticidadId, cr.criticidad,
+                        f.id AS facturaId, f.factura,
+                        e.id AS estadoId, e.estado,
+                        c.es_gestionado, c.tiene_backup, c.parent_id	
+                            FROM circuitos AS c
+                                    LEFT JOIN clientes AS cl ON c.cliente_id = cl.id
+                                    LEFT JOIN tecnologias AS t ON c.tecnologia_id = t.id
+                                    LEFT JOIN velocidades AS v ON c.velocidad_id = v.id
+                                    LEFT JOIN criticidades AS cr ON c.criticidad_id = cr.id
+                                    LEFT JOIN facturas AS f ON c.factura_id = f.id
+                                    LEFT JOIN estados AS e ON c.estado_id = e.id
+                                    WHERE c.id = '" . $id . "' OR c.parent_id = '" . $id . "'");    
+
+        $circuitos = array();
+        foreach ($adapter->execute() as $item) {
+            $circuitos[] = $item;
+        }
+        
+        $datos['circuitos'] = $circuitos;
+ 
+        
+        $caudales = array();
+        
+        if(isset($circuitos['0']['id'])&&(int)$circuitos['0']['id']>0) {
+            $id = (int)$circuitos['0']['id'];
+            $adapter = $this->adapter->query("SELECT * FROM caudales WHERE circuito_id = '" . $id . "'" );
+            foreach ($adapter->execute() as $item) {
+                $caudales['principal'][] = $item;
+            }
+        }
+        
+        if(isset($circuitos['1']['id'])&&(int)$circuitos['1']['id']>0) {
+            $id = (int)$circuitos['1']['id'];
+            $adapter = $this->adapter->query("SELECT * FROM caudales WHERE circuito_id = '" . $id . "'" );
+            foreach ($adapter->execute() as $item) {
+                $caudales['backup'][] = $item;
+            }
+        }
+        
+        $datos['caudales'] = $caudales;
+        
+        return $datos;
+        
+        
+        
+    }        
     
     
-    
-    
+    public function getCircuitosBySede($id, $parent = 0)
+    {
+        
+        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $id . "'" );
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['administrativo'];
+        }
+
+        if(0==$parent) {
+            $tag = 'ecircuito';
+        } else {
+            $tag = 'becircuito';
+        }
+        
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
+        
+        foreach($select as $key => $circuito) {
+            
+            $html .= '<option value="'. $key . '">' . $circuito . '</option>';
+        }
+        
+        $html .= '</select>';
+        
+        return $html;
+
+    }        
     
 //    public function removeStickyNote($id) {
 //        return $this->delete(array('id' => (int) $id));
