@@ -480,6 +480,10 @@ class Wizard extends Form
         /* EQUIPO */
 
         // main
+        
+        
+        
+        
         $this->add(array(
              'type' => 'Zend\Form\Element\Select',
              'name' => 'eservicio',
@@ -757,7 +761,216 @@ class Wizard extends Form
             ),
         ));
         
+        /* Equipo Backup */
+
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'beservicio',
+             'options' => array(
+                    'label' => 'Servicio',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForServicio(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'beservicio',
+                    'required'=> false,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+
+        $this->add(array(
+            'name' => 'benemonico',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Nemónico',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'benemonico',
+                   # 'required'=>'required',
+                    'aria-describedby' => 'benemonicoHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
         
+        $this->add(array(
+            'name' => 'beipgestion',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP Gestión',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'beipgestion',
+                    #'required'=>'required',
+                    'aria-describedby' => 'beipgestionHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'benivel',
+             'options' => array(
+                    'label' => 'Nivel',
+                    'value_options' => array('1' => 'Nivel 1',
+                                             '2' => 'Nivel 2',
+                                             '3' => 'Nivel 3',
+                                             '4' => 'Nivel 4',
+                                             '5' => 'Nivel 5'),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'benivel',
+                    'required'=> true,
+                    'value' => '1',
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'benemonicon1',
+             'options' => array(
+                    'label' => 'Nemónico Nivel 1',
+                    'value_options' => array('1' => 'NA'),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'benemonicon1',
+                    'required'=> true,
+                    'value' => '1',
+                    'class' => 'form-control input-sm',
+                    'enable' => false
+                ),
+
+            'validators' => array('Int'),            
+        ));
+
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'befabricante',
+             'options' => array(
+                    'label' => 'Fabricante',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForFabricante(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'befabricante',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'bemodelo',
+             'options' => array(
+                    'label' => 'Modelo',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForModelo(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'bemodelo',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+
+        $this->add(array(
+            'name' => 'beserie',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'N/S',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'beserie',
+                    'aria-describedby' => 'beserieHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        /* Other side */
+        $this->add(array(
+            'name' => 'beubicacion',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Ubicación',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'eubicacion',
+                    'aria-describedby' => 'eubicacionHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'belogosalta',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Pedido LOGOS Alta',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'elogosalta',
+                    'aria-describedby' => 'elogosaltaHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'beobservacion',
+            'type' => 'Zend\Form\Element\Textarea',
+            'attributes'=>array(
+                'id' => 'eobservacion',
+                'class' => 'form-control input-sm',
+                'rows' => 4,
+                'placeholder' => 'Ingresa observaciones respecto al equipo ...',
+            ),
+            'options' => array(
+                'label' => 'Observaciones',
+            ),
+        ));
+        
+        
+        
+        
+
         /* EQUIPO NO GESTIONADO */
 
         $this->add(array(
@@ -1127,6 +1340,143 @@ class Wizard extends Form
                  array('name' => 'Zend\Filter\StringTrim'),
                  array('name' => 'Zend\Filter\StringToLower'),
              )
+        ));
+        
+        
+        /* IP LAN */
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'iplrpv',
+             'options' => array(
+                    'label' => 'RPV',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForRpv(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'iplrpv',
+                    'required'=> false,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));
+
+        $this->add(array(
+            'name' => 'iplalias',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Alias',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'iplalias',
+                   # 'required'=>'required',
+                    'aria-describedby' => 'iplaliasHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'iplvlan',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Vlan',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'iplvlan',
+                   # 'required'=>'required',
+                    'aria-describedby' => 'iplvlanHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'ipliplan',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP Lan',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'ipliplan',
+                   # 'required'=>'required',
+                    'aria-describedby' => 'ipliplanHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        /* Other side*/
+        $this->add(array(
+            'name' => 'iplmascara',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Máscara',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'iplmascara',
+                    'aria-describedby' => 'iplmascaraHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'iplnat',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Nat',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'iplnat',
+                    'aria-describedby' => 'iplnatHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+            )
+        ));
+
+        $this->add(array(
+            'name' => 'iplinterfaz',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Interfaz',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'iplinterfaz',
+                    'aria-describedby' => 'iplinterfazHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+            )
         ));
 
     } 
