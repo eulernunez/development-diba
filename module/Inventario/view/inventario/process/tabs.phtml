@@ -130,7 +130,7 @@ function updateSede() {
 
 function circuitoFill(id) {
     var data = {id: id, view: 1};
-    var    url = '/circuito-fill';
+    var    url = '<?= $this->url('circuito-fill'); ?>';
     $.ajax({
         type: "POST",
         url: url,
@@ -150,7 +150,7 @@ function circuitoFill(id) {
     
 function equipoFill(sede, id) {
     var data = {id: id, sede: sede, view: 1};
-    var    url = '/equipo-fill';
+    var    url = '<?= $this->url('equipo-fill'); ?>';
     
     $('#ipwan').removeClass('disabled');
     
