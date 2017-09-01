@@ -36,6 +36,18 @@ return array(
  					$serviceLocator->getServiceLocator()
  					->get('circuitoService')
  				);
+				$ctr->setEquipoService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('equipoService')
+ 				);
+                                $ctr->setIpWanService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('ipwanService')
+ 				);
+                                $ctr->setIpLanService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('iplanService')
+ 				);
 				$ctr->setWizardService(
  					$serviceLocator->getServiceLocator()
  					->get('wizardService')
@@ -125,9 +137,9 @@ return array(
             ),
             
             'wizard' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
-                    'route'    => '/wizard',
+                    'route'    => '/wizard[/[:id]/[:tab]]',
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'wizard',
@@ -168,10 +180,22 @@ return array(
                 ),
             ),
             
-            'tabs' => array(
+            'ip-lan' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/tabs',
+                    'route'    => '/ip-lan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ip-lan',
+                    ),
+                ),
+            ),
+            
+            
+            'tabs' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/tabs/[:id]',
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'tabs',
@@ -204,6 +228,117 @@ return array(
             ),
             
 
+            'circuito-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/circuito-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'circuito-fill',
+                    ),
+                ),
+            ),
+            
+            'equipo-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/equipo-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'equipo-fill',
+                    ),
+                ),
+            ),
+            
+            'sede-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/sede-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'sede-fill',
+                    ),
+                ),
+            ),
+
+            
+            'ipwan-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ipwan-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ipwan-fill',
+                    ),
+                ),
+            ),
+
+            'ipwanone-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ipwanone-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ipwanone-fill',
+                    ),
+                ),
+            ),
+
+            'add-ipwan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/add-ipwan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'add-ipwan',
+                    ),
+                ),
+            ),
+
+            'save-ipwan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-ipwan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'save-ipwan',
+                    ),
+                ),
+            ),
+
+            'iplan-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/iplan-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'iplan-fill',
+                    ),
+                ),
+            ),
+
+            'add-iplan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/add-iplan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'add-iplan',
+                    ),
+                ),
+            ),            
+            
+            'save-iplan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-iplan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'save-iplan',
+                    ),
+                ),
+            ),
+            
 //            'randomAction' => array(
 //                'type' => 'Segment',
 //                'options' => array(
@@ -300,6 +435,15 @@ return array(
             },
             'circuitoService' => function ($sm) {
                 return $sm->get('Inventario\Model\Circuito');            
+            },
+            'equipoService' => function ($sm) {
+                return $sm->get('Inventario\Model\Equipo');            
+            },
+            'ipwanService' => function ($sm) {
+                return $sm->get('Inventario\Model\IpWan');            
+            },
+            'iplanService' => function ($sm) {
+                return $sm->get('Inventario\Model\IpLan');            
             },
             'wizardService' => function ($sm) {
                 $wizardService = new \Inventario\Model\Wizard\WizardService();
