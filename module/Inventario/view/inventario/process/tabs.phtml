@@ -63,7 +63,7 @@ legend
 
 function updateEquipos() {
     
-    var url = '/equipo-fill';
+    var url = '<?= $this->url('equipo-fill'); ?>';
         $.ajax({
            type: "POST",
            url: url,
@@ -83,7 +83,7 @@ function updateEquipos() {
 
 function updateCircuitos() {
 
-    var url = '/circuito-fill';
+    var url = '<?= $this->url('circuito-fill'); ?>';
         $.ajax({
            type: "POST",
            url: url,
