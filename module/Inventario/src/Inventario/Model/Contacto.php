@@ -65,15 +65,15 @@ class Contacto extends AbstractTableGateway {
         );
 
         $id = (int) $contacto->getId();
-
+        
         if ($id == 0) {
             if (!$this->insert($data))
                 return false;
             return $this->getLastInsertValue();
         }
-        elseif ($this->getContacto($id)) {
+        elseif ($id > 0) {  // $this->getContacto($id)
             if (!$this->update($data, array('id' => $id)))
-                return false;
+                return $id;
             return $id;
         }
         else
@@ -96,6 +96,11 @@ class Contacto extends AbstractTableGateway {
             if (!$this->insert($data))
                 return false;
             return $this->getLastInsertValue();
+        }
+        elseif ($id > 0) {  // $this->getEquipmentContacto($id)
+            if (!$this->update($data, array('id' => $id)))
+                return $id;
+            return $id;
         }
         else
             return false;
