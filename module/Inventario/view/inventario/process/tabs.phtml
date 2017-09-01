@@ -107,7 +107,7 @@ function updateCircuitos() {
 
 function updateSede() {
     
-    var url = '/sede-fill';
+    var url = '<?= $this->url('sede-fill');?>';
        $.ajax({
            type: "POST",
            url: url,
