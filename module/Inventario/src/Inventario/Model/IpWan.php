@@ -79,8 +79,8 @@ class IpWan extends AbstractTableGateway {
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
-        elseif ($this->getSede($id)) {
-            if (!$this->update($data, array('id' => $id))) { return false; }
+        elseif ($id>0) {
+            if (!$this->update($data, array('id' => $id))) { return $id; }
             return $id;
         }
         else return false;
@@ -121,6 +121,146 @@ class IpWan extends AbstractTableGateway {
         elseif(0 == $ipWan->getIpwuso()) {return false;}
         else {return true;}
     }
+    
+    
+    public function getIpWanConfigurationByEquipo($id, $backupId)
+    {
+        
+        if($backupId>0) {
+            $filter = " OR ip.equipo_id = '" . $backupId . "' ";
+        } else {
+            $filter = "";
+        }
+        
+        $datos = array();
+        
+        
+        
+        
+        
+        # IpWan
+        $statement = "SELECT ip.id, ip.rpv_id, rp.rpv, ip.routing_id,
+                        ro.routing, ip.vlan_edc, ip.vlan_nacional_id,
+                        vn.vlan, ip.red_id, re.red,
+                        ip.uso_id, us.uso,
+                        ip.ip_wan_edc, ip.mascara,
+                        ip.pe_ppal, ip.pe_backup, ip.equipo_id
+                            FROM ip_wans AS ip 
+                            LEFT JOIN rpvs AS rp ON ip.rpv_id = rp.id
+                            LEFT JOIN routings AS ro ON ip.routing_id = ro.id
+                            LEFT JOIN vlan_nacionales AS vn ON ip.vlan_nacional_id = vn.id
+                            LEFT JOIN redes AS re ON ip.red_id = re.id
+                            LEFT JOIN usos AS us ON ip.red_id = us.id
+                            WHERE ip.equipo_id = '" . $id . "'" . $filter;
+        
+        $adapter = $this->adapter->query($statement);
+
+        $ipwans = array();
+        foreach ($adapter->execute() as $item) {
+            $ipwans[] = $item;
+        }
+        
+        $equipoId = 0;
+        if(isset($ipwans['0']['equipo_id'])) {
+            $equipoId = $ipwans['0']['equipo_id']; 
+        }
+        
+        $datos['ipwans'] = $ipwans;
+        
+        $htmlcombobox = array();
+        
+        $htmlcombobox[] = $this->getAvailableEquipo($id, $backupId, $equipoId);
+        
+        $datos['htmlcombobox'] = $htmlcombobox;
+
+        return $datos;
+
+    }        
+
+
+    public function getIpWanConfigurationById($id)
+    {
+        
+        $datos = array();
+        
+        # IpWan
+        $statement = "SELECT ip.id, ip.rpv_id, rp.rpv, ip.routing_id,
+                        ro.routing, ip.vlan_edc, ip.vlan_nacional_id,
+                        vn.vlan, ip.red_id, re.red,
+                        ip.uso_id, us.uso,
+                        ip.ip_wan_edc, ip.mascara,
+                        ip.pe_ppal, ip.pe_backup, ip.equipo_id
+                            FROM ip_wans AS ip 
+                            LEFT JOIN rpvs AS rp ON ip.rpv_id = rp.id
+                            LEFT JOIN routings AS ro ON ip.routing_id = ro.id
+                            LEFT JOIN vlan_nacionales AS vn ON ip.vlan_nacional_id = vn.id
+                            LEFT JOIN redes AS re ON ip.red_id = re.id
+                            LEFT JOIN usos AS us ON ip.red_id = us.id
+                            WHERE ip.id = '" . $id . "'";
+        
+        $adapter = $this->adapter->query($statement);
+
+        $ipwans = array();
+        foreach ($adapter->execute() as $item) {
+            $ipwans[] = $item;
+        }
+        $equipoId = $ipwans['0']['equipo_id']; 
+        $datos['ipwans'] = $ipwans;
+        $backupId = 0;
+        
+        $htmlcombobox = array();
+        
+        $htmlcombobox[] = $this->getAvailableEquipo($equipoId, $backupId, $equipoId);
+        
+        $datos['htmlcombobox'] = $htmlcombobox;
+
+        return $datos;
+
+    }        
+
+    
+    
+    
+    
+    
+
+
+
+
+
+    
+    
+    public function getAvailableEquipo($id, $backupId, $equipoId )
+    {
+
+        if($backupId>0) {
+            $filter = " OR id = '" . $backupId . "' ";
+        } else {
+            $filter = "";
+        }
+        
+        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE id = '" . $id . "'" . $filter . " ORDER BY id ASC");
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['nemonico'];
+        }
+        
+        
+      
+        $tag = 'ipweequipo';
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
+        
+        foreach($select as $key => $equipo) {
+            $selected = ($key==$equipoId)?'selected':'';
+            $html .= '<option value="'. $key . '"' . $selected . ' >' . $equipo . '</option>';
+        }
+        
+        $html .= '</select>';
+        
+        return $html;
+
+    }        
+    
     
     
     

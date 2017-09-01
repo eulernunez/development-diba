@@ -1,29 +1,30 @@
 <?php
 /**
- * Description of Equipo
+ * Description of Backup Equipo
  * @author Euler Nuñez
  */
 
-// module/Inventario/src/Inventario/Model/Entity/Equipo.php
+// module/Inventario/src/Inventario/Model/Entity/BackupEquipo.php
 
 namespace Inventario\Model\Entity;
 
-class Equipo {
+class BackupEquipo {
 
     protected $id;
-    protected $eservicio;
-    protected $enemonico;
-    protected $eipgestion;
-    protected $enivel;
-    protected $enemonicon1;
-    protected $efabricante;
-    protected $emodelo;
-    protected $eserie;
-    protected $eubicacion;
-    protected $elogosalta;
-    protected $eestado;
-    protected $eobservacion;
-
+    protected $beservicio;
+    protected $benemonico;
+    protected $beipgestion;
+    protected $benivel;
+    protected $benemonicon1;
+    protected $befabricante;
+    protected $bemodelo;
+    protected $beserie;
+    protected $beubicacion;
+    protected $belogosalta;
+    protected $beestado;
+    protected $beobservacion;
+    protected $parentId;
+    
     protected $contactoId;
     protected $circuitoId;
     
@@ -70,111 +71,111 @@ class Equipo {
         return $this;
     }
 
-    public function getEservicio() {
-        return $this->eservicio;
+    public function getBeservicio() {
+        return $this->beservicio;
     }
 
-    public function setEservicio($eservicio) {
-        $this->eservicio = $eservicio;
+    public function setBeservicio($beservicio) {
+        $this->beservicio = $beservicio;
         return $this;
     }
     
-    public function getEnemonico() {
-        return $this->enemonico;
+    public function getBenemonico() {
+        return $this->benemonico;
     }
 
-    public function setEnemonico($enemonico) {
-        $this->enemonico = $enemonico;
+    public function setBenemonico($benemonico) {
+        $this->benemonico = $benemonico;
         return $this;
     }
 
-    public function getEipgestion() {
-        return $this->eipgestion;
+    public function getBeipgestion() {
+        return $this->beipgestion;
     }
 
-    public function setEipgestion($eipgestion) {
-        $this->eipgestion = $eipgestion;
-        return $this;
-    }
-    
-    public function getEnivel() {
-        return $this->enivel;
-    }
-
-    public function setEnivel($enivel) {
-        $this->enivel = $enivel;
+    public function setBeipgestion($beipgestion) {
+        $this->beipgestion = $beipgestion;
         return $this;
     }
     
-    public function getEnemonicon1() {
-        return $this->enemonicon1;
+    public function getBenivel() {
+        return $this->benivel;
     }
 
-    public function setEnemonicon1($enemonicon1) {
-        $this->enemonicon1 = $enemonicon1;
+    public function setBenivel($benivel) {
+        $this->benivel = $benivel;
         return $this;
     }
     
-    public function getEfabricante() {
-        return $this->efabricante;
+    public function getBenemonicon1() {
+        return $this->benemonicon1;
     }
 
-    public function setEfabricante($efabricante) {
-        $this->efabricante = $efabricante;
-        return $this;
-    }
-
-    public function getEmodelo() {
-        return $this->emodelo;
-    }
-
-    public function setEmodelo($emodelo) {
-        $this->emodelo = $emodelo;
+    public function setBenemonicon1($benemonicon1) {
+        $this->benemonicon1 = $benemonicon1;
         return $this;
     }
     
-    public function getEserie() {
-        return $this->eserie;
+    public function getBefabricante() {
+        return $this->befabricante;
     }
 
-    public function setEserie($eserie) {
-        $this->eserie = $eserie;
+    public function setBefabricante($befabricante) {
+        $this->befabricante = $befabricante;
+        return $this;
+    }
+
+    public function getBemodelo() {
+        return $this->bemodelo;
+    }
+
+    public function setEmodelo($bemodelo) {
+        $this->bemodelo = $bemodelo;
         return $this;
     }
     
-    public function getEubicacion() {
-        return $this->eubicacion;
+    public function getBeserie() {
+        return $this->beserie;
     }
 
-    public function setEubicacion($eubicacion) {
-        $this->eubicacion = $eubicacion;
+    public function setBeserie($beserie) {
+        $this->beserie = $beserie;
         return $this;
     }
     
-    public function getElogosalta() {
-        return $this->elogosalta;
+    public function getBeubicacion() {
+        return $this->beubicacion;
     }
 
-    public function setElogosalta($elogosalta) {
-        $this->elogosalta = $elogosalta;
+    public function setBeubicacion($beubicacion) {
+        $this->beubicacion = $beubicacion;
+        return $this;
+    }
+    
+    public function getBelogosalta() {
+        return $this->belogosalta;
+    }
+
+    public function setBelogosalta($belogosalta) {
+        $this->belogosalta = $belogosalta;
         return $this;
     }
 
-    public function getEestado() {
-        return $this->eestado;
+    public function getBeestado() {
+        return $this->beestado;
     }
 
-    public function setEestado($eestado) {
-        $this->eestado = $eestado;
+    public function setBeestado($beestado) {
+        $this->beestado = $beestado;
         return $this;
     }
 
-    public function getEobservacion() {
-        return $this->eobservacion;
+    public function getBeobservacion() {
+        return $this->beobservacion;
     }
 
-    public function setEobservacion($eobservacion) {
-        $this->eobservacion = $eobservacion;
+    public function setBeobservacion($beobservacion) {
+        $this->beobservacion = $beobservacion;
         return $this;
     }
 
@@ -196,7 +197,14 @@ class Equipo {
         return $this;
     }
 
+    public function getParentId() {
+        return $this->parentId;
+    }
 
+    public function setParentId($parentId) {
+        $this->parentId = $parentId;
+        return $this;
+    }
 
     
 }

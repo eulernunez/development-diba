@@ -23,7 +23,8 @@ class Equipo {
     protected $elogosalta;
     protected $eestado;
     protected $eobservacion;
-
+    protected $ebackup;
+    
     protected $contactoId;
     protected $circuitoId;
     
@@ -196,6 +197,15 @@ class Equipo {
         return $this;
     }
 
+    public function getEbackup() {
+        return $this->ebackup;
+    }
+
+    public function setEbackup($ebackup) {
+        $this->ebackup = $ebackup;
+        return $this;
+    }
+    
 
 
     

@@ -1,27 +1,24 @@
 <?php
 /**
- * Description of IP WAN
+ * Description of IP LAN
  * @author Euler Nuñez
  */
 
-// module/Inventario/src/Inventario/Model/Entity/IpWan.php
+// module/Inventario/src/Inventario/Model/Entity/IpLan.php
 
 namespace Inventario\Model\Entity;
 
-class IpWan {
+class IpLan {
 
     protected $id;
     
-    protected $ipwrpv;
-    protected $ipwrouting;
-    protected $ipwvlanedc;
-    protected $ipwvlannacional;
-    protected $ipwred;
-    protected $ipwuso;
-    protected $ipwipwanedc;
-    protected $ipwmascara;
-    protected $ipwpeppal;
-    protected $ipwpebackup;
+    protected $iplrpv;
+    protected $iplalias;
+    protected $iplvlan;
+    protected $ipliplan;
+    protected $iplmascara;
+    protected $iplnat;
+    protected $iplinterfaz;
 
     protected $equipoId;
     
@@ -68,96 +65,69 @@ class IpWan {
         return $this;
     }
 
-    public function getIpwrpv() {
-        return $this->ipwrpv;
+    public function getIplrpv() {
+        return $this->iplrpv;
     }
 
-    public function setIpwrpv($ipwrpv) {
-        $this->ipwrpv = $ipwrpv;
+    public function setIplrpv($iplrpv) {
+        $this->iplrpv = $iplrpv;
         return $this;
     }
     
-    public function getIpwrouting() {
-        return $this->ipwrouting;
+    public function getIplalias() {
+        return $this->iplalias;
     }
 
-    public function setIpwrouting($ipwrouting) {
-        $this->ipwrouting = $ipwrouting;
+    public function setIplalias($iplalias) {
+        $this->iplalias = $iplalias;
         return $this;
     }
     
-    public function getIpwvlanedc() {
-        return $this->ipwvlanedc;
+    public function getIplvlan() {
+        return $this->iplvlan;
     }
 
-    public function setIpwvlanedc($ipwvlanedc) {
-        $this->ipwvlanedc = $ipwvlanedc;
+    public function setIplvlan($iplvlan) {
+        $this->iplvlan = $iplvlan;
         return $this;
     }
     
-    public function getIpwvlannacional() {
-        return $this->ipwvlannacional;
+    public function getIpliplan() {
+        return $this->ipliplan;
     }
 
-    public function setIpwvlannacional($ipwvlannacional) {
-        $this->ipwvlannacional = $ipwvlannacional;
+    public function setIpliplan($ipliplan) {
+        $this->ipliplan = $ipliplan;
         return $this;
     }
 
-    public function getIpwred() {
-        return $this->ipwred;
+    public function getIplmascara() {
+        return $this->iplmascara;
     }
 
-    public function setIpwred($ipwred) {
-        $this->ipwred = $ipwred;
+    public function setIplmascara($iplmascara) {
+        $this->iplmascara = $iplmascara;
         return $this;
     }
 
-    public function getIpwuso() {
-        return $this->ipwuso;
+    public function getIplnat() {
+        return $this->iplnat;
     }
 
-    public function setIpwuso($ipwuso) {
-        $this->ipwuso = $ipwuso;
+    public function setIplnat($iplnat) {
+        $this->iplnat = $iplnat;
         return $this;
     }
 
-    public function getIpwipwanedc() {
-        return $this->ipwipwanedc;
+    public function getIplinterfaz() {
+        return $this->iplinterfaz;
     }
 
-    public function setIpwipwanedc($ipwipwanedc) {
-        $this->ipwipwanedc = $ipwipwanedc;
-        return $this;
-    }
-    
-    public function getIpwmascara() {
-        return $this->ipwmascara;
-    }
-
-    public function setIpwmascara($ipwmascara) {
-        $this->ipwmascara = $ipwmascara;
-        return $this;
-    }
-
-    public function getIpwpeppal() {
-        return $this->ipwpeppal;
-    }
-
-    public function setIpwpeppal($ipwpeppal) {
-        $this->ipwpeppal = $ipwpeppal;
+    public function setIplinterfaz($iplinterfaz) {
+        $this->iplinterfaz = $iplinterfaz;
         return $this;
     }
     
-    public function getIpwpebackup() {
-        return $this->ipwpebackup;
-    }
-
-    public function setIpwpebackup($ipwpebackup) {
-        $this->ipwpebackup = $ipwpebackup;
-        return $this;
-    }
-
     public function getEquipoId() {
         return $this->equipoId;
     }
