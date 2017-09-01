@@ -75,8 +75,8 @@
                     <td class="noWrap"><?= ucwords(strtolower($sede->contacto)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($sede->fechaAlta)); ?></td>
                     <td class="noWrap">
-    
-                        <a class="update" href="/tabs/<?= $sede->id; ?>" title="Consultar">
+                        <!--  href="/tabs/<?= $sede->id; ?>" -->
+                        <a class="update" href="<?php echo $this->url('tabs') . $sede->id; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
 
