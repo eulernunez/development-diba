@@ -540,7 +540,7 @@ $(function(){
             
             <div style="float:right;">
                 <?php $sedeId = $this->information['sede']['id'] ;?>
-                <a class="btn btn-primary btn-sm" href="/wizard/<?= $sedeId; ?>/1" role="button" title="Agregar circuito">
+                <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/1" role="button" title="Agregar circuito">
                     <i class="glyphicon glyphicon-plus"></i>
                 </a>
             </div>    
