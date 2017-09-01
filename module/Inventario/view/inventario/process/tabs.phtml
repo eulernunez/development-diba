@@ -179,7 +179,7 @@ function ipwanFill() {
     $('#ipwan').addClass('disabled');
     
     var data = {id: id, idbck: idbck, view: 1};
-    var    url = '/ipwan-fill';
+    var    url = '<?= $this->url('ipwan-fill') ?>';
     $.ajax({
         type: "POST",
         url: url,
