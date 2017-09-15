@@ -171,13 +171,12 @@
                        
                     </a>
                     <ul class="collapse" id="component-nav">
-                       
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Generar Factura Pre. </a></li>
-                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Carregar Factura Pro. </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Esborrar Periode Facturació </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Sumatoris per Lot </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Direcció d'Entitats </a></li>
-                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Llistat d'Usuaris Lot3 </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Generar Factura Pre</span> </a></li>
+                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Carregar Factura Pro</span> </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Esborrar Periode Facturació</span> </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Sumatoris per Lot</span> </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Direcció d'Entitats</span> </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Llistat d'Usuaris Lot3</span> </a></li>
                     </ul>
                 </li>
 
@@ -195,25 +194,25 @@
                     <ul class="collapse" id="DDL-nav">
                         <li>
                             <a href="#" data-parent="#DDL-nav" data-toggle="collapse" class="accordion-toggle" data-target="#DDL1-nav">
-                                <i class="icon-sitemap"></i>&nbsp; Diputació de Barcelona
+                                <i class="icon-sitemap"></i><span style="font-size: 12px;">&nbsp;Diputación de Barcelona</span>  
 	   
                                 <span class="pull-right" style="margin-right: 20px;">
                                     <i class="icon-angle-left"></i>
                                 </span>
-                                
-                            </a>
+                            </a>    
+                           
                             <ul class="collapse" id="DDL1-nav">
                                 <li>
-                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XIC </a>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">XIC</span> </a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XEM </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">XEM</span> </a></li>
                                 <li>
-                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XB </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">XB</span> </a></li>
                                 <li>
-                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> XPN </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">XPN</span> </a></li>
                                 <li>
-                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Quadre Resum </a></li>
+                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Quadre Resum</span> </a></li>
                                 
                             </ul>
                         </li>
@@ -231,8 +230,8 @@
                     </a>
                     <ul class="collapse" id="provisio-nav">
                        
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Seguimiento Datos </a></li>
-                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> Seguimiento Moviles </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Seguimiento Datos</span> </a></li>
+                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Seguimiento Móviles</span> </a></li>
                     </ul>
                 </li>
 
@@ -248,7 +247,7 @@
                     <ul class="collapse" id="inventari-nav">
                         <li class="">
                             <!--<a href="button.html"><i class="icon-angle-right"></i> Planta Instal lada </a>-->
-                        <a href="<?php echo $this->url('list') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Plantas Instaladas') ?></a>
+                            <a href="<?php echo $this->url('list') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> <?= $this->translate('Plantas Instaladas') ?> </span></a>
                         
                         </li>
                         
@@ -264,7 +263,7 @@
                             <a href="<?php echo $this->url('alta') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Alta de Planta') ?></a>
                         </li>-->
                         <li class="">
-                            <a href="<?php echo $this->url('wizard') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Wizard') ?></a>
+                            <a href="<?php echo $this->url('wizard') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> <?= $this->translate('Wizard') ?> </span></a>
                         </li>
                         
                     </ul>
