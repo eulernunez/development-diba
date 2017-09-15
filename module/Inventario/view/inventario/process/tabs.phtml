@@ -859,7 +859,7 @@ $(function(){
                                         <?php foreach($this->information['caudales']['principal'] as $item) : ?>
                                             <tr class="row-input">
                                                 <td><input name="caudal-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
-                                                <td><input name="cantidad-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['cantidad']  ?>" /></td>
+                                                <td><input name="cantidad-<?= $cont?>" class="col-xs-12" type="text" value="<?= number_format($item['cantidad'],0)  ?>" /></td>
                                                 <td><select name="unidad-<?= $cont?>" class="col-xs-20" id="exampleSelect1">
                                                         <option value="1" <?= ('1'==$item['unidad'])?'selected':'' ?>>Mb</option>
                                                         <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
@@ -983,7 +983,7 @@ $(function(){
                                                  
                                             <tr class="row-input">
                                                 <td><input name="caudalbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
-                                                <td><input name="cantidadbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['cantidad']  ?>" /></td>
+                                                <td><input name="cantidadbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= number_format($item['cantidad'],0)  ?>" /></td>
                                                 <td><select name="unidadbck-<?= $cont?>" class="col-xs-20" id="exampleSelect1">
                                                         <option value="1" <?= ('1'==$item['unidad'])?'selected':'' ?>>Mb</option>
                                                         <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>

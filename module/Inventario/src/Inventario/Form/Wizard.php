@@ -227,7 +227,8 @@ class Wizard extends Form
                     'required'=>'required',
                     'aria-describedby' => 'cadministrativoHelp',
                     'placeholder' => 'Ingresar el administrativo',
-                    'class' => 'form-control input-sm'
+                    'class' => 'form-control input-sm',
+                    'maxlength' => 14
                 ),
             'filters' => array(
                  array('name' => 'Zend\Filter\StringTrim'),
