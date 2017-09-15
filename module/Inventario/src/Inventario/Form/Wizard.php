@@ -1479,6 +1479,506 @@ class Wizard extends Form
             )
         ));
 
+        
+        /* HARDWARE ADICIONAL */
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'hatipo',
+             'options' => array(
+                    'label' => 'Tipo',
+                    'value_options' => array('' => 'Seleccione una opción') 
+                        +  $this->getOptionsForHardwareAdicional(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'hatipo',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'hafabricante',
+             'options' => array(
+                    'label' => 'Fabricante',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForFabricante(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'hafabricante',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'hamodelo',
+             'options' => array(
+                    'label' => 'Modelo',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForModelo(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'hamodelo',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+
+        // Other side
+        $this->add(array(
+            'name' => 'haserie',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'N/S',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'haserie',
+                    'aria-describedby' => 'haserieHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'haalias',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Alias',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'haalias',
+                    'aria-describedby' => 'haaliasHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        
+        /* HARDWARE ESPECIAL */
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'rpvtarjeta',
+             'options' => array(
+                    'label' => 'Tarjeta',
+                    'value_options' => array('' => 'Seleccione una opción') 
+                        +  $this->getOptionsForTarjeta(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvtarjeta',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'rpvfabricante',
+             'options' => array(
+                    'label' => 'Fabricante',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForFabricante(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvfabricante',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+        ));        
+        
+        /* Other side */
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'rpvmodelo',
+             'options' => array(
+                    'label' => 'Modelo',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForModelo(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvamodelo',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),  
+        ));
+
+        $this->add(array(
+            'name' => 'rpvserie',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'N/S',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvserie',
+                    'aria-describedby' => 'rpvserieHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'rpvalias',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Alias',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvalias',
+                    'aria-describedby' => 'rpvaliasHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        /* Other field set IP LAN*/
+        /* Side a */
+        $this->add(array(
+            'name' => 'rpvvlan',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Vlan',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvvlan',
+                    'aria-describedby' => 'rpvvlanHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'rpviplan1',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP Lan 1',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpviplan1',
+                    'aria-describedby' => 'rpviplan1Help',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'rpviplan2',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP Lan 2',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpviplan2',
+                    'aria-describedby' => 'rpviplan2Help',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        /* Side b */
+
+        $this->add(array(
+            'name' => 'rpvmascara',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Máscara',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvmascara',
+                    'aria-describedby' => 'rpvmascaraHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'rpvinterfaz1',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Interfaz 1',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvinterfaz1',
+                    'aria-describedby' => 'rpvinterfaz1Help',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'rpvinterfaz2',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Interfaz 2',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'rpvinterfaz2',
+                    'aria-describedby' => 'rpvinterfaz2Help',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        /* Multicast*/
+        /* Side a */
+        $this->add(array(
+            'name' => 'redwantunelgreppal',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Red Wan Tunel GRE PPAL',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'redwantunelgreppal',
+                    'aria-describedby' => 'redwantunelgreppalHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+
+        $this->add(array(
+            'name' => 'iploppbackgre',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP LoppBack GRE',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'iploppbackgre',
+                    'aria-describedby' => 'iploppbackgreHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'ipedctunel1',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP EDC Tunel 1',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'ipedctunel1',
+                    'aria-describedby' => 'iploppbackgreHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'ipasrppaltuneloficina',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP ASR PPAL Tunel Oficina',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'ipasrppaltuneloficina',
+                    'aria-describedby' => 'ipasrppaltuneloficinaHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));        
+
+        $this->add(array(
+            'name' => 'interfaztunelasrppal',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Interfaz Tunel ASR PPAL',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'interfaztunelasrppal',
+                    'aria-describedby' => 'interfaztunelasrppalHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        /* Side b */
+        $this->add(array(
+            'name' => 'redwantunelgrebck',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Red Wan Tunel GRE BCK',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'redwantunelgrebck',
+                    'aria-describedby' => 'redwantunelgrebckHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));        
+        
+        $this->add(array(
+            'name' => 'iprp',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP RP',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'iprp',
+                    'aria-describedby' => 'iprpHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'ipedctunel2',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP EDC Tunel 2',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'ipedctunel2',
+                    'aria-describedby' => 'ipedctunel2Help',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));        
+        
+        $this->add(array(
+            'name' => 'ipasrbcktuneloficina',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP ASR BCK Tunel Oficina',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'ipasrbcktuneloficina',
+                    'aria-describedby' => 'ipasrbcktuneloficinaHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'interfaztunelasrbck',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Interfaz Tunel ASR BCK',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'interfaztunelasrbck',
+                    'aria-describedby' => 'interfaztunelasrbckHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        
+
     } 
     
 
@@ -1662,4 +2162,26 @@ class Wizard extends Form
     }        
     
     
+    public function getOptionsForHardwareAdicional() 
+    {
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query('SELECT id, tipo FROM tipo_hardware_adicional');
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['tipo'];
+        }
+        return $select;
+    }
+    
+    public function getOptionsForTarjeta()
+    {
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query('SELECT id, tarjeta FROM tarjetas');
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['tarjeta'];
+        }
+        return $select;
+    }
+
 }    
