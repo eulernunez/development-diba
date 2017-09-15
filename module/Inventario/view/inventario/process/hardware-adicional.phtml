@@ -1,0 +1,120 @@
+
+<!--<form id="pago">
+<fieldset>
+<legend>Comprador</legend>
+<ol>
+<li>
+<label for="nombre">Nombre</label>
+<input id="nombre" name="nombre" type="text" placeholder="Escribe tu nombre completo" required autofocus>
+</li>
+<li>
+<label for="email">Email</label>
+<input id="email" name="email" type="email" placeholder="ejemplo@um.es" required>
+</li>
+<li>
+<label for="telefono">Teléfono</label>
+<input id="telefono" name="telefono" type="tel" placeholder="Ej. +34668899999" required>
+</li>
+<li>
+<label for="pais">País</label>
+<input id="pais" name="pais" type="text" required>
+</li>
+</ol>
+</fieldset>
+<fieldset>
+<legend>Tarjeta de crédito o débito</legend>
+<ol>
+<li>
+<label for="numtarjeta">Número</label>
+<input id="numtarjeta" name="numtarjeta" type="number" placeholder="Ej. 5555-4444-3333-2222" required>
+</li>
+<li>
+<label for="nomtarjeta">Nombre</label>
+<input id="nomtarjeta" name="nomtarjeta" type="text" placeholder="Nombre que figura en la tarjeta" required>
+</li>
+</ol>
+</fieldset>
+-------------------------------------------------
+<fieldset>
+<button type="submit">Confirmar pedido</button>
+</fieldset>
+</form>-->
+
+
+
+    
+    
+<?php
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('formulario'));
+$form->setAttribute('novalidate', 'novalidate');
+
+#die('<pre>' . print_r($form, true) . '</pre>');
+
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formLabel($form->get('email'));
+echo $this->formInput($form->get('email'));
+echo $this->FormElementErrors($form->get('email'));
+
+echo('<br/>');
+
+echo $this->formLabel($form->get('phone'));
+echo $this->formInput($form->get('phone'));
+echo $this->FormElementErrors($form->get('phone'));
+
+echo('<br/>');
+
+echo $this->formLabel($form->get('language'));
+echo $this->formSelect($form->get('language'));
+
+echo('<br/>');
+
+echo $this->formLabel($form->get('payment_type'));
+echo $this->formSelect($form->get('payment_type'));
+
+//echo $this->formLabel($form->get('phoneNumber'));
+//echo $this->formInput($form->get('phoneNumber'));
+//echo $this->FormElementErrors($form->get('phoneNumber'));
+
+echo('<br/>');
+
+
+echo $this->formLabel($form->get('use'));
+echo $this->formCheckbox($form->get('use'));
+
+echo('<br/>');
+
+echo $this->formLabel($form->get('direction'));
+echo $this->formRadio($form->get('direction'));
+
+//
+//echo('<br/>');
+//
+//
+//echo $this->formLabel($form->get('test'));
+//echo $this->formRadio($form->get('test'));
+
+
+
+echo('<br/>');
+
+echo $this->formLabel($form->get('message'));
+echo $this->formTextarea($form->get('message'));
+
+echo('<br/>');
+
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag($form);
+
+// //Imprimimos el campo email
+//$formLabel = $this->plugin('formLabel');
+//
+//$email = $form->get('email');
+//echo $formLabel->openTag();
+//echo $email->getOption('label');
+//echo $this->formInput($email);
+//echo $formLabel->closeTag();
+

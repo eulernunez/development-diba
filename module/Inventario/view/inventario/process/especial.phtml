@@ -1,0 +1,375 @@
+<style>
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}	
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>                
+
+<script>
+
+$(function(){
+
+    $('#gestionado').click(function(){
+
+      if (this.checked) {
+          $('.grid-caudal').css('display','block');
+      }
+      else {
+          
+           $('.grid-caudal').css('display','none');
+      }
+
+    });
+    
+    $('#is-backup').click(function(){
+
+      if (this.checked) {
+          $('#circuit-backup').css('display','block');
+      }
+      else {
+          
+           $('#circuit-backup').css('display','none');
+      }
+
+    });
+
+    
+    $('#gestionado-backup').click(function(){
+
+      if (this.checked) {
+          $('.grid-caudal-backup').css('display','block');
+      }
+      else {
+          
+           $('.grid-caudal-backup').css('display','none');
+      }
+
+    });
+    
+    
+        
+//    $("#boton").on("click",function(){
+//	    $("#parrafo").css("color", "#000000");
+//    });
+    
+    
+
+});
+
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <fieldset class="col-md-12">    	
+            <legend>CIRCUITO</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                        <form> 
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Administrativo</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingrese el nombre de la sede">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Teléfono</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Cliente</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Ajuntament de Baga</option>
+                                    <option>Ajuntament de El Brull</option>
+                                    <option>Ajuntament de Calonge de Segarra</option>
+                                    <option>Diputacion de Barcelona</option>
+                                    <option>Serveis Municipal de Montseny S.L.</option>
+                                    <option>Xarxa Audiovisual Local</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Tecnología</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>FO</option>
+                                    <option>FTTH</option>
+                                    <option>xDSL</option>
+                                    <option>UMTS</option>
+                                    <option>LTE</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Velocidad</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>10MB</option>
+                                    <option>100MB</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Criticidad</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Crítica</option>
+                                    <option>Normal</option>
+                                </select>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                  <input id="is-backup" type="checkbox" class="form-check-input">
+                                  ¿Tiene Backup?
+                                </label>
+                            </div>                        
+
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                            <label for="exampleSelect1">Factura</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>AB-526389</option>
+                                <option>HB-958777</option>
+                                <option>GG-956857</option>
+                                <option>KJ-525689</option>
+                                <option>PL-955577</option>
+                                <option>XC-922877</option>    
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleSelect1">Estado</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>Pre-Alta</option>
+                                <option>Alta</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="checkbox" id="gestionado" class="form-check-input">
+                                  ¿Es gestionado?
+                                </label>
+                            </div>                        
+                        </div>
+                        
+                        <div class="grid-caudal" style="display: none;">
+                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
+                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
+                            <div class="panel-body">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="" class="form-check-input"></th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Oro</td>
+                                            <td>60</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option selected="">Mb</option>
+                                                    <option>%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Plata</td>
+                                            <td>30</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option selected="">Mb</option>
+                                                    <option>%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+                <!-- SET CIRCUIT BACKUP -->
+                
+<!--<div class="panel panel-default">-->
+    <div id="circuit-backup" class="panel-body" style="display:none;">
+        <fieldset class="col-md-12">    	
+            <legend>CIRCUITO BACKUP</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                        <form> 
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Administrativo</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingrese el nombre de la sede">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Teléfono</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Cliente</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Ajuntament de Baga</option>
+                                    <option>Ajuntament de El Brull</option>
+                                    <option>Ajuntament de Calonge de Segarra</option>
+                                    <option>Diputacion de Barcelona</option>
+                                    <option>Serveis Municipal de Montseny S.L.</option>
+                                    <option>Xarxa Audiovisual Local</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Tecnología</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>FO</option>
+                                    <option>FTTH</option>
+                                    <option>xDSL</option>
+                                    <option>UMTS</option>
+                                    <option>LTE</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleSelect1">Velocidad</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>10MB</option>
+                                    <option>100MB</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                            <label for="exampleSelect1">Estado</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>Pre-Alta</option>
+                                <option>Alta</option>
+                            </select>
+                        </div>    
+                            
+                                  
+
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        
+                    
+                    
+                        <div class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="checkbox" id="gestionado-backup" class="form-check-input">
+                                  ¿Es gestionado?
+                                </label>
+                            </div>                        
+                        </div>
+                        
+                        <div class="grid-caudal-backup" style="display: none;">
+                            <button type="submit" class="btn btn-primary" style="float: right; margin-left: 2px; margin-right: 14px;">IMG:Delete</button>
+                            <button type="submit" class="btn btn-primary" style="float: right;">IMG:Add</button>
+                            <div class="panel-body">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="" class="form-check-input"></th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Unidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox" id="" class="form-check-input"></td>
+                                            <td>Bronce</td>
+                                            <td>60</td>
+                                            <td>
+                                                <select class="form-control" id="exampleSelect1">
+                                                    <option>Mb</option>
+                                                    <option selected="">%</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+                <!-- Set -->
+                
+                
+                
+                
+                
+                
+                
+            </div>
+            
+            
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+<!--</div>-->                
+                
+                
+                
+                
+                
+                <!-- SET -->
+                
+            </div>
+            
+            
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+</div>
