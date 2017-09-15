@@ -61,6 +61,29 @@ legend
 
 <script>
 
+function updateNotEquipos() {
+    
+    var url = '<?= $this->url('notequipo-fill'); ?>';
+        $.ajax({
+           type: "POST",
+           url: url,
+           data: $('#myForm').serialize(),
+           cache: false,
+           success: function (json) {
+                    $("#equipo-not-fill").html(json);
+                    $('.update-notequipo').addClass('disabled');
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#box").html(html);
+            }
+        });
+
+}
+
+
+
+
 function updateEquipos() {
     
     var url = '<?= $this->url('equipo-fill'); ?>';
@@ -147,12 +170,41 @@ function circuitoFill(id) {
         }
     });
 }
-    
+
+function notequipoFill(sede, id) {
+    var data = {id: id, sede: sede, view: 1};
+    var    url = '<?= $this->url('notequipo-fill'); ?>';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#equipo-not-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+}
+
+
+ 
+ 
 function equipoFill(sede, id) {
     var data = {id: id, sede: sede, view: 1};
     var    url = '<?= $this->url('equipo-fill'); ?>';
     
     $('#ipwan').removeClass('disabled');
+    $('#iplan').removeClass('disabled');
+    $('#ha').removeClass('disabled');
+    $('#he').removeClass('disabled');
+    $('#mc').removeClass('disabled');
+    
+    
     
     $.ajax({
         type: "POST",
@@ -177,6 +229,11 @@ function ipwanFill() {
     var idbck = $('#equipoBckId').val();
     
     $('#ipwan').addClass('disabled');
+    $('#iplan').removeClass('disabled');
+    $('#ha').removeClass('disabled');
+    $('#he').removeClass('disabled');
+    $('#mc').removeClass('disabled');
+    
     
     var data = {id: id, idbck: idbck, view: 1};
     var    url = '<?= $this->url('ipwan-fill') ?>';
@@ -203,6 +260,10 @@ function iplanFill() {
     var idbck = $('#equipoBckId').val();
     
     $('#iplan').addClass('disabled');
+    $('#ipwan').removeClass('disabled');
+    $('#ha').removeClass('disabled');
+    $('#he').removeClass('disabled');
+    $('#mc').removeClass('disabled');    
     
     var data = {id: id, idbck: idbck, view: 1};
     var    url = '<?= $this->url('iplan-fill') ?>'; 
@@ -222,6 +283,103 @@ function iplanFill() {
         }
     });
 }
+
+function haFill() {
+    
+    var id = $('#equipoId').val();
+    var idbck = $('#equipoBckId').val();
+    
+    $('#ha').addClass('disabled');
+    $('#ipwan').removeClass('disabled');
+    $('#iplan').removeClass('disabled');
+    $('#he').removeClass('disabled');
+    $('#mc').removeClass('disabled');    
+
+    
+    
+    
+    var data = {id: id, idbck: idbck, view: 1};
+    var    url = '<?= $this->url('ha-fill') ?>'; 
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#ipwan-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+}
+
+function heFill() {
+    
+    var id = $('#equipoId').val();
+    var idbck = $('#equipoBckId').val();
+    
+    $('#he').addClass('disabled');
+    $('#ipwan').removeClass('disabled');
+    $('#iplan').removeClass('disabled');
+    $('#ha').removeClass('disabled');
+    $('#mc').removeClass('disabled');    
+
+    
+    
+    var data = {id: id, idbck: idbck, view: 1};
+    var    url = '<?= $this->url('he-fill') ?>'; 
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#ipwan-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+}
+
+
+function mcFill() {
+    
+    var id = $('#equipoId').val();
+    var idbck = $('#equipoBckId').val();
+    
+    $('#mc').addClass('disabled');
+    $('#ipwan').removeClass('disabled');
+    $('#iplan').removeClass('disabled');
+    $('#ha').removeClass('disabled');
+    $('#he').removeClass('disabled');    
+    
+    var data = {id: id, idbck: idbck, view: 1};
+    var    url = '<?= $this->url('mc-fill') ?>'; 
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#ipwan-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+}
+
 
 
 
@@ -333,7 +491,7 @@ $(function(){
         });
         $(this).addClass('success');
     });
-    
+
     $('#grid-equipos tbody tr').click(function(){
         
         $("#grid-equipos tbody tr").each(function () {
@@ -592,13 +750,14 @@ $(function(){
             <div style="clear: both;"></div>
 
             <div id="circuito-fill">
-
-            <?php if(isset($this->information['circuitos']['0']['id'])) : ?>    
+                   
+    <?php if(isset($this->information['circuitos']['0']['id'])) : ?>
+    
             <input type="hidden" id="circuitoId" name="circuitoId" value="<?= $this->information['circuitos']['0']['id']; ?>">
             <?php if(isset($this->information['circuitos']['1']['id'])) : ?>
                 <input type="hidden" id="circuitoBackupId" name="circuitoBackupId" value="<?= $this->information['circuitos']['1']['id']; ?>">
             <?php endif ; ?>
-    
+     
             <div class="panel panel-default">
                 <div class="panel-body">
                     <fieldset class="col-md-12">    	
@@ -609,44 +768,44 @@ $(function(){
                     <div class="col-lg-6">    
 
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Administrativo</label>
+                                <label class="control-label" for="exampleInputEmail1">Administrativo</label>
                                 <?php $form->get('cadministrativo')->setValue($this->information['circuitos']['0']['administrativo']) ?>
                                 <?= $this->formInput($form->get('cadministrativo')); ?>
                                 
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Teléfono</label>
+                                <label class="control-label" for="exampleInputEmail1">Teléfono</label>
                                 <?php $form->get('ctelefono')->setValue($this->information['circuitos']['0']['telefono']) ?>
                                 <?= $this->formInput($form->get('ctelefono')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Cliente</label>
+                                <label class="control-label" for="exampleSelect1">Cliente</label>
                                 <?php $form->get('ccliente')->setValue($this->information['circuitos']['0']['clienteId']) ?>
                                 <?= $this->formSelect($form->get('ccliente')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Tecnología</label>
+                                <label class="control-label" for="exampleSelect1">Tecnología</label>
                                 <?php $form->get('ctecnologia')->setValue($this->information['circuitos']['0']['tecnologiaId']) ?>
                                 <?= $this->formSelect($form->get('ctecnologia')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Velocidad</label>
+                                <label class="control-label" for="exampleSelect1">Velocidad</label>
                                 <?php $form->get('cvelocidad')->setValue($this->information['circuitos']['0']['velocidadId']) ?>
                                 <?= $this->formSelect($form->get('cvelocidad')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Criticidad</label>
+                                <label class="control-label" for="exampleSelect1">Criticidad</label>
                                 <?php $form->get('ccriticidad')->setValue($this->information['circuitos']['0']['criticidadId']) ?>
                                 <?= $this->formSelect($form->get('ccriticidad')); ?>
                             </div>
 
                             <div class="form-check">
-                                <label class="form-check-label"> 
+                                <label class="control-label" class="form-check-label"> 
                                     <?php $backup = $this->information['circuitos']['0']['tiene_backup']; ?>
                                     <input id="cbackup" name="cbackup" type="checkbox" value="1" class="form-check-input" <?= ($backup)?'checked':'' ?>>
                                   ¿Tiene Backup?
@@ -658,13 +817,13 @@ $(function(){
                     <div class="col-lg-6">    
                         
                         <div class="form-group">
-                            <label for="exampleSelect1">Factura</label>
+                            <label class="control-label" for="exampleSelect1">Factura</label>
                             <?php $form->get('cfactura')->setValue($this->information['circuitos']['0']['facturaId']) ?>
                             <?= $this->formSelect($form->get('cfactura')); ?>                        
                         </div>
 
                         <div class="form-group">
-                            <label for="exampleSelect1">Estado</label>
+                            <label class="control-label" for="exampleSelect1">Estado</label>
                             <?php $form->get('cestado')->setValue($this->information['circuitos']['0']['estadoId']) ?>
                             <?= $this->formSelect($form->get('cestado')); ?>
                         </div>
@@ -737,38 +896,50 @@ $(function(){
 
                          
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Administrativo</label>
-                                <?php $form->get('bcadministrativo')->setValue($this->information['circuitos']['1']['administrativo']) ?>
+                                <label class="control-label" for="bcadministrativo">Administrativo</label>
+                                <?php if(isset($this->information['circuitos']['1']['administrativo'])) {
+                                    $form->get('bcadministrativo')->setValue($this->information['circuitos']['1']['administrativo']);
+                                } ?>
                                 <?= $this->formInput($form->get('bcadministrativo')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Teléfono</label>
-                                <?php $form->get('bctelefono')->setValue($this->information['circuitos']['1']['telefono']) ?>
+                                <label class="control-label" for="bctelefono">Teléfono</label>
+                                <?php if(isset($this->information['circuitos']['1']['telefono'])) {
+                                    $form->get('bctelefono')->setValue($this->information['circuitos']['1']['telefono']);
+                                } ?>
                                 <?= $this->formInput($form->get('bctelefono')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Cliente</label>
-                                <?php $form->get('bccliente')->setValue($this->information['circuitos']['1']['clienteId']) ?>
+                                <label class="control-label" for="bccliente">Cliente</label>
+                                <?php if(isset($this->information['circuitos']['1']['clienteId'])) {
+                                    $form->get('bccliente')->setValue($this->information['circuitos']['1']['clienteId']);
+                                } ?>
                                 <?= $this->formSelect($form->get('bccliente')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Tecnología</label>
-                                <?php $form->get('bctecnologia')->setValue($this->information['circuitos']['1']['tecnologiaId']) ?>
+                                <label class="control-label" for="bctecnologia">Tecnología</label>
+                                <?php if(isset($this->information['circuitos']['1']['tecnologiaId'])) {
+                                    $form->get('bctecnologia')->setValue($this->information['circuitos']['1']['tecnologiaId']);
+                                } ?>
                                 <?= $this->formSelect($form->get('bctecnologia')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Velocidad</label>
-                                <?php $form->get('bcvelocidad')->setValue($this->information['circuitos']['1']['velocidadId']) ?>
+                                <label class="control-label" for="bcvelocidad">Velocidad</label>
+                                <?php if(isset($this->information['circuitos']['1']['velocidadId'])) {
+                                    $form->get('bcvelocidad')->setValue($this->information['circuitos']['1']['velocidadId']);
+                                } ?>
                                 <?= $this->formSelect($form->get('bcvelocidad')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Estado</label>
-                                <?php $form->get('bcestado')->setValue($this->information['circuitos']['1']['estadoId']) ?>
+                                <label class="control-label" for="exampleSelect1">Estado</label>
+                                <?php if(isset($this->information['circuitos']['1']['estadoId'])) {
+                                    $form->get('bcestado')->setValue($this->information['circuitos']['1']['estadoId']);
+                                } ?>
                                 <?= $this->formSelect($form->get('bcestado')); ?>
                             </div>    
                     </div>    
@@ -778,9 +949,14 @@ $(function(){
                         <div class="form-group">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                     <?php $esBGestionado = $this->information['circuitos']['1']['es_gestionado']; ?>
+                                    <?php
+                                        $esBGestionado = 0;
+                                        if(isset($this->information['circuitos']['1']['es_gestionado'])) {
+                                        $esBGestionado = $this->information['circuitos']['1']['es_gestionado'];
+                                        } ?>
+                                    
                                     <input type="checkbox" id="bcgestionado" name="bcgestionado" value="1" class="form-check-input" <?= ($esBGestionado)?'checked':'' ?>>
-                                  ¿Es gestionado?
+                                    ¿Es gestionado?
                                 </label>
                             </div>                        
                         </div>
@@ -800,6 +976,7 @@ $(function(){
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
+                                    <?php if(isset($this->information['caudales']['backup'])) : ?>
                                     <tbody>
                                         <?php $cont = 1; ?>
                                         <?php foreach($this->information['caudales']['backup'] as $item) : ?>
@@ -821,6 +998,7 @@ $(function(){
                                         <?php endforeach; ?>                                    
                                     
                                     </tbody>
+                                    <?php endif; ?>
                                 </table>
                             </div>
                         </div>                        
@@ -848,18 +1026,25 @@ $(function(){
                 
             </div>
                             
+        <div class="clearfix"></div>                
+                        
+        <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
+            <a class="btn btn-primary btn-sm update-circuito" href="#" role="button" onclick="updateCircuitos();" title="Update circuito">
+                <i class="glyphicon glyphicon-edit"></i>
+            </a>
+        </div>     
+        
+          
+                        
+                    
         </fieldset>				
         <div class="clearfix"></div>
+        
         
         
     </div>
 </div>       
                 
-                <div style="float:right;">
-                    <a class="btn btn-primary btn-sm update-circuito" href="#" role="button" onclick="updateCircuitos();" title="Update circuito">
-                        <i class="glyphicon glyphicon-edit"></i>
-                    </a>
-                </div>     
                  
             <?php endIf; ?>    
                 
@@ -929,11 +1114,12 @@ $(function(){
 
     <?php if(isset($this->information['equipos']['0'])) : ?>        
             <div>
-                <button id="ipwan" type="button" class="btn btn-primary" onclick="ipwanFill();">Direccionamiento WAN</button>
-                <button id="iplan" type="button" class="btn btn-primary" onclick="iplanFill();">Direccionamiento LAN</button>
-                <button type="button" class="btn btn-primary">Hardware Adicional</button>
-                <button type="button" class="btn btn-primary">Hardware RPV 13918</button>
-            </div>
+                <button id="ipwan" type="button" title="Direccionamiento Wan" class="btn btn-primary" onclick="ipwanFill();">Direccionamiento WAN</button>
+                <button id="iplan" type="button" title="Direccionamiento Lan" class="btn btn-primary" onclick="iplanFill();">Direccionamiento LAN</button>
+                <button id="ha"    type="button" title="Hardware Adicional" class="btn btn-primary" onclick="haFill();">Hardware Adicional</button>
+                <button id="he"    type="button" title="Hardware Especial" class="btn btn-primary" onclick="heFill();">Hardware RPV 13918</button>
+                <button id="mc"    type="button" title="Configuración Multicast" class="btn btn-primary" onclick="mcFill();">Configuración Multicast</button>
+            </div> 
         
     <div id="equipo-fill">
         <div id="ipwan-fill">
@@ -1071,14 +1257,14 @@ $(function(){
                     
                     <div class="col-lg-6">
                         
-                            <div class="form-group">
-                                <label class="control-label" for="circuito-equipo-backup">Circuito</label>
-                                <?php if(isset($this->information['htmlcombobox']['1'])) : ?>
-                                    <?= $this->information['htmlcombobox']['1']; ?>
-                                <?php else: ?>
-                                    <?= $this->comboBoxCircuitoBck; ?>
-                                <?php endif; ?>
-                            </div>
+                        <div class="form-group">
+                            <label class="control-label" for="circuito-equipo-backup">Circuito</label>
+                            <?php if(isset($this->information['htmlcombobox']['1'])) : ?>
+                                <?= $this->information['htmlcombobox']['1']; ?>
+                            <?php else: ?>
+                                <?= $this->comboBoxCircuitoBck; ?>
+                            <?php endif; ?>
+                        </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="servicio">Servicio</label>
@@ -1196,6 +1382,14 @@ $(function(){
                 
             </div>
         
+            <div class="clearfix"></div>
+            <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
+                <a class="btn btn-primary btn-sm update-equipo" href="#" role="button" onclick="updateEquipos();" title="Update equipo">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </a>
+            </div>
+            
+            
         </fieldset>				
         <div class="clearfix"></div>
     </div>
@@ -1209,21 +1403,311 @@ $(function(){
           
             </div>
           <!-- FIN -->
-            <div style="float:right;">
-                <a class="btn btn-primary btn-sm update-equipo" href="#" role="button" onclick="updateEquipos();" title="Update equipo">
-                    <i class="glyphicon glyphicon-edit"></i>
-                </a>
-            </div>
+            
     <?php endIf; ?>      
         </div>
         <div class="tab-pane fade in" id="tab3">
-          <h3>This is tab 3</h3>
+
+            <div style="float:right;">
+
+                <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/3" role="button" title="Agregar equipo">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </a>
+
+            </div>
+            <div style="clear: both;"></div>
+
+            <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
+                 
+                <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Propiedad Router</th>
+                            <th>Tipo IP</th>
+                            <th>IP Cliente</th>
+                            <th>Red</th>
+                            <th>Usos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $row = 1; ?>
+                        <?php foreach($this->information['notequiposall'] as $notequipo) : ?> 
+                        <tr id="<?= $notequipo['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
+                            <td><?= $notequipo['propiedad'] ?></td>
+                            <td><?= $notequipo['tipo'] ?></td>
+                            <td><?= $notequipo['ip'] ?></td>
+                            <td><?= $notequipo['red'] ?></td>
+                            <td><?= $notequipo['uso'] ?></td>
+                            <td> 
+                                <a class="btn btn-primary btn-xs" href="#" onclick="notequipoFill('<?= $this->sedeId; ?>', '<?= $notequipo['id'] ?>');" title="Consultar equipo">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </a>
+                                <a class="btn btn-primary btn-xs" href="#" role="button" onclick="alert('Delete');"  title="Eliminar equipo">
+                                    <i class="glyphicon glyphicon-minus"></i>
+                                </a>
+                            </td>  
+                        </tr>
+                        <?php $row++; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="clear: both;"></div>
+
+    <?php if(isset($this->information['notequipos']['0'])) : ?>        
+              
+        <div id="equipo-not-fill">
+        
+        <div class="panel panel-default">
+            <div class="panel-body">        
+        
+                <fieldset class="col-md-12">    	
+                <legend>EQUIPO NO GESTIONADO</legend>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div class="col-lg-6">    
+                            <div id="form-step-3" role="form" data-toggle="validator">
+                                
+                                <div class="form-group">
+                                    <label class="control-label" for="circuito">Circuito</label>
+                                    <?= $this->information['htmlcombobox2']['0']; ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="engservicio">Servicio</label>
+                                    <?php $form->get('engservicio')->setValue($this->information['notequipos']['0']['servicio_id']) ?>
+                                    <?= $this->formSelect($form->get('engservicio')); ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="engpropiedad">Propiedad Router</label>
+                                    <?php $form->get('engpropiedad')->setValue($this->information['notequipos']['0']['propiedad_id']) ?>
+                                    <?= $this->formSelect($form->get('engpropiedad')); ?>
+                                </div>                        
+
+                                <div class="form-group">
+                                    <label class="control-label" for="tipo-ip">Tipo IP</label>
+                                    <?php $form->get('engtipoip')->setValue($this->information['notequipos']['0']['tipo_ip']) ?>
+                                    <?= $this->formSelect($form->get('engtipoip')); ?>                            
+                                </div>                        
+
+                                <div class="form-group">
+                                    <label class="control-label" for="ip-no-gestionado">IP</label>
+                                    <?php $form->get('engip')->setValue($this->information['notequipos']['0']['ip']) ?>
+                                    <?= $this->formInput($form->get('engip')); ?>
+                                </div>
+                        
+                                <div class="form-group">
+                                    <label class="control-label" for="red">Red</label>
+                                    <?php $form->get('engred')->setValue($this->information['notequipos']['0']['red_id']) ?>
+                                    <?= $this->formSelect($form->get('engred')); ?>                                
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="usos">Usos</label>
+                                    <?php $form->get('enguso')->setValue($this->information['notequipos']['0']['uso_id']) ?>    
+                                    <?= $this->formSelect($form->get('enguso')); ?>                            
+                                </div>
+                            
+                            </div>
+                        </div>    
+                    
+                    <div class="col-lg-6">
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-no-gestionado">Contacto</label>
+                            <?php $form->get('engcontacto')->setValue($this->information['notequipos']['0']['contacto']) ?>
+                            <?= $this->formInput($form->get('engcontacto')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="telefono-no-gestionado">Teléfono</label>
+                            <?php $form->get('engtelefono')->setValue($this->information['notequipos']['0']['telefono']) ?>
+                            <?= $this->formInput($form->get('engtelefono')); ?>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="horario-no-gestionado">Horario</label>
+                            <?php $form->get('enghorario')->setValue($this->information['notequipos']['0']['horario']) ?>
+                            <?= $this->formInput($form->get('enghorario')); ?>
+                        </div>
+                                                
+                        <div class="form-group">
+                            <label class="control-label" for="observacion-no-gestionado">Observaciones</label>
+                            <?php $form->get('engobservacion')->setValue($this->information['notequipos']['0']['observacion']) ?>    
+                            <?= $this->formTextarea($form->get('engobservacion')); ?>
+                        </div>
+                        
+                    </div>    
+                
+                </div>
+
+            </div>
+            
+            <div class="clearfix"></div>                
+                        
+            <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
+                <a class="btn btn-primary btn-sm update-notequipo" href="#" role="button" onclick="updateNotEquipos();" title="Update equipo no gestionado">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </a>
+            </div>     
+
+        </fieldset>				
+
+    </div>
+    </div>        
+            
+        <input type="hidden" id="notEquipoId" name="notEquipoId" value="<?=  $this->information['notequipos']['0']['id']; ?>">
+        <input type="hidden" id="notEquipoContactoId" name="notEquipoContactoId" value="<?=  $this->information['notequipos']['0']['contacto_id']; ?>">
+          
+    </div>        
+            
+            
+    <?php endif; ?>        
+            
+
+            
+            
+            
+        
+        
+        
         </div>
         <div class="tab-pane fade in" id="tab4">
-          <h3>This is tab 4</h3>
+          
+
+            <div style="float:right;">
+
+                <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar equipo glan">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </a>
+
+            </div>
+            <div style="clear: both;"></div>
+
+            <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
+                 
+                <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Función</th>
+                            <th>Nemónico</th>
+                            <th>Modelo</th>
+                            <th>S/N</th>
+                            <th>IP Gestión</th>
+                            <th>Criticidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $row = 1; ?>
+                        <?php foreach($this->information['glansall'] as $glan) : ?> 
+                        <tr id="<?= $glan['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
+                            <td><?= $glan['propiedad'] ?></td>
+                            <td><?= $glan['tipo'] ?></td>
+                            <td><?= $glan['ip'] ?></td>
+                            <td><?= $glan['red'] ?></td>
+                            <td><?= $glan['uso'] ?></td>
+                            <td> 
+                                <a class="btn btn-primary btn-xs" href="#" onclick="glanFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </a>
+                                <a class="btn btn-primary btn-xs" href="#" role="button" onclick="alert('Delete');"  title="Eliminar equipo">
+                                    <i class="glyphicon glyphicon-minus"></i>
+                                </a>
+                            </td>  
+                        </tr>
+                        <?php $row++; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="clear: both;"></div>
+
+    <?php if(isset($this->information['glans']['0'])) : ?>        
+              
+        <div id="glan-fill">
+            
+            
+            
+        </div>    
+            
+    <?php endif; ?>      
+          
+          
         </div>
         <div class="tab-pane fade in" id="tab5">
-          <h3>This is tab 5</h3>
+
+            <div style="float:right;">
+
+                <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar APs">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </a>
+
+            </div>
+            <div style="clear: both;"></div>
+
+            <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
+                 
+                <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>IP Cliente</th>
+                            <th>ID AP</th>
+                            <th>Modelo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $row = 1; ?>
+                        <?php foreach($this->information['apsall'] as $ap) : ?> 
+                        <tr id="<?= $ap['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
+                            <td><?= $ap['propiedad'] ?></td>
+                            <td><?= $ap['tipo'] ?></td>
+                            <td><?= $ap['ip'] ?></td>
+                            <td><?= $ap['red'] ?></td>
+                            <td><?= $ap['uso'] ?></td>
+                            <td> 
+                                <a class="btn btn-primary btn-xs" href="#" onclick="apFill('<?= $this->sedeId; ?>', '<?= $ap['id'] ?>');" title="Consultar ap">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </a>
+                                <a class="btn btn-primary btn-xs" href="#" role="button" onclick="alert('Delete');"  title="Eliminar equipo">
+                                    <i class="glyphicon glyphicon-minus"></i>
+                                </a>
+                            </td>  
+                        </tr>
+                        <?php $row++; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="clear: both;"></div>
+
+    <?php if(isset($this->information['aps']['0'])) : ?>        
+              
+        <div id="ap-fill">
+            
+            
+            
+        </div>    
+            
+    <?php endif; ?>      
+            
+            
+            
+            
+            
+            
+        
+        
+        
         </div>
         
         

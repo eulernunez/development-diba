@@ -2,9 +2,9 @@
 
 $(function() {
 
-    $('#grid-iplan tbody tr').click(function(){
+    $('#grid-ha tbody tr').click(function(){
 
-        $("#grid-iplan tbody tr").each(function () {
+        $("#grid-ha tbody tr").each(function () {
             $(this).removeClass('success');
         });
         $(this).addClass('success');
@@ -15,35 +15,36 @@ $(function() {
 </script>
 
 <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 109px;">
-    <table id="grid-iplan" class="table table-bordered table-hover table-condensed">
+    <table id="grid-ha" class="table table-bordered table-hover table-condensed">
         <thead>
             <tr>
+                <th>Tipo</th>
+                <th>Fabricante</th>
+                <th>Modelo</th>
+                <th>N/S</th>
                 <th>Alias</th>
-                <th>Vlan Lan</th>
-                <th>IP Lan</th>
-                <th>Mask Lan</th>
-                <th>Nat</th>
-                <th>Int Lan</th>
-                <th>RPV</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         <?php   
-            $total = count($this->information['iplans']);
+            $total = count($this->information['has']);
             $row = 1; 
         ?>
-        <?php foreach($this->information['iplans'] as $configuration) : ?> 
-        <tr class="fila-grid <?= ($total==$row)?'success':'' ?>">                    
-           <td><?= $configuration['alias'] ?></td>
-            <td><?= $configuration['vlan'] ?></td>
-            <td><?= $configuration['ip_lan'] ?></td>
-            <td><?= $configuration['mascara'] ?></td>
-            <td><?= $configuration['nat'] ?></td>
-            <td><?= $configuration['interfaz'] ?></td>
-            <td><?= $configuration['rpv'] ?></td>
+        <?php foreach($this->information['has'] as $ha) : ?>
+        <?php if(0==$this->select) : ?>    
+        <tr class="fila-grid <?= ($total==$row)?'success':'' ?>">
+        <?php else: ?>
+        <tr class="fila-grid <?= ($ha['id']==$this->select)?'success':'' ?>">
+        <?php endif; ?>     
+            
+            <td><?= $ha['tipo'] ?></td>
+            <td><?= $ha['fabricante'] ?></td>
+            <td><?= $ha['modelo'] ?></td>
+            <td><?= $ha['serie'] ?></td>
+            <td><?= $ha['alias'] ?></td>
             <td> 
-                <a class="btn btn-primary btn-xs" href="#" onclick="iplanoneFill('<?= $configuration['id'] ?>');" title="Consultar configuración">
+                <a class="btn btn-primary btn-xs" href="#" onclick="haoneFill('<?= $ha['id'] ?>');" title="Consultar configuración">
                     <i class="glyphicon glyphicon-eye-open"></i>
                 </a>
                 <a class="btn btn-primary btn-xs" href="#" role="button" onclick="alert('Delete');"  title="Eliminar configuración">

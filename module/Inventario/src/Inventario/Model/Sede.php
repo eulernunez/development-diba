@@ -152,18 +152,27 @@ class Sede extends AbstractTableGateway {
 
         $circuitos = array();
         $circuitoIds = array();
-        $combobox = array(); 
+        $circuitoIds2 = array();
+        $combobox = array();
+        $combobox2 = array();
         foreach ($adapter->execute() as $item) {
             $circuitos[] = $item;
-            $circuitoIds[] = $item['id'];
-            $combobox[$item['id']] = $item['administrativo'];
+            
+            if($item['es_gestionado']) {
+                $circuitoIds[] = $item['id'];
+                $combobox[$item['id']] = $item['administrativo'];
+            } else {
+                $circuitoIds2[] = $item['id'];
+                $combobox2[$item['id']] = $item['administrativo'];
+            }
         }
         
         $datos['circuitosall'] = $circuitos;
         $datos['circuitoIds'] = $circuitoIds;
+        $datos['circuitoIds2'] = $circuitoIds2;
         $datos['combobox'] = $combobox;
-        
-       
+        $datos['combobox2'] = $combobox2;
+
         
         unset($circuitos);
         $circuitos = array();
@@ -172,6 +181,8 @@ class Sede extends AbstractTableGateway {
         
         if(isset($circuitoIds['0'])) {
             $circuitoId = $circuitoIds['0'];
+        } elseif(isset($circuitoIds2['0'])) {
+            $circuitoId = $circuitoIds2['0'];
         }
         
         $adapter = $this->adapter->query(
@@ -225,7 +236,6 @@ class Sede extends AbstractTableGateway {
         $equipos = array();
         $equipoIds = array();
         
-
         if(count($circuitoIds)>0) {
             $adapter = $this->adapter->query(
                         "SELECT e.id, s.id AS servicioId, s.servicio,
@@ -295,11 +305,106 @@ class Sede extends AbstractTableGateway {
         
         $datos['htmlcombobox'] = $htmlcombobox;
         
+
+
+        # EQUIPO NO GESTIONADO
+        
+        $equiposNot = array();
+        $equipoNotIds = array();
+        
+        if(count($circuitoIds2) > 0) {
+            $adapter = $this->adapter->query(
+                        "SELECT e.id,
+                            e.servicio_id, s.servicio,
+                            e.propiedad_id, if(e.propiedad_id = 1,'Telefónica','Cliente') as propiedad,
+                            e.tipo_ip, if(e.tipo_ip = 1,'Dinámico','Estático') as tipo,
+                            e.ip,
+                            e.red_id, r.red,
+                            e.uso_id, u.uso,	
+                            e.contacto_id, c.contacto, c.telefono, c.horario,
+                            e.observacion,
+                            e.circuito_id
+                                FROM equipos_no_gestionados AS e
+                                LEFT JOIN servicios AS s ON e.servicio_id = s.id
+                                LEFT JOIN redes AS r ON e.red_id = r.id
+                                LEFT JOIN usos AS u ON e.uso_id = u.id
+                                LEFT JOIN contactos AS c ON e.contacto_id = c.id
+                                WHERE e.circuito_id IN ("  . implode(",",$circuitoIds2) . ")");
+
+
+            foreach ($adapter->execute() as $item) {
+                $equiposNot[] = $item;
+                $equipoNotIds[] = $item['id'];       
+            }
+        
+        }
+        $datos['notequiposall'] = $equiposNot;
+        $datos['notequipoIds'] = $equipoNotIds;
+
+
+         unset($equiposNot);
+        $equiposNot = array();
+        
+        $equipoNotId = -1;
+        if(isset($equipoNotIds['0'])) {
+        $equipoNotId = $equipoNotIds['0'];
+        }
+        
+        
+        
+        
+        
+        
+        $adapter = $this->adapter->query(
+                        "SELECT e.id,
+                            e.servicio_id, s.servicio,
+                            e.propiedad_id, if(e.propiedad_id = 1,'Telefónica','Cliente') as propiedad,
+                            e.tipo_ip, if(e.tipo_ip = 1,'Dinámico','Estático') as tipo,
+                            e.ip,
+                            e.red_id, r.red,
+                            e.uso_id, u.uso,	
+                            e.contacto_id, c.contacto, c.telefono, c.horario,
+                            e.observacion,
+                            e.circuito_id
+                                FROM equipos_no_gestionados AS e
+                                LEFT JOIN servicios AS s ON e.servicio_id = s.id
+                                LEFT JOIN redes AS r ON e.red_id = r.id
+                                LEFT JOIN usos AS u ON e.uso_id = u.id
+                                LEFT JOIN contactos AS c ON e.contacto_id = c.id
+                                WHERE e.id = '" . $equipoNotId . "'");    
+
+        $equipoNotCircuitoIds = array();                             
+        foreach ($adapter->execute() as $item) {
+            $equiposNot[] = $item;
+            $equipoNotCircuitoIds[$item['id']] = array('circuito_id' => $item['circuito_id']);
+        }
+        
+        
+        $datos['notequipoCircuitoIds'] = $equipoNotCircuitoIds;
+        $datos['notequipos'] = $equiposNot;
+        
+        $htmlcombobox2 = array();
+        
+        foreach($equipoNotCircuitoIds as $key => $circuito) {
+        $htmlcombobox2[] = $this->createHtmlComboCircuitos($circuito['circuito_id'], -1, $combobox2);
+        }
+        
+        $datos['htmlcombobox2'] = $htmlcombobox2;
+        
+       
+        # GLAN
+        
+        $glans = array();
+        $datos['glansall'] = $glans;
+        
+        # APs
+        
+        $aps = array();
+        $datos['apsall'] = $aps;
+        
         
         
         return $datos;
-        
-        
         
         
 //        
@@ -412,8 +517,10 @@ class Sede extends AbstractTableGateway {
     {
         if(0==$parent) {
             $tag = 'ecircuito';
-        } else {
+        } elseif($parent>0) {
             $tag = 'becircuito';
+        } else {
+            $tag = 'enotcircuito';
         }
         
         $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';

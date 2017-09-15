@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Description of IP Lan Table
+ * Description of Multicast Table
  * @author Euler Nunez 
  */
-// module/Inventario/src/Inventario/Model/IpLan.php
+// module/Inventario/src/Inventario/Model/Multicast.php
 
 namespace Inventario\Model;
 
@@ -12,9 +12,9 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
 
-class IpLan extends AbstractTableGateway {
+class Multicast extends AbstractTableGateway {
 
-    protected $table = 'ip_lans';
+    protected $table = 'multicasts';
 
     public function __construct(Adapter $adapter) {
         $this->adapter = $adapter;
@@ -54,23 +54,26 @@ class IpLan extends AbstractTableGateway {
 //        return $stickyNote;
 //    }
 
-    public function saveIpLan(Entity\IpLan $ipLan) {
+    public function saveMulticast(Entity\Multicast $multicast) {
 
-        if(!$this->validationIpLan($ipLan)) { return false;}
+        if(!$this->validationMulticast($multicast)) { return false;}
 
         $data = array(  
-            'rpv_id' => (int)$ipLan->getIplrpv(),
-            'alias' => $ipLan->getIplalias(),
-            'vlan' => $ipLan->getIplvlan(),
-            'ip_lan' => $ipLan->getIpliplan(),
-            'mascara' => $ipLan->getIplmascara(),
-            'nat' => $ipLan->getIplnat(),
-            'interfaz' => $ipLan->getIplinterfaz(),
+            'red_wan_tunel_gre_ppal' => $multicast->getRedwantunelgreppal(),
+            'ip_lopp_back_gre' => $multicast->getIploppbackgre(),
+            'ip_edc_tunel_1' => $multicast->getIpedctunel1(),
+            'ip_asr_ppal_tunel_oficina' => $multicast->getIpasrppaltuneloficina(),
+            'interfaz_tunel_asr_ppal' => $multicast->getInterfaztunelasrppal(),
+            'red_wan_tunel_gre_bck' => $multicast->getRedwantunelgrebck(),
+            'ip_rp' => $multicast->getIprp(),
+            'ip_edc_tunel_2' => $multicast->getIpedctunel2(),
+            'ip_asr_bck_tunel_oficina' => $multicast->getIpasrbcktuneloficina(),
+            'interfaz_tunel_asr_bck' => $multicast->getInterfaztunelasrbck(),
             
-            'equipo_id' => $ipLan->getEquipoId()
+            'equipo_id' => $multicast->getEquipoId()
             );
 
-        $id = (int) $ipLan->getId();
+        $id = (int) $multicast->getId();
 
         if ($id == 0) {
             if (!$this->insert($data)) { return false; }
@@ -108,7 +111,7 @@ class IpLan extends AbstractTableGateway {
 //    }
     
     
-    public function validationIpLan(Entity\IpLan $ipLan)
+    public function validationMulticast(Entity\Multicast $multicast)
     {
 //        if(0 == $ipLan->getIplrpv()) {return false;}
 //        elseif(empty($ipLan->getIplalias())) {return false;}
@@ -117,39 +120,48 @@ class IpLan extends AbstractTableGateway {
     }
     
     
-    public function getIpLanConfigurationByEquipo($id, $backupId)
+    public function getMulticastByEquipo($id, $backupId)
     {
         
         if($backupId>0) {
-            $filter = " OR ipl.equipo_id = '" . $backupId . "' ";
+            $filter = " OR mc.equipo_id = '" . $backupId . "' ";
         } else {
             $filter = "";
         }
         
         $datos = array();
         
-        # IpLan
-        $statement = "SELECT    ipl.id, ipl.rpv_id, rp.rpv,
-                                ipl.alias, ipl.vlan, ipl.ip_lan,
-                                ipl.mascara, ipl.nat, ipl.interfaz,
-                                ipl.equipo_id
-                                    FROM ip_lans AS ipl 
-                                    LEFT JOIN rpvs AS rp ON ipl.rpv_id = rp.id
-                                    WHERE ipl.equipo_id = '" . $id . "'" . $filter;
+        # Multicast
+        $statement = "SELECT 
+                        mc.id,
+                        mc.red_wan_tunel_gre_ppal,
+                        mc.ip_lopp_back_gre,
+                        mc.ip_edc_tunel_1,
+                        mc.ip_asr_ppal_tunel_oficina,
+                        mc.interfaz_tunel_asr_ppal,
+                        mc.red_wan_tunel_gre_bck,
+                        mc.ip_rp,
+                        mc.ip_edc_tunel_2,
+                        mc.ip_asr_bck_tunel_oficina,
+                        mc.interfaz_tunel_asr_bck,
+                        mc.equipo_id
+                            FROM multicasts AS mc
+                            WHERE mc.equipo_id = '" . $id . "'" . $filter;
         
         $adapter = $this->adapter->query($statement);
 
-        $iplans = array();
+        $mcs = array();
+
         foreach ($adapter->execute() as $item) {
-            $iplans[] = $item;
+            $mcs[] = $item;
         }
         
         $equipoId = 0;
-        if(isset($iplans['0']['equipo_id'])) {
-            $equipoId = $iplans['0']['equipo_id']; 
+        if(isset($mcs['0']['equipo_id'])) {
+            $equipoId = $mcs['0']['equipo_id']; 
         }
         
-        $datos['iplans'] = $iplans;
+        $datos['mcs'] = $mcs;
         
         $htmlcombobox = array();
         
@@ -157,39 +169,44 @@ class IpLan extends AbstractTableGateway {
         
         $datos['htmlcombobox'] = $htmlcombobox;
 
+       
+        
         return $datos;
 
     }        
 
 
-    public function getIpWanConfigurationById($id)
+    public function getMulticastById($id)
     {
         
         $datos = array();
         
-        # IpWan
-        $statement = "SELECT ip.id, ip.rpv_id, rp.rpv, ip.routing_id,
-                        ro.routing, ip.vlan_edc, ip.vlan_nacional_id,
-                        vn.vlan, ip.red_id, re.red,
-                        ip.uso_id, us.uso,
-                        ip.ip_wan_edc, ip.mascara,
-                        ip.pe_ppal, ip.pe_backup, ip.equipo_id
-                            FROM ip_wans AS ip 
-                            LEFT JOIN rpvs AS rp ON ip.rpv_id = rp.id
-                            LEFT JOIN routings AS ro ON ip.routing_id = ro.id
-                            LEFT JOIN vlan_nacionales AS vn ON ip.vlan_nacional_id = vn.id
-                            LEFT JOIN redes AS re ON ip.red_id = re.id
-                            LEFT JOIN usos AS us ON ip.red_id = us.id
-                            WHERE ip.id = '" . $id . "'";
+        # Multicast
+        $statement = 
+                    "SELECT 
+                        mc.id,
+                        mc.red_wan_tunel_gre_ppal,
+                        mc.ip_lopp_back_gre,
+                        mc.ip_edc_tunel_1,
+                        mc.ip_asr_ppal_tunel_oficina,
+                        mc.interfaz_tunel_asr_ppal,
+                        mc.red_wan_tunel_gre_bck,
+                        mc.ip_rp,
+                        mc.ip_edc_tunel_2,
+                        mc.ip_asr_bck_tunel_oficina,
+                        mc.interfaz_tunel_asr_bck,
+                        mc.equipo_id
+                            FROM multicasts AS mc
+                            WHERE mc.id = '" . $id . "'";
         
         $adapter = $this->adapter->query($statement);
 
-        $ipwans = array();
+        $mcs = array();
         foreach ($adapter->execute() as $item) {
-            $ipwans[] = $item;
+            $mcs[] = $item;
         }
-        $equipoId = $ipwans['0']['equipo_id']; 
-        $datos['ipwans'] = $ipwans;
+        $equipoId = $mcs['0']['equipo_id']; 
+        $datos['mcs'] = $mcs;
         $backupId = 0;
         
         $htmlcombobox = array();
@@ -220,7 +237,7 @@ class IpLan extends AbstractTableGateway {
         
         
       
-        $tag = 'iplequipo';
+        $tag = 'mcequipo';
         $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
         
         foreach($select as $key => $equipo) {

@@ -33,8 +33,12 @@ $(function() {
             $total = count($this->information['iplans']);
             $row = 1; 
         ?>
-        <?php foreach($this->information['iplans'] as $configuration) : ?> 
-        <tr class="fila-grid <?= ($total==$row)?'success':'' ?>">                    
+        <?php foreach($this->information['iplans'] as $configuration) : ?>
+        <?php if(0==$this->select) : ?>    
+        <tr class="fila-grid <?= ($total==$row)?'success':'' ?>">
+        <?php else: ?>
+        <tr class="fila-grid <?= ($configuration['id']==$this->select)?'success':'' ?>">
+        <?php endif; ?>             
            <td><?= $configuration['alias'] ?></td>
             <td><?= $configuration['vlan'] ?></td>
             <td><?= $configuration['ip_lan'] ?></td>

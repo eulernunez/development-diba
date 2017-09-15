@@ -28,17 +28,17 @@ legend
 
 <script>
 
-function updateIpwan() {
+function updateMc() {
 
-    var url = '/save-ipwan';
+    var url = '<?= $this->url('save-mc'); ?>'; 
     $.ajax({
        type: "POST",
        url: url,
        data: $('#myForm').serialize(),
        cache: false,
        success: function (json) {
-                $("#grid-ipwan-fill").html(json);
-                $('.update-ipwan').addClass('disabled');
+                $("#grid-mc-fill").html(json);
+                $('.update-mc').addClass('disabled');
         },
         error: function (xhr, status) {
             html = "<div class='alert alert-danger'>Error!</div>"
@@ -51,14 +51,14 @@ function updateIpwan() {
 
 
 
-function addIplan() {
+function addMc() {
 
     var id = $('#equipoId').val();
     var idbck = $('#equipoBckId').val();
 
     var data = {id: id, idbck: idbck};
-    var url = '<?= $this->url('add-iplan'); ?>';
-    
+    var url = '<?= $this->url('add-mc'); ?>';
+
     $.ajax({
         type: "POST",
         url: url,
@@ -77,10 +77,10 @@ function addIplan() {
     
     
 
-function ipwanoneFill(id) {
+function mconeFill(id) {
     
     var data = {id: id, view: 1};
-    var    url = '/ipwanone-fill';
+    var    url = '<?= $this->url('mcone-fill'); ?>';
     $.ajax({
         type: "POST",
         url: url,
@@ -96,6 +96,7 @@ function ipwanoneFill(id) {
             $("#fill").html(html);
         }
     });
+    
 }
 
 
@@ -105,15 +106,15 @@ function ipwanoneFill(id) {
 
 
 $(function(){
-    
-    $('#grid-iplan tbody tr').click(function(){
+
+    $('#grid-mc tbody tr').click(function(){
         
-        $("#grid-iplan tbody tr").each(function () {
+        $("#grid-mc tbody tr").each(function () {
                 $(this).removeClass('success');
         });
         $(this).addClass('success');
     });
-                
+   
 });
 
 </script>
@@ -123,39 +124,44 @@ $(function(){
     <div class="panel-body">
         
         <div style="float:right;">
-            <a class="btn btn-primary btn-sm" href="#" onclick="addIplan();" role="button" title="Agregar direccionamiento Lan">
+            <a class="btn btn-primary btn-sm" href="#" onclick="addMc();" role="button" title="Agregar multicast">
                 <i class="glyphicon glyphicon-plus"></i>
             </a>
         </div>    
         <div style="clear: both;"></div>
 
-        <div id="grid-iplan-fill">
+        <div id="grid-mc-fill">
         <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 109px;">
-            <table id="grid-iplan" class="table table-bordered table-hover table-condensed">
+            <table id="grid-mc" class="table table-bordered table-hover table-condensed">
                 <thead>
                     <tr>
-                        <th>Alias</th>
-                        <th>Vlan Lan</th>
-                        <th>IP Lan</th>
-                        <th>Mask Lan</th>
-                        <th>Nat</th>
-                        <th>Int Lan</th>
-                        <th>RPV</th>
+                        <th>Red Wan Tunel Gre Ppal</th>
+                        <th>IP Lopp Back Gre</th>
+                        <th>IP Edc Tunel 1</th>
+                        <th>IP Asr Ppal Tunel Oficina</th>
+                        <th>Interfaz Tunel Asr Ppal</th>
+                        <th>Red Wan Tunel Gre Bck</th>
+                        <th>IP RP</th>
+                        <th>IP Edc Tunel 2</th>
+                        <th>IP Asr Bck Tunel Oficina</th>
+                        <th>Interfaz Tunel Asr Bck</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
                     <?php $row = 1; ?>
-                    <?php foreach($this->information['iplans'] as $configuration) : ?> 
+                    <?php foreach($this->information['mcs'] as $mc) : ?> 
                     <tr class="fila-grid <?= (1==$row)?'success':'' ?>">                    
-                        <td><?= $configuration['alias'] ?></td>
-                        <td><?= $configuration['vlan'] ?></td>
-                        <td><?= $configuration['ip_lan'] ?></td>
-                        <td><?= $configuration['mascara'] ?></td>
-                        <td><?= $configuration['nat'] ?></td>
-                        <td><?= $configuration['interfaz'] ?></td>
-                        <td><?= $configuration['rpv'] ?></td>
+                        <td><?= $mc['red_wan_tunel_gre_ppal'] ?></td>
+                        <td><?= $mc['ip_lopp_back_gre'] ?></td>
+                        <td><?= $mc['ip_edc_tunel_1'] ?></td>
+                        <td><?= $mc['ip_asr_ppal_tunel_oficina'] ?></td>
+                        <td><?= $mc['interfaz_tunel_asr_ppal'] ?></td>
+                        <td><?= $mc['red_wan_tunel_gre_bck'] ?></td>
+                        <td><?= $mc['ip_rp'] ?></td>
+                        <td><?= $mc['ip_edc_tunel_2'] ?></td>
+                        <td><?= $mc['ip_asr_bck_tunel_oficina'] ?></td>
+                        <td><?= $mc['interfaz_tunel_asr_bck'] ?></td>
                         <td> 
                             <a class="btn btn-primary btn-xs" href="#" onclick="iplanoneFill('<?= $configuration['id'] ?>');" title="Consultar configuración">
                                 <i class="glyphicon glyphicon-eye-open"></i>
@@ -172,40 +178,45 @@ $(function(){
         </div>
     </div>
         <div id="ipwanone-fill">
-        <?php if(isset($this->information['iplans']['0'])) : ?>    
+        <?php if(isset($this->information['mcs']['0'])) : ?>    
         <div class="panel panel-default">
             <div class="panel-body">
 
                 <div class="col-lg-6">
                     
                     <div class="form-group">
-                        <label class="control-label" for="iplequipo">Equipo</label>
+                        <label class="control-label" for="mcequipo">Equipo</label>
                         <?= $this->information['htmlcombobox']['0']; ?>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="iplrpv">RPV</label>
-                        <?php $form->get('iplrpv')->setValue($this->information['iplans']['0']['rpv_id']) ?>
-                        <?= $this->formSelect($form->get('iplrpv')); ?>
-                    </div>
-                    
-                    
-                    <div class="form-group">
-                        <label class="control-label" for="iplalias">Alias</label>
-                        <?php $form->get('iplalias')->setValue($this->information['iplans']['0']['alias']) ?>
-                        <?= $this->formInput($form->get('iplalias')); ?>
+                        <label class="control-label" for="redwantunelgreppal">Red Wan Tunel GRE PPAL</label>
+                        <?php $form->get('redwantunelgreppal')->setValue($this->information['mcs']['0']['red_wan_tunel_gre_ppal']) ?>
+                        <?= $this->formInput($form->get('redwantunelgreppal')); ?>
                     </div>
                     
                     <div class="form-group">
-                        <label class="control-label" for="iplvlan">Vlan</label>
-                        <?php $form->get('iplvlan')->setValue($this->information['iplans']['0']['vlan']) ?>
-                        <?= $this->formInput($form->get('iplvlan')); ?>
-                    </div>                    
+                        <label class="control-label" for="iploppbackgre">IP LoppBack GRE</label>
+                        <?php $form->get('iploppbackgre')->setValue($this->information['mcs']['0']['ip_lopp_back_gre']) ?>
+                        <?= $this->formInput($form->get('iploppbackgre')); ?>
+                    </div>
                     
                     <div class="form-group">
-                        <label class="control-label" for="ipliplan">IP Lan</label>
-                        <?php $form->get('ipliplan')->setValue($this->information['iplans']['0']['ip_lan']) ?>
-                        <?= $this->formInput($form->get('ipliplan')); ?>
+                        <label class="control-label" for="ipedctunel1">IP EDC Tunel 1</label>
+                        <?php $form->get('ipedctunel1')->setValue($this->information['mcs']['0']['ip_edc_tunel_1']) ?>
+                        <?= $this->formInput($form->get('ipedctunel1')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="ipasrppaltuneloficina">IP ASR PPAL Tunel Oficina</label>
+                        <?php $form->get('ipasrppaltuneloficina')->setValue($this->information['mcs']['0']['ip_asr_ppal_tunel_oficina']) ?>
+                        <?= $this->formInput($form->get('ipasrppaltuneloficina')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="interfaztunelasrppal">Interfaz Tunel ASR PPAL</label>
+                        <?php $form->get('interfaztunelasrppal')->setValue($this->information['mcs']['0']['interfaz_tunel_asr_ppal']) ?>
+                        <?= $this->formInput($form->get('interfaztunelasrppal')); ?>
                     </div>
                     
                 </div>    
@@ -213,57 +224,54 @@ $(function(){
                 <div class="col-lg-6">
                     
                     <div class="form-group">
-                        <label class="control-label" for="iplmascara">Máscara</label>
-                        <?php $form->get('iplmascara')->setValue($this->information['iplans']['0']['mascara']) ?>
-                        <?= $this->formInput($form->get('iplmascara')); ?>
+                        <label class="control-label" for="redwantunelgrebck">Red Wan Tunel GRE BCK</label>
+                        <?php $form->get('redwantunelgrebck')->setValue($this->information['mcs']['0']['red_wan_tunel_gre_bck']) ?>
+                        <?= $this->formInput($form->get('redwantunelgrebck')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="iprp">IP RP</label>
+                        <?php $form->get('iprp')->setValue($this->information['mcs']['0']['ip_rp']) ?>
+                        <?= $this->formInput($form->get('iprp')); ?>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="iplnat">Nat</label>
-                        <?php $form->get('iplnat')->setValue($this->information['iplans']['0']['nat']) ?>
-                        <?= $this->formInput($form->get('iplnat')); ?>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label" for="iplinterfaz">Interfaz</label>
-                        <?php $form->get('iplinterfaz')->setValue($this->information['iplans']['0']['interfaz']) ?>
-                        <?= $this->formInput($form->get('iplinterfaz')); ?>
-                    </div>
-                    
-                    <div class="form-group">
-                        &nbsp;
-                    </div>        
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    
-                    <?php if(isset($this->information['iplans']['0']['id'])) : ?>
-                        <input type="hidden" id="iplanId" name="iplanId" value="<?=  $this->information['iplans']['0']['id']; ?>">
-                    <?php  endif; ?>
-                    
-                    <div style="float:right;">
-                        <a class="btn btn-primary btn-sm update-ipwan" href="#" onclick="updateIplan();" role="button" title="Update direccionamiento Wan">
-                            <i class="glyphicon glyphicon-edit"></i>
-                        </a>
+                        <label class="control-label" for="ipedctunel2">IP EDC Tunel 2</label>
+                        <?php $form->get('ipedctunel2')->setValue($this->information['mcs']['0']['ip_edc_tunel_2']) ?>
+                        <?= $this->formInput($form->get('ipedctunel2')); ?>
                     </div>
                 
-                </div>    
+                    <div class="form-group">
+                        <label class="control-label" for="ipasrbcktuneloficina">IP ASR BCK Tunel Oficina</label>
+                        <?php $form->get('ipasrbcktuneloficina')->setValue($this->information['mcs']['0']['ip_asr_bck_tunel_oficina']) ?>
+                        <?= $this->formInput($form->get('ipasrbcktuneloficina')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="interfaztunelasrbck">Interfaz Tunel ASR BCK</label>
+                        <?php $form->get('interfaztunelasrbck')->setValue($this->information['mcs']['0']['interfaz_tunel_asr_bck']) ?>
+                        <?= $this->formInput($form->get('interfaztunelasrbck')); ?>
+                    </div>
+                    
+                
+                    <?php if(isset($this->information['mcs']['0']['id'])) : ?>
+                        <input type="hidden" id="mcId" name="mcId" value="<?=  $this->information['mcs']['0']['id']; ?>">
+                    <?php  endif; ?>
+                    
+                    <div class="form-group">
+                        &nbsp;
+                    </div>    
+                        
+                    <div style="float:right;">
+                        <a class="btn btn-primary btn-sm update-mc" href="#" onclick="updateMc();" role="button" title="Update multicast">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                    </div>                    
+                    
+                    
+                </div>
             </div>
+            
         </div>
         <?php endif; ?>    
         </div>

@@ -49,44 +49,33 @@ $(function(){
         <div class="col-lg-6">
 
             <div class="form-group">
-                <label class="control-label" for="ipwequipo">Equipo</label>
+                <label class="control-label" for="iplequipo">Equipo</label>
                 <?= $this->information['htmlcombobox']['0']; ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwrpv">RPV</label>
-                <?php $form->get('ipwrpv')->setValue($this->information['ipwans']['0']['rpv_id']) ?>
-                <?= $this->formSelect($form->get('ipwrpv')); ?>
+                <label class="control-label" for="iplrpv">RPV</label>
+                <?php $form->get('iplrpv')->setValue($this->information['iplans']['0']['rpv_id']) ?>
+                <?= $this->formSelect($form->get('iplrpv')); ?>
             </div>
-                            
+                    
+                    
             <div class="form-group">
-                <label class="control-label" for="ipwrouting">Routing</label>
-                <?php $form->get('ipwrouting')->setValue($this->information['ipwans']['0']['routing_id']) ?>
-                <?= $this->formSelect($form->get('ipwrouting')); ?>                            
+                <label class="control-label" for="iplalias">Alias</label>
+                <?php $form->get('iplalias')->setValue($this->information['iplans']['0']['alias']) ?>
+                <?= $this->formInput($form->get('iplalias')); ?>
             </div>
-
+                    
             <div class="form-group">
-                <label class="control-label" for="ipwvlanedc">Vlan EDC</label>
-                <?php $form->get('ipwvlanedc')->setValue($this->information['ipwans']['0']['vlan_edc']) ?>
-                <?= $this->formInput($form->get('ipwvlanedc')); ?>
-            </div>
-                            
+                <label class="control-label" for="iplvlan">Vlan</label>
+                <?php $form->get('iplvlan')->setValue($this->information['iplans']['0']['vlan']) ?>
+                <?= $this->formInput($form->get('iplvlan')); ?>
+            </div>                    
+                    
             <div class="form-group">
-                <label class="control-label" for="ipwvlannacional">Vlan Nacional</label>
-                <?php $form->get('ipwvlannacional')->setValue($this->information['ipwans']['0']['vlan_nacional_id']) ?>
-                <?= $this->formSelect($form->get('ipwvlannacional')); ?>                                
-            </div>
-
-            <div class="form-group">
-                <label class="control-label" for="ipwred">Red</label>
-                <?php $form->get('ipwred')->setValue($this->information['ipwans']['0']['red_id']) ?>
-                <?= $this->formSelect($form->get('ipwred')); ?>                            
-            </div>
-                            
-            <div class="form-group">
-                <label class="control-label" for="ipwuso">Uso</label>
-                <?php $form->get('ipwuso')->setValue($this->information['ipwans']['0']['uso_id']) ?>
-                <?= $this->formSelect($form->get('ipwuso')); ?>                            
+                <label class="control-label" for="ipliplan">IP Lan</label>
+                <?php $form->get('ipliplan')->setValue($this->information['iplans']['0']['ip_lan']) ?>
+                <?= $this->formInput($form->get('ipliplan')); ?>
             </div>
 
         </div>    
@@ -94,33 +83,24 @@ $(function(){
         <div class="col-lg-6">
                     
             <div class="form-group">
-                <label class="control-label" for="ipwipwanedc">IP WAN EDC</label>
-                <?php $form->get('ipwipwanedc')->setValue($this->information['ipwans']['0']['ip_wan_edc']) ?>
-                <?= $this->formInput($form->get('ipwipwanedc')); ?>
+                <label class="control-label" for="iplmascara">Máscara</label>
+                <?php $form->get('iplmascara')->setValue($this->information['iplans']['0']['mascara']) ?>
+                <?= $this->formInput($form->get('iplmascara')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwmascara">Máscara</label>
-                <?php $form->get('ipwmascara')->setValue($this->information['ipwans']['0']['mascara']) ?>
-                <?= $this->formInput($form->get('ipwmascara')); ?>
+                <label class="control-label" for="iplnat">Nat</label>
+                <?php $form->get('iplnat')->setValue($this->information['iplans']['0']['nat']) ?>
+                <?= $this->formInput($form->get('iplnat')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwpeppal">PE Ppal</label>
-                <?php $form->get('ipwpeppal')->setValue($this->information['ipwans']['0']['pe_ppal']) ?>
-                <?= $this->formInput($form->get('ipwpeppal')); ?>
+                <label class="control-label" for="iplinterfaz">Interfaz</label>
+                <?php $form->get('iplinterfaz')->setValue($this->information['iplans']['0']['interfaz']) ?>
+                <?= $this->formInput($form->get('iplinterfaz')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwpebackup">PE Backup</label>
-                <?php $form->get('ipwpebackup')->setValue($this->information['ipwans']['0']['pe_backup']) ?>
-                <?= $this->formInput($form->get('ipwpebackup')); ?>
-            </div>
-            
-            <div class="form-group">
-                &nbsp;
-            </div>        
-            <div class="form-group">
                 &nbsp;
             </div>
             <div class="form-group">
@@ -132,19 +112,12 @@ $(function(){
             <div class="form-group">
                 &nbsp;
             </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            
-            <?php if(isset($this->information['ipwans']['0']['id'])) : ?>
-                <input type="hidden" id="ipwanId" name="ipwanId" value="<?=  $this->information['ipwans']['0']['id']; ?>">
+            <?php if(isset($this->information['iplans']['0']['id'])) : ?>
+                <input type="hidden" id="iplanId" name="iplanId" value="<?=  $this->information['iplans']['0']['id']; ?>">
             <?php  endif; ?>
-            
+
             <div style="float:right;">
-                <a class="btn btn-primary btn-sm update-ipwan" href="#" onclick="updateIpwan();" role="button" title="Update direccionamiento Wan">
+                <a class="btn btn-primary btn-sm update-iplan" href="#" onclick="updateIplan();" role="button" title="Update direccionamiento Lan">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
             </div>

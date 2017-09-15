@@ -162,34 +162,28 @@ class IpLan extends AbstractTableGateway {
     }        
 
 
-    public function getIpWanConfigurationById($id)
+    public function getIpLanConfigurationById($id)
     {
         
         $datos = array();
         
-        # IpWan
-        $statement = "SELECT ip.id, ip.rpv_id, rp.rpv, ip.routing_id,
-                        ro.routing, ip.vlan_edc, ip.vlan_nacional_id,
-                        vn.vlan, ip.red_id, re.red,
-                        ip.uso_id, us.uso,
-                        ip.ip_wan_edc, ip.mascara,
-                        ip.pe_ppal, ip.pe_backup, ip.equipo_id
-                            FROM ip_wans AS ip 
-                            LEFT JOIN rpvs AS rp ON ip.rpv_id = rp.id
-                            LEFT JOIN routings AS ro ON ip.routing_id = ro.id
-                            LEFT JOIN vlan_nacionales AS vn ON ip.vlan_nacional_id = vn.id
-                            LEFT JOIN redes AS re ON ip.red_id = re.id
-                            LEFT JOIN usos AS us ON ip.red_id = us.id
-                            WHERE ip.id = '" . $id . "'";
-        
+        # IpLan
+        $statement = "SELECT    ipl.id, ipl.rpv_id, rp.rpv,
+                                ipl.alias, ipl.vlan, ipl.ip_lan,
+                                ipl.mascara, ipl.nat, ipl.interfaz,
+                                ipl.equipo_id
+                                    FROM ip_lans AS ipl 
+                                    LEFT JOIN rpvs AS rp ON ipl.rpv_id = rp.id
+                                    WHERE ipl.id = '" . $id . "'";
+                                        
         $adapter = $this->adapter->query($statement);
 
-        $ipwans = array();
+        $iplans = array();
         foreach ($adapter->execute() as $item) {
-            $ipwans[] = $item;
+            $iplans[] = $item;
         }
-        $equipoId = $ipwans['0']['equipo_id']; 
-        $datos['ipwans'] = $ipwans;
+        $equipoId = $iplans['0']['equipo_id']; 
+        $datos['iplans'] = $iplans;
         $backupId = 0;
         
         $htmlcombobox = array();

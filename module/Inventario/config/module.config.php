@@ -48,6 +48,22 @@ return array(
  					$serviceLocator->getServiceLocator()
  					->get('iplanService')
  				);
+                                $ctr->setHwadicionalService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('hwadicionalService')
+ 				);
+                                $ctr->setHwespecialService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('hwespecialService')
+ 				);
+                                $ctr->setMulticastService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('multicastService')
+ 				);
+                                $ctr->setEquiponotgestionadoService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('equiponotgestionadoService')
+ 				);
 				$ctr->setWizardService(
  					$serviceLocator->getServiceLocator()
  					->get('wizardService')
@@ -249,7 +265,18 @@ return array(
                     ),
                 ),
             ),
-            
+
+            'notequipo-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/notequipo-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'notequipo-fill',
+                    ),
+                ),
+            ),
+
             'sede-fill' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -338,6 +365,172 @@ return array(
                     ),
                 ),
             ),
+            
+            'iplanone-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/iplanone-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'iplanone-fill',
+                    ),
+                ),
+            ),
+
+            'hardware-adicional' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/hardware-adicional',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'hardware-adicional',
+                    ),
+                ),
+            ),
+            
+            'ha-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ha-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ha-fill',
+                    ),
+                ),
+            ),
+            
+            'add-ha' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/add-ha',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'add-ha',
+                    ),
+                ),
+            ),            
+            
+            'save-ha' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-ha',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'save-ha',
+                    ),
+                ),
+            ),
+            
+            'haone-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/haone-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'haone-fill',
+                    ),
+                ),
+            ),
+
+            'heone-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/heone-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'heone-fill',
+                    ),
+                ),
+            ),
+
+            'mcone-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/mcone-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'mcone-fill',
+                    ),
+                ),
+            ),
+
+            'especial' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/especial',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'especial',
+                    ),
+                ),
+            ),
+
+            'he-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/he-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'he-fill',
+                    ),
+                ),
+            ),
+
+            'add-he' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/add-he',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'add-he',
+                    ),
+                ),
+            ),
+
+            'save-he' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-he',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'save-he',
+                    ),
+                ),
+            ),
+
+            'mc-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/mc-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'mc-fill',
+                    ),
+                ),
+            ),
+
+            'add-mc' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/add-mc',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'add-mc',
+                    ),
+                ),
+            ),
+            
+            'save-mc' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-mc',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'save-mc',
+                    ),
+                ),
+            ),
+            
             
 //            'randomAction' => array(
 //                'type' => 'Segment',
@@ -444,6 +637,18 @@ return array(
             },
             'iplanService' => function ($sm) {
                 return $sm->get('Inventario\Model\IpLan');            
+            },
+            'hwadicionalService' => function ($sm) {
+                return $sm->get('Inventario\Model\HwAdicional');            
+            },
+            'hwespecialService' => function ($sm) {
+                return $sm->get('Inventario\Model\HwEspecial');            
+            },
+            'multicastService' => function ($sm) {
+                return $sm->get('Inventario\Model\Multicast');            
+            },
+            'equiponotgestionadoService' => function ($sm) {
+                return $sm->get('Inventario\Model\EquipoNoGestionado');            
             },
             'wizardService' => function ($sm) {
                 $wizardService = new \Inventario\Model\Wizard\WizardService();

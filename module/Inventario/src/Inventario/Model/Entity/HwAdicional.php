@@ -1,27 +1,26 @@
 <?php
 /**
- * Description of IP LAN
+ * Description of Hardware Adicional
  * @author Euler Nuñez
  */
 
-// module/Inventario/src/Inventario/Model/Entity/IpLan.php
+// module/Inventario/src/Inventario/Model/Entity/HardwareAdicional.php
 
 namespace Inventario\Model\Entity;
 
-class IpLan {
+class HwAdicional {
 
     protected $id;
     
-    protected $iplrpv;
-    protected $iplalias;
-    protected $iplvlan;
-    protected $ipliplan;
-    protected $iplmascara;
-    protected $iplnat;
-    protected $iplinterfaz;
+    protected $hatipo;
+    protected $hafabricante;
+    protected $hamodelo;
+    protected $haserie;
+    protected $haalias;
+    protected $haiplan;
 
     protected $equipoId;
-    
+
     public function __construct(array $options = null) {
         
         if (is_array($options)) {
@@ -65,66 +64,57 @@ class IpLan {
         return $this;
     }
 
-    public function getIplrpv() {
-        return $this->iplrpv;
+    public function getHatipo() {
+        return $this->hatipo;
     }
 
-    public function setIplrpv($iplrpv) {
-        $this->iplrpv = $iplrpv;
+    public function setHatipo($hatipo) {
+        $this->hatipo = $hatipo;
         return $this;
     }
     
-    public function getIplalias() {
-        return $this->iplalias;
+    public function getHafabricante() {
+        return $this->hafabricante;
     }
 
-    public function setIplalias($iplalias) {
-        $this->iplalias = $iplalias;
+    public function setHafabricante($hafabricante) {
+        $this->hafabricante = $hafabricante;
         return $this;
     }
     
-    public function getIplvlan() {
-        return $this->iplvlan;
+    public function getHamodelo() {
+        return $this->hamodelo;
     }
 
-    public function setIplvlan($iplvlan) {
-        $this->iplvlan = $iplvlan;
+    public function setHamodelo($hamodelo) {
+        $this->hamodelo = $hamodelo;
         return $this;
     }
     
-    public function getIpliplan() {
-        return $this->ipliplan;
+    public function getHaserie() {
+        return $this->haserie;
     }
 
-    public function setIpliplan($ipliplan) {
-        $this->ipliplan = $ipliplan;
+    public function setHaserie($haserie) {
+        $this->haserie = $haserie;
         return $this;
     }
 
-    public function getIplmascara() {
-        return $this->iplmascara;
+    public function getHaalias() {
+        return $this->haalias;
     }
 
-    public function setIplmascara($iplmascara) {
-        $this->iplmascara = $iplmascara;
+    public function setHaalias($haalias) {
+        $this->haalias = $haalias;
         return $this;
     }
 
-    public function getIplnat() {
-        return $this->iplnat;
+    public function getHaiplan() {
+        return $this->haiplan;
     }
 
-    public function setIplnat($iplnat) {
-        $this->iplnat = $iplnat;
-        return $this;
-    }
-
-    public function getIplinterfaz() {
-        return $this->iplinterfaz;
-    }
-
-    public function setIplinterfaz($iplinterfaz) {
-        $this->iplinterfaz = $iplinterfaz;
+    public function setHaiplan($haiplan) {
+        $this->haiplan = $haiplan;
         return $this;
     }
     

@@ -124,6 +124,11 @@ class Contacto extends AbstractTableGateway {
                 return false;
             return $this->getLastInsertValue();
         }
+        elseif ($id > 0) {  // $this->getEquipmentNotMngmentContacto($id)
+            if (!$this->update($data, array('id' => $id)))
+                return $id;
+            return $id;
+        }
         else
             return false;
     }

@@ -79,8 +79,8 @@ class EquipoNoGestionado extends AbstractTableGateway {
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
-        elseif ($this->getSede($id)) {
-            if (!$this->update($data, array('id' => $id))) { return false; }
+        elseif ($id > 0) {
+            if (!$this->update($data, array('id' => $id))) { return $id; }
             return $id;
         }
         else return false;
@@ -125,13 +125,83 @@ class EquipoNoGestionado extends AbstractTableGateway {
         else {return true;}
     }
     
-    
-    
-    
-    
-    
 //    public function removeStickyNote($id) {
 //        return $this->delete(array('id' => (int) $id));
 //    }
 
+    public function getInformationByEquipo($sedeId, $id)
+    {
+        
+        $datos = array();
+        
+        $adapter =  $this->adapter->query(
+                        "SELECT e.id,
+                            e.servicio_id, s.servicio,
+                            e.propiedad_id, if(e.propiedad_id = 1,'Telefónica','Cliente') as propiedad,
+                            e.tipo_ip, if(e.tipo_ip = 1,'Dinámico','Estático') as tipo,
+                            e.ip,
+                            e.red_id, r.red,
+                            e.uso_id, u.uso,	
+                            e.contacto_id, c.contacto, c.telefono, c.horario,
+                            e.observacion,
+                            e.circuito_id
+                                FROM equipos_no_gestionados AS e
+                                LEFT JOIN servicios AS s ON e.servicio_id = s.id
+                                LEFT JOIN redes AS r ON e.red_id = r.id
+                                LEFT JOIN usos AS u ON e.uso_id = u.id
+                                LEFT JOIN contactos AS c ON e.contacto_id = c.id
+                                WHERE e.id = '" . $id . "'");
+        
+        $equiposNot = array();
+        
+        foreach ($adapter->execute() as $item) {
+            $equiposNot[] = $item;
+            $equipoNotCircuitoIds[$item['id']] = array(
+                                                'circuito_id' => $item['circuito_id']);
+        }
+        
+        $datos['notequipos'] = $equiposNot;        
+        $datos['notequipoCircuitoIds'] = $equipoNotCircuitoIds;
+        
+        $htmlcombobox = array();
+        
+        foreach($equipoNotCircuitoIds as $key => $circuito) {
+            $htmlcombobox[] = $this->getCircuitosBySede($sedeId, $circuito['circuito_id']);
+        }
+        
+        $datos['htmlcombobox'] = $htmlcombobox;
+
+        return $datos;
+
+    }
+
+    
+    
+    public function getCircuitosBySede($sedeId, $circuitoId)
+    {
+
+        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $sedeId . "' AND es_gestionado=0" );
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['administrativo'];
+        }
+        
+        $tag = 'enotcircuito';
+
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
+        
+        foreach($select as $key => $circuito) {
+            
+            $selected = ($key==$circuitoId)?'selected':'';
+            $html .= '<option value="'. $key . '"' . $selected . ' >' . $circuito . '</option>';
+            
+            
+        }
+        
+        $html .= '</select>';
+        
+        return $html;
+
+    }
+  
 }

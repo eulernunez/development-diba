@@ -28,13 +28,6 @@ legend
 
 <script>
 
-
-
-
-
-
-
-
 $(function(){
     
     
@@ -49,108 +42,91 @@ $(function(){
         <div class="col-lg-6">
 
             <div class="form-group">
-                <label class="control-label" for="ipwequipo">Equipo</label>
+                <label class="control-label" for="mcequipo">Equipo</label>
                 <?= $this->information['htmlcombobox']['0']; ?>
             </div>
-
+            
+            
             <div class="form-group">
-                <label class="control-label" for="ipwrpv">RPV</label>
-                <?php $form->get('ipwrpv')->setValue($this->information['ipwans']['0']['rpv_id']) ?>
-                <?= $this->formSelect($form->get('ipwrpv')); ?>
-            </div>
-                            
-            <div class="form-group">
-                <label class="control-label" for="ipwrouting">Routing</label>
-                <?php $form->get('ipwrouting')->setValue($this->information['ipwans']['0']['routing_id']) ?>
-                <?= $this->formSelect($form->get('ipwrouting')); ?>                            
+                <label class="control-label" for="redwantunelgreppal">Red Wan Tunel GRE PPAL</label>
+                <?php $form->get('redwantunelgreppal')->setValue($this->information['mcs']['0']['red_wan_tunel_gre_ppal']) ?>
+                <?= $this->formInput($form->get('redwantunelgreppal')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwvlanedc">Vlan EDC</label>
-                <?php $form->get('ipwvlanedc')->setValue($this->information['ipwans']['0']['vlan_edc']) ?>
-                <?= $this->formInput($form->get('ipwvlanedc')); ?>
+                <label class="control-label" for="iploppbackgre">IP LoppBack GRE</label>
+                <?php $form->get('iploppbackgre')->setValue($this->information['mcs']['0']['ip_lopp_back_gre']) ?>
+                <?= $this->formInput($form->get('iploppbackgre')); ?>
             </div>
-                            
+                    
             <div class="form-group">
-                <label class="control-label" for="ipwvlannacional">Vlan Nacional</label>
-                <?php $form->get('ipwvlannacional')->setValue($this->information['ipwans']['0']['vlan_nacional_id']) ?>
-                <?= $this->formSelect($form->get('ipwvlannacional')); ?>                                
+                <label class="control-label" for="ipedctunel1">IP EDC Tunel 1</label>
+                <?php $form->get('ipedctunel1')->setValue($this->information['mcs']['0']['ip_edc_tunel_1']) ?>
+                <?= $this->formInput($form->get('ipedctunel1')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwred">Red</label>
-                <?php $form->get('ipwred')->setValue($this->information['ipwans']['0']['red_id']) ?>
-                <?= $this->formSelect($form->get('ipwred')); ?>                            
-            </div>
-                            
-            <div class="form-group">
-                <label class="control-label" for="ipwuso">Uso</label>
-                <?php $form->get('ipwuso')->setValue($this->information['ipwans']['0']['uso_id']) ?>
-                <?= $this->formSelect($form->get('ipwuso')); ?>                            
+                <label class="control-label" for="ipasrppaltuneloficina">IP ASR PPAL Tunel Oficina</label>
+                <?php $form->get('ipasrppaltuneloficina')->setValue($this->information['mcs']['0']['ip_asr_ppal_tunel_oficina']) ?>
+                <?= $this->formInput($form->get('ipasrppaltuneloficina')); ?>
             </div>
 
+            <div class="form-group">
+                <label class="control-label" for="interfaztunelasrppal">Interfaz Tunel ASR PPAL</label>
+                <?php $form->get('interfaztunelasrppal')->setValue($this->information['mcs']['0']['interfaz_tunel_asr_ppal']) ?>
+                <?= $this->formInput($form->get('interfaztunelasrppal')); ?>
+            </div>
+            
         </div>    
 
         <div class="col-lg-6">
                     
             <div class="form-group">
-                <label class="control-label" for="ipwipwanedc">IP WAN EDC</label>
-                <?php $form->get('ipwipwanedc')->setValue($this->information['ipwans']['0']['ip_wan_edc']) ?>
-                <?= $this->formInput($form->get('ipwipwanedc')); ?>
+                <label class="control-label" for="redwantunelgrebck">Red Wan Tunel GRE BCK</label>
+                <?php $form->get('redwantunelgrebck')->setValue($this->information['mcs']['0']['red_wan_tunel_gre_bck']) ?>
+                <?= $this->formInput($form->get('redwantunelgrebck')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwmascara">Máscara</label>
-                <?php $form->get('ipwmascara')->setValue($this->information['ipwans']['0']['mascara']) ?>
-                <?= $this->formInput($form->get('ipwmascara')); ?>
+                <label class="control-label" for="iprp">IP RP</label>
+                <?php $form->get('iprp')->setValue($this->information['mcs']['0']['ip_rp']) ?>
+                <?= $this->formInput($form->get('iprp')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwpeppal">PE Ppal</label>
-                <?php $form->get('ipwpeppal')->setValue($this->information['ipwans']['0']['pe_ppal']) ?>
-                <?= $this->formInput($form->get('ipwpeppal')); ?>
+                <label class="control-label" for="ipedctunel2">IP EDC Tunel 2</label>
+                <?php $form->get('ipedctunel2')->setValue($this->information['mcs']['0']['ip_edc_tunel_2']) ?>
+                <?= $this->formInput($form->get('ipedctunel2')); ?>
+            </div>
+                
+            <div class="form-group">
+                <label class="control-label" for="ipasrbcktuneloficina">IP ASR BCK Tunel Oficina</label>
+                <?php $form->get('ipasrbcktuneloficina')->setValue($this->information['mcs']['0']['ip_asr_bck_tunel_oficina']) ?>
+                <?= $this->formInput($form->get('ipasrbcktuneloficina')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwpebackup">PE Backup</label>
-                <?php $form->get('ipwpebackup')->setValue($this->information['ipwans']['0']['pe_backup']) ?>
-                <?= $this->formInput($form->get('ipwpebackup')); ?>
+                <label class="control-label" for="interfaztunelasrbck">Interfaz Tunel ASR BCK</label>
+                <?php $form->get('interfaztunelasrbck')->setValue($this->information['mcs']['0']['interfaz_tunel_asr_bck']) ?>
+                <?= $this->formInput($form->get('interfaztunelasrbck')); ?>
             </div>
-            
-            <div class="form-group">
-                &nbsp;
-            </div>        
+                    
             <div class="form-group">
                 &nbsp;
             </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            
-            <?php if(isset($this->information['ipwans']['0']['id'])) : ?>
-                <input type="hidden" id="ipwanId" name="ipwanId" value="<?=  $this->information['ipwans']['0']['id']; ?>">
+                
+            <?php if(isset($this->information['mcs']['0']['id'])) : ?>
+                <input type="hidden" id="mcId" name="mcId" value="<?=  $this->information['mcs']['0']['id']; ?>">
             <?php  endif; ?>
-            
+
             <div style="float:right;">
-                <a class="btn btn-primary btn-sm update-ipwan" href="#" onclick="updateIpwan();" role="button" title="Update direccionamiento Wan">
+                <a class="btn btn-primary btn-sm update-mc" href="#" onclick="updateMc();" role="button" title="Update multicast">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
-            </div>
-            
+            </div>                    
                     
         </div>    
     </div>
+    
 </div>
    

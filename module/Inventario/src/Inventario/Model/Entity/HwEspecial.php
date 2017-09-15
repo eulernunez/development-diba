@@ -1,27 +1,31 @@
 <?php
 /**
- * Description of IP LAN
+ * Description of Hardware Especial
  * @author Euler Nuñez
  */
 
-// module/Inventario/src/Inventario/Model/Entity/IpLan.php
+// module/Inventario/src/Inventario/Model/Entity/HardwareEspecial.php
 
 namespace Inventario\Model\Entity;
 
-class IpLan {
+class HwEspecial {
 
     protected $id;
     
-    protected $iplrpv;
-    protected $iplalias;
-    protected $iplvlan;
-    protected $ipliplan;
-    protected $iplmascara;
-    protected $iplnat;
-    protected $iplinterfaz;
-
-    protected $equipoId;
+    protected $rpvtarjeta;
+    protected $rpvfabricante;
+    protected $rpvmodelo;
+    protected $rpvserie;
+    protected $rpvalias;
+    protected $rpvvlan;
+    protected $rpviplan1;
+    protected $rpviplan2;
+    protected $rpvmascara;
+    protected $rpvinterfaz1;
+    protected $rpvinterfaz2;
     
+    protected $equipoId;
+
     public function __construct(array $options = null) {
         
         if (is_array($options)) {
@@ -65,66 +69,103 @@ class IpLan {
         return $this;
     }
 
-    public function getIplrpv() {
-        return $this->iplrpv;
+    public function getRpvtarjeta() {
+        return $this->rpvtarjeta;
     }
 
-    public function setIplrpv($iplrpv) {
-        $this->iplrpv = $iplrpv;
+    public function setRpvtarjeta($rpvtarjeta) {
+        $this->rpvtarjeta = $rpvtarjeta;
         return $this;
     }
     
-    public function getIplalias() {
-        return $this->iplalias;
+    public function getRpvfabricante() {
+        return $this->rpvfabricante;
     }
 
-    public function setIplalias($iplalias) {
-        $this->iplalias = $iplalias;
+    public function setRpvfabricante($rpvfabricante) {
+        $this->rpvfabricante = $rpvfabricante;
         return $this;
     }
     
-    public function getIplvlan() {
-        return $this->iplvlan;
+    public function getRpvmodelo() {
+        return $this->rpvmodelo;
     }
 
-    public function setIplvlan($iplvlan) {
-        $this->iplvlan = $iplvlan;
+    public function setRpvmodelo($rpvmodelo) {
+        $this->rpvmodelo = $rpvmodelo;
         return $this;
     }
     
-    public function getIpliplan() {
-        return $this->ipliplan;
+    public function getRpvserie() {
+        return $this->rpvserie;
     }
 
-    public function setIpliplan($ipliplan) {
-        $this->ipliplan = $ipliplan;
+    public function setRpvserie($rpvserie) {
+        $this->rpvserie = $rpvserie;
         return $this;
     }
 
-    public function getIplmascara() {
-        return $this->iplmascara;
+    public function getRpvalias() {
+        return $this->rpvalias;
     }
 
-    public function setIplmascara($iplmascara) {
-        $this->iplmascara = $iplmascara;
+    public function setRpvalias($rpvalias) {
+        $this->rpvalias = $rpvalias;
         return $this;
     }
 
-    public function getIplnat() {
-        return $this->iplnat;
+    public function getRpvvlan() {
+        return $this->rpvvlan;
     }
 
-    public function setIplnat($iplnat) {
-        $this->iplnat = $iplnat;
+    public function setRpvvlan($rpvvlan) {
+        $this->rpvvlan = $rpvvlan;
         return $this;
     }
-
-    public function getIplinterfaz() {
-        return $this->iplinterfaz;
+    
+    public function getRpviplan1() {
+        return $this->rpviplan1;
     }
 
-    public function setIplinterfaz($iplinterfaz) {
-        $this->iplinterfaz = $iplinterfaz;
+    public function setRpviplan1($rpviplan1) {
+        $this->rpviplan1 = $rpviplan1;
+        return $this;
+    }
+    
+    public function getRpviplan2() {
+        return $this->rpviplan2;
+    }
+
+    public function setRpviplan2($rpviplan2) {
+        $this->rpviplan2 = $rpviplan2;
+        return $this;
+    }
+    
+    public function getRpvmascara() {
+        return $this->rpvmascara;
+    }
+
+    public function setRpvmascara($rpvmascara) {
+        $this->rpvmascara = $rpvmascara;
+        return $this;
+    }
+    
+    
+    public function getRpvinterfaz1() {
+        return $this->rpvinterfaz1;
+    }
+
+    public function setRpvinterfaz1($rpvinterfaz1) {
+        $this->rpvinterfaz1 = $rpvinterfaz1;
+        return $this;
+    }
+    
+    public function getRpvinterfaz2() {
+        return $this->rpvinterfaz2;
+    }
+
+    public function setRpvinterfaz2($rpvinterfaz2) {
+        $this->rpvinterfaz2 = $rpvinterfaz2;
         return $this;
     }
     
@@ -136,6 +177,7 @@ class IpLan {
         $this->equipoId = $equipoId;
         return $this;
     }
-    
+
+
 }
 

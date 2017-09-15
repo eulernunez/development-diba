@@ -13,6 +13,16 @@ return array(
                     )
                 )
             ),
+            'logout' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/logout',
+                    'defaults' => array(
+                        'controller' => 'Users\Controller\User',
+                        'action'     => 'logout',
+                    ),
+                ),
+            ),
             'users' => array(
                 'type' => 'segment',
                 'options' => array(

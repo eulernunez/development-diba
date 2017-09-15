@@ -1,120 +1,109 @@
+<style>
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}	
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>                
 
-<!--<form id="pago">
-<fieldset>
-<legend>Comprador</legend>
-<ol>
-<li>
-<label for="nombre">Nombre</label>
-<input id="nombre" name="nombre" type="text" placeholder="Escribe tu nombre completo" required autofocus>
-</li>
-<li>
-<label for="email">Email</label>
-<input id="email" name="email" type="email" placeholder="ejemplo@um.es" required>
-</li>
-<li>
-<label for="telefono">Teléfono</label>
-<input id="telefono" name="telefono" type="tel" placeholder="Ej. +34668899999" required>
-</li>
-<li>
-<label for="pais">País</label>
-<input id="pais" name="pais" type="text" required>
-</li>
-</ol>
-</fieldset>
-<fieldset>
-<legend>Tarjeta de crédito o débito</legend>
-<ol>
-<li>
-<label for="numtarjeta">Número</label>
-<input id="numtarjeta" name="numtarjeta" type="number" placeholder="Ej. 5555-4444-3333-2222" required>
-</li>
-<li>
-<label for="nomtarjeta">Nombre</label>
-<input id="nomtarjeta" name="nomtarjeta" type="text" placeholder="Nombre que figura en la tarjeta" required>
-</li>
-</ol>
-</fieldset>
--------------------------------------------------
-<fieldset>
-<button type="submit">Confirmar pedido</button>
-</fieldset>
-</form>-->
+<script>
 
+$(function(){
+});
 
+</script>
 
-    
-    
-<?php
+<div class="panel panel-default">
+    <div class="panel-body">
+        <fieldset class="col-md-12">    	
+            <legend>HARDWARE ADICIONAL</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
 
-$form = $this->form;
-$form->setAttribute('action', $this->url('formulario'));
-$form->setAttribute('novalidate', 'novalidate');
+                        <div class="form-group">
+                            <label class="control-label" for="haequipo">Equipo</label>
+                            <select class="form-control input-sm" id="haequipo" name="haequipo" required>
+                                <option>diba-caco</option>
+                                <option>dipb-saco</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="hatipo">Tipo</label>
+                            <select class="form-control input-sm" id="hatipo" name="hatipo" required>
+                                <option>Seleccione una opción</option>
+                                <option>Tarjeta</option>
+                                <option>Cable</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="hafabricante">Fabricante</label>
+                            <select class="form-control input-sm" id="hafabricante" name="hafabricante" required>
+                                <option>Seleccione una opción</option>
+                                <option>CISCO</option>
+                                <option>Belden</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="hamodelo">Modelo</label>
+                            <select class="form-control input-sm" id="hamodelo" name="hamodelo" required>
+                                <option>Seleccione una opción</option>
+                                <option>RJ 45</option>
+                                <option>7845OKM</option>
+                            </select>
+                        </div>
+                        
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="hanumeroserie">N/S</label>
+                            <input type="text" class="form-control input-sm" id="hanumeroserie" name="hanumeroserie" aria-describedby="hanumeroserieHelp">
+                        </div>
+                                                
+                        <div class="form-group">
+                            <label class="control-label" for="haalias">Alias</label>
+                            <input type="text" class="form-control input-sm" id="haalias" name="haalias" aria-describedby="haaliasHelp">
+                        </div>
 
-#die('<pre>' . print_r($form, true) . '</pre>');
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input id="haiplan" name="haiplan" type="checkbox" class="form-check-input" value="1">
+                              ¿Tiene IP Lan?
+                            </label>
+                        </div> 
 
-$form->prepare();
-
-echo $this->form()->openTag($form);
-echo $this->formLabel($form->get('email'));
-echo $this->formInput($form->get('email'));
-echo $this->FormElementErrors($form->get('email'));
-
-echo('<br/>');
-
-echo $this->formLabel($form->get('phone'));
-echo $this->formInput($form->get('phone'));
-echo $this->FormElementErrors($form->get('phone'));
-
-echo('<br/>');
-
-echo $this->formLabel($form->get('language'));
-echo $this->formSelect($form->get('language'));
-
-echo('<br/>');
-
-echo $this->formLabel($form->get('payment_type'));
-echo $this->formSelect($form->get('payment_type'));
-
-//echo $this->formLabel($form->get('phoneNumber'));
-//echo $this->formInput($form->get('phoneNumber'));
-//echo $this->FormElementErrors($form->get('phoneNumber'));
-
-echo('<br/>');
-
-
-echo $this->formLabel($form->get('use'));
-echo $this->formCheckbox($form->get('use'));
-
-echo('<br/>');
-
-echo $this->formLabel($form->get('direction'));
-echo $this->formRadio($form->get('direction'));
-
-//
-//echo('<br/>');
-//
-//
-//echo $this->formLabel($form->get('test'));
-//echo $this->formRadio($form->get('test'));
-
-
-
-echo('<br/>');
-
-echo $this->formLabel($form->get('message'));
-echo $this->formTextarea($form->get('message'));
-
-echo('<br/>');
-
-echo $this->formSubmit($form->get('submit'));
-echo $this->form()->closeTag($form);
-
-// //Imprimimos el campo email
-//$formLabel = $this->plugin('formLabel');
-//
-//$email = $form->get('email');
-//echo $formLabel->openTag();
-//echo $email->getOption('label');
-//echo $this->formInput($email);
-//echo $formLabel->closeTag();
-
+                    </div>    
+                
+                </div>
+                
+            </div>
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+</div>

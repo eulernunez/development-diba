@@ -535,6 +535,14 @@ $form->prepare();
 
                         <div class="col-lg-6">    
                             <div id="form-step-3" role="form" data-toggle="validator">
+                                
+                                <?php if(3==$this->tab) : ?>
+                                    <div class="form-group">
+                                        <label class="control-label" for="servicio">Circuito</label>
+                                        <?= $this->comboBoxCircuito; ?>
+                                    </div>
+                                <?php endif; ?>
+                                
                                 <div class="form-group">
                                     <label class="control-label" for="servicio-no-gestionado">Servicio</label>
                                     <?= $this->formSelect($form->get('engservicio')); ?>
@@ -803,7 +811,9 @@ $(document).ready(function(){
                 <?php if('1'== $this->tab) : ?>
                 hiddenSteps: ['0', '2', '3', '4', '5'],
                 <?php elseif('2'== $this->tab) : ?>
-                hiddenSteps: ['0', '1', '3', '4', '5'],    
+                hiddenSteps: ['0', '1', '3', '4', '5'],
+                <?php elseif('3'== $this->tab) : ?>
+                hiddenSteps: ['0', '1', '2', '4', '5'],    
                 <?php else : ?>
                 hiddenSteps: ['5'],        
                 <?php endif ; ?>

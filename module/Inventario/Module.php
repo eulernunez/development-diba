@@ -97,8 +97,26 @@ class Module #implements FormElementProviderInterface
                     $table = new Model\IpLan($dbAdapter);
                     return $table;
                 },                        
-        
-                        
+                'Inventario\Model\HwAdicional' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\HwAdicional($dbAdapter);
+                    return $table;
+                },        
+                'Inventario\Model\HwEspecial' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\HwEspecial($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\Multicast' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Multicast($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\EquipoNoGestionado' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\EquipoNoGestionado($dbAdapter);
+                    return $table;
+                },
             ),
         );
     }    

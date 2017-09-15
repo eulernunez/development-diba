@@ -1,27 +1,30 @@
 <?php
 /**
- * Description of IP LAN
+ * Description of Multicast
  * @author Euler Nuñez
  */
 
-// module/Inventario/src/Inventario/Model/Entity/IpLan.php
+// module/Inventario/src/Inventario/Model/Entity/Multicast.php
 
 namespace Inventario\Model\Entity;
 
-class IpLan {
+class Multicast {
 
     protected $id;
     
-    protected $iplrpv;
-    protected $iplalias;
-    protected $iplvlan;
-    protected $ipliplan;
-    protected $iplmascara;
-    protected $iplnat;
-    protected $iplinterfaz;
-
-    protected $equipoId;
+    protected $redwantunelgreppal;
+    protected $iploppbackgre;
+    protected $ipedctunel1;
+    protected $ipasrppaltuneloficina;
+    protected $interfaztunelasrppal;
+    protected $redwantunelgrebck;
+    protected $iprp;
+    protected $ipedctunel2;
+    protected $ipasrbcktuneloficina;
+    protected $interfaztunelasrbck;
     
+    protected $equipoId;
+
     public function __construct(array $options = null) {
         
         if (is_array($options)) {
@@ -65,68 +68,97 @@ class IpLan {
         return $this;
     }
 
-    public function getIplrpv() {
-        return $this->iplrpv;
+    public function getRedwantunelgreppal() {
+        return $this->redwantunelgreppal;
     }
 
-    public function setIplrpv($iplrpv) {
-        $this->iplrpv = $iplrpv;
+    public function setRedwantunelgreppal($redwantunelgreppal) {
+        $this->redwantunelgreppal = $redwantunelgreppal;
         return $this;
     }
     
-    public function getIplalias() {
-        return $this->iplalias;
+    public function getIploppbackgre() {
+        return $this->iploppbackgre;
     }
 
-    public function setIplalias($iplalias) {
-        $this->iplalias = $iplalias;
+    public function setIploppbackgre($iploppbackgre) {
+        $this->iploppbackgre = $iploppbackgre;
+        return $this;
+    }
+
+    public function getIpedctunel1() {
+        return $this->ipedctunel1;
+    }
+
+    public function setIpedctunel1($ipedctunel1) {
+        $this->ipedctunel1 = $ipedctunel1;
+        return $this;
+    }
+
+    public function getIpasrppaltuneloficina() {
+        return $this->ipasrppaltuneloficina;
+    }
+
+    public function setIpasrppaltuneloficina($ipasrppaltuneloficina) {
+        $this->ipasrppaltuneloficina = $ipasrppaltuneloficina;
+        return $this;
+    }
+
+    public function getInterfaztunelasrppal() {
+        return $this->interfaztunelasrppal;
+    }
+
+    public function setInterfaztunelasrppal($interfaztunelasrppal) {
+        $this->interfaztunelasrppal = $interfaztunelasrppal;
+        return $this;
+    }
+
+    public function getRedwantunelgrebck() {
+        return $this->redwantunelgrebck;
+    }
+
+    public function setRedwantunelgrebck($redwantunelgrebck) {
+        $this->redwantunelgrebck = $redwantunelgrebck;
         return $this;
     }
     
-    public function getIplvlan() {
-        return $this->iplvlan;
+    public function getIprp() {
+        return $this->iprp;
     }
 
-    public function setIplvlan($iplvlan) {
-        $this->iplvlan = $iplvlan;
+    public function setIprp($iprp) {
+        $this->iprp = $iprp;
         return $this;
     }
     
-    public function getIpliplan() {
-        return $this->ipliplan;
+    public function getIpedctunel2() {
+        return $this->ipedctunel2;
     }
 
-    public function setIpliplan($ipliplan) {
-        $this->ipliplan = $ipliplan;
+    public function setIpedctunel2($ipedctunel2) {
+        $this->ipedctunel2 = $ipedctunel2;
         return $this;
     }
-
-    public function getIplmascara() {
-        return $this->iplmascara;
+    
+    public function getIpasrbcktuneloficina() {
+        return $this->ipasrbcktuneloficina;
     }
 
-    public function setIplmascara($iplmascara) {
-        $this->iplmascara = $iplmascara;
+    public function setIpasrbcktuneloficina($ipasrbcktuneloficina) {
+        $this->ipasrbcktuneloficina = $ipasrbcktuneloficina;
         return $this;
     }
-
-    public function getIplnat() {
-        return $this->iplnat;
+    
+    public function getInterfaztunelasrbck() {
+        return $this->interfaztunelasrbck;
     }
 
-    public function setIplnat($iplnat) {
-        $this->iplnat = $iplnat;
+    public function setInterfaztunelasrbck($interfaztunelasrbck) {
+        $this->interfaztunelasrbck = $interfaztunelasrbck;
         return $this;
     }
+    
 
-    public function getIplinterfaz() {
-        return $this->iplinterfaz;
-    }
-
-    public function setIplinterfaz($iplinterfaz) {
-        $this->iplinterfaz = $iplinterfaz;
-        return $this;
-    }
     
     public function getEquipoId() {
         return $this->equipoId;
@@ -136,6 +168,7 @@ class IpLan {
         $this->equipoId = $equipoId;
         return $this;
     }
-    
+
+
 }
 

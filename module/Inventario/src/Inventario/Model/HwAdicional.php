@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Description of IP Lan Table
+ * Description of Hardware Adicional Table
  * @author Euler Nunez 
  */
-// module/Inventario/src/Inventario/Model/IpLan.php
+// module/Inventario/src/Inventario/Model/HwAdicional.php
 
 namespace Inventario\Model;
 
@@ -12,9 +12,9 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
 
-class IpLan extends AbstractTableGateway {
+class HwAdicional extends AbstractTableGateway {
 
-    protected $table = 'ip_lans';
+    protected $table = 'hw_adicionales';
 
     public function __construct(Adapter $adapter) {
         $this->adapter = $adapter;
@@ -54,23 +54,21 @@ class IpLan extends AbstractTableGateway {
 //        return $stickyNote;
 //    }
 
-    public function saveIpLan(Entity\IpLan $ipLan) {
+    public function saveHwAdicional(Entity\HwAdicional $hwAdicional) {
 
-        if(!$this->validationIpLan($ipLan)) { return false;}
+        if(!$this->validationHwAdicional($hwAdicional)) { return false;}
 
         $data = array(  
-            'rpv_id' => (int)$ipLan->getIplrpv(),
-            'alias' => $ipLan->getIplalias(),
-            'vlan' => $ipLan->getIplvlan(),
-            'ip_lan' => $ipLan->getIpliplan(),
-            'mascara' => $ipLan->getIplmascara(),
-            'nat' => $ipLan->getIplnat(),
-            'interfaz' => $ipLan->getIplinterfaz(),
-            
-            'equipo_id' => $ipLan->getEquipoId()
+            'tipo_id' => (int)$hwAdicional->getHatipo(),
+            'fabricante_id' => (int)$hwAdicional->getHafabricante(),
+            'modelo_id' => $hwAdicional->getHamodelo(),
+            'serie' => $hwAdicional->getHaserie(),
+            'alias' => $hwAdicional->getHaalias(),
+            'tiene_iplan' => $hwAdicional->getHaiplan(),
+            'equipo_id' => $hwAdicional->getEquipoId()
             );
 
-        $id = (int) $ipLan->getId();
+        $id = (int) $hwAdicional->getId();
 
         if ($id == 0) {
             if (!$this->insert($data)) { return false; }
@@ -108,7 +106,7 @@ class IpLan extends AbstractTableGateway {
 //    }
     
     
-    public function validationIpLan(Entity\IpLan $ipLan)
+    public function validationHwAdicional(Entity\HwAdicional $hwAdicional)
     {
 //        if(0 == $ipLan->getIplrpv()) {return false;}
 //        elseif(empty($ipLan->getIplalias())) {return false;}
@@ -117,39 +115,45 @@ class IpLan extends AbstractTableGateway {
     }
     
     
-    public function getIpLanConfigurationByEquipo($id, $backupId)
+    public function getHwAdicionalesByEquipo($id, $backupId)
     {
         
         if($backupId>0) {
-            $filter = " OR ipl.equipo_id = '" . $backupId . "' ";
+            $filter = " OR hw.equipo_id = '" . $backupId . "' ";
         } else {
             $filter = "";
         }
         
         $datos = array();
         
-        # IpLan
-        $statement = "SELECT    ipl.id, ipl.rpv_id, rp.rpv,
-                                ipl.alias, ipl.vlan, ipl.ip_lan,
-                                ipl.mascara, ipl.nat, ipl.interfaz,
-                                ipl.equipo_id
-                                    FROM ip_lans AS ipl 
-                                    LEFT JOIN rpvs AS rp ON ipl.rpv_id = rp.id
-                                    WHERE ipl.equipo_id = '" . $id . "'" . $filter;
+        # HwAdicional
+        $statement = "SELECT 
+                        hw.id, 
+                        hw.tipo_id, t.tipo,
+                        hw.fabricante_id, f.fabricante,
+                        hw.modelo_id, m.modelo,
+                        hw.serie, hw.alias, hw.tiene_iplan, hw.equipo_id
+                            FROM hw_adicionales AS hw
+                            LEFT JOIN tipo_hardware_adicional AS t ON hw.tipo_id = t.id
+                            LEFT JOIN fabricantes AS f ON hw.fabricante_id = f.id
+                            LEFT JOIN modelos AS m ON hw.modelo_id = m.id
+                            WHERE hw.equipo_id = '" . $id . "'" . $filter;
+        
+       
         
         $adapter = $this->adapter->query($statement);
 
-        $iplans = array();
+        $has = array();
         foreach ($adapter->execute() as $item) {
-            $iplans[] = $item;
+            $has[] = $item;
         }
         
         $equipoId = 0;
-        if(isset($iplans['0']['equipo_id'])) {
-            $equipoId = $iplans['0']['equipo_id']; 
+        if(isset($has['0']['equipo_id'])) {
+            $equipoId = $has['0']['equipo_id']; 
         }
         
-        $datos['iplans'] = $iplans;
+        $datos['has'] = $has;
         
         $htmlcombobox = array();
         
@@ -157,39 +161,39 @@ class IpLan extends AbstractTableGateway {
         
         $datos['htmlcombobox'] = $htmlcombobox;
 
+       
+        
         return $datos;
 
     }        
 
 
-    public function getIpWanConfigurationById($id)
+    public function getHwAdicionalById($id)
     {
         
         $datos = array();
         
-        # IpWan
-        $statement = "SELECT ip.id, ip.rpv_id, rp.rpv, ip.routing_id,
-                        ro.routing, ip.vlan_edc, ip.vlan_nacional_id,
-                        vn.vlan, ip.red_id, re.red,
-                        ip.uso_id, us.uso,
-                        ip.ip_wan_edc, ip.mascara,
-                        ip.pe_ppal, ip.pe_backup, ip.equipo_id
-                            FROM ip_wans AS ip 
-                            LEFT JOIN rpvs AS rp ON ip.rpv_id = rp.id
-                            LEFT JOIN routings AS ro ON ip.routing_id = ro.id
-                            LEFT JOIN vlan_nacionales AS vn ON ip.vlan_nacional_id = vn.id
-                            LEFT JOIN redes AS re ON ip.red_id = re.id
-                            LEFT JOIN usos AS us ON ip.red_id = us.id
-                            WHERE ip.id = '" . $id . "'";
+        # Hw Adicional
+        $statement = "SELECT 
+                        hw.id, 
+                        hw.tipo_id, t.tipo,
+                        hw.fabricante_id, f.fabricante,
+                        hw.modelo_id, m.modelo,
+                        hw.serie, hw.alias, hw.tiene_iplan, hw.equipo_id
+                            FROM hw_adicionales AS hw
+                            LEFT JOIN tipo_hardware_adicional AS t ON hw.tipo_id = t.id
+                            LEFT JOIN fabricantes AS f ON hw.fabricante_id = f.id
+                            LEFT JOIN modelos AS m ON hw.modelo_id = m.id
+                            WHERE hw.id = '" . $id . "'";
         
         $adapter = $this->adapter->query($statement);
 
-        $ipwans = array();
+        $has = array();
         foreach ($adapter->execute() as $item) {
-            $ipwans[] = $item;
+            $has[] = $item;
         }
-        $equipoId = $ipwans['0']['equipo_id']; 
-        $datos['ipwans'] = $ipwans;
+        $equipoId = $has['0']['equipo_id']; 
+        $datos['has'] = $has;
         $backupId = 0;
         
         $htmlcombobox = array();
@@ -220,7 +224,7 @@ class IpLan extends AbstractTableGateway {
         
         
       
-        $tag = 'iplequipo';
+        $tag = 'haequipo';
         $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
         
         foreach($select as $key => $equipo) {

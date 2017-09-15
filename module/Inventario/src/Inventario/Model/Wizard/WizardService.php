@@ -180,8 +180,20 @@ class WizardService {
             
             return $result;
             
+        } elseif (3 == $tab ) {
+            
+            try{
+                
+                $this->circuitoId = $id;
+                $result = $this->persistenciaEquipoNoGestionado();
+                
+            } catch (\Exception $e) {
+                echo ('<pre>' . print_r($e->getMessage(), true) . '</pre>');
+            }
+            
+            return $result;
+            
         } else {
-           
             return false;
         }
     
@@ -381,6 +393,40 @@ class WizardService {
                 
         return $this->equipoId; 
     }        
+    
+    
+    public function updateEquipoNoGestionado()
+    {
+        $equipo = new \Inventario\Model\Entity\EquipoNoGestionado();
+        $contacto = new \Inventario\Model\Entity\EquipmentNotMngmentContacto();
+        $contacto->setOptions($this->posts);
+        if(isset($this->posts['notEquipoContactoId'])) {
+            $contacto->setId($this->posts['notEquipoContactoId']);
+        }
+        
+        $contactoId = $this->contactoTable->saveEquipmentNotMngmentContacto($contacto);
+        
+        $equipo->setOptions($this->posts);
+        $equipo->setContactoId($contactoId);
+        if(isset($this->posts['notEquipoId'])) {
+            $equipo->setId($this->posts['notEquipoId']);
+        }
+        if(isset($this->posts['enotcircuito'])) {
+            $equipo->setCircuitoId($this->posts['enotcircuito']);
+        }
+        
+        $this->equipoId = $this->equipoNoGestionadoTable->saveEquipoNoGestionado($equipo);
+                
+        return $this->equipoId; 
+    }        
+    
+    
+    
+    
+    
+    
+    
+    
     
     public function persistencaIpWan()
     {

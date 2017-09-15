@@ -49,108 +49,119 @@ $(function(){
         <div class="col-lg-6">
 
             <div class="form-group">
-                <label class="control-label" for="ipwequipo">Equipo</label>
+                <label class="control-label" for="rpvequipo">Equipo</label>
                 <?= $this->information['htmlcombobox']['0']; ?>
+            </div>            
+            
+            
+            <div class="form-group">
+                <label class="control-label" for="rpvtarjeta">Tarjeta</label>
+                <?php $form->get('rpvtarjeta')->setValue($this->information['hes']['0']['tarjeta_id']) ?>
+                <?= $this->formSelect($form->get('rpvtarjeta')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwrpv">RPV</label>
-                <?php $form->get('ipwrpv')->setValue($this->information['ipwans']['0']['rpv_id']) ?>
-                <?= $this->formSelect($form->get('ipwrpv')); ?>
+                <label class="control-label" for="rpvfabricante">Fabricante</label>
+                <?php $form->get('rpvfabricante')->setValue($this->information['hes']['0']['fabricante_id']) ?>
+                <?= $this->formSelect($form->get('rpvfabricante')); ?>
             </div>
-                            
-            <div class="form-group">
-                <label class="control-label" for="ipwrouting">Routing</label>
-                <?php $form->get('ipwrouting')->setValue($this->information['ipwans']['0']['routing_id']) ?>
-                <?= $this->formSelect($form->get('ipwrouting')); ?>                            
-            </div>
-
-            <div class="form-group">
-                <label class="control-label" for="ipwvlanedc">Vlan EDC</label>
-                <?php $form->get('ipwvlanedc')->setValue($this->information['ipwans']['0']['vlan_edc']) ?>
-                <?= $this->formInput($form->get('ipwvlanedc')); ?>
-            </div>
-                            
-            <div class="form-group">
-                <label class="control-label" for="ipwvlannacional">Vlan Nacional</label>
-                <?php $form->get('ipwvlannacional')->setValue($this->information['ipwans']['0']['vlan_nacional_id']) ?>
-                <?= $this->formSelect($form->get('ipwvlannacional')); ?>                                
-            </div>
-
-            <div class="form-group">
-                <label class="control-label" for="ipwred">Red</label>
-                <?php $form->get('ipwred')->setValue($this->information['ipwans']['0']['red_id']) ?>
-                <?= $this->formSelect($form->get('ipwred')); ?>                            
-            </div>
-                            
-            <div class="form-group">
-                <label class="control-label" for="ipwuso">Uso</label>
-                <?php $form->get('ipwuso')->setValue($this->information['ipwans']['0']['uso_id']) ?>
-                <?= $this->formSelect($form->get('ipwuso')); ?>                            
-            </div>
-
+            
         </div>    
 
         <div class="col-lg-6">
                     
             <div class="form-group">
-                <label class="control-label" for="ipwipwanedc">IP WAN EDC</label>
-                <?php $form->get('ipwipwanedc')->setValue($this->information['ipwans']['0']['ip_wan_edc']) ?>
-                <?= $this->formInput($form->get('ipwipwanedc')); ?>
+                <label class="control-label" for="rpvmodelo">Modelo</label>
+                <?php $form->get('rpvmodelo')->setValue($this->information['hes']['0']['modelo_id']) ?>
+                <?= $this->formSelect($form->get('rpvmodelo')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwmascara">Máscara</label>
-                <?php $form->get('ipwmascara')->setValue($this->information['ipwans']['0']['mascara']) ?>
-                <?= $this->formInput($form->get('ipwmascara')); ?>
+                <label class="control-label" for="rpvserie">N/S</label>
+                <?php $form->get('rpvserie')->setValue($this->information['hes']['0']['serie']) ?>
+                <?= $this->formInput($form->get('rpvserie')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="ipwpeppal">PE Ppal</label>
-                <?php $form->get('ipwpeppal')->setValue($this->information['ipwans']['0']['pe_ppal']) ?>
-                <?= $this->formInput($form->get('ipwpeppal')); ?>
+                <label class="control-label" for="rpvalias">Alias</label>
+                <?php $form->get('rpvalias')->setValue($this->information['hes']['0']['alias']) ?>
+                <?= $this->formInput($form->get('rpvalias')); ?>
             </div>
-
-            <div class="form-group">
-                <label class="control-label" for="ipwpebackup">PE Backup</label>
-                <?php $form->get('ipwpebackup')->setValue($this->information['ipwans']['0']['pe_backup']) ?>
-                <?= $this->formInput($form->get('ipwpebackup')); ?>
-            </div>
-            
-            <div class="form-group">
-                &nbsp;
-            </div>        
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            
-            <?php if(isset($this->information['ipwans']['0']['id'])) : ?>
-                <input type="hidden" id="ipwanId" name="ipwanId" value="<?=  $this->information['ipwans']['0']['id']; ?>">
-            <?php  endif; ?>
-            
-            <div style="float:right;">
-                <a class="btn btn-primary btn-sm update-ipwan" href="#" onclick="updateIpwan();" role="button" title="Update direccionamiento Wan">
-                    <i class="glyphicon glyphicon-edit"></i>
-                </a>
-            </div>
-            
                     
         </div>    
     </div>
+    
+    
+            <div class="panel-body"><!-- INICIO Direccionamiento LAN -->
+                    <fieldset class="col-md-12">    	
+                        <legend>Direccionamiento LAN</legend>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+
+                                <div class="col-lg-6">    
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="rpvvlan">VLAN</label>
+                                        <?php $form->get('rpvvlan')->setValue($this->information['hes']['0']['vlan']) ?>
+                                        <?= $this->formInput($form->get('rpvvlan')); ?>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label" for="rpviplan1">IP Lan 1</label>
+                                        <?php $form->get('rpviplan1')->setValue($this->information['hes']['0']['ip_lan_1']) ?>
+                                        <?= $this->formInput($form->get('rpviplan1')); ?>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="rpviplan2">IP Lan 2</label>
+                                        <?php $form->get('rpviplan2')->setValue($this->information['hes']['0']['ip_lan_2']) ?>
+                                        <?= $this->formInput($form->get('rpviplan2')); ?>
+                                    </div>
+
+                                </div>    
+
+                                <div class="col-lg-6">    
+
+                                    <div class="form-group">
+                                        <label class="control-label" for="rpvmascara">Máscara</label>
+                                        <?php $form->get('rpvmascara')->setValue($this->information['hes']['0']['mascara']) ?>
+                                        <?= $this->formInput($form->get('rpvmascara')); ?>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label" for="rpvinterfaz1">Interfaz 1</label>
+                                        <?php $form->get('rpvinterfaz1')->setValue($this->information['hes']['0']['interfaz_1']) ?>
+                                        <?= $this->formInput($form->get('rpvinterfaz1')); ?>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="control-label" for="rpvinterfaz2">Interfaz 2</label>
+                                        <?php $form->get('rpvinterfaz2')->setValue($this->information['hes']['0']['interfaz_2']) ?>
+                                        <?= $this->formInput($form->get('rpvinterfaz2')); ?>
+                                    </div>
+                                    
+                                    
+                                </div>    
+                            </div>
+                        </div>
+                    </fieldset>				
+                    <div class="clearfix"></div>
+                </div> <!-- FIN Direccionamiento LAN  -->
+    
+                <?php if(isset($this->information['hes']['0']['id'])) : ?>
+                        <input type="hidden" id="heId" name="heId" value="<?=  $this->information['hes']['0']['id']; ?>">
+                <?php  endif; ?>
+                    
+                <div style="float:right; padding-top: 14px;">
+                    <a class="btn btn-primary btn-sm update-he" href="#" onclick="updateHe();" role="button" title="Update Hardware">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                </div>
+
+                
+    
+    
+    
+    
 </div>
    

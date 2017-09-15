@@ -28,17 +28,17 @@ legend
 
 <script>
 
-function updateIpwan() {
+function updateIplan() {
 
-    var url = '/save-ipwan';
+    var url = '<?= $this->url('save-iplan'); ?>'; 
     $.ajax({
        type: "POST",
        url: url,
        data: $('#myForm').serialize(),
        cache: false,
        success: function (json) {
-                $("#grid-ipwan-fill").html(json);
-                $('.update-ipwan').addClass('disabled');
+                $("#grid-iplan-fill").html(json);
+                $('.update-iplan').addClass('disabled');
         },
         error: function (xhr, status) {
             html = "<div class='alert alert-danger'>Error!</div>"
@@ -77,10 +77,10 @@ function addIplan() {
     
     
 
-function ipwanoneFill(id) {
+function iplanoneFill(id) {
     
     var data = {id: id, view: 1};
-    var    url = '/ipwanone-fill';
+    var    url = '<?= $this->url('iplanone-fill'); ?>'; 
     $.ajax({
         type: "POST",
         url: url,
@@ -232,9 +232,6 @@ $(function(){
                     
                     <div class="form-group">
                         &nbsp;
-                    </div>        
-                    <div class="form-group">
-                        &nbsp;
                     </div>
                     <div class="form-group">
                         &nbsp;
@@ -245,19 +242,12 @@ $(function(){
                     <div class="form-group">
                         &nbsp;
                     </div>
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    <div class="form-group">
-                        &nbsp;
-                    </div>
-                    
                     <?php if(isset($this->information['iplans']['0']['id'])) : ?>
                         <input type="hidden" id="iplanId" name="iplanId" value="<?=  $this->information['iplans']['0']['id']; ?>">
                     <?php  endif; ?>
                     
                     <div style="float:right;">
-                        <a class="btn btn-primary btn-sm update-ipwan" href="#" onclick="updateIplan();" role="button" title="Update direccionamiento Wan">
+                        <a class="btn btn-primary btn-sm update-iplan" href="#" onclick="updateIplan();" role="button" title="Update direccionamiento Lan">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </div>

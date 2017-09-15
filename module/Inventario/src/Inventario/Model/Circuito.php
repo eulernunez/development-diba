@@ -189,20 +189,30 @@ class Circuito extends AbstractTableGateway {
     public function getCircuitosBySede($id, $parent = 0)
     {
         
-        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $id . "'" );
+        if(0==$parent) {
+            $tag = 'ecircuito';
+        } elseif(1==$parent) {
+            $tag = 'becircuito';
+        } elseif(-1==$parent) {
+            $tag = 'enotcircuito';
+        }
+        
+        if($parent>=0) {
+            $filter = "AND es_gestionado = 1";
+        } else {
+            $filter = "AND es_gestionado = 0";
+        }
+        
+        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $id . "' $filter");
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['administrativo'];
         }
 
-        if(0==$parent) {
-            $tag = 'ecircuito';
-        } else {
-            $tag = 'becircuito';
-        }
         
-        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm" required>';
         
+        #$html .= '<option value="">Selecciona una opción</option>';
         foreach($select as $key => $circuito) {
             
             $html .= '<option value="'. $key . '">' . $circuito . '</option>';

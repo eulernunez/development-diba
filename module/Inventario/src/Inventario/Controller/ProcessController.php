@@ -23,7 +23,11 @@ class ProcessController extends AbstractActionController
     protected $equipoService;
     protected $ipwanService;
     protected $iplanService;
-
+    protected $hwadicionalService;
+    protected $hwespecialService;
+    protected $multicastService;
+    protected $equiponotgestionadoService;
+    
     protected $wizardService;
 
     public function indexAction()
@@ -63,6 +67,11 @@ class ProcessController extends AbstractActionController
         $this->equipoService = $service;
     }
     
+    public function setEquiponotgestionadoService($service)
+    {
+        $this->equiponotgestionadoService = $service;
+    }
+
     public function setIpWanService($service)
     {
         $this->ipwanService = $service;
@@ -74,11 +83,25 @@ class ProcessController extends AbstractActionController
     }
 
     
+    public function setHwadicionalService($service)
+    {
+        $this->hwadicionalService = $service;
+    }
+
+    public function setHwespecialService($service)
+    {
+        $this->hwespecialService = $service;
+    }
     
     public function setWizardService($service)
     {
         $this->wizardService = $service;
     }        
+    
+    public function setMulticastService($service)
+    {
+        $this->multicastService = $service;
+    }
     
     
     public function altaAction()
@@ -181,6 +204,8 @@ class ProcessController extends AbstractActionController
             $sedeId = $id;
         } elseif(2 == $tab) {
             $comboBoxCircuito = $this->circuitoService->getCircuitosBySede($id); 
+        } elseif(3 == $tab) {
+            $comboBoxCircuito = $this->circuitoService->getCircuitosBySede($id,-1);
         }
         
         if($this->getRequest()->isPost()) {
@@ -225,6 +250,9 @@ class ProcessController extends AbstractActionController
             $result = $this->wizardService->addProcess($sedeId);
         } elseif ((int)$posts['tab']==2) {
             $circuitoId = (int)$posts['ecircuito'];
+            $result = $this->wizardService->addProcess($circuitoId);
+        } elseif ((int)$posts['tab']==3) {
+            $circuitoId = (int)$posts['enotcircuito'];
             $result = $this->wizardService->addProcess($circuitoId);
         }
         
@@ -282,10 +310,8 @@ class ProcessController extends AbstractActionController
         $id = $this->params()->fromRoute('id');
         $information = $this->sedeService->getAllSedeInformation($id);
         
-        #die('INFORMACION: <pre>' . print_r($information, true) . '</pre>');       
-
         $comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($id,1); 
-        #die('<pre>' . print_r($information, true) . '</pre>');
+        #die('<pre>' . print_r($comboBoxCircuitoBck, true) . '</pre>');
         return new ViewModel(array(
             'form' => $form,
             'information' => $information,
@@ -398,7 +424,40 @@ class ProcessController extends AbstractActionController
         return $viewmodel;
 
     }        
-    
+
+    public function notequipoFillAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+        
+        if(1==$view) {
+            $id = $posts['id'];
+            $sedeId = $posts['sede'];
+            $information = $this->equiponotgestionadoService->getInformationByEquipo($sedeId, $id);
+        } else {
+            $this->wizardService->setPostParams($posts);
+            $circuitoId = $this->wizardService->updateEquipoNoGestionado();
+            $sedeId = (int)$posts['sedeId'];
+            $information = $this->equiponotgestionadoService->getInformationByEquipo($sedeId, $circuitoId);
+        }
+        
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+
+    }        
+
     public function sedeFillAction()
     {
 
@@ -591,8 +650,10 @@ class ProcessController extends AbstractActionController
         $configuracion = new \Inventario\Model\Entity\IpWan();
         $configuracion->setOptions($posts);
         
+        $select = 0;
         if(isset($posts['ipwanId'])) {
             $configuracion->setId($posts['ipwanId']);
+            $select = (int)$posts['ipwanId'];
         }
         
         $configuracion->setEquipoId($posts['ipweequipo']);
@@ -607,7 +668,8 @@ class ProcessController extends AbstractActionController
         $information = $this->ipwanService->getIpWanConfigurationByEquipo($id, $idbck);
         
         
-        $viewmodel = new ViewModel(array('information' => $information));
+        $viewmodel = new ViewModel(array('information' => $information,
+                                         'select' => $select));
         
         $viewmodel->setTerminal(true);
 
@@ -623,8 +685,10 @@ class ProcessController extends AbstractActionController
         $configuracion = new \Inventario\Model\Entity\IpLan();
         $configuracion->setOptions($posts);
         
+        $select = 0;
         if(isset($posts['iplanId'])) {
             $configuracion->setId($posts['iplanId']);
+            $select = (int)$posts['iplanId'];
         }
         
         $configuracion->setEquipoId($posts['iplequipo']);
@@ -639,13 +703,441 @@ class ProcessController extends AbstractActionController
         
         $information = $this->iplanService->getIpLanConfigurationByEquipo($id, $idbck);
         
-        $viewmodel = new ViewModel(array('information' => $information));
+        $viewmodel = new ViewModel(array('information' => $information,
+                                         'select' => $select));
         
         $viewmodel->setTerminal(true);
 
         return $viewmodel;
         
     }        
+
+    public function hardwareAdicionalAction()
+    {
+        return [];
+    }
+    
+    public function haFillAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+        
+        if(1==$view) {
+            
+            $id = $posts['id'];
+            $backupId = 0;
+            
+            if(isset($posts['idbck'])) {
+                $backupId = $posts['idbck'];
+            }
+
+            $information = $this->hwadicionalService->getHwAdicionalesByEquipo($id, $backupId);
+            
+            
+        }
+
+        
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
+    public function addHaAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $id = $posts['id'];
+        $idbck = 0;
+
+        if(isset($posts['idbck'])) {
+            $idbck = (int)$posts['idbck'];
+        }
+        
+        $information = $this->equipoService->getAvailableEquipos($id, $idbck, 3);
+        
+        $viewmodel = new ViewModel(
+                array('form' => $form,
+                      'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
+    public function saveHaAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        
+        $hwAdicional = new \Inventario\Model\Entity\HwAdicional();
+        $hwAdicional->setOptions($posts);
+        $select = 0;
+        if(isset($posts['haId'])) {
+            $hwAdicional->setId($posts['haId']);
+            $select = (int)$posts['haId'];
+        }
+        
+        $hwAdicional->setEquipoId($posts['haequipo']);
+        
+        $this->hwadicionalService->saveHwAdicional($hwAdicional);
+
+        $id = (int)$posts['equipoId'];
+        $idbck = 0;
+        if(isset($posts['equipoBckId'])) {
+            $idbck = (int)$posts['equipoBckId'];
+        }
+        
+        $information = $this->hwadicionalService->getHwAdicionalesByEquipo($id, $idbck);
+        
+        $viewmodel = new ViewModel(array('information' => $information,
+                                         'select' => $select));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+        
+    }        
+
+    public function especialAction()
+    {
+        return [];
+    }
+
+    public function heFillAction()
+    {
+
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        
+        
+        
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+        
+        if(1==$view) {
+            
+            $id = $posts['id'];
+            $backupId = 0;
+            
+            if(isset($posts['idbck'])) {
+                $backupId = $posts['idbck'];
+            }
+
+            #$information = $this->hwadicionalService->getHwAdicionalesByEquipo($id, $backupId);
+            $information = $this->hwespecialService->getHwEspecialesByEquipo($id, $backupId);
+            
+        }
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
+    public function addHeAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $id = $posts['id'];
+        $idbck = 0;
+
+        if(isset($posts['idbck'])) {
+            $idbck = (int)$posts['idbck'];
+        }
+        
+        $information = $this->equipoService->getAvailableEquipos($id, $idbck, 4);
+        
+        $viewmodel = new ViewModel(
+                array('form' => $form,
+                      'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
+    public function saveHeAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        
+        $hwEspecial = new \Inventario\Model\Entity\HwEspecial();
+        $hwEspecial->setOptions($posts);
+        
+        $select = 0;
+        if(isset($posts['heId'])) {
+            $hwEspecial->setId($posts['heId']);
+            $select = (int)$posts['heId'];
+            
+        }
+        
+        $hwEspecial->setEquipoId($posts['rpvequipo']);
+        
+        $this->hwespecialService->saveHwEspecial($hwEspecial);
+
+        $id = (int)$posts['equipoId'];
+        $idbck = 0;
+        if(isset($posts['equipoBckId'])) {
+            $idbck = (int)$posts['equipoBckId'];
+        }
+        
+        $information = $this->hwespecialService->getHwEspecialesByEquipo($id, $idbck);
+        
+        $viewmodel = new ViewModel(array('information' => $information,
+                                         'select' => $select));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
+
+    public function mcFillAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+        
+        if(1==$view) {
+            
+            $id = $posts['id'];
+            $backupId = 0;
+            
+            if(isset($posts['idbck'])) {
+                $backupId = $posts['idbck'];
+            }
+
+            
+            $information = $this->multicastService->getMulticastByEquipo($id, $backupId);
+            
+        }
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
+    public function addMcAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        
+        
+        $id = $posts['id'];
+        $idbck = 0;
+
+        if(isset($posts['idbck'])) {
+            $idbck = (int)$posts['idbck'];
+        }
+        
+        $information = $this->equipoService->getAvailableEquipos($id, $idbck, 5);
+        
+        
+        
+        $viewmodel = new ViewModel(
+                array('form' => $form,
+                      'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
+    public function saveMcAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+
+        $multicast = new \Inventario\Model\Entity\Multicast();
+        $multicast->setOptions($posts);
+        
+         $select = 0;
+        if(isset($posts['heId'])) {
+            $multicast->setId($posts['mcId']);
+            $select = (int)$posts['mcId'];
+        }
+        
+        $multicast->setEquipoId($posts['mcequipo']);
+        
+        $this->multicastService->saveMulticast($multicast);
+
+        $id = (int)$posts['equipoId'];
+        $idbck = 0;
+        if(isset($posts['equipoBckId'])) {
+            $idbck = (int)$posts['equipoBckId'];
+        }
+
+        $information = $this->multicastService->getMulticastByEquipo($id, $idbck);
+        
+        $viewmodel = new ViewModel(array('information' => $information,
+                                         'select' => $select));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
+    
+    public function iplanoneFillAction()
+    {
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+
+        
+        
+        if(1==$view) {
+            $id = $posts['id'];
+            $information = $this->iplanService->getIpLanConfigurationById($id);
+        }
+
+      
+        
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+        
+    }
+   
+    public function haoneFillAction()
+    {
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+
+        
+        
+        if(1==$view) {
+            $id = $posts['id'];
+            $information = $this->hwadicionalService->getHwAdicionalById($id);
+        }
+
+       
+        
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+        
+    }
+    
+    public function heoneFillAction()
+    {
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+
+        if(1==$view) {
+            $id = $posts['id'];
+            $information = $this->hwespecialService->getHwEspecialById($id);
+        }
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+        
+    }
+    
+    public function mconeFillAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $view = 0;
+        if(isset($posts['view'])) {
+            $view = (int)$posts['view'];
+        }
+
+        if(1==$view) {
+            $id = $posts['id'];
+            $information = $this->multicastService->getMulticastById($id);
+        }
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
     
     
 }

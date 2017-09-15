@@ -28,18 +28,17 @@ legend
 
 <script>
 
-function saveIplan() {
+function saveMc() {
             
-    var url = '<?= $this->url('save-iplan'); ?>';
+    var url = '<?= $this->url('save-mc'); ?>';
     $.ajax({
-       type: "POST",
-       url: url,
-       data: $('#myForm').serialize(),
-       cache: false,
-       success: function (json) {
-                   
-                $("#grid-iplan-fill").html(json);
-                $('.save-iplan').addClass('disabled');
+        type: "POST",
+        url: url,
+        data: $('#myForm').serialize(),
+        cache: false,
+        success: function (json) {
+            $("#grid-mc-fill").html(json);
+            $('.save-mc').addClass('disabled');
         },
         error: function (xhr, status) {
             html = "<div class='alert alert-danger'>Error!</div>"
@@ -69,28 +68,33 @@ $(function(){
         <div class="col-lg-6">
 
             <div class="form-group">
-                <label class="control-label" for="iplequipo">Equipo</label>
+                <label class="control-label" for="mcequipo">Equipo</label>
                 <?= $this->information['htmlcombobox']['0']; ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="iplrpv">RPV</label>
-                <?= $this->formSelect($form->get('iplrpv')); ?>
+                <label class="control-label" for="redwantunelgreppal">Red Wan Tunel GRE PPAL</label>
+                <?= $this->formInput($form->get('redwantunelgreppal')); ?>
+            </div>
+                    
+            <div class="form-group">
+                <label class="control-label" for="iploppbackgre">IP LoppBack GRE</label>
+                <?= $this->formInput($form->get('iploppbackgre')); ?>
+            </div>
+                    
+            <div class="form-group">
+                <label class="control-label" for="ipedctunel1">IP EDC Tunel 1</label>
+                <?= $this->formInput($form->get('ipedctunel1')); ?>
+            </div>
+                    
+            <div class="form-group">
+                <label class="control-label" for="ipasrppaltuneloficina">IP ASR PPAL Tunel Oficina</label>
+                <?= $this->formInput($form->get('ipasrppaltuneloficina')); ?>
             </div>
 
             <div class="form-group">
-                <label class="control-label" for="iplalias">Alias</label>
-                <?= $this->formInput($form->get('iplalias')); ?>
-            </div>
-                    
-            <div class="form-group">
-                <label class="control-label" for="iplvlan">Vlan</label>
-                <?= $this->formInput($form->get('iplvlan')); ?>
-            </div>                    
-                    
-            <div class="form-group">
-                <label class="control-label" for="ipliplan">IP Lan</label>
-                <?= $this->formInput($form->get('ipliplan')); ?>
+                <label class="control-label" for="interfaztunelasrppal">Interfaz Tunel ASR PPAL</label>
+                <?= $this->formInput($form->get('interfaztunelasrppal')); ?>
             </div>
 
         </div>    
@@ -98,49 +102,43 @@ $(function(){
         <div class="col-lg-6">
             
             <div class="form-group">
-                <label class="control-label" for="iplmascara">Máscara</label>
-                <?= $this->formInput($form->get('iplmascara')); ?>
+                <label class="control-label" for="redwantunelgrebck">Red Wan Tunel GRE BCK</label>
+                <?= $this->formInput($form->get('redwantunelgrebck')); ?>
+            </div>
+                    
+            <div class="form-group">
+                <label class="control-label" for="iprp">IP RP</label>
+                <?= $this->formInput($form->get('iprp')); ?>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="ipedctunel2">IP EDC Tunel 2</label>
+                <?= $this->formInput($form->get('ipedctunel2')); ?>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="ipasrbcktuneloficina">IP ASR BCK Tunel Oficina</label>
+                <?= $this->formInput($form->get('ipasrbcktuneloficina')); ?>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="interfaztunelasrbck">Interfaz Tunel ASR BCK</label>
+                <?= $this->formInput($form->get('interfaztunelasrbck')); ?>
             </div>
             
-            
-           <div class="form-group">
-                <label class="control-label" for="iplnat">Nat</label>
-                <?= $this->formInput($form->get('iplnat')); ?>
-            </div>
-            
-            <div class="form-group">
-                <label class="control-label" for="iplinterfaz">Interfaz</label>
-                <?= $this->formInput($form->get('iplinterfaz')); ?>
-            </div>            
-            
-            <div class="form-group">
-                &nbsp;
-            </div>        
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                &nbsp;
-            </div>
             <div class="form-group">
                 &nbsp;
             </div>
             
             <div style="float:right;">
-                <a class="btn btn-primary btn-sm save-iplan" href="#" onclick="saveIplan();" role="button" title="Guardar direccionamiento Lan">
+                <a class="btn btn-primary btn-sm save-mc" href="#" onclick="saveMc();" role="button" title="Guardar multicast">
                     <i class="glyphicon glyphicon-saved"></i>
                 </a>
-            </div>
+            </div>    
             
-        </div>    
+        </div>
+        
     </div>
+    
+     <div class="clearfix"></div>
 </div>

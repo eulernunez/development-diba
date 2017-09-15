@@ -195,7 +195,7 @@ class Equipo extends AbstractTableGateway {
     public function getCircuitosBySede($sedeId,$circuitoId, $parent)
     {
 
-        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $sedeId . "'" );
+        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $sedeId . "' AND es_gestionado=1" );
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['administrativo'];
@@ -226,17 +226,12 @@ class Equipo extends AbstractTableGateway {
     
     
     
-     public function getAvailableEquipos($id, $backupId, $flag)
+    public function getAvailableEquipos($id, $backupId, $flag)
     {
 
         $datos = array();
         $htmlcombobox = array();
         
-        
-        
-         
-         
-         
         if($backupId>0) {
             $filter = " OR id = '" . $backupId . "' ";
         } else {
@@ -251,10 +246,16 @@ class Equipo extends AbstractTableGateway {
         
         if($flag == 2) {
             $tag = 'iplequipo';
-        }elseif($flag == 1) {
+        } elseif ($flag == 1) {
             $tag = 'ipweequipo';
+        } elseif ($flag == 3) {
+            $tag = 'haequipo';
+        } elseif ($flag == 4) {
+            $tag = 'rpvequipo';
+        } elseif ($flag == 5) {
+            $tag = 'mcequipo';
         }
-      
+
         
         $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
         
