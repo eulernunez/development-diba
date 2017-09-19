@@ -169,6 +169,7 @@ class SessionManager extends AbstractManager
         }
 
         session_destroy();
+        die('DEAD 2');
         if ($options['send_expire_cookie']) {
             $this->expireSessionCookie();
         }
