@@ -1,3 +1,9 @@
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+?>
+
 <script>
 $(function(){
 
@@ -36,7 +42,7 @@ $(function(){
                                 <?= $this->formSelect($form->get('eservicio')); ?>
                             </div>
                             
-                            
+                            <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico">Nemónico</label>
                                 <?php $form->get('enemonico')->setValue($this->information['equipos']['0']['nemonico']) ?>
@@ -49,21 +55,21 @@ $(function(){
                                 <?php $form->get('eipgestion')->setValue($this->information['equipos']['0']['ip_gestion']) ?>
                                 <?= $this->formInput($form->get('eipgestion')); ?>
                             </div>
-                            
+                            <?php endIf; ?>
                             <div class="form-group">
                                 <label class="control-label" for="nivel">Nivel</label>
                                 <?php $form->get('enivel')->setValue($this->information['equipos']['0']['nivel']) ?>
                                 <?= $this->formSelect($form->get('enivel')); ?>
                                 
                             </div>
-
+                            <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
                                 <?php $form->get('enemonicon1')->setValue($this->information['equipos']['0']['nemonico_nivel1']) ?>
                                 <?= $this->formSelect($form->get('enemonicon1')); ?>
                                 
                             </div>
-                        
+                            <?php endIf; ?>
                             <div class="form-group">
                                 <label class="control-label" for="fabricante">Fabricante</label>
                                 <?php $form->get('efabricante')->setValue($this->information['equipos']['0']['fabricanteId']) ?>
@@ -91,13 +97,13 @@ $(function(){
                             <?php $form->get('eubicacion')->setValue($this->information['equipos']['0']['ubicacion']) ?>
                             <?= $this->formInput($form->get('eubicacion')); ?>
                         </div>
-                        
+                        <?php if('Cliente' != $userRole) : ?>
                         <div class="form-group">
                             <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
                             <?php $form->get('elogosalta')->setValue($this->information['equipos']['0']['pedido_logos_alta']) ?>
                             <?= $this->formInput($form->get('elogosalta')); ?>
                         </div>    
-                        
+                         <?php endIf; ?>
                         <div class="form-group">
                             <label class="control-label" for="contacto-equipo">Contacto</label>
                             <?php $form->get('econtacto')->setValue($this->information['equipos']['0']['contacto']) ?>
@@ -121,14 +127,14 @@ $(function(){
                             <?php $form->get('eestado')->setValue($this->information['equipos']['0']['estadoId']) ?>
                             <?= $this->formSelect($form->get('eestado')); ?>
                         </div>
-                        
+                        <?php if('Cliente' != $userRole) : ?>
                         <div class="form-group">
                             <label class="control-label" for="observacion-equipo">Observaciones</label>
                             <?php $form->get('eobservacion')->setValue($this->information['equipos']['0']['observacion']);
                             #$form->get('observacion')->setAttribute('rows', 1);  ?>
                             <?= $this->formTextarea($form->get('eobservacion')); ?>
                         </div>
-                        
+                        <?php endIf; ?>
                         <div class="form-check">
                             <label class="form-check-label"> 
                                 <?php $ebackup = $this->information['equipos']['0']['tiene_backup']; ?>
@@ -166,7 +172,7 @@ $(function(){
                                 <?php $form->get('beservicio')->setValue($this->information['equipos']['1']['servicioId']) ?>
                                 <?= $this->formSelect($form->get('beservicio')); ?>
                             </div>
-                            
+                            <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico">Nemónico</label>
                                 <?php $form->get('benemonico')->setValue($this->information['equipos']['1']['nemonico']) ?>
@@ -178,19 +184,19 @@ $(function(){
                                 <?php $form->get('beipgestion')->setValue($this->information['equipos']['1']['ip_gestion']) ?>
                                 <?= $this->formInput($form->get('beipgestion')); ?>
                             </div>
-                            
+                            <?php endIf; ?>
                             <div class="form-group">
                                 <label class="control-label" for="nivel">Nivel</label>
                                 <?php $form->get('benivel')->setValue($this->information['equipos']['1']['nivel']) ?>
                                 <?= $this->formSelect($form->get('benivel')); ?>
                             </div>
-
+                            <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
                                 <?php $form->get('benemonicon1')->setValue($this->information['equipos']['1']['nemonico_nivel1']) ?>
                                 <?= $this->formSelect($form->get('benemonicon1')); ?>
                             </div>
-                            
+                            <?php endIf; ?>
                             <div class="form-group">
                                 <label class="control-label" for="fabricante">Fabricante</label>
                                 <?php $form->get('befabricante')->setValue($this->information['equipos']['1']['fabricanteId']) ?>
@@ -218,7 +224,7 @@ $(function(){
                             <?php $form->get('beubicacion')->setValue($this->information['equipos']['1']['ubicacion']) ?>
                             <?= $this->formInput($form->get('beubicacion')); ?>
                         </div>
-
+                        <?php if('Cliente' != $userRole) : ?>
                         <div class="form-group">
                             <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
                             <?php $form->get('belogosalta')->setValue($this->information['equipos']['1']['pedido_logos_alta']) ?>
@@ -230,6 +236,7 @@ $(function(){
                             <?php $form->get('beobservacion')->setValue($this->information['equipos']['1']['observacion']) ?>
                             <?= $this->formTextarea($form->get('beobservacion')); ?>
                         </div>
+                        <?php endIf; ?>
                     </div>    
                 </div>
             </div>
