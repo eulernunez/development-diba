@@ -95,6 +95,8 @@ class UserController extends AbstractActionController
                                 ->write($data['userName']);
                             $session->offsetSet('userId', $userDetails['id']);
                             $session->offsetSet('userEmail', $data['userName']);
+                            $session->offsetSet('firstName', $userDetails['first_name']);
+                            $session->offsetSet('lastName', $userDetails['last_name']);
                         } else {
                             // //// Destroy the Session and redirect to Login
                             $message['error'] = LoginMessages::ACCOUNT_NOT_ACTIVE;

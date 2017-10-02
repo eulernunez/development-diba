@@ -74,6 +74,16 @@
      <!-- END PAGE LEVEL SCRIPTS -->
 
 </head>
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+    $firstName = $session->offsetGet('firstName');
+    $lastName = $session->offsetGet('lastName');
+
+
+
+?>
      <!-- END HEAD -->
      <!-- BEGIN BODY -->
 <body class="padTop53 " >
@@ -134,7 +144,7 @@
                 </a>
                 <br />
                 <div class="media-body">
-                    <h5 class="media-heading"> Euler Núñez </h5>
+                    <h5 class="media-heading"> <?= $firstName . ' ' . $lastName ; ?> </h5>
                     <ul class="list-unstyled user-info">
                         <li>
                              <a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Online
@@ -262,10 +272,11 @@
 <!--                        <li class="">
                             <a href="<?php echo $this->url('alta') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Alta de Planta') ?></a>
                         </li>-->
-                        <li class="">
-                            <a href="<?php echo $this->url('wizard') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> <?= $this->translate('Wizard') ?> </span></a>
-                        </li>
-                        
+                        <?php if('Cliente' != $userRole) : ?>
+                            <li class="">
+                                <a href="<?php echo $this->url('wizard') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> <?= $this->translate('Wizard') ?> </span></a>
+                            </li>
+                        <?php endIf; ?>
                     </ul>
                 </li>
                 
