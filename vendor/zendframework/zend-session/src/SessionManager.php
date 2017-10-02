@@ -389,6 +389,7 @@ class SessionManager extends AbstractManager
      */
     public function expireSessionCookie()
     {
+        
         $config = $this->getConfig();
         if (!$config->getUseCookies()) {
             return;
