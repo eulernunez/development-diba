@@ -162,25 +162,26 @@ $(function(){
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $cont = 1; ?>
-                                        <?php foreach($this->information['caudales']['principal'] as $item) : ?>
-                                                 
-                                            <tr class="row-input">
-                                                <td><input name="caudal-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
-                                                <td><input name="cantidad-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['cantidad']  ?>" /></td>
-                                                <td><select name="unidad-<?= $cont?>" class="col-xs-20" id="exampleSelect1">
-                                                        <option value="1" <?= ('1'==$item['unidad'])?'selected':'' ?>>Mb</option>
-                                                        <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
-                                                <td>
-                                                    <!--<input type="button" class="borrar" value="Eliminar" />-->
-                                                    <a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar">
-                                                        <i class="glyphicon glyphicon-minus"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <?php $cont++; ?>
-                                        <?php endforeach; ?>
+                                        <?php if(isset($this->information['caudales']['principal'])) : ?>
+                                            <?php $cont = 1; ?>
+                                            <?php foreach($this->information['caudales']['principal'] as $item) : ?>
 
+                                                <tr class="row-input">
+                                                    <td><input name="caudal-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
+                                                    <td><input name="cantidad-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['cantidad']  ?>" /></td>
+                                                    <td><select name="unidad-<?= $cont?>" class="col-xs-20" id="exampleSelect1">
+                                                            <option value="1" <?= ('1'==$item['unidad'])?'selected':'' ?>>Mb</option>
+                                                            <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
+                                                    <td>
+                                                        <!--<input type="button" class="borrar" value="Eliminar" />-->
+                                                        <a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar">
+                                                            <i class="glyphicon glyphicon-minus"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <?php $cont++; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>            
                                     </tbody>
                                 </table>
                             </div>

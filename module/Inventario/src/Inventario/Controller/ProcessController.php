@@ -310,7 +310,8 @@ class ProcessController extends AbstractActionController
         $id = $this->params()->fromRoute('id');
         $information = $this->sedeService->getAllSedeInformation($id);
         
-        $comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($id,1); 
+        $comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($id,1);
+        
         #die('<pre>' . print_r($comboBoxCircuitoBck, true) . '</pre>');
         return new ViewModel(array(
             'form' => $form,
@@ -477,7 +478,7 @@ class ProcessController extends AbstractActionController
         $viewmodel->setTerminal(true);
         
         return $viewmodel;
-    
+
     }        
             
     public function ipwanFillAction()
