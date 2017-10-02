@@ -717,9 +717,18 @@ $(function(){
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $row = 1; ?>
-                        <?php foreach($this->information['circuitosall'] as $circuito) : ?> 
-                        <tr class="fila-grid <?= (1==$row)?'success':'' ?>">
+                    <?php $row = false; ?>
+                    <?php foreach($this->information['circuitosall'] as $circuito) : ?> 
+                        <?php
+                            if(isset($this->information['circuitos']['0']['id'])) {
+                                $row = true;  
+                            }
+                        ?>
+                        <?php if($row) : ?>
+                        <tr class="fila-grid <?= ($this->information['circuitos']['0']['id']==$circuito['id'])?'success':'' ?>">
+                        <?php else : ?>
+                        <tr class="fila-grid">    
+                        <?php endif; ?>    
                             <td><?= ($circuito['parent_id']==0)?'PRINCIPAL':'BACKUP' ?></td>
                             <td><?= $circuito['administrativo'] ?></td>
                             <td><?= $circuito['tecnologia'] ?></td>
@@ -737,13 +746,12 @@ $(function(){
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
                                 
-
+ 
                                 
                                 
                             </td>  
                         </tr>
-                        <?php $row++; ?>
-                        <?php endforeach; ?>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -855,7 +863,8 @@ $(function(){
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         <?php $cont = 1; ?>     
+                                    <?php if(isset($this->information['caudales']['principal'])) : ?>    
+                                        <?php $cont = 1; ?>     
                                         <?php foreach($this->information['caudales']['principal'] as $item) : ?>
                                             <tr class="row-input">
                                                 <td><input name="caudal-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
@@ -872,7 +881,7 @@ $(function(){
                                             </tr>
                                             <?php $cont++; ?>
                                         <?php endforeach; ?>
-
+                                    <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
