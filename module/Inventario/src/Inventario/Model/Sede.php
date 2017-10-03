@@ -10,6 +10,9 @@ namespace Inventario\Model;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
+ use Zend\Session\Container;
+
+
 
 class Sede extends AbstractTableGateway {
 
@@ -21,11 +24,22 @@ class Sede extends AbstractTableGateway {
 
     
     public function fetchAll() {
-
-        $resultSet = $this->select(function (Select $select) {
+        
+        $resultSet = 
+                    $this->select(function (Select $select) {
+                    $session = new Container('User');
+                    $userRole = $session->offsetGet('userRole');
+                    $nif = $session->offsetGet('firstName');
                     $select->join(array('c' => 'contactos'), 'c.id=sedes.contacto_id',array('contactoId' => 'id', 'contacto'),$select::JOIN_LEFT);
-                          #  ->order('fecha_alta ASC');
+                    if('Cliente' == $userRole) {
+                        $select->where(array('sedes.nif' => $nif)); 
+                    }
+                     
+                    #  ->order('fecha_alta ASC');
                 });
+                
+        
+                
                 
         $entities = array();
         
