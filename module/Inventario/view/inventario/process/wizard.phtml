@@ -77,14 +77,37 @@ $form->prepare();
     <!--<form action="/wizard" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8">-->
 
     <!-- SmartWizard html -->
+    <?php
+    
+        if(isset($this->tab) && $this->tab==2) {
+            $property = 'block';
+            $hiddenButtons = 1;
+        } else {
+            $property = 'none';
+            $hiddenButtons = 0;
+        }
+        if(isset($this->tab) && $this->tab==3) {
+            $property2 = 'block';
+            $hiddenButtons2 = 1;
+        } else {
+            $property2 = 'none';
+            $hiddenButtons2 = 0;
+        }
+        
+        $hiddenButtons3 = 0;
+        if(isset($this->tab) && $this->tab==1) {
+            $hiddenButtons3 = 1;
+        }
+    ?>
+    <div id="box"></div>
     <div id="smartwizard" >
         <ul>
-            <li><a href="#step-1">SEDE&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 1</small></a></li>
-            <li><a href="#step-2">CIRCUITO<br /><small>Step 2</small></a></li>
-            <li><a href="#step-3">&nbsp;&nbsp;EQUIPO&nbsp;&nbsp;GESTIONADO&nbsp;&nbsp;<br /><small>Step 3</small></a></li>
-            <li><a href="#step-4">EQUIPO RESIDENCIAL<br /><small>Step 4</small></a></li>
-            <li><a href="#step-5">IP WAN&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 5</small></a></li>
-            <li><a href="#step-6">FINAL&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>Step 5</small></a></li>
+            <li><a href="#step-1">SEDE&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>1er Paso</small></a></li>
+            <li><a href="#step-2">CIRCUITO<br /><small>2do Paso</small></a></li>
+            <li class="step-equipo" style="display:<?= $property; ?>;"><a href="#step-3">&nbsp;&nbsp;EQUIPO&nbsp;&nbsp;GESTIONADO&nbsp;&nbsp;<br /><small>3er Paso (a)</small></a></li>
+            <li class="step-equipo-no-gestionado" style="display:<?= $property2; ?>;"><a href="#step-4">EQUIPO NO GESTIONADO<br /><small>3er Paso(b)</small></a></li>
+            <li class="step-equipo-comodin"><a href="#step-5">EQUIPO&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>3er Paso</small></a></li>
+            <li><a href="#step-6">FINAL&nbsp;&nbsp;&nbsp;&nbsp;<br /><small>&nbsp;</small></a></li>
         </ul>
 
         <div style="border-style: none;">
@@ -249,7 +272,7 @@ $form->prepare();
                                 </div>
                         
                                 <div class="grid-caudal" style="display: none;">
-                                    <button id="add" type="button" class="btn btn-primary btn-sm" style="float: right;">Agregar</button>
+                                    <button id="add" type="button" title="Agregar caudal" class="btn btn-primary btn-xs" style="float: right;  margin-right: 18px;"><i class="glyphicon glyphicon-plus"></i></button>
                                     <div style="clear:both;"></div>
                                     <div class="panel-body">
 
@@ -347,7 +370,7 @@ $form->prepare();
                             </div>
                         
                         <div class="grid-caudal-backup" style="display: none;">
-                            <button id="add-backup" type="button" class="btn btn-primary btn-sm" style="float: right;">Agregar</button>
+                            <button id="add-backup" type="button" title="Agregar caudal" class="btn btn-primary btn-xs" style="float: right; margin-right: 18px;"><i class="glyphicon glyphicon-plus"></i></button>
                             <div style="clear:both;"></div>
                             <div class="panel-body">
                                 <table id="backup" class="table table-bordered">
@@ -403,7 +426,7 @@ $form->prepare();
 
                 
             </div>
-                
+            <div class="step-equipo" style="display:<?= $property; ?>;">   
             <div id="step-3">
 <!--    
 <h2>Your Address</h2>
@@ -524,8 +547,8 @@ $form->prepare();
         </fieldset>				
 
             </div>
-                
-
+        </div>    
+        <div class="step-equipo-no-gestionado" style="display: <?= $property2; ?>;">
             <div id="step-4" class="">
                     
             <fieldset class="col-md-12">    	
@@ -607,7 +630,7 @@ $form->prepare();
         </fieldset>				
                     
             </div>
-
+        </div>
 
             <div id="step-5" class="">
 <!--                <h2>Final</h2>
@@ -724,10 +747,16 @@ $form->prepare();
     
     <!--</form>-->
     <?= $this->form()->closeTag($form); ?>
-    <div id="box" style="border:1px solid #ccc;"></div>
+    <div id="boxXXX" style="border:1px solid #ccc;"></div>
 </div>
 
 <script type="text/javascript">
+
+function sleep(delay) {
+        var start = new Date().getTime();
+        while (new Date().getTime() < start + delay);
+}
+
 
 $(document).ready(function(){
             
@@ -762,7 +791,7 @@ $(document).ready(function(){
             
             
             
-    var btnSaveAndOut = $('<button></button>').text('Save&Exit')
+    var btnSaveAndOut = $('<button></button>').text('Grabar')
                         .addClass('btn btn-success save')
                         .on('click', function(){
 
@@ -772,26 +801,32 @@ $(document).ready(function(){
                                    url: url,
                                    data: $('#myForm').serialize(),
                                    cache: false,
-                                   success: function (json) {
-                                        var obj = jQuery.parseJSON(json);
-                                        var results;
-                                        for(var key in obj){
-                                            console.log(' name= ' + key + ' value= ' + obj[key]);
-                                            results = parseInt(obj[key]);
-                                            console.log('Resultado='+results);
-                                       }
-                                       if(results>0) {
-    //                                                    html = "<div class='alert alert-success'>Success!</div>";
-                                            $("#box").html(json);
+                                   success: function (html) {
+//                                        var obj = jQuery.parseJSON(json);
+//                                        var results;
+//                                        for(var key in obj){
+//                                            console.log(' name= ' + key + ' value= ' + obj[key]);
+//                                            results = parseInt(obj[key]);
+//                                            console.log('Resultado='+results);
+//                                       }
+//                                       if(results>0) {
+                                            
+                                            //html = "<div class='alert alert-success' style='text-align: center; font-family: 20px; font-weight: bold;'>¡Se proceso satisfactoriamente!</div>";
+                                            $("#box").html(html);
                                             $('.save').hide();
                                             $('.sw-btn-group-extra').hide();
-                                            $('.sw-btn-prev').addClass('disabled');
-                                            $('.sw-btn-next').addClass('disabled');
-                                        } else {
-                                            html = "<div class='alert alert-danger'>Error!</div>";
-                                            $("#box").html(html);
-                                        }
-
+//-                                            $('.sw-btn-prev').addClass('disabled');
+//-                                            $('.sw-btn-next').addClass('disabled');
+                                            $('.sw-btn-prev').hide();
+                                            $('.sw-btn-next').hide();
+//+                                            Para direccionar a la nueva página. 
+//+                                            document.location.href = '<?php # $this->url('tabs') . '1447' ; ?>';
+                                            
+//                                        } else {
+//                                            html = "<div class='alert alert-danger'>Error!</div>";
+//                                            $("#box").html(html);
+//                                        }
+                                        
                                     },
                                     error: function (xhr, status) {
                                         html = "<div class='alert alert-danger'>Error!</div>"
@@ -801,11 +836,12 @@ $(document).ready(function(){
 
                         });                         
  
-            
+ 
             // Smart Wizard   btnFinish, btnCancel, 
             $('#smartwizard').smartWizard({ 
                 selected: <?= $this->tab; ?>, 
                 theme: 'arrows',
+                keyNavigation: false,
                 transitionEffect:'fade',
                 
                 <?php if('1'== $this->tab) : ?>
@@ -825,14 +861,26 @@ $(document).ready(function(){
                     markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
                     removeDoneStepOnNavigateBack: true, // While navigate back done step after active step will be cleared
                     enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
-                }
+                },
+                lang: {  // Language variables
+                    next: 'Siguiente', 
+                    previous: 'Anterior'
+                },                        
             });
             
             
             $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
                 
-                
-                
+                if(stepNumber==1 && stepDirection === 'forward') {
+                    if($('#cgestionado').prop('checked')) {
+                        $('.step-equipo').css('display','block');
+                        $('.step-equipo-comodin').css('display','none');
+                    } else {
+                        stepNumber = stepNumber + 1;
+                        $('.step-equipo-no-gestionado').css('display','block');
+                        $('.step-equipo-comodin').css('display','none');
+                    }
+                }
                 var elmForm = $("#form-step-" + stepNumber);
                 
 //                alert('TEST: ' + elmForm);
@@ -865,6 +913,13 @@ $(document).ready(function(){
                 }else{
                     $('.btn-finish').addClass('disabled');
                 }
+                
+                if(stepNumber == 2){
+                    $('.sw-btn-next').addClass('disabled');
+                } else {
+                    $('.sw-btn-next').removeClass('disabled');
+                }
+                
             });                               
 
             
@@ -880,7 +935,7 @@ $(document).ready(function(){
                             <td><input name="' + caudal + '" class="col-xs-12" type="text" value="" /></td>\n\
                             <td><input name="' + cantidad + '" class="col-xs-12" type="text" value="" /></td>\n\
                             <td><select name="' + unidad + '" class="col-xs-20" id="exampleSelect1"><option value="1" selected="selected">Mb</option><option value="2">%</option></select></td>\n\
-                            <td><input type="button" class="borrar" value="Eliminar" /></td>\n\
+                            <td><a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar"><i class="glyphicon glyphicon-minus"></i></a></td>\n\
                         </tr>';
                 $('#grid-caudal tr:last').after(row);
 
@@ -899,7 +954,7 @@ $(document).ready(function(){
                             <td><input name="' + caudalbck + '" class="col-xs-12" type="text" value="" /></td>\n\
                             <td><input name="' + cantidadbck + '"  class="col-xs-12" type="text" value="" /></td>\n\
                             <td><select name="' + unidadbck + '"  class="col-xs-20" id="exampleSelect1"><option value="1" selected="selected">Mb</option><option value="2">%</option></select></td>\n\
-                            <td><input type="button" class="borrar" value="Eliminar" /></td>\n\
+                            <td><a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar"><i class="glyphicon glyphicon-minus"></i></a></td>\n\
                         </tr>';
                 $('#backup tr:last').after(row);
                 
@@ -913,14 +968,15 @@ $(document).ready(function(){
             });
             
             
-           
-           
+            <?php if($hiddenButtons==1||$hiddenButtons2==1||$hiddenButtons3==1) : ?>
+                $('.sw-btn-prev').hide();
+                $('.sw-btn-next').hide();
+            <?php endif; ?>                
+
             
             
-        }); 
-
-
-
+            
+    }); 
 
 
 
@@ -952,6 +1008,9 @@ $(document).ready(function(){
         }
         else {
             $('.grid-caudal').css('display','none');
+
+            $('.step-equipo').css('display','none');
+            $('.step-equipo-no-gestionado').css('display','block');
 
             $('#eservicio').removeAttr('required');
             $('#enemonico').removeAttr('required');

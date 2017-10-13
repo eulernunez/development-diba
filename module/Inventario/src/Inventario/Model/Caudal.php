@@ -144,8 +144,8 @@ class Caudal extends AbstractTableGateway {
     
     
     
-//    public function removeStickyNote($id) {
-//        return $this->delete(array('id' => (int) $id));
-//    }
+    public function removeCaudales($id) {
+        return $this->delete(array('circuito_id' => (int) $id));
+    }
 
 }

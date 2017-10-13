@@ -70,6 +70,116 @@ legend
 
 <script>
 
+$(document).ready(function (e){
+
+    $('#deleteCircuito').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        var parentId = $(e.relatedTarget).data().parent;
+        $('#deleteCircuitoId').val(id);
+        $('#deleteCircuitoParentId').val(parentId);
+    })
+
+    $('#deleteEquipo').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        var parentId = $(e.relatedTarget).data().parent;
+        $('#deleteEquipoId').val(id);
+        $('#deleteEquipoParentId').val(parentId);
+    })
+
+    $('#deleteEquipoNotManagement').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        $('#deleteEquipoNotManagementId').val(id);
+    })
+
+
+
+});
+
+
+
+function deleteEquipoNotManagement() {
+
+    $('#deleteEquipoNotManagement').modal('hide');
+    var url = '<?= $this->url('delete-equipo-not-management'); ?>';
+    var id = $('#deleteEquipoNotManagementId').val();
+    var sedeId = $('#deleteEquipoNotManagementSedeId').val();
+    var data = {id: id, sedeId: sedeId};
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            $("#delete-equipo-not-management").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+
+}
+
+
+
+
+function deleteEquipo() {
+    
+    $('#deleteEquipo').modal('hide');
+    var url = '<?= $this->url('delete-equipo'); ?>';
+    var id = $('#deleteEquipoId').val();
+    var parentId = $('#deleteEquipoParentId').val();
+    var sedeId = $('#deleteEquipoSedeId').val();
+    var data = {id: id, parentId: parentId, sedeId: sedeId};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#delete-equipo").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+
+
+
+
+function deleteCircuito() {
+    $('#deleteCircuito').modal('hide');
+    var url = '<?= $this->url('delete-circuito'); ?>';
+    var id = $('#deleteCircuitoId').val();
+    var parentId = $('#deleteCircuitoParentId').val();
+    var sedeId = $('#deleteCircuitoSedeId').val();
+    var data = {id: id, parentId: parentId, sedeId: sedeId};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#delete-circuito").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+
+
+
 function updateNotEquipos() {
     
     var url = '<?= $this->url('notequipo-fill'); ?>';
@@ -479,7 +589,7 @@ $(function(){
                     <td><input name="' + caudalbck + '" class="col-xs-12" type="text" value="" /></td>\n\
                     <td><input name="' + cantidadbck + '"  class="col-xs-12" type="text" value="" /></td>\n\
                     <td><select name="' + unidadbck + '"  class="col-xs-20" id="exampleSelect1"><option value="1" selected="selected">Mb</option><option value="2">%</option></select></td>\n\
-                    <td><input type="button" class="borrar" value="Eliminar" /></td>\n\
+                    <td><a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar"><i class="glyphicon glyphicon-minus"></i></a></td>\n\
                 </tr>';
         $('#backup tr:last').after(row);
 
@@ -530,18 +640,18 @@ $(function(){
 ?>
 
 <div>
-    
+
     <?= $this->form()->openTag($form); ?>
 
-    
+
         <fieldset class="col-md-12">    	
             <legend>SEDE</legend>
             
             <div class="panel panel-default">
                 <div class="panel-body">
-                    
-                <div id="sede-fill">    
-                    <div class="col-lg-3">    
+    
+                <div id="sede-fill">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Nombre</label>
                             <?php $form->get('nombre')->setValue($information['sede']['nombre']) ?>
@@ -704,7 +814,10 @@ $(function(){
     
     <div class="tab-content" style="margin: 2px; padding: 2px;">
         <div class="tab-pane fade in active" id="tab1">
-
+            <div id="delete-circuito">
+            <input type="hidden" id="deleteCircuitoId" name="deleteCircuitoId" value="">
+            <input type="hidden" id="deleteCircuitoParentId" name="deleteCircuitoParentId" value="">
+            <input type="hidden" id="deleteCircuitoSedeId" name="deleteCircuitoSedeId" value="<?= $this->information['sede']['id'] ;?>">
             
             <div style="float:right;">
                 <?php $sedeId = $this->information['sede']['id'] ;?>
@@ -752,12 +865,9 @@ $(function(){
                                 <?php else : ?>
                                 <span style="margin-left: 20px;">&nbsp;</span>
                                 <?php endif; ?>
-                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar circuito">
+                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar circuito" data-toggle="modal" data-id="<?= $circuito['id']; ?>" data-parent="<?= $circuito['parent_id']; ?>" data-target="#deleteCircuito">
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
-                                
- 
-                                
                                 
                             </td>  
                         </tr>
@@ -1000,7 +1110,7 @@ $(function(){
                                         <?php $cont = 1; ?>
                                         <?php foreach($this->information['caudales']['backup'] as $item) : ?>
                                                  
-                                            <tr class="row-input">
+                                            <tr class="row-input-backup">
                                                 <td><input name="caudalbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
                                                 <td><input name="cantidadbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= number_format($item['cantidad'],0)  ?>" /></td>
                                                 <td><select name="unidadbck-<?= $cont?>" class="col-xs-20" id="exampleSelect1">
@@ -1070,20 +1180,22 @@ $(function(){
                 
             </div>
             
-            
-
+            </div>
         </div>
-        <div class="tab-pane fade in" id="tab2">
-            
-            <div style="float:right;">
-                
-                <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/2" role="button" title="Agregar equipo">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </a>
-            </div>    
-            <div style="clear: both;"></div>
+            <div class="tab-pane fade in" id="tab2">
+                <div id="delete-equipo">
+                    <input type="hidden" id="deleteEquipoId" name="deleteEquipoId" value="">
+                    <input type="hidden" id="deleteEquipoParentId" name="deleteEquipoParentId" value="">
+                    <input type="hidden" id="deleteEquipoSedeId" name="deleteEquipoSedeId" value="<?= $this->information['sede']['id'] ;?>">
 
-            
+                
+                    <div style="float:right;">
+
+                        <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/2" role="button" title="Agregar equipo">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </a>
+                    </div>    
+                    <div style="clear: both;"></div>
             
         
         <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
@@ -1123,7 +1235,7 @@ $(function(){
                                 <span style="margin-left: 20px;">&nbsp;</span>
                                 <?php endif; ?>
                                 
-                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
+                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo" data-toggle="modal" data-id="<?= $equipo['id']; ?>" data-parent="<?= $equipo['parent_id']; ?>" data-target="#deleteEquipo">    
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
                             </td>  
@@ -1429,13 +1541,18 @@ $(function(){
             </div>
           <!-- FIN -->
             
-    <?php endIf; ?>      
+    <?php endIf; ?>
+          
+          <!-- POZOR!!!! -->
+            </div>
         </div>
         <div class="tab-pane fade in" id="tab3">
-
+            <div id="delete-equipo-not-management">
+                    <input type="hidden" id="deleteEquipoNotManagementId" name="deleteEquipoNotManagementId" value="">
+                    <input type="hidden" id="deleteEquipoNotManagementSedeId" name="deleteEquipoNotManagementSedeId" value="<?= $this->information['sede']['id'] ;?>">
             <div style="float:right;">
 
-                <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/3" role="button" title="Agregar equipo">
+                <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/3" role="button" title="Agregar equipo no gestionado">
                     <i class="glyphicon glyphicon-plus"></i>
                 </a>
 
@@ -1468,7 +1585,7 @@ $(function(){
                                 <a class="btn btn-primary btn-xs" href="#" onclick="notequipoFill('<?= $this->sedeId; ?>', '<?= $notequipo['id'] ?>');" title="Consultar equipo">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
-                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
+                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo no gestionado" data-toggle="modal" data-id="<?= $notequipo['id']; ?>" data-target="#deleteEquipoNotManagement">    
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
                             </td>  
@@ -1597,9 +1714,9 @@ $(function(){
             
             
             
+            <!-- HASTA AQUIIIIIIIIIIIIIIIIIII -->    
         
-        
-        
+            </div>
         </div>
         <div class="tab-pane fade in" id="tab4">
           
@@ -1741,3 +1858,159 @@ $(function(){
 
     <?= $this->form()->closeTag($form); ?>
 </div>
+
+
+<!-- Modal Delete Circulo -->
+<div class="modal fade" id="deleteCircuito" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar circuito</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteCircuito();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete Equipo -->
+<div class="modal fade" id="deleteEquipo" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar equipo</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteEquipo();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete EquipoNotManagement -->
+<div class="modal fade" id="deleteEquipoNotManagement" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar equipo no gestionado</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteEquipoNotManagement();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete IpWan -->
+<div class="modal fade" id="deleteIpWan" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar configuración IP Wan</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteIpWan();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Delete IpLan -->
+<div class="modal fade" id="deleteIpLan" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar configuración IP Lan</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteIpLan();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Delete Ha -->
+<div class="modal fade" id="deleteHa" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar hardware</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteHa();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete He -->
+<div class="modal fade" id="deleteHe" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar hardware</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteHe();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete Mc -->
+<div class="modal fade" id="deleteMc" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar multicast</h4>
+            </div>
+            <div class="modal-body">
+                 <p>¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteMc();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

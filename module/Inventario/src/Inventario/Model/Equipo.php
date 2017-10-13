@@ -93,6 +93,26 @@ class Equipo extends AbstractTableGateway {
         else return false;
         
     }
+    
+    public function deleteEquipo($id, $parentId)
+    {
+
+        $data['activo'] = 0;
+        $this->update($data, array('id' => $id));
+        $this->update($data, array('parent_id' => $id));
+        
+        if($parentId > 0) {
+            $data2['tiene_backup'] = 0;
+            $this->update($data2, array('id' => $parentId));
+        }
+
+        return true;
+
+    }        
+
+    
+    
+    
 
     public function saveBackupEquipo(Entity\BackupEquipo $equipo)
     {
@@ -164,7 +184,7 @@ class Equipo extends AbstractTableGateway {
                                 LEFT JOIN modelos AS m ON e.modelo_id = m.id
                                 LEFT JOIN contactos AS c ON e.contacto_id = c.id
                                 LEFT JOIN estados AS st ON e.estado = st.id
-                                WHERE e.id = '" . $id . "' OR e.parent_id = '" . $id . "'");
+                                WHERE (e.id = '" . $id . "' AND e.activo=1) OR (e.parent_id = '" . $id . "' AND e.activo=1)");
         
         $equipos = array();
         
@@ -195,7 +215,7 @@ class Equipo extends AbstractTableGateway {
     public function getCircuitosBySede($sedeId,$circuitoId, $parent)
     {
 
-        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $sedeId . "' AND es_gestionado=1" );
+        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $sedeId . "' AND es_gestionado=1 AND activo=1" );
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['administrativo'];
@@ -233,12 +253,12 @@ class Equipo extends AbstractTableGateway {
         $htmlcombobox = array();
         
         if($backupId>0) {
-            $filter = " OR id = '" . $backupId . "' ";
+            $filter = " OR (id = '" . $backupId . "' activo=1)";
         } else {
             $filter = "";
         }
         
-        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE id = '" . $id . "'" . $filter . " ORDER BY id ASC");
+        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE (id = '" . $id . "' AND activo=1) " . $filter . " ORDER BY id ASC");
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['nemonico'];

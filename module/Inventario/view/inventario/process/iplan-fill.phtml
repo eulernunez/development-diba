@@ -27,6 +27,34 @@ legend
 </style>
 
 <script>
+    
+function deleteIpLan() {
+    
+    $('#deleteIpLan').modal('hide');
+    var url = '<?= $this->url('delete-ip-lan'); ?>';
+    var id = $('#deleteIpLanId').val();
+    
+    var equipoId = $('#equipoId').val();
+    var equipoBckId = $('#equipoBckId').val();
+    var data = {id: id, equipoId: equipoId, equipoBckId:equipoBckId};
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            $("#ipwan-fill").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+    
+    
 
 function updateIplan() {
 
@@ -113,7 +141,12 @@ $(function(){
         });
         $(this).addClass('success');
     });
-                
+    
+    $('#deleteIpLan').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        $('#deleteIpLanId').val(id);
+    })
+
 });
 
 </script>
@@ -121,7 +154,7 @@ $(function(){
 
 <div class="panel panel-default">
     <div class="panel-body">
-        
+        <input type="hidden" id="deleteIpLanId" name="deleteIpLanId" value="">
         <div style="float:right;">
             <a class="btn btn-primary btn-sm" href="#" onclick="addIplan();" role="button" title="Agregar direccionamiento Lan">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -160,7 +193,7 @@ $(function(){
                             <a class="btn btn-primary btn-xs" href="#" onclick="iplanoneFill('<?= $configuration['id'] ?>');" title="Consultar configuración">
                                 <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
-                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar configuración">
+                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar configuración IP Lan" data-toggle="modal" data-id="<?= $configuration['id']; ?>" data-target="#deleteIpLan">
                                 <i class="glyphicon glyphicon-minus"></i>
                             </a>
                         </td>  

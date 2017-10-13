@@ -76,6 +76,7 @@ class Circuito extends AbstractTableGateway {
         if ($id == 0) {
             $data['alta'] = date("Y-m-d H:i:s");
             $data['parent_id'] = 0;
+            $data['activo'] = 1;
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
@@ -87,6 +88,25 @@ class Circuito extends AbstractTableGateway {
         
     }
 
+    public function deleteCircuito($id, $parentId)
+    {
+
+        $data['activo'] = 0;
+        $this->update($data, array('id' => $id));
+        $this->update($data, array('parent_id' => $id));
+        
+        if($parentId > 0) {
+            $data2['tiene_backup'] = 0;
+            $this->update($data2, array('id' => $parentId));
+        }
+
+        return true;
+
+    }        
+    
+    
+    
+    
     public function saveBackupCircuito(Entity\BackupCircuito $circuito) {
         
         $data = array(  'administrativo' => $circuito->getBcadministrativo(),
@@ -149,7 +169,7 @@ class Circuito extends AbstractTableGateway {
                                     LEFT JOIN criticidades AS cr ON c.criticidad_id = cr.id
                                     LEFT JOIN facturas AS f ON c.factura_id = f.id
                                     LEFT JOIN estados AS e ON c.estado_id = e.id
-                                    WHERE c.id = '" . $id . "' OR c.parent_id = '" . $id . "'");    
+                                    WHERE (c.id = '" . $id . "' AND c.activo=1) OR (c.parent_id = '" . $id . "' AND c.activo = 1)" );  
 
         $circuitos = array();
         foreach ($adapter->execute() as $item) {
@@ -198,9 +218,9 @@ class Circuito extends AbstractTableGateway {
         }
         
         if($parent>=0) {
-            $filter = "AND es_gestionado = 1";
+            $filter = "AND es_gestionado = 1 AND activo=1";
         } else {
-            $filter = "AND es_gestionado = 0";
+            $filter = "AND es_gestionado = 0 AND activo=1";
         }
         
         $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $id . "' $filter");

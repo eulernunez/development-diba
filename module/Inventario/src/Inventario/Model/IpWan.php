@@ -76,6 +76,7 @@ class IpWan extends AbstractTableGateway {
         $id = (int) $ipWan->getId();
         
         if ($id == 0) {
+            $data['activo'] = 1;
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
@@ -87,6 +88,19 @@ class IpWan extends AbstractTableGateway {
         
     }
 
+    public function deleteIpWan($id)
+    {
+
+        $data['activo'] = 0;
+        $this->update($data, array('id' => $id));
+        
+        return true;
+
+    }        
+        
+    
+    
+    
 //    public function saveBackupCircuito(Entity\BackupCircuito $circuito) {
 //        
 //        $data = array(  'administrativo' => $circuito->getBcadministrativo(),
@@ -127,7 +141,7 @@ class IpWan extends AbstractTableGateway {
     {
         
         if($backupId>0) {
-            $filter = " OR ip.equipo_id = '" . $backupId . "' ";
+            $filter = " OR (ip.equipo_id = '" . $backupId . "' AND ip.activo=1)";
         } else {
             $filter = "";
         }
@@ -151,7 +165,7 @@ class IpWan extends AbstractTableGateway {
                             LEFT JOIN vlan_nacionales AS vn ON ip.vlan_nacional_id = vn.id
                             LEFT JOIN redes AS re ON ip.red_id = re.id
                             LEFT JOIN usos AS us ON ip.red_id = us.id
-                            WHERE ip.equipo_id = '" . $id . "'" . $filter;
+                            WHERE (ip.equipo_id = '" . $id . "' AND ip.activo=1)" . $filter;
         
         $adapter = $this->adapter->query($statement);
 
@@ -196,7 +210,7 @@ class IpWan extends AbstractTableGateway {
                             LEFT JOIN vlan_nacionales AS vn ON ip.vlan_nacional_id = vn.id
                             LEFT JOIN redes AS re ON ip.red_id = re.id
                             LEFT JOIN usos AS us ON ip.red_id = us.id
-                            WHERE ip.id = '" . $id . "'";
+                            WHERE ip.id = '" . $id . "' AND ip.activo=1";
         
         $adapter = $this->adapter->query($statement);
 
@@ -234,12 +248,12 @@ class IpWan extends AbstractTableGateway {
     {
 
         if($backupId>0) {
-            $filter = " OR id = '" . $backupId . "' ";
+            $filter = " OR (id = '" . $backupId . "' AND activo=1) ";
         } else {
             $filter = "";
         }
         
-        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE id = '" . $id . "'" . $filter . " ORDER BY id ASC");
+        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE (id = '" . $id . "' AND activo=1)" . $filter . " ORDER BY id ASC");
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['nemonico'];

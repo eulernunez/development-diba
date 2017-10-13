@@ -1,1 +1,11 @@
-<div class='alert alert-success'>Success 2!</div>
+<div class='alert alert-success' style='text-align: center; font-family: 20px; font-weight: bold;'>¡Se proceso satisfactoriamente!
+
+    <?php if(isset($this->sedeId) && $this->sedeId>0) : ?>
+    <div style="float:right; margin-top: 10px; margin-top: -6px;">
+        <a class="btn btn-primary btn-sm" href="<?= $this->url('tabs') . $this->sedeId; ?>" role="button" title="Volver">
+            <i class="glyphicon glyphicon-hand-left"></i>
+        </a>
+    </div>
+    <?php endIf; ?>
+    
+</div>

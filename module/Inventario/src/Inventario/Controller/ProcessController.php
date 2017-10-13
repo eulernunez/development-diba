@@ -200,8 +200,10 @@ class ProcessController extends AbstractActionController
         $tab = (int)$this->params()->fromRoute('tab');
         $id = (int)$this->params()->fromRoute('id');
         
+        $sedeId = $id;
+        
         if(1 == $tab) {
-            $sedeId = $id;
+            
         } elseif(2 == $tab) {
             $comboBoxCircuito = $this->circuitoService->getCircuitosBySede($id); 
         } elseif(3 == $tab) {
@@ -229,7 +231,7 @@ class ProcessController extends AbstractActionController
     public function comAction()
     {
         
-        $viewmodel = new ViewModel();
+        //$viewmodel = new ViewModel();
         $request = $this->getRequest();
         $response = $this->getResponse();
         
@@ -239,8 +241,7 @@ class ProcessController extends AbstractActionController
         
         $posts = (array)$this->request->getPost();
         
-        #echo( 'POST <pre>' . print_r( $posts, true) . '</pre>');
-        
+        $sedeId = (int)$posts['sedeId'];
         $this->wizardService->setPostParams($posts);
         
         if((int)$posts['tab']==0) {
@@ -289,13 +290,20 @@ class ProcessController extends AbstractActionController
 //        echo( 'CIRCUITO <pre>' . print_r($circuitoId, true) . '</pre>');
         
         
-//        $viewmodel->setTerminal($request->isXmlHttpRequest()); # $viewmodel->setTerminal(true)  # 1
+        //$viewmodel->setTerminal($request->isXmlHttpRequest()); # $viewmodel->setTerminal(true)  # 1
         
-        $response->setContent(\Zend\Json\Json::encode(array('success' => $result)));  # 2
-        return $response;                                                             # 2  
+//        $response->setContent(\Zend\Json\Json::encode(array('success' => $result)));  # 2
+//        return $response;                                                             # 2  
 
-//        return $viewmodel;                                                                      # 1
+        //return $viewmodel;                                                                      # 1
+        
+        $viewmodel = new ViewModel(array(
+            'sedeId' => $sedeId));
 
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
     }
     
     
@@ -312,7 +320,7 @@ class ProcessController extends AbstractActionController
         
         $comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($id,1);
         
-        #die('<pre>' . print_r($comboBoxCircuitoBck, true) . '</pre>');
+        #die('<pre>' . print_r($information, true) . '</pre>');
         return new ViewModel(array(
             'form' => $form,
             'information' => $information,
@@ -370,7 +378,7 @@ class ProcessController extends AbstractActionController
         
             
         } else {
-           # echo('<pre>' . print_r($posts, true) . '</pre>');
+            #die('<pre>' . print_r($posts, true) . '</pre>');
             $this->wizardService->setPostParams($posts);
             $circuitoId = $this->wizardService->updateCircuito();
             $information = $this->circuitoService->getInformationByCircuito($circuitoId);
@@ -389,6 +397,41 @@ class ProcessController extends AbstractActionController
 //      return $response;
 
     }     
+    
+    public function deleteCircuitoAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $circuitoId = $posts['id'];
+        $parentId = 0;
+        if(isset($posts['parentId'])) {
+            $parentId = $posts['parentId'];
+        }
+        $sedeId = $posts['sedeId'];
+        
+        $result = $this->circuitoService->deleteCircuito($circuitoId, $parentId);
+        
+        $information = $this->sedeService->getAllSedeInformation($sedeId);
+        $comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($sedeId,1);
+        
+        $viewmodel = new ViewModel(array(
+                                    'form' => $form,
+                                    'information' => $information,
+                                    'sedeId' => $sedeId,
+                                    'comboBoxCircuitoBck' => $comboBoxCircuitoBck));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }        
+    
+    
+    
+    
     
     
     public function equipoFillAction()
@@ -426,6 +469,39 @@ class ProcessController extends AbstractActionController
 
     }        
 
+    public function deleteEquipoAction()
+    {
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $equipoId = $posts['id'];
+        $parentId = 0;
+        if(isset($posts['parentId'])) {
+            $parentId = $posts['parentId'];
+        }
+        $sedeId = $posts['sedeId'];
+
+        $result = $this->equipoService->deleteEquipo($equipoId, $parentId);
+        
+        $information = $this->sedeService->getAllSedeInformation($sedeId);
+        #$comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($sedeId,1);
+        
+        $viewmodel = new ViewModel(array(
+                        'form' => $form,
+                        'information' => $information,
+                        'sedeId' => $sedeId));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }
+    
+    
+    
+    
     public function notequipoFillAction()
     {
 
@@ -459,6 +535,33 @@ class ProcessController extends AbstractActionController
 
     }        
 
+    public function deleteEquipoNotManagementAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $equipoId = $posts['id'];
+        $sedeId = $posts['sedeId'];
+         
+        $result = $this->equiponotgestionadoService->deleteEquipoNotManagement($equipoId);
+        $information = $this->sedeService->getAllSedeInformation($sedeId);
+        
+        $viewmodel = new ViewModel(array(
+                        'form' => $form,
+                        'information' => $information,
+                        'sedeId' => $sedeId));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }        
+    
+    
+    
+    
     public function sedeFillAction()
     {
 
@@ -518,6 +621,35 @@ class ProcessController extends AbstractActionController
 
     }
 
+    public function deleteIpWanAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $id = $posts['id'];
+        $equipoId = $posts['equipoId'];
+        $equipoBckId = 0;
+
+        if(isset($posts['equipoBckId'])) {
+            $equipoBckId = $posts['equipoBckId'];
+        }
+
+        $result = $this->ipwanService->deleteIpWan($id);
+        $information = $this->ipwanService->getIpWanConfigurationByEquipo($equipoId, $equipoBckId);
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
+    
     public function iplanFillAction()
     {
 
@@ -555,6 +687,34 @@ class ProcessController extends AbstractActionController
 
     }
 
+    public function deleteIpLanAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $id = $posts['id'];
+        $equipoId = $posts['equipoId'];
+        $equipoBckId = 0;
+
+        if(isset($posts['equipoBckId'])) {
+            $equipoBckId = $posts['equipoBckId'];
+        }
+
+        $result = $this->iplanService->deleteIpLan($id);
+        $information = $this->iplanService->getIpLanConfigurationByEquipo($equipoId, $equipoBckId);
+        
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+        
+        
+    }        
     
     
 
@@ -754,6 +914,39 @@ class ProcessController extends AbstractActionController
         return $viewmodel;
 
     }
+
+    public function deleteHaAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        $id = $posts['id'];
+        $equipoId = $posts['equipoId'];
+        $equipoBckId = 0;
+
+        if(isset($posts['equipoBckId'])) {
+            $equipoBckId = $posts['equipoBckId'];
+        }
+
+        $result = $this->hwadicionalService->deleteHa($id);
+        $information = $this->hwadicionalService->getHwAdicionalesByEquipo($equipoId, $equipoBckId);
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }        
+
+
+
+
+
+
     
     public function addHaAction()
     {
@@ -859,6 +1052,33 @@ class ProcessController extends AbstractActionController
 
     }
     
+    public function deleteHeAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        $id = $posts['id'];
+        $equipoId = $posts['equipoId'];
+        $equipoBckId = 0;
+
+        if(isset($posts['equipoBckId'])) {
+            $equipoBckId = $posts['equipoBckId'];
+        }
+
+        $result = $this->hwespecialService->deleteHe($id);
+        $information = $this->hwespecialService->getHwEspecialesByEquipo($equipoId, $equipoBckId);
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }        
+    
     public function addHeAction()
     {
 
@@ -952,6 +1172,33 @@ class ProcessController extends AbstractActionController
                             array('form' => $form,
                                   'information' => $information));
         
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
+    public function deleteMcAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        $id = $posts['id'];
+        $equipoId = $posts['equipoId'];
+        $equipoBckId = 0;
+
+        if(isset($posts['equipoBckId'])) {
+            $equipoBckId = $posts['equipoBckId'];
+        }
+
+        $result = $this->multicastService->deleteMc($id);
+        $information = $this->multicastService->getMulticastByEquipo($equipoId, $equipoBckId);
+
+        $viewmodel = new ViewModel(
+                            array('form' => $form,
+                                  'information' => $information));
+
         $viewmodel->setTerminal(true);
 
         return $viewmodel;

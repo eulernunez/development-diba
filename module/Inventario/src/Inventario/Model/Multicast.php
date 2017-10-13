@@ -76,6 +76,7 @@ class Multicast extends AbstractTableGateway {
         $id = (int) $multicast->getId();
 
         if ($id == 0) {
+            $data['activo'] = 1;
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
@@ -87,6 +88,16 @@ class Multicast extends AbstractTableGateway {
 
     }
 
+    public function deleteMc($id)
+    {
+
+        $data['activo'] = 0;
+        $this->update($data, array('id' => $id));
+        
+        return true;
+
+    }
+    
 //    public function saveBackupCircuito(Entity\BackupCircuito $circuito) {
 //        
 //        $data = array(  'administrativo' => $circuito->getBcadministrativo(),
@@ -124,7 +135,7 @@ class Multicast extends AbstractTableGateway {
     {
         
         if($backupId>0) {
-            $filter = " OR mc.equipo_id = '" . $backupId . "' ";
+            $filter = " OR (mc.equipo_id = '" . $backupId . "' AND mc.activo=1)";
         } else {
             $filter = "";
         }
@@ -146,7 +157,7 @@ class Multicast extends AbstractTableGateway {
                         mc.interfaz_tunel_asr_bck,
                         mc.equipo_id
                             FROM multicasts AS mc
-                            WHERE mc.equipo_id = '" . $id . "'" . $filter;
+                            WHERE (mc.equipo_id = '" . $id . "' AND mc.activo=1)" . $filter;
         
         $adapter = $this->adapter->query($statement);
 
@@ -197,7 +208,7 @@ class Multicast extends AbstractTableGateway {
                         mc.interfaz_tunel_asr_bck,
                         mc.equipo_id
                             FROM multicasts AS mc
-                            WHERE mc.id = '" . $id . "'";
+                            WHERE (mc.id = '" . $id . "' AND mc.activo=1)";
         
         $adapter = $this->adapter->query($statement);
 
@@ -224,12 +235,12 @@ class Multicast extends AbstractTableGateway {
     {
 
         if($backupId>0) {
-            $filter = " OR id = '" . $backupId . "' ";
+            $filter = " OR (id = '" . $backupId . "' AND activo=1) ";
         } else {
             $filter = "";
         }
         
-        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE id = '" . $id . "'" . $filter . " ORDER BY id ASC");
+        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE (id = '" . $id . "' AND activo=1)" . $filter . " ORDER BY id ASC");
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['nemonico'];

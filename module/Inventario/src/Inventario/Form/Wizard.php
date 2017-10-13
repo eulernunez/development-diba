@@ -58,7 +58,7 @@ class Wizard extends Form
             'attributes' => 
                 array(
                     'id' => 'idescat',
-                    'required'=>'required',
+                    //'required'=>'required',
                     'aria-describedby' => 'idescatHelp',
                     'class' => 'form-control input-sm',
                     

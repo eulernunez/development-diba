@@ -77,6 +77,7 @@ class HwEspecial extends AbstractTableGateway {
         $id = (int) $hwEspecial->getId();
 
         if ($id == 0) {
+            $data['activo'] = 1;
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
@@ -88,6 +89,18 @@ class HwEspecial extends AbstractTableGateway {
 
     }
 
+    public function deleteHe($id)
+    {
+
+        $data['activo'] = 0;
+        $this->update($data, array('id' => $id));
+        
+        return true;
+
+    }
+    
+    
+    
 //    public function saveBackupCircuito(Entity\BackupCircuito $circuito) {
 //        
 //        $data = array(  'administrativo' => $circuito->getBcadministrativo(),
@@ -125,7 +138,7 @@ class HwEspecial extends AbstractTableGateway {
     {
         
         if($backupId>0) {
-            $filter = " OR hw.equipo_id = '" . $backupId . "' ";
+            $filter = " OR (hw.equipo_id = '" . $backupId . "' AND hw.activo=1)";
         } else {
             $filter = "";
         }
@@ -144,7 +157,7 @@ class HwEspecial extends AbstractTableGateway {
                                     LEFT JOIN tarjetas AS t ON hw.tarjeta_id = t.id
                                     LEFT JOIN fabricantes AS f ON hw.fabricante_id = f.id
                                     LEFT JOIN modelos AS m ON hw.modelo_id = m.id
-                                    WHERE hw.equipo_id = '" . $id . "'" . $filter;
+                                    WHERE (hw.equipo_id = '" . $id . "' AND hw.activo=1)" . $filter;
         
         $adapter = $this->adapter->query($statement);
 
@@ -191,7 +204,7 @@ class HwEspecial extends AbstractTableGateway {
                             LEFT JOIN tarjetas AS t ON hw.tarjeta_id = t.id
                             LEFT JOIN fabricantes AS f ON hw.fabricante_id = f.id
                             LEFT JOIN modelos AS m ON hw.modelo_id = m.id
-                            WHERE hw.id = '" . $id . "'";
+                            WHERE hw.id = '" . $id . "' AND hw.activo=1";
 
         $adapter = $this->adapter->query($statement);
 
@@ -218,12 +231,12 @@ class HwEspecial extends AbstractTableGateway {
     {
 
         if($backupId>0) {
-            $filter = " OR id = '" . $backupId . "' ";
+            $filter = " OR (id = '" . $backupId . "' AND activo=1) ";
         } else {
             $filter = "";
         }
         
-        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE id = '" . $id . "'" . $filter . " ORDER BY id ASC");
+        $statement = $this->adapter->query("SELECT id, nemonico FROM equipos WHERE (id = '" . $id . "' AND activo=1) " . $filter . " ORDER BY id ASC");
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['nemonico'];

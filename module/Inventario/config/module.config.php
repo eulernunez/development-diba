@@ -255,6 +255,18 @@ return array(
                 ),
             ),
             
+            'delete-circuito' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-circuito',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-circuito',
+                    ),
+                ),
+            ),
+            
+            
             'equipo-fill' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -266,6 +278,17 @@ return array(
                 ),
             ),
 
+            'delete-equipo' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-equipo',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-equipo',
+                    ),
+                ),
+            ),
+            
             'notequipo-fill' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -273,6 +296,17 @@ return array(
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'notequipo-fill',
+                    ),
+                ),
+            ),
+
+            'delete-equipo-not-management' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-equipo-not-management',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-equipo-not-management',
                     ),
                 ),
             ),
@@ -296,6 +330,17 @@ return array(
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'ipwan-fill',
+                    ),
+                ),
+            ),
+
+            'delete-ip-wan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-ip-wan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-ip-wan',
                     ),
                 ),
             ),
@@ -340,6 +385,17 @@ return array(
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'iplan-fill',
+                    ),
+                ),
+            ),
+
+            'delete-ip-lan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-ip-lan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-ip-lan',
                     ),
                 ),
             ),
@@ -398,7 +454,18 @@ return array(
                     ),
                 ),
             ),
-            
+
+            'delete-ha' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-ha',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-ha',
+                    ),
+                ),
+            ),
+
             'add-ha' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -476,6 +543,17 @@ return array(
                 ),
             ),
 
+            'delete-he' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-he',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-he',
+                    ),
+                ),
+            ),
+
             'add-he' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -505,6 +583,17 @@ return array(
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'mc-fill',
+                    ),
+                ),
+            ),
+
+            'delete-mc' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-mc',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-mc',
                     ),
                 ),
             ),

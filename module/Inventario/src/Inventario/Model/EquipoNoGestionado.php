@@ -87,6 +87,19 @@ class EquipoNoGestionado extends AbstractTableGateway {
         
     }
 
+    public function deleteEquipoNotManagement($id)
+    {
+
+        $data['activo'] = 0;
+        $this->update($data, array('id' => $id));
+        
+        return true;
+
+    }        
+    
+    
+    
+    
 //    public function saveBackupCircuito(Entity\BackupCircuito $circuito) {
 //        
 //        $data = array(  'administrativo' => $circuito->getBcadministrativo(),
@@ -150,7 +163,7 @@ class EquipoNoGestionado extends AbstractTableGateway {
                                 LEFT JOIN redes AS r ON e.red_id = r.id
                                 LEFT JOIN usos AS u ON e.uso_id = u.id
                                 LEFT JOIN contactos AS c ON e.contacto_id = c.id
-                                WHERE e.id = '" . $id . "'");
+                                WHERE e.id = '" . $id . "' AND e.activo=1");
         
         $equiposNot = array();
         
@@ -180,7 +193,7 @@ class EquipoNoGestionado extends AbstractTableGateway {
     public function getCircuitosBySede($sedeId, $circuitoId)
     {
 
-        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $sedeId . "' AND es_gestionado=0" );
+        $statement = $this->adapter->query("SELECT id, administrativo FROM circuitos WHERE sede_id = '" . $sedeId . "' AND es_gestionado=0 AND activo=1" );
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['administrativo'];

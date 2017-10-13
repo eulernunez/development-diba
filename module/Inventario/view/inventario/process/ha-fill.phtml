@@ -28,6 +28,35 @@ legend
 
 <script>
 
+function deleteHa() {
+    
+    $('#deleteHa').modal('hide');
+    var url = '<?= $this->url('delete-ha'); ?>';
+    var id = $('#deleteHaId').val();
+    
+    var equipoId = $('#equipoId').val();
+    var equipoBckId = $('#equipoBckId').val();
+    var data = {id: id, equipoId: equipoId, equipoBckId:equipoBckId};
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            $("#ipwan-fill").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+    
+
+
+
 function updateHa() {
 
     var url = '<?= $this->url('save-ha'); ?>'; 
@@ -113,7 +142,12 @@ $(function(){
         });
         $(this).addClass('success');
     });
-                
+
+    $('#deleteHa').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        $('#deleteHaId').val(id);
+    })
+
 });
 
 </script>
@@ -121,7 +155,7 @@ $(function(){
 
 <div class="panel panel-default">
     <div class="panel-body">
-        
+        <input type="hidden" id="deleteHaId" name="deleteHaId" value="">
         <div style="float:right;">
             <a class="btn btn-primary btn-sm" href="#" onclick="addHa();" role="button" title="Agregar hardware">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -156,7 +190,7 @@ $(function(){
                             <a class="btn btn-primary btn-xs" href="#" onclick="haoneFill('<?= $ha['id'] ?>');" title="Consultar configuración">
                                 <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
-                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar configuración">
+                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar hardware" data-toggle="modal" data-id="<?= $ha['id']; ?>" data-target="#deleteHa">                            
                                 <i class="glyphicon glyphicon-minus"></i>
                             </a>
                         </td>  
@@ -220,7 +254,7 @@ $(function(){
                     <div class="form-group">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <?php $tieneIplan = 0;  
+                                    <?php $tieneIplan = 0;
                                         if(isset($this->information['has']['0']['tiene_iplan'])) {
                                             $tieneIplan = $this->information['has']['0']['tiene_iplan'];
                                         }

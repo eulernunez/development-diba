@@ -56,6 +56,45 @@ $(function(){
       }
 
     });
+    
+    
+    $('#add').click(function() {
+
+        var row;
+        var id = $('.row-input').length + 1;
+        var caudal = 'caudal-' + id;
+        var cantidad = 'cantidad-' + id;
+        var unidad = 'unidad-' + id;
+
+        row =   '<tr class="row-input">\n\
+                    <td><input name="' + caudal + '" class="col-xs-12" type="text" value="" /></td>\n\
+                    <td><input name="' + cantidad + '" class="col-xs-12" type="text" value="" /></td>\n\
+                    <td><select name="' + unidad + '" class="col-xs-20" id="exampleSelect1"><option value="1" selected="selected">Mb</option><option value="2">%</option></select></td>\n\
+                    <td><a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar"><i class="glyphicon glyphicon-minus"></i></a></td>\n\
+                </tr>';
+        $('#grid-caudal tr:last').after(row);
+
+    });    
+    
+    $('#add-backup').click(function(){
+
+        var row;
+        var id = $('.row-input-backup').length + 1;
+        var caudalbck = 'caudalbck-' + id;
+        var cantidadbck = 'cantidadbck-' + id;
+        var unidadbck = 'unidadbck-' + id;
+
+        row =   '<tr class="row-input-backup">\n\
+                    <td><input name="' + caudalbck + '" class="col-xs-12" type="text" value="" /></td>\n\
+                    <td><input name="' + cantidadbck + '"  class="col-xs-12" type="text" value="" /></td>\n\
+                    <td><select name="' + unidadbck + '"  class="col-xs-20" id="exampleSelect1"><option value="1" selected="selected">Mb</option><option value="2">%</option></select></td>\n\
+                    <td><a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar"><i class="glyphicon glyphicon-minus"></i></a></td>\n\
+                </tr>';
+        $('#backup tr:last').after(row);
+
+    });
+    
+    
 
 });
 </script>
@@ -168,7 +207,7 @@ $(function(){
 
                                                 <tr class="row-input">
                                                     <td><input name="caudal-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
-                                                    <td><input name="cantidad-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['cantidad']  ?>" /></td>
+                                                    <td><input name="cantidad-<?= $cont?>" class="col-xs-12" type="text" value="<?= number_format($item['cantidad'],0)  ?>" /></td>
                                                     <td><select name="unidad-<?= $cont?>" class="col-xs-20" id="exampleSelect1">
                                                             <option value="1" <?= ('1'==$item['unidad'])?'selected':'' ?>>Mb</option>
                                                             <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
@@ -290,12 +329,13 @@ $(function(){
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
+                                    <?php if(isset($this->information['caudales']['backup'])) : ?>
                                     <tbody>
                                         <?php $cont = 1; ?>
                                         <?php foreach($this->information['caudales']['backup'] as $item) : ?>
-.                                            <tr class="row-input">
+.                                            <tr class="row-input-backup">
                                                 <td><input name="caudalbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['caudal']  ?>" /></td>
-                                                <td><input name="cantidadbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= $item['cantidad']  ?>" /></td>
+                                                <td><input name="cantidadbck-<?= $cont?>" class="col-xs-12" type="text" value="<?= number_format($item['cantidad'],0)  ?>" /></td>
                                                 <td><select name="unidadbck-<?= $cont?>" class="col-xs-20" id="exampleSelect1">
                                                         <option value="1" <?= ('1'==$item['unidad'])?'selected':'' ?>>Mb</option>
                                                         <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
@@ -310,6 +350,7 @@ $(function(){
                                         <?php endforeach; ?>                                    
                                     
                                     </tbody>
+                                    <?php endif; ?>
                                 </table>
                             </div>
                         </div>                        

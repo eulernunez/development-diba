@@ -28,6 +28,35 @@ legend
 
 <script>
 
+function deleteHe() {
+    
+    $('#deleteHe').modal('hide');
+    var url = '<?= $this->url('delete-he'); ?>';
+    var id = $('#deleteHeId').val();
+    
+    var equipoId = $('#equipoId').val();
+    var equipoBckId = $('#equipoBckId').val();
+    var data = {id: id, equipoId: equipoId, equipoBckId:equipoBckId};
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            $("#ipwan-fill").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+
+
+
+
 function updateHe() {
 
     var url = '<?= $this->url('save-he'); ?>';
@@ -113,7 +142,13 @@ $(function(){
         });
         $(this).addClass('success');
     });
-                
+
+    $('#deleteHe').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        $('#deleteHeId').val(id);
+    })
+
+
 });
 
 </script>
@@ -121,7 +156,7 @@ $(function(){
 
 <div class="panel panel-default">
     <div class="panel-body">
-        
+        <input type="hidden" id="deleteHeId" name="deleteHeId" value="">
         <div style="float:right;">
             <a class="btn btn-primary btn-sm" href="#" onclick="addHe();" role="button" title="Agregar hardware">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -162,7 +197,7 @@ $(function(){
                             <a class="btn btn-primary btn-xs" href="#" onclick="heoneFill('<?= $he['id'] ?>');" title="Consultar configuración">
                                 <i class="glyphicon glyphicon-eye-open"></i>
                             </a>
-                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar configuración">
+                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar hardware" data-toggle="modal" data-id="<?= $he['id']; ?>" data-target="#deleteHe">                                
                                 <i class="glyphicon glyphicon-minus"></i>
                             </a>
                         </td>  

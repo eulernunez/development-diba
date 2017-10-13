@@ -133,7 +133,7 @@ class WizardService {
                 $this->persistenciaSede();
                 $this->persistenciaCircuito();
                 $this->persistenciaEquipo();
-                $result = $this->persistencaIpWan();
+                //$result = $this->persistencaIpWan();
             } catch (\Exception $e) {
                 echo ('<pre>' . print_r($e->getMessage(), true) . '</pre>');
             }
@@ -256,7 +256,7 @@ class WizardService {
         $this->circuitoId = $this->circuitoTable->saveCircuito($circuito);
         
         if(isset($this->posts['cgestionado']) && true == $this->posts['cgestionado']){
-            
+
             $this->caudalTable->setParams($this->posts)
                                 ->setTipo(1)->gettingCaudalKeys()
                                 ->setCircuitoId($this->circuitoId)->saveCaudales();
@@ -289,10 +289,10 @@ class WizardService {
         $this->circuitoId = $this->circuitoTable->saveCircuito($circuito);
         
         if(isset($this->posts['cgestionado']) && true == $this->posts['cgestionado']){
-            
-//            $this->caudalTable->setParams($this->posts)
-//                                ->setTipo(1)->gettingCaudalKeys()
-//                                ->setCircuitoId($this->circuitoId)->saveCaudales();
+            $this->caudalTable->removeCaudales($this->circuitoId);
+            $this->caudalTable->setParams($this->posts)
+                                ->setTipo(1)->gettingCaudalKeys()
+                                ->setCircuitoId($this->circuitoId)->saveCaudales();
             
         }
         
@@ -303,13 +303,15 @@ class WizardService {
                 $backupCircuito->setId($this->posts['circuitoBackupId']);
             }
             $backupCircuito->setSedeId($this->posts['sedeId'])->setParentId($this->circuitoId);
-            
+
             $this->backupCircuitoId = $this->circuitoTable->saveBackupCircuito($backupCircuito);
             if(isset($this->posts['bcgestionado']) && true == $this->posts['bcgestionado']) {
-//                $caudalTable = new \Inventario\Model\Caudal($this->adapter);
-//                $caudalTable->setParams($this->posts)
-//                                    ->setTipo(2)->gettingCaudalKeys()
-//                                    ->setCircuitoId($this->backupCircuitoId)->saveCaudales();
+                
+                $caudalTable = new \Inventario\Model\Caudal($this->adapter);
+                $caudalTable->removeCaudales($this->backupCircuitoId);
+                $caudalTable->setParams($this->posts)
+                                    ->setTipo(2)->gettingCaudalKeys()
+                                    ->setCircuitoId($this->backupCircuitoId)->saveCaudales();
             }
             
         }

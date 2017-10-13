@@ -162,7 +162,7 @@ class Sede extends AbstractTableGateway {
                                     LEFT JOIN criticidades AS cr ON c.criticidad_id = cr.id
                                     LEFT JOIN facturas AS f ON c.factura_id = f.id
                                     LEFT JOIN estados AS e ON c.estado_id = e.id
-                                    WHERE c.sede_id = '" . $id . "'" );    
+                                    WHERE c.sede_id = '" . $id . "' AND c.activo = 1" );    
 
         $circuitos = array();
         $circuitoIds = array();
@@ -215,7 +215,7 @@ class Sede extends AbstractTableGateway {
                                     LEFT JOIN criticidades AS cr ON c.criticidad_id = cr.id
                                     LEFT JOIN facturas AS f ON c.factura_id = f.id
                                     LEFT JOIN estados AS e ON c.estado_id = e.id
-                                    WHERE c.id = '" . $circuitoId . "' OR c.parent_id = '" . $circuitoId . "'" );    
+                                    WHERE (c.id = '" . $circuitoId . "' AND c.activo=1) OR (c.parent_id = '" . $circuitoId . "' AND c.activo = 1)" );    
 
         foreach ($adapter->execute() as $item) {
             $circuitos[] = $item;
@@ -264,7 +264,7 @@ class Sede extends AbstractTableGateway {
                                         LEFT JOIN modelos AS m ON e.modelo_id = m.id
                                         LEFT JOIN contactos AS c ON e.contacto_id = c.id
                                         LEFT JOIN estados AS st ON e.estado = st.id
-                                        WHERE e.circuito_id IN ("  . implode(",",$circuitoIds) . ")");
+                                        WHERE e.circuito_id IN ("  . implode(",",$circuitoIds) . ") AND e.activo = 1");
 
 
             foreach ($adapter->execute() as $item) {
@@ -298,7 +298,7 @@ class Sede extends AbstractTableGateway {
                                     LEFT JOIN modelos AS m ON e.modelo_id = m.id
                                     LEFT JOIN contactos AS c ON e.contacto_id = c.id
                                     LEFT JOIN estados AS st ON e.estado = st.id
-                                     WHERE e.id = '" . $equipoId . "' OR e.parent_id = '" . $equipoId . "'" );    
+                                     WHERE (e.id = '" . $equipoId . "' AND e.activo = 1) OR (e.parent_id = '" . $equipoId . "' AND e.activo=1)");    
 
         $equipoCircuitoIds = array();                             
         foreach ($adapter->execute() as $item) {
@@ -343,7 +343,7 @@ class Sede extends AbstractTableGateway {
                                 LEFT JOIN redes AS r ON e.red_id = r.id
                                 LEFT JOIN usos AS u ON e.uso_id = u.id
                                 LEFT JOIN contactos AS c ON e.contacto_id = c.id
-                                WHERE e.circuito_id IN ("  . implode(",",$circuitoIds2) . ")");
+                                WHERE e.circuito_id IN ("  . implode(",",$circuitoIds2) . ") AND e.activo=1");
 
 
             foreach ($adapter->execute() as $item) {
@@ -385,7 +385,7 @@ class Sede extends AbstractTableGateway {
                                 LEFT JOIN redes AS r ON e.red_id = r.id
                                 LEFT JOIN usos AS u ON e.uso_id = u.id
                                 LEFT JOIN contactos AS c ON e.contacto_id = c.id
-                                WHERE e.id = '" . $equipoNotId . "'");    
+                                WHERE e.id = '" . $equipoNotId . "' AND e.activo=1");    
 
         $equipoNotCircuitoIds = array();                             
         foreach ($adapter->execute() as $item) {
