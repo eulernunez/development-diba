@@ -1,0 +1,122 @@
+<script>
+$(function(){
+
+    if($('#ebackup').prop('checked')) {
+        $('#equipo-backup').css('display','block');
+    }
+    
+    $('#ebackup').click(function(){
+      if (this.checked) {
+          $('#equipo-backup').css('display','block');
+      } else {
+           $('#equipo-backup').css('display','none');
+      } });
+
+});
+</script>
+
+
+        <div class="panel panel-default">
+            <div class="panel-body">        
+        
+                <fieldset class="col-md-12">    	
+                <legend>EQUIPO NO GESTIONADO</legend>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div class="col-lg-6">    
+                            <div id="form-step-3" role="form" data-toggle="validator">
+                                
+                                <div class="form-group">
+                                    <label class="control-label" for="circuito">Circuito</label>
+                                    <?= $this->information['htmlcombobox']['0']; ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="engservicio">Servicio</label>
+                                    <?php $form->get('engservicio')->setValue($this->information['notequipos']['0']['servicio_id']) ?>
+                                    <?= $this->formSelect($form->get('engservicio')); ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="engpropiedad">Propiedad Router</label>
+                                    <?php $form->get('engpropiedad')->setValue($this->information['notequipos']['0']['propiedad_id']) ?>
+                                    <?= $this->formSelect($form->get('engpropiedad')); ?>
+                                </div>                        
+
+                                <div class="form-group">
+                                    <label class="control-label" for="tipo-ip">Tipo IP</label>
+                                    <?php $form->get('engtipoip')->setValue($this->information['notequipos']['0']['tipo_ip']) ?>
+                                    <?= $this->formSelect($form->get('engtipoip')); ?>                            
+                                </div>                        
+
+                                <div class="form-group">
+                                    <label class="control-label" for="ip-no-gestionado">IP</label>
+                                    <?php $form->get('engip')->setValue($this->information['notequipos']['0']['ip']) ?>
+                                    <?= $this->formInput($form->get('engip')); ?>
+                                </div>
+                        
+                                <div class="form-group">
+                                    <label class="control-label" for="red">Red</label>
+                                    <?php $form->get('engred')->setValue($this->information['notequipos']['0']['red_id']) ?>
+                                    <?= $this->formSelect($form->get('engred')); ?>                                
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="usos">Usos</label>
+                                    <?php $form->get('enguso')->setValue($this->information['notequipos']['0']['uso_id']) ?>    
+                                    <?= $this->formSelect($form->get('enguso')); ?>                            
+                                </div>
+                            
+                            </div>
+                        </div>    
+                    
+                    <div class="col-lg-6">
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-no-gestionado">Contacto</label>
+                            <?php $form->get('engcontacto')->setValue($this->information['notequipos']['0']['contacto']) ?>
+                            <?= $this->formInput($form->get('engcontacto')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="telefono-no-gestionado">Teléfono</label>
+                            <?php $form->get('engtelefono')->setValue($this->information['notequipos']['0']['telefono']) ?>
+                            <?= $this->formInput($form->get('engtelefono')); ?>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label" for="horario-no-gestionado">Horario</label>
+                            <?php $form->get('enghorario')->setValue($this->information['notequipos']['0']['horario']) ?>
+                            <?= $this->formInput($form->get('enghorario')); ?>
+                        </div>
+                                                
+                        <div class="form-group">
+                            <label class="control-label" for="observacion-no-gestionado">Observaciones</label>
+                            <?php $form->get('engobservacion')->setValue($this->information['notequipos']['0']['observacion']) ?>    
+                            <?= $this->formTextarea($form->get('engobservacion')); ?>
+                        </div>
+                        
+                    </div>    
+                
+                </div>
+
+            </div>
+            
+            <div class="clearfix"></div>                
+                        
+            <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
+                <a class="btn btn-primary btn-sm update-notequipo" href="#" role="button" onclick="updateNotEquipos();" title="Update equipo no gestionado">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </a>
+            </div>     
+
+        </fieldset>				
+
+    </div>
+    </div>        
+            
+<input type="hidden" id="notEquipoId" name="notEquipoId" value="<?=  $this->information['notequipos']['0']['id']; ?>">
+<?php if(isset($this->information['notequipos']['0']['contacto_id'])) : ?>
+<input type="hidden" id="notEquipoContactoId" name="notEquipoContactoId" value="<?=  $this->information['notequipos']['0']['contacto_id']; ?>">
+<?php endif; ?>

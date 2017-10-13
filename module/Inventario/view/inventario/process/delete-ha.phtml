@@ -1,0 +1,261 @@
+<style>
+
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>
+
+<script>
+
+function updateHa() {
+
+    var url = '<?= $this->url('save-ha'); ?>'; 
+    $.ajax({
+       type: "POST",
+       url: url,
+       data: $('#myForm').serialize(),
+       cache: false,
+       success: function (json) {
+                $("#grid-ha-fill").html(json);
+                $('.update-ha').addClass('disabled');
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+
+
+
+
+function addHa() {
+
+    var id = $('#equipoId').val();
+    var idbck = $('#equipoBckId').val();
+
+    var data = {id: id, idbck: idbck};
+    var url = '<?= $this->url('add-ha'); ?>';
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (json) {
+            $("#ipwanone-fill").html(json);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+    
+    
+
+function haoneFill(id) {
+    
+    var data = {id: id, view: 1};
+    var    url = '<?= $this->url('haone-fill'); ?>';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#ipwanone-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+}
+
+
+
+
+
+
+
+$(function(){
+    
+    $('#grid-ha tbody tr').click(function(){
+        
+        $("#grid-ha tbody tr").each(function () {
+                $(this).removeClass('success');
+        });
+        $(this).addClass('success');
+    });
+                
+});
+
+</script>
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        
+        <div style="float:right;">
+            <a class="btn btn-primary btn-sm" href="#" onclick="addHa();" role="button" title="Agregar hardware">
+                <i class="glyphicon glyphicon-plus"></i>
+            </a>
+        </div>    
+        <div style="clear: both;"></div>
+
+        <div id="grid-ha-fill">
+        <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 109px;">
+            <table id="grid-ha" class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Fabricante</th>
+                        <th>Modelo</th>
+                        <th>N/S</th>
+                        <th>Alias</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <?php $row = 1; ?>
+                    <?php foreach($this->information['has'] as $ha) : ?> 
+                    <tr class="fila-grid <?= (1==$row)?'success':'' ?>">                    
+                        <td><?= $ha['tipo'] ?></td>
+                        <td><?= $ha['fabricante'] ?></td>
+                        <td><?= $ha['modelo'] ?></td>
+                        <td><?= $ha['serie'] ?></td>
+                        <td><?= $ha['alias'] ?></td>
+                        <td> 
+                            <a class="btn btn-primary btn-xs" href="#" onclick="haoneFill('<?= $ha['id'] ?>');" title="Consultar configuración">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                            </a>
+                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar configuración">
+                                <i class="glyphicon glyphicon-minus"></i>
+                            </a>
+                        </td>  
+                    </tr>
+                    <?php $row++; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+        <div id="ipwanone-fill">
+        <?php if(isset($this->information['has']['0'])) : ?>    
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-6">
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="haequipo">Equipo</label>
+                        <?= $this->information['htmlcombobox']['0']; ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="hatipo">Tipo</label>
+                        <?php $form->get('hatipo')->setValue($this->information['has']['0']['tipo_id']) ?>
+                        <?= $this->formSelect($form->get('hatipo')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="hafabricante">Fabricante</label>
+                        <?php $form->get('hafabricante')->setValue($this->information['has']['0']['fabricante_id']) ?>
+                        <?= $this->formSelect($form->get('hafabricante')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="hamodelo">Modelo</label>
+                        <?php $form->get('hamodelo')->setValue($this->information['has']['0']['modelo_id']) ?>
+                        <?= $this->formSelect($form->get('hamodelo')); ?>
+                    </div>
+                    
+                </div>    
+
+                <div class="col-lg-6">
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="haserie">N/S</label>
+                        <?php $form->get('haserie')->setValue($this->information['has']['0']['serie']) ?>
+                        <?= $this->formInput($form->get('haserie')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="haalias">Alias</label>
+                        <?php $form->get('haalias')->setValue($this->information['has']['0']['alias']) ?>
+                        <?= $this->formInput($form->get('haalias')); ?>
+                    </div>
+                    
+                     <div class="form-group">
+                        &nbsp;
+                    </div>  
+
+                    <div class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <?php $tieneIplan = 0;  
+                                        if(isset($this->information['has']['0']['tiene_iplan'])) {
+                                            $tieneIplan = $this->information['has']['0']['tiene_iplan'];
+                                        }
+                                    ?>
+                                    <input type="checkbox" id="haiplan" name="haiplan" value="1" class="form-check-input" <?= ($tieneIplan)?'checked':'' ?>>
+                                  ¿Tiene IP Lan?
+                                </label>
+                            </div>                        
+                    </div>
+                    
+                         
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    
+                    <?php if(isset($this->information['has']['0']['id'])) : ?>
+                        <input type="hidden" id="haId" name="haId" value="<?=  $this->information['has']['0']['id']; ?>">
+                    <?php  endif; ?>
+                    
+                    <div style="float:right;">
+                        <a class="btn btn-primary btn-sm update-ha" href="#" onclick="updateHa();" role="button" title="Update Hardware">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                    </div>
+                
+                </div>    
+            </div>
+        </div>
+        <?php endif; ?>    
+        </div>
+        
+        
+        <div class="clearfix"></div>
+    </div>
+</div>

@@ -1,0 +1,295 @@
+<style>
+
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>
+
+<script>
+
+function updateIpwan() {
+
+    var url = '<?= $this->url('save-ipwan'); ?>';
+    $.ajax({
+       type: "POST",
+       url: url,
+       data: $('#myForm').serialize(),
+       cache: false,
+       success: function (json) {
+                $("#grid-ipwan-fill").html(json);
+                $('.update-ipwan').addClass('disabled');
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+
+
+
+
+function addIpwan(id) {
+
+    var id = $('#equipoId').val();
+    var idbck = $('#equipoBckId').val();
+
+    var data = {id: id, idbck: idbck};
+    var url = '<?= $this->url('add-ipwan'); ?>';
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (json) {
+            $("#ipwanone-fill").html(json);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+    
+    
+
+function ipwanoneFill(id) {
+    
+    var data = {id: id, view: 1};
+    var    url = '<?= $this->url('ipwanone-fill'); ?>';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#ipwanone-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+}
+
+
+
+
+
+
+
+$(function(){
+    
+    $('#grid-ipwan tbody tr').click(function(){
+        
+        $("#grid-ipwan tbody tr").each(function () {
+                $(this).removeClass('success');
+        });
+        $(this).addClass('success');
+    });
+                
+});
+
+</script>
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        
+        <div style="float:right;">
+            <a class="btn btn-primary btn-sm" href="#" onclick="addIpwan();" role="button" title="Agregar direccionamiento Wan">
+                <i class="glyphicon glyphicon-plus"></i>
+            </a>
+        </div>    
+        <div style="clear: both;"></div>
+
+        <div id="grid-ipwan-fill">
+        <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 109px;">
+            <table id="grid-ipwan" class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Routing</th>
+                        <th>IP</th>
+                        <th>Máscara</th>
+                        <th>PE Ppal</th>
+                        <th>PE Backup</th>
+                        <th>VLAN EDC</th>
+                        <th>VLAN PE</th>
+                        <th>RPV</th>
+                        <th>Red</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <?php $row = 1; ?>
+                    <?php foreach($this->information['ipwans'] as $configuration) : ?> 
+                    <tr class="fila-grid <?= (1==$row)?'success':'' ?>">                    
+                        <td><?= $configuration['routing'] ?></td>
+                        <td><?= $configuration['ip_wan_edc'] ?></td>
+                        <td><?= $configuration['mascara'] ?></td>
+                        <td><?= $configuration['pe_ppal'] ?></td>
+                        <td><?= $configuration['pe_backup'] ?></td>
+                        <td><?= $configuration['vlan_edc'] ?></td>
+                        <td><?= $configuration['vlan'] ?></td>
+                        <td><?= $configuration['rpv'] ?></td>
+                        <td><?= $configuration['red'] ?></td>
+                        <td> 
+                            <a class="btn btn-primary btn-xs" href="#" onclick="ipwanoneFill('<?= $configuration['id'] ?>');" title="Consultar configuración">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                            </a>
+                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar configuración">
+                                <i class="glyphicon glyphicon-minus"></i>
+                            </a>
+                        </td>  
+                    </tr>
+                    <?php $row++; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+        <div id="ipwanone-fill">
+        <?php if(isset($this->information['ipwans']['0'])) : ?>    
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="col-lg-6">
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="ipwequipo">Equipo</label>
+                        <?= $this->information['htmlcombobox']['0']; ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="ipwrpv">RPV</label>
+.                        <?php $form->get('ipwrpv')->setValue($this->information['ipwans']['0']['rpv_id']) ?>
+                        <?= $this->formSelect($form->get('ipwrpv')); ?>
+                    </div>
+                            
+                    <div class="form-group">
+                        <label class="control-label" for="ipwrouting">Routing</label>
+                        <?php $form->get('ipwrouting')->setValue($this->information['ipwans']['0']['routing_id']) ?>
+                        <?= $this->formSelect($form->get('ipwrouting')); ?>                            
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="ipwvlanedc">Vlan EDC</label>
+                        <?php $form->get('ipwvlanedc')->setValue($this->information['ipwans']['0']['vlan_edc']) ?>
+                        <?= $this->formInput($form->get('ipwvlanedc')); ?>
+                    </div>
+                            
+                    <div class="form-group">
+                        <label class="control-label" for="ipwvlannacional">Vlan Nacional</label>
+                        <?php $form->get('ipwvlannacional')->setValue($this->information['ipwans']['0']['vlan_nacional_id']) ?>
+                        <?= $this->formSelect($form->get('ipwvlannacional')); ?>                                
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="ipwred">Red</label>
+                        <?php $form->get('ipwred')->setValue($this->information['ipwans']['0']['red_id']) ?>
+                        <?= $this->formSelect($form->get('ipwred')); ?>                            
+                    </div>
+                            
+                    <div class="form-group">
+                        <label class="control-label" for="ipwuso">Uso</label>
+                        <?php $form->get('ipwuso')->setValue($this->information['ipwans']['0']['uso_id']) ?>
+                        <?= $this->formSelect($form->get('ipwuso')); ?>                            
+                    </div>
+
+                </div>    
+
+                <div class="col-lg-6">
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="ipwipwanedc">IP WAN EDC</label>
+                        <?php $form->get('ipwipwanedc')->setValue($this->information['ipwans']['0']['ip_wan_edc']) ?>
+                        <?= $this->formInput($form->get('ipwipwanedc')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="ipwmascara">Máscara</label>
+                        <?php $form->get('ipwmascara')->setValue($this->information['ipwans']['0']['mascara']) ?>
+                        <?= $this->formInput($form->get('ipwmascara')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="ipwpeppal">PE Ppal</label>
+                        <?php $form->get('ipwpeppal')->setValue($this->information['ipwans']['0']['pe_ppal']) ?>
+                        <?= $this->formInput($form->get('ipwpeppal')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="ipwpebackup">PE Backup</label>
+                        <?php $form->get('ipwpebackup')->setValue($this->information['ipwans']['0']['pe_backup']) ?>
+                        <?= $this->formInput($form->get('ipwpebackup')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        &nbsp;
+                    </div>        
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    <div class="form-group">
+                        &nbsp;
+                    </div>
+                    
+                    <?php if(isset($this->information['ipwans']['0']['id'])) : ?>
+                        <input type="hidden" id="ipwanId" name="ipwanId" value="<?=  $this->information['ipwans']['0']['id']; ?>">
+                    <?php  endif; ?>
+                    
+                    <div style="float:right;">
+                        <a class="btn btn-primary btn-sm update-ipwan" href="#" onclick="updateIpwan();" role="button" title="Update direccionamiento Wan">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                    </div>
+                
+                </div>    
+            </div>
+        </div>
+        <?php endif; ?>    
+        </div>
+        
+        
+        <div class="clearfix"></div>
+    </div>
+</div>
