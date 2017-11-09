@@ -1,0 +1,304 @@
+<style>
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}	
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>                
+
+<script>
+
+$(function(){
+
+    
+    
+    
+    
+    
+});
+
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <fieldset class="col-md-12">    	
+            <legend>EQUIPO GESTIONADO BCK</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                        <form> 
+
+                            <div class="form-group">
+                                <label class="control-label" for="servicio">Servicio</label>
+                                <select class="form-control input-sm" id="servicio" name="servicio" required>
+                                    <option>Seleccione una opción</option>
+                                    <option>Macrolan</option>
+                                    <option>DataInternet</option>
+                                </select>
+                                
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="nemonico">Nemónico</label>
+                                <input type="text" class="form-control" id="nemonico" name="nemonico" aria-describedby="nemonicoHelp" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="ip-gestion">IP Gestión</label>
+                                <input type="text" class="form-control" id="ip-gestion" name="ip-gestion" aria-describedby="ip-gestionHelp" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="nivel">Nivel</label>
+                                <select class="form-control input-sm" id="nivel" name="nivel" required>
+                                    <option></option>
+                                    <option>Nivel 1</option>
+                                    <option>Nivel 2</option>
+                                    <option>Nivel 3</option>
+                                    <option>Nivel 4</option>
+                                    <option>Nivel 5</option>
+                                    <option>Nivel 6</option>
+                                </select>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="nemonico-n1">Nemónico N1</label>
+                                <select class="form-control input-sm" id="nemonico-n1" name="nemonico-n1" required>
+                                    <option>NA</option>
+                                    <option>dipdb-saso</option>
+                                    <option>dipdb-xamo</option>
+                                    <option>dipdb-catp</option>
+                                    
+                                </select>
+                                
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
+                                <input type="text" class="form-control input-sm" id="logos-alta" name="logos-alta" aria-describedby="logos-altaHelp" required>
+                            </div>    
+                        
+                            <div class="form-group">
+                                <label class="control-label" for="ubicacion">Ubicación</label>
+                                <input type="text" class="form-control input-sm" id="ubicacion" name="ubicacion" aria-describedby="ubicacionHelp" required>
+                            </div>
+
+                        
+
+                                          
+
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                                <label class="control-label" for="fabricante">Fabricante</label>
+                                <select class="form-control input-sm" id="fabricante" name="fabricante">
+                                    <option></option>
+                                    <option>CISCO</option>
+                                    <option>Alcatel-Lucent</option>
+                                    <option>Juniper</option>
+                                    <option>Huawei</option>
+                                </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="exampleSelect1">Modelo</label>
+                            <select class="form-control" id="modelo" name="modelo">
+                                <option>HP-98812</option>
+                                <option>XC-1289</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-equipo">Contacto</label>
+                            <input type="text" class="form-control input-sm" id="contacto-equipo" name="contacto-equipo" aria-describedby="contacto-equipoHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-equipo-horario">Horario</label>
+                            <input type="text" class="form-control input-sm" id="contacto-equipo-horario" name="contacto-equipo-horario" aria-describedby="contacto-equipo-horarioHelp">
+                        </div>
+                                                
+                         <div class="form-group">
+                            <label class="control-label" for="estado-equipo">Estado</label>
+                            <select class="form-control input-sm" id="estado-equipo" name="estado-equipo">
+                                <option selected>Pre-Alta</option>
+                                <option>Alta</option>
+                            </select>
+                        </div>
+                        
+                         <div class="form-group">
+                            <label class="control-label" for="observacion-equipo">Observaciones</label>
+                            <textarea class="form-control input-sm" id="observacion-equipo" name="observacion-equipo" rows="5"></textarea>
+                        </div>
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+                <!-- BEGIN BACKUP --> 
+                
+                
+    <div id="equipo-backup" class="panel-body" style="display:none;">
+        <fieldset class="col-md-12">    	
+            <legend>EQUIPO GESTIONADO</legend>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <div class="col-lg-6">    
+
+                        <form> 
+
+                            <div class="form-group">
+                                <label class="control-label" for="servicio">Servicio</label>
+                                <select class="form-control input-sm" id="servicio" name="servicio" required>
+                                    <option>Seleccione una opción</option>
+                                    <option>Macrolan</option>
+                                    <option>DataInternet</option>
+                                </select>
+                                
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="nemonico">Nemónico</label>
+                                <input type="text" class="form-control" id="nemonico" name="nemonico" aria-describedby="nemonicoHelp" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="ip-gestion">IP Gestión</label>
+                                <input type="text" class="form-control" id="ip-gestion" name="ip-gestion" aria-describedby="ip-gestionHelp" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="nivel">Nivel</label>
+                                <select class="form-control input-sm" id="nivel" name="nivel" required>
+                                    <option></option>
+                                    <option>Nivel 1</option>
+                                    <option>Nivel 2</option>
+                                    <option>Nivel 3</option>
+                                    <option>Nivel 4</option>
+                                    <option>Nivel 5</option>
+                                    <option>Nivel 6</option>
+                                </select>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label" for="nemonico-n1">Nemónico N1</label>
+                                <select class="form-control input-sm" id="nemonico-n1" name="nemonico-n1" required>
+                                    <option>NA</option>
+                                    <option>dipdb-saso</option>
+                                    <option>dipdb-xamo</option>
+                                    <option>dipdb-catp</option>
+                                    
+                                </select>
+                                
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
+                                <input type="text" class="form-control input-sm" id="logos-alta" name="logos-alta" aria-describedby="logos-altaHelp" required>
+                            </div>    
+                        
+                            <div class="form-group">
+                                <label class="control-label" for="ubicacion">Ubicación</label>
+                                <input type="text" class="form-control input-sm" id="ubicacion" name="ubicacion" aria-describedby="ubicacionHelp" required>
+                            </div>
+
+                        
+
+                                          
+
+                    </div>    
+                    
+                    <div class="col-lg-6">    
+                        
+                        <div class="form-group">
+                                <label class="control-label" for="fabricante">Fabricante</label>
+                                <select class="form-control input-sm" id="fabricante" name="fabricante">
+                                    <option></option>
+                                    <option>CISCO</option>
+                                    <option>Alcatel-Lucent</option>
+                                    <option>Juniper</option>
+                                    <option>Huawei</option>
+                                </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="exampleSelect1">Modelo</label>
+                            <select class="form-control" id="modelo" name="modelo">
+                                <option>HP-98812</option>
+                                <option>XC-1289</option>
+                            </select>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-equipo">Contacto</label>
+                            <input type="text" class="form-control input-sm" id="contacto-equipo" name="contacto-equipo" aria-describedby="contacto-equipoHelp">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="contacto-equipo-horario">Horario</label>
+                            <input type="text" class="form-control input-sm" id="contacto-equipo-horario" name="contacto-equipo-horario" aria-describedby="contacto-equipo-horarioHelp">
+                        </div>
+                                                
+                         <div class="form-group">
+                            <label class="control-label" for="estado-equipo">Estado</label>
+                            <select class="form-control input-sm" id="estado-equipo" name="estado-equipo">
+                                <option selected>Pre-Alta</option>
+                                <option>Alta</option>
+                            </select>
+                        </div>
+                        
+                         <div class="form-group">
+                            <label class="control-label" for="observacion-equipo">Observaciones</label>
+                            <textarea class="form-control input-sm" id="observacion-equipo" name="observacion-equipo" rows="5"></textarea>
+                        </div>
+                        
+                        
+                    </div>    
+                
+                </div>
+                
+            </div>
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+
+                
+                
+                
+                
+                <!-- END BACKUP -->
+            
+        </fieldset>				
+        <div class="clearfix"></div>
+    </div>
+</div>
