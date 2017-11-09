@@ -8,6 +8,8 @@ $(function(){
 //    });
 //
 
+    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+
     if($('#cgestionado').prop('checked')) {
         $('.grid-caudal').css('display','block');
     }
@@ -95,11 +97,138 @@ $(function(){
     });
     
     
+    
+        $("#ctecnologia").change(function(){
+        var tecnologia = $("#ctecnologia option:selected").val();
+        var data = {tecnologia: tecnologia, tipo: 1};
+        var    url = '<?= $this->url('ajax-velocidad'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#ajax-velocidad").html(html);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#fill").html(html);
+            }
+        });
+    });
+
+    $("#bctecnologia").change(function(){
+        var tecnologia = $("#bctecnologia option:selected").val();
+        var data = {tecnologia: tecnologia, tipo: 2};
+        var    url = '<?= $this->url('ajax-velocidad'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#ajax-velocidad-backup").html(html);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#fill").html(html);
+            }
+        });
+    });
+
+    
+    $('#grid-circuitos tbody tr').click(function(){
+        
+        $("#grid-circuitos tbody tr").each(function () {
+                $(this).removeClass('success');
+        });
+        $(this).addClass('success');
+    });
+    
+    
+    
+    
+    
 
 });
 </script>
 
+<?php
+    $circuitosNumber = 0;
+    if(isset($this->information['circuitosall'])) {
+        $circuitosNumber = count($this->information['circuitosall']);
+    }
+?>
+<div style="float:left;">
+    <button type="button" class="btn btn-primary" title="Número de circuitos"><?= '# ' . $circuitosNumber; ?></button>
+</div>
 
+
+<div style="float:right;">
+    <?php $sedeId = $this->information['sede']['id'] ;?>
+    <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/1" role="button" title="Agregar circuito">
+        <i class="glyphicon glyphicon-plus"></i>
+    </a>
+</div>    
+<div style="clear: both;"></div>
+
+<div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
+    <table id="grid-circuitos" class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Cliente</th>
+                <th>Administrativo</th>
+                <th>Tecnología</th>
+                <th>Velocidad</th>
+                <th>Criticidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php $row = false; ?>
+        <?php foreach($this->information['circuitosall'] as $circuito) : ?> 
+            <?php
+                if(isset($this->information['circuitos']['0']['id'])) {
+                    $row = true;  
+                }
+            ?>
+            <?php if($row) : ?>
+            <tr class="fila-grid <?= ($this->information['circuitos']['0']['id']==$circuito['id'])?'success':'' ?>">
+            <?php else : ?>
+            <tr class="fila-grid">    
+            <?php endif; ?>    
+                <td><?= ($circuito['parent_id']==0)?'PRINCIPAL':'BACKUP' ?></td>
+                <td><?= $circuito['nif'] ?></td>
+                <td> <?php if(preg_match("/^00000/", $circuito['administrativo'])) : ?> 
+                    <span style="color: red; font-weight: bold;" title="pseudo-administrativo" ><?= $circuito['administrativo'] ?></span>
+                    <?php else : ?>
+                    <?= $circuito['administrativo'] ?>
+                    <?php endif ; ?>
+                </td>
+                <td><?= $circuito['tecnologia'] ?></td>
+                <td><?= $circuito['velocidad'] ?></td>
+                <td><?= $circuito['criticidad'] ?></td>
+                <td> 
+                    <?php if(0==$circuito['parent_id']) : ?>
+                    <a class="btn btn-primary btn-xs" href="#" onclick="circuitoFill('<?= $circuito['id'] ?>');" title="Consultar circuito">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>
+                    <?php else : ?>
+                    <span style="margin-left: 20px;">&nbsp;</span>
+                    <?php endif; ?>
+                    <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar circuito" data-toggle="modal" data-administrativo="<?= $circuito['administrativo']; ?>" data-nif="<?= $circuito['nif']; ?>" data-id="<?= $circuito['id']; ?>" data-parent="<?= $circuito['parent_id']; ?>" data-target="#deleteCircuito">
+                        <i class="glyphicon glyphicon-minus"></i>
+                    </a>
+
+                </td>  
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div style="clear: both;"></div>
+<div id="circuito-fill">
 <input type="hidden" id="circuitoId" name="circuitoId" value="<?= $this->information['circuitos']['0']['id']; ?>">
 <?php if(isset($this->information['circuitos']['1']['id'])) : ?>
     <input type="hidden" id="circuitoBackupId" name="circuitoBackupId" value="<?= $this->information['circuitos']['1']['id']; ?>">
@@ -114,18 +243,39 @@ $(function(){
                 <div class="panel-body">
                     <div class="col-lg-6">    
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Administrativo</label>
-                            <?php $form->get('cadministrativo')->setValue($this->information['circuitos']['0']['administrativo']) ?>
+                            <label class="control-label" for="exampleInputEmail1">Administrativo</label>
+                            <?php
+                                $form->get('cadministrativo')->setValue($this->information['circuitos']['0']['administrativo']);
+                                $form->get('cadministrativo')->setAttribute('readonly','readonly');
+                                if(preg_match("/^00000/", $this->information['circuitos']['0']['administrativo'])) {
+                                    $form->get('cadministrativo')->setAttribute('title','Pseudo-administrativo');
+                                    $form->get('cadministrativo')->setAttribute('style','color:red; font; font-weight: bold;');
+                                }
+                            ?>
                             <?= $this->formInput($form->get('cadministrativo')); ?>
 
                         </div>
 
+<!--                        <div class="form-group">
+                            <label for="exampleInputEmail1">Administrativo</label>
+                            <?php // $form->get('xcadministrativo')->setValue($this->information['circuitos']['0']['xadministrativo']) ?>
+                            <?php // $this->formInput($form->get('xcadministrativo')); ?>
+
+                        </div>-->
+                        
+                        
                         <div class="form-group">
                             <label for="exampleInputEmail1">Teléfono</label>
                             <?php $form->get('ctelefono')->setValue($this->information['circuitos']['0']['telefono']) ?>
                             <?= $this->formInput($form->get('ctelefono')); ?>
                         </div>
 
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Ibenet</label>
+                            <?php $form->get('cibenet')->setValue($this->information['circuitos']['0']['ibenet']) ?>
+                            <?= $this->formInput($form->get('cibenet')); ?>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="exampleSelect1">Cliente</label>
                             <?php $form->get('ccliente')->setValue($this->information['circuitos']['0']['clienteId']) ?>
@@ -137,29 +287,29 @@ $(function(){
                             <?php $form->get('ctecnologia')->setValue($this->information['circuitos']['0']['tecnologiaId']) ?>
                             <?= $this->formSelect($form->get('ctecnologia')); ?>
                         </div>
-
-                        <div class="form-group">
-                            <label for="exampleSelect1">Velocidad</label>
-                            <?php $form->get('cvelocidad')->setValue($this->information['circuitos']['0']['velocidadId']) ?>
-                            <?= $this->formSelect($form->get('cvelocidad')); ?>
-                        </div>
-
+                        <div id="ajax-velocidad">
+                            <div class="form-group">
+                                <label for="exampleSelect1">Velocidad</label>
+                                <?php $form->get('cvelocidad')->setValue($this->information['circuitos']['0']['velocidadId']) ?>
+                                <?= $this->formSelect($form->get('cvelocidad')); ?>
+                            </div>
+                        </div>    
                         <div class="form-group">
                             <label for="exampleSelect1">Criticidad</label>
                             <?php $form->get('ccriticidad')->setValue($this->information['circuitos']['0']['criticidadId']) ?>
                             <?= $this->formSelect($form->get('ccriticidad')); ?>
                         </div>
-
-                        <div class="form-check">
+                        <?php $esGestionado = $this->information['circuitos']['0']['es_gestionado']; ?>
+                        <div style="display: <?= ($esGestionado)?'block':'none' ?>;" class="form-check">
                             <label class="form-check-label"> 
                                 <?php $backup = $this->information['circuitos']['0']['tiene_backup']; ?>
-                              <input id="cbackup" name="cbackup" type="checkbox" value="1" class="form-check-input" <?= ($backup)?'checked':'' ?>>
+                              <input id="cbackup" name="cbackup" type="checkbox" value="1" class="form-check-input" <?= ($backup)?'checked':'' ?> <?= ($backup)?'readonly':'' ?>>
                               ¿Tiene Backup?
                             </label>
-                        </div>                        
+                        </div>
 
-                    </div>    
-                    
+                    </div>
+
                     <div class="col-lg-6">    
                         
                         <div class="form-group">
@@ -177,8 +327,8 @@ $(function(){
                         <div class="form-group">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <?php $esGestionado = $this->information['circuitos']['0']['es_gestionado']; ?>
-                                    <input type="checkbox" id="cgestionado" value="1" name="cgestionado" class="form-check-input" <?= ($esGestionado)?'checked':'' ?>>
+                                    
+                                    <input type="checkbox" id="cgestionado" value="1" name="cgestionado" class="form-check-input" <?= ($esGestionado)?'checked':'' ?> disabled>
                                     ¿Es gestionado?
                                 </label>
                             </div>                        
@@ -194,8 +344,8 @@ $(function(){
                                 <table id="grid-caudal" class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
-                                            <th>Cantidad</th>
+                                            <th>Calidad</th>
+                                            <th>Caudal</th>
                                             <th>Unidad</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -241,14 +391,29 @@ $(function(){
 
                         
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Administrativo</label>
-                                <?php   if(isset($this->information['circuitos']['1']['administrativo'])) { 
-                                            $form->get('bcadministrativo')->setValue($this->information['circuitos']['1']['administrativo']);
-                                        }
-                                ?>
+                                <label class="control-label" for="bcadministrativo">Administrativo</label>
+                                <?php if(isset($this->information['circuitos']['1']['administrativo'])) {
+                                    $form->get('bcadministrativo')->setValue($this->information['circuitos']['1']['administrativo']);
+                                    $form->get('bcadministrativo')->setAttribute('readonly','readonly');
+                                    if(preg_match("/^00000/", $this->information['circuitos']['1']['administrativo'])) {
+                                        $form->get('bcadministrativo')->setAttribute('title','Pseudo-administrativo');
+                                        $form->get('bcadministrativo')->setAttribute('style','color:red; font; font-weight: bold;');                                        
+                                    }
+                                } ?>
                                 <?= $this->formInput($form->get('bcadministrativo')); ?>
                             </div>
 
+<!--                            <div class="form-group">
+                                <label for="exampleInputEmail1">Administrativo</label>
+                                <?php
+//                                if(isset($this->information['circuitos']['1']['xadministrativo'])) { 
+//                                            $form->get('xbcadministrativo')->setValue($this->information['circuitos']['1']['xadministrativo']);
+//                                        }
+                                ?>
+                                <?php // $this->formInput($form->get('xbcadministrativo')); ?>
+                            </div>-->
+                        
+                        
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Teléfono</label>
                                 <?php   if(isset($this->information['circuitos']['1']['telefono'])) { 
@@ -257,15 +422,26 @@ $(function(){
                                 ?>
                                 <?= $this->formInput($form->get('bctelefono')); ?>
                             </div>
-
+                        
                             <div class="form-group">
-                                <label for="exampleSelect1">Cliente</label>
-                                <?php   if(isset($this->information['circuitos']['1']['clienteId'])) { 
-                                            $form->get('bccliente')->setValue($this->information['circuitos']['1']['clienteId']);
+                                <label for="exampleInputEmail1">Ibenet</label>
+                                <?php   if(isset($this->information['circuitos']['1']['ibenet'])) { 
+                                            $form->get('bcibenet')->setValue($this->information['circuitos']['1']['ibenet']);
                                         }
                                 ?>
-                                <?= $this->formSelect($form->get('bccliente')); ?>
+                                <?= $this->formInput($form->get('bcibenet')); ?>
                             </div>
+                        
+
+<!--                            <div class="form-group">
+                                <label for="exampleSelect1">Cliente</label>
+                                <?php   
+//                                    if(isset($this->information['circuitos']['1']['clienteId'])) { 
+//                                            $form->get('bccliente')->setValue($this->information['circuitos']['1']['clienteId']);
+//                                    }
+                                ?>
+                                <?php # $this->formSelect($form->get('bccliente')); ?>
+                            </div>-->
 
                             <div class="form-group">
                                 <label for="exampleSelect1">Tecnología</label>
@@ -276,17 +452,17 @@ $(function(){
                                 
                                 <?= $this->formSelect($form->get('bctecnologia')); ?>
                             </div>
+                            <div id="ajax-velocidad-backup">
+                                <div class="form-group">
+                                    <label for="exampleSelect1">Velocidad</label>
+                                    <?php   if(isset($this->information['circuitos']['1']['velocidadId'])) { 
+                                                $form->get('bcvelocidad')->setValue($this->information['circuitos']['1']['velocidadId']);
+                                            }
+                                    ?>
 
-                            <div class="form-group">
-                                <label for="exampleSelect1">Velocidad</label>
-                                <?php   if(isset($this->information['circuitos']['1']['velocidadId'])) { 
-                                            $form->get('bcvelocidad')->setValue($this->information['circuitos']['1']['velocidadId']);
-                                        }
-                                ?>
-                                
-                                <?= $this->formSelect($form->get('bcvelocidad')); ?>
-                            </div>
-
+                                    <?= $this->formSelect($form->get('bcvelocidad')); ?>
+                                </div>
+                            </div>    
                             <div class="form-group">
                                 <label for="exampleSelect1">Estado</label>
                                 <?php   if(isset($this->information['circuitos']['1']['estadoId'])) { 
@@ -303,17 +479,20 @@ $(function(){
                         <div class="form-group">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <?php $esBGestionado = 0;  
+                                    <?php 
+                                        $esBGestionado = 0;
+                                        $existBGestionado = 0;
                                         if(isset($this->information['circuitos']['1']['es_gestionado'])) {
                                             $esBGestionado = $this->information['circuitos']['1']['es_gestionado'];
+                                            $existBGestionado = 1;
                                         }
                                     ?>
-                                    <input type="checkbox" id="bcgestionado" name="bcgestionado" value="1" class="form-check-input" <?= ($esBGestionado)?'checked':'' ?>>
+                                    <input type="checkbox" id="bcgestionado" name="bcgestionado" value="1" class="form-check-input" <?= ($esBGestionado)?'checked':'' ?> <?= ($existBGestionado)?'disabled':'' ?>>
                                   ¿Es gestionado?
                                 </label>
-                            </div>                        
+                            </div>
                         </div>
-                        
+
                         <div class="grid-caudal-backup" style="display: none;">
                             <!--<button id="add-backup" type="button" class="btn btn-primary btn-sm" style="float: right;">IMG:Add</button>-->
                             <button id="add-backup" type="button" title="Agregar caudal" class="btn btn-primary btn-xs" style="float: right; margin-right: 18px;"><i class="glyphicon glyphicon-plus"></i></button>
@@ -323,8 +502,8 @@ $(function(){
                                 <table id="backup" class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
-                                            <th>Cantidad</th>
+                                            <th>Calidad</th>
+                                            <th>Caudal</th>
                                             <th>Unidad</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -390,3 +569,4 @@ $(function(){
         <div class="clearfix"></div>
     </div>
 </div>          
+</div> 

@@ -7,6 +7,8 @@
 <script>
 $(function(){
 
+    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+
     if($('#ebackup').prop('checked')) {
         $('#equipo-backup').css('display','block');
     }
@@ -17,6 +19,47 @@ $(function(){
       } else {
            $('#equipo-backup').css('display','none');
       } });
+
+    $("#efabricante").change(function(){
+        var fabricante = $("#efabricante option:selected").val();
+        var data = {fabricante: fabricante, tipo: 1};
+        var    url = '<?= $this->url('ajax-modelo'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#ajax-modelo").html(html);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#fill").html(html);
+            }
+        });
+    });
+
+    $("#befabricante").change(function(){
+        var fabricante = $("#befabricante option:selected").val();
+        var data = {fabricante: fabricante, tipo: 2};
+        var    url = '<?= $this->url('ajax-modelo'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#ajax-modelo-backup").html(html);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#fill").html(html);
+            }
+        });
+    });
+
+
+
 
 });
 </script>
@@ -65,8 +108,9 @@ $(function(){
                             <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
-                                <?php $form->get('enemonicon1')->setValue($this->information['equipos']['0']['nemonico_nivel1']) ?>
-                                <?= $this->formSelect($form->get('enemonicon1')); ?>
+                                <?php # $form->get('enemonicon1')->setValue($this->information['equipos']['0']['nemonico_nivel1']) ?>
+                                <?php # $this->formSelect($form->get('enemonicon1')); ?>
+                                 <?= $this->information['htmlcombobox3']['0']; ?>
                                 
                             </div>
                             <?php endIf; ?>
@@ -75,17 +119,22 @@ $(function(){
                                 <?php $form->get('efabricante')->setValue($this->information['equipos']['0']['fabricanteId']) ?>
                                 <?= $this->formSelect($form->get('efabricante')); ?>
                             </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="exampleSelect1">Modelo</label>
-                                <?php $form->get('emodelo')->setValue($this->information['equipos']['0']['modeloId']) ?>
-                                <?= $this->formSelect($form->get('emodelo')); ?>
+                            <div id="ajax-modelo">
+                                <div class="form-group">
+                                    <label class="control-label" for="exampleSelect1">Modelo</label>
+                                    <?php $form->get('emodelo')->setValue($this->information['equipos']['0']['modeloId']) ?>
+                                    <?= $this->formSelect($form->get('emodelo')); ?>
+                                </div>
                             </div>
-                            
                             <div class="form-group">
                                 <label class="control-label" for="serie">N/S</label>
                                 <?php $form->get('eserie')->setValue($this->information['equipos']['0']['numero_serie']) ?>
                                <?= $this->formInput($form->get('eserie')); ?>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="Locert">Locert</label>
+                                <?php $form->get('elocert')->setValue($this->information['equipos']['0']['locert']) ?>
+                               <?= $this->formInput($form->get('elocert')); ?>
                             </div>
 
                     </div>    
@@ -193,8 +242,11 @@ $(function(){
                             <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
-                                <?php $form->get('benemonicon1')->setValue($this->information['equipos']['1']['nemonico_nivel1']) ?>
-                                <?= $this->formSelect($form->get('benemonicon1')); ?>
+                                <?php
+//                                    $form->get('benemonicon1')->setValue($this->information['equipos']['1']['nemonico_nivel1']);
+                                ?>
+                                <?php # $this->formSelect($form->get('benemonicon1')); ?>
+                                <?= $this->information['htmlcombobox3']['1']; ?>
                             </div>
                             <?php endIf; ?>
                             <div class="form-group">
@@ -202,17 +254,22 @@ $(function(){
                                 <?php $form->get('befabricante')->setValue($this->information['equipos']['1']['fabricanteId']) ?>
                                 <?= $this->formSelect($form->get('befabricante')); ?>
                             </div>
-                        
-                            <div class="form-group">
-                                <label class="control-label" for="modelo">Modelo</label>
-                                <?php $form->get('bemodelo')->setValue($this->information['equipos']['1']['modeloId']) ?>
-                                <?= $this->formSelect($form->get('bemodelo')); ?>
-                            </div>
-                        
+                            <div id="ajax-modelo-backup">
+                                <div class="form-group">
+                                    <label class="control-label" for="modelo">Modelo</label>
+                                    <?php $form->get('bemodelo')->setValue($this->information['equipos']['1']['modeloId']) ?>
+                                    <?= $this->formSelect($form->get('bemodelo')); ?>
+                                </div>
+                            </div>    
                             <div class="form-group">
                                 <label class="control-label" for="numero-serie">S/N</label>
                                 <?php $form->get('beserie')->setValue($this->information['equipos']['1']['numero_serie']) ?>
                                 <?= $this->formInput($form->get('beserie')); ?>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="numero-serie">Locert</label>
+                                <?php $form->get('belocert')->setValue($this->information['equipos']['1']['locert']) ?>
+                                <?= $this->formInput($form->get('belocert')); ?>
                             </div>
 
                     </div>    

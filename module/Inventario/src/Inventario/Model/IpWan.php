@@ -70,6 +70,8 @@ class IpWan extends AbstractTableGateway {
             'mascara' => $ipWan->getIpwmascara(),
             'pe_ppal' => $ipWan->getIpwpeppal(),
             'pe_backup' => $ipWan->getIpwpebackup(),
+            'int_pe_ppal' => $ipWan->getIpwintpeppal(),
+            'int_pe_backup' => $ipWan->getIpwintpebackup(),
             'equipo_id' => $ipWan->getEquipoId());
         
         
@@ -158,7 +160,7 @@ class IpWan extends AbstractTableGateway {
                         vn.vlan, ip.red_id, re.red,
                         ip.uso_id, us.uso,
                         ip.ip_wan_edc, ip.mascara,
-                        ip.pe_ppal, ip.pe_backup, ip.equipo_id
+                        ip.pe_ppal, ip.pe_backup, ip.int_pe_ppal, ip.int_pe_backup, ip.equipo_id
                             FROM ip_wans AS ip 
                             LEFT JOIN rpvs AS rp ON ip.rpv_id = rp.id
                             LEFT JOIN routings AS ro ON ip.routing_id = ro.id
@@ -203,7 +205,7 @@ class IpWan extends AbstractTableGateway {
                         vn.vlan, ip.red_id, re.red,
                         ip.uso_id, us.uso,
                         ip.ip_wan_edc, ip.mascara,
-                        ip.pe_ppal, ip.pe_backup, ip.equipo_id
+                        ip.pe_ppal, ip.pe_backup, ip.int_pe_ppal, ip.int_pe_backup, ip.equipo_id
                             FROM ip_wans AS ip 
                             LEFT JOIN rpvs AS rp ON ip.rpv_id = rp.id
                             LEFT JOIN routings AS ro ON ip.routing_id = ro.id

@@ -55,7 +55,7 @@ function saveIpwan() {
 
 $(function(){
     
-    
+    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
     
 });
 
@@ -125,12 +125,17 @@ $(function(){
                 <label class="control-label" for="ipwpebackup">PE Backup</label>
                 <?= $this->formInput($form->get('ipwpebackup')); ?>
             </div>
+            
             <div class="form-group">
-                &nbsp;
-            </div>        
-            <div class="form-group">
-                &nbsp;
+                <label class="control-label" for="ipwintpeppal">Interfaz PE Ppal</label>
+                <?= $this->formInput($form->get('ipwintpeppal')); ?>
             </div>
+            
+            <div class="form-group">
+                <label class="control-label" for="ipwintpebackup">Interfaz PE Backup</label>
+                <?= $this->formInput($form->get('ipwintpebackup')); ?>
+            </div>
+            
             <div class="form-group">
                 &nbsp;
             </div>

@@ -11,6 +11,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Inventario\Form\GetPass;
 use Inventario\Form\Wizard;
+use Inventario\Model\Poblacion;
+Use Inventario\Model\Velocidad;
+Use Inventario\Model\Modelo;
+Use Inventario\Model\Uso;
 
 class ProcessController extends AbstractActionController
 {
@@ -164,6 +168,11 @@ class ProcessController extends AbstractActionController
     {
         return [];
     }
+
+    public function glanAction()
+    {
+        return [];
+    }
     
     public function equipoNoGestionadoAction()
     {
@@ -312,15 +321,54 @@ class ProcessController extends AbstractActionController
     {
 
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-        $form = new Wizard($dbAdapter);
         
         # ID SEDE
         $id = $this->params()->fromRoute('id');
-        $information = $this->sedeService->getAllSedeInformation($id);
         
+        $information = $this->sedeService->getAllSedeInformation($id);
+
+        #die('INFORMACION: <pre>' . print_r($information, true) . '</pre>');
+        
+        if(isset($information['sede']['provinciaId'])){
+            $provinciaId = (int)$information['sede']['provinciaId'];
+        } else {
+            $provinciaId = null;
+        }
+        
+        if(isset($information['circuitos']['0']['tecnologiaId'])){
+            $tecnologiaId = (int)$information['circuitos']['0']['tecnologiaId'];
+        } else {
+            $tecnologiaId = null;
+        }
+        
+        if(isset($information['circuitos']['1']['tecnologiaId'])){
+            $tecnologiaBackupId = (int)$information['circuitos']['1']['tecnologiaId'];
+        } else {
+            $tecnologiaBackupId = null;
+        }
+
+        if(isset($information['equipos']['0']['fabricanteId'])){
+            $fabricanteId = (int)$information['equipos']['0']['fabricanteId'];
+        } else {
+            $fabricanteId = null;
+        }
+        
+        if(isset($information['equipos']['1']['fabricanteId'])){
+            $fabricanteBackupId = (int)$information['equipos']['1']['fabricanteId'];
+        } else {
+            $fabricanteBackupId = null;
+        }
+        
+        if(isset($information['notequipos']['0']['red_id'])){
+            $redId = (int)$information['notequipos']['0']['red_id'];
+        } else {
+            $redId = null;
+        }
+
+        
+        $form = new Wizard($dbAdapter, $provinciaId, $tecnologiaId, $tecnologiaBackupId, $fabricanteId, $fabricanteBackupId, $redId);
         $comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($id,1);
         
-        #die('<pre>' . print_r($information, true) . '</pre>');
         return new ViewModel(array(
             'form' => $form,
             'information' => $information,
@@ -362,8 +410,7 @@ class ProcessController extends AbstractActionController
     {
 
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-        $form = new Wizard($dbAdapter);
-
+        
         $posts = (array)$this->request->getPost();
 
         $id = 0;
@@ -372,17 +419,76 @@ class ProcessController extends AbstractActionController
             $id = (int)$posts['id'];
             $view = (int)$posts['view'];
         }
-        if(1==$view) {
+        if(1 == $view) {
             
             $information = $this->circuitoService->getInformationByCircuito($id);
-        
+            //$information = $this->sedeService->getAllSedeInformation($view);
             
         } else {
-            #die('<pre>' . print_r($posts, true) . '</pre>');
+            
+            $sedeId = (int)$posts['sedeId'];
             $this->wizardService->setPostParams($posts);
+            #die('<pre>' . print_r($posts, true) . '</pre>');
             $circuitoId = $this->wizardService->updateCircuito();
-            $information = $this->circuitoService->getInformationByCircuito($circuitoId);
+            #$information = $this->circuitoService->getInformationByCircuito($circuitoId);
+            $information = $this->sedeService->getAllSedeInformation($sedeId);
         }
+        
+        if(isset($information['circuitos']['0']['tecnologiaId'])){
+            $tecnologiaId = (int)$information['circuitos']['0']['tecnologiaId'];
+        } else {
+            $tecnologiaId = null;
+        }
+        
+        if(isset($information['circuitos']['1']['tecnologiaId'])){
+            $tecnologiaBackupId = (int)$information['circuitos']['1']['tecnologiaId'];
+        } else {
+            $tecnologiaBackupId = null;
+        }
+        
+        $form = new Wizard($dbAdapter, null, $tecnologiaId, $tecnologiaBackupId);
+        
+        $viewmodel = new ViewModel(
+                        array('form' => $form,
+                              'information' => $information,
+                              'tipo' => $view  ));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+//      $response = $this->getResponse();
+//      $response->setContent(\Zend\Json\Json::encode(array('success' => 5)));  # 2
+//      return $response;
+
+    }
+    
+    public function circuitoUpdateAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        
+        $posts = (array)$this->request->getPost();
+
+        $sedeId = (int)$posts['sedeId'];
+        $this->wizardService->setPostParams($posts);
+        $circuitoId = $this->wizardService->updateCircuito();
+        #$information = $this->circuitoService->getInformationByCircuito($circuitoId);
+        $information = $this->sedeService->getAllSedeInformation($sedeId);
+        
+        if(isset($information['circuitos']['0']['tecnologiaId'])){
+            $tecnologiaId = (int)$information['circuitos']['0']['tecnologiaId'];
+        } else {
+            $tecnologiaId = null;
+        }
+        
+        if(isset($information['circuitos']['1']['tecnologiaId'])){
+            $tecnologiaBackupId = (int)$information['circuitos']['1']['tecnologiaId'];
+        } else {
+            $tecnologiaBackupId = null;
+        }
+        
+        $form = new Wizard($dbAdapter, null, $tecnologiaId, $tecnologiaBackupId);
         
         $viewmodel = new ViewModel(
                         array('form' => $form,
@@ -396,13 +502,100 @@ class ProcessController extends AbstractActionController
 //      $response->setContent(\Zend\Json\Json::encode(array('success' => 5)));  # 2
 //      return $response;
 
-    }     
+    }
+    
+    
+    
+
+    public function ajaxPoblacionAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $provinciaId = $posts['provincia'];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $poblacion = new Poblacion($dbAdapter);
+        
+        $poblaciones = $poblacion->getOptionsForPoblacion($provinciaId);
+        
+        $viewmodel = new ViewModel(
+                        array('poblaciones' => $poblaciones));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }        
+
+    public function ajaxVelocidadAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $tecnologiaId = $posts['tecnologia'];
+        $tipo = $posts['tipo'];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $velocidad = new Velocidad($dbAdapter);
+
+        $velocidades = $velocidad->getOptionsForVelocidad($tecnologiaId);
+
+        $viewmodel = new ViewModel(
+                        array('velocidades' => $velocidades,
+                              'tipo' => $tipo));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
+    public function ajaxModeloAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $fabricanteId = $posts['fabricante'];
+        $tipo = $posts['tipo'];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $modelo = new Modelo($dbAdapter);
+
+        $modelos = $modelo->getOptionsForModelos($fabricanteId);
+
+        $viewmodel = new ViewModel(
+                        array('modelos' => $modelos,
+                              'tipo' => $tipo));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
+    public function ajaxUsosAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $redId = $posts['red'];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $uso = new Uso($dbAdapter);
+        
+        $usos = $uso->getOptionsForUsos($redId);
+        
+        $viewmodel = new ViewModel(
+                        array('usos' => $usos));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }        
     
     public function deleteCircuitoAction()
     {
 
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-        $form = new Wizard($dbAdapter);
+        
         $posts = (array)$this->request->getPost();
 
         $circuitoId = $posts['id'];
@@ -416,6 +609,26 @@ class ProcessController extends AbstractActionController
         
         $information = $this->sedeService->getAllSedeInformation($sedeId);
         $comboBoxCircuitoBck = $this->circuitoService->getCircuitosBySede($sedeId,1);
+        
+        if(isset($information['circuitos']['0']['tecnologiaId'])){
+            $tecnologiaId = (int)$information['circuitos']['0']['tecnologiaId'];
+        } else {
+            $tecnologiaId = null;
+        }
+        
+        if(isset($information['circuitos']['1']['tecnologiaId'])){
+            $tecnologiaBackupId = (int)$information['circuitos']['1']['tecnologiaId'];
+        } else {
+            $tecnologiaBackupId = null;
+        }
+        
+        $form = new Wizard($dbAdapter, null, $tecnologiaId, $tecnologiaBackupId);
+        
+        
+        
+        
+        
+        
         
         $viewmodel = new ViewModel(array(
                                     'form' => $form,
@@ -438,9 +651,9 @@ class ProcessController extends AbstractActionController
     {
 
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-        $form = new Wizard($dbAdapter);
+        
         $posts = (array)$this->request->getPost();
-
+        
         $view = 0;
         if(isset($posts['view'])){
             $view = (int)$posts['view'];
@@ -448,20 +661,37 @@ class ProcessController extends AbstractActionController
         
         if(1==$view) {
             $id = $posts['id'];
-            $sedeId = $posts['sede'];
+            $sedeId = (int)$posts['sede'];
             $information = $this->equipoService->getInformationByEquipo($sedeId, $id);
             
         } else {
             #echo('TESTING: <pre>' . print_r($posts, true) . '</pre>');
-            $this->wizardService->setPostParams($posts);
-            $circuitoId = $this->wizardService->updateEquipo();
-            $sedeId = (int)$posts['sedeId'];
-            $information = $this->equipoService->getInformationByEquipo($sedeId, $circuitoId);
+//            $this->wizardService->setPostParams($posts);
+//            $circuitoId = $this->wizardService->updateEquipo();
+//            $sedeId = (int)$posts['sedeId'];
+//            //$information = $this->equipoService->getInformationByEquipo($sedeId, $circuitoId);
+//            $information = $this->sedeService->getAllSedeInformation($sedeId);
         }
         
+        if(isset($information['equipos']['0']['fabricanteId'])){
+            $fabricanteId = (int)$information['equipos']['0']['fabricanteId'];
+        } else {
+            $fabricanteId = null;
+        }
+        
+        if(isset($information['equipos']['1']['fabricanteId'])){
+            $fabricanteBackupId = (int)$information['equipos']['1']['fabricanteId'];
+        } else {
+            $fabricanteBackupId = null;
+        }
+        
+        $form = new Wizard($dbAdapter, null, null, null, $fabricanteId, $fabricanteBackupId);
+        
         $viewmodel = new ViewModel(
-                            array('form' => $form,
-                                  'information' => $information));
+                            array(
+                                    'form' => $form,
+                                    'information' => $information,
+                                    'sedeId' => $sedeId));
 
         $viewmodel->setTerminal(true);
         
@@ -469,6 +699,51 @@ class ProcessController extends AbstractActionController
 
     }        
 
+    public function equipoUpdateAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        
+        $posts = (array)$this->request->getPost();
+        $this->wizardService->setPostParams($posts);
+        $circuitoId = $this->wizardService->updateEquipo();
+        $sedeId = (int)$posts['sedeId'];
+        $information = $this->sedeService->getAllSedeInformation($sedeId);
+        
+        if(isset($information['equipos']['0']['fabricanteId'])){
+            $fabricanteId = (int)$information['equipos']['0']['fabricanteId'];
+        } else {
+            $fabricanteId = null;
+        }
+        
+        if(isset($information['equipos']['1']['fabricanteId'])){
+            $fabricanteBackupId = (int)$information['equipos']['1']['fabricanteId'];
+        } else {
+            $fabricanteBackupId = null;
+        }
+        
+        $form = new Wizard($dbAdapter, null, null, null, $fabricanteId, $fabricanteBackupId);
+        
+        $viewmodel = new ViewModel(
+                            array(
+                                    'form' => $form,
+                                    'information' => $information,
+                                    'sedeId' => $sedeId));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+
+    }        
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public function deleteEquipoAction()
     {
         
@@ -506,7 +781,7 @@ class ProcessController extends AbstractActionController
     {
 
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-        $form = new Wizard($dbAdapter);
+
         $posts = (array)$this->request->getPost();
 
         $view = 0;
@@ -519,11 +794,19 @@ class ProcessController extends AbstractActionController
             $sedeId = $posts['sede'];
             $information = $this->equiponotgestionadoService->getInformationByEquipo($sedeId, $id);
         } else {
-            $this->wizardService->setPostParams($posts);
-            $circuitoId = $this->wizardService->updateEquipoNoGestionado();
-            $sedeId = (int)$posts['sedeId'];
-            $information = $this->equiponotgestionadoService->getInformationByEquipo($sedeId, $circuitoId);
+//            $this->wizardService->setPostParams($posts);
+//            $circuitoId = $this->wizardService->updateEquipoNoGestionado();
+//            $sedeId = (int)$posts['sedeId'];
+//            $information = $this->equiponotgestionadoService->getInformationByEquipo($sedeId, $circuitoId);
         }
+
+        if(isset($information['notequipos']['0']['red_id'])){
+            $redId = (int)$information['notequipos']['0']['red_id'];
+        } else {
+            $redId = null;
+        }
+
+        $form = new Wizard($dbAdapter, null, null, null, null, null, $redId);
         
         $viewmodel = new ViewModel(
                             array('form' => $form,
@@ -534,6 +817,38 @@ class ProcessController extends AbstractActionController
         return $viewmodel;
 
     }        
+
+    public function notequipoUpdateAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+
+        $posts = (array)$this->request->getPost();
+
+        $this->wizardService->setPostParams($posts);
+        $circuitoId = $this->wizardService->updateEquipoNoGestionado();
+        $sedeId = (int)$posts['sedeId'];
+        //$information = $this->equiponotgestionadoService->getInformationByEquipo($sedeId, $circuitoId);
+        $information = $this->sedeService->getAllSedeInformation($sedeId);
+
+        if(isset($information['notequipos']['0']['red_id'])){
+            $redId = (int)$information['notequipos']['0']['red_id'];
+        } else {
+            $redId = null;
+        }
+
+        $form = new Wizard($dbAdapter, null, null, null, null, null, $redId);
+        
+        $viewmodel = new ViewModel(
+                            array(  'form' => $form,
+                                    'information' => $information,
+                                    'sedeId' => $sedeId));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
 
     public function deleteEquipoNotManagementAction()
     {
@@ -612,8 +927,8 @@ class ProcessController extends AbstractActionController
         #echo('INFORMACION: <pre>' . print_r($information, true) . '</pre>');
         
         $viewmodel = new ViewModel(
-                            array('form' => $form,
-                                  'information' => $information));
+                            array(  'form' => $form,
+                                    'information' => $information));
         
         $viewmodel->setTerminal(true);
 

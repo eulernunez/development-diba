@@ -12,7 +12,9 @@ class Circuito {
 
     protected $id;
     protected $cadministrativo;
+    protected $xcadministrativo;
     protected $ctelefono;
+    protected $cibenet;
     protected $ccliente;
     protected $ctecnologia;
     protected $cvelocidad;
@@ -77,6 +79,16 @@ class Circuito {
         return $this;
     }
     
+    public function getXcadministrativo() {
+        return $this->xcadministrativo;
+    }
+
+    public function setXcadministrativo($xcadministrativo) {
+        $this->xcadministrativo = $xcadministrativo;
+        return $this;
+    }
+    
+    
     public function getCtelefono() {
         return $this->ctelefono;
     }
@@ -86,6 +98,16 @@ class Circuito {
         return $this;
     }
 
+    public function getCibenet() {
+        return $this->cibenet;
+    }
+
+    public function setCibenet($cibenet) {
+        $this->cibenet = $cibenet;
+        return $this;
+    }
+    
+    
     public function getCcliente() {
         return $this->ccliente;
     }

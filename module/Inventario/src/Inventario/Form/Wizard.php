@@ -18,13 +18,25 @@ class Wizard extends Form
 {
 
     protected $adapter;
+    protected $provinciaId;
+    protected $tecnologiaId;
+    protected $backupTecnologiaId;
+    protected $fabricanteId;
+    protected $backupFabricanteId;
+    protected $redId;
     
-    public function __construct(AdapterInterface $dbAdapter)
+    public function __construct(AdapterInterface $dbAdapter, $provinciaId = null, $tecnologiaId = null, $backupTecnologiaId = null, $fabricanteId = null, $backupFabricanteId = null, $redId = null)
     {
+        $this->provinciaId = $provinciaId;
+        $this->tecnologiaId = $tecnologiaId;
+        $this->backupTecnologiaId = $backupTecnologiaId;
+        $this->fabricanteId = $fabricanteId;
+        $this->backupFabricanteId = $backupFabricanteId;
+        $this->redId = $redId;
 
         $this->adapter =$dbAdapter;
         parent::__construct("Wizard");
-        $this->setAttribute('method', 'post');        
+        $this->setAttribute('method', 'post');
         
         /* SEDE */
         $this->add(array(
@@ -101,7 +113,9 @@ class Wizard extends Form
 //                            '4' => 'Sabadell',
 //                            '5' => 'Granollers'
 //                    ),
-                      'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForPoblacion(),  
+                      
+//                 'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForPoblacion(),
+                   'value_options' => $this->getOptionsForPoblacion(),   
                  
              ),
             'attributes' => 
@@ -148,7 +162,7 @@ class Wizard extends Form
                     'id' => 'horario',
                     'required'=>'required',
                     'aria-describedby' => 'horarioHelp',
-                    'class' => 'form-control input-sm'
+                    'class' => 'form-control input-sm',
                 ),
             'filters' => array(
                  array('name' => 'Zend\Filter\StringTrim'),
@@ -200,7 +214,7 @@ class Wizard extends Form
             'name' => 'observacion',
             'type' => 'Zend\Form\Element\Textarea',
             'attributes'=>array(
-                'id' => 'observaciones',
+                'id' => 'observacion',
                 'class' => 'form-control input-sm',
                 'rows' => 6,
                 'placeholder' => 'Ingresa observaciones respecto a la sede ...',
@@ -219,16 +233,40 @@ class Wizard extends Form
             'type' => 'Zend\Form\Element\Text',
             'options' => 
                 array(
-                    'label' => 'Nombre',
+                    'label' => 'Administrativo',
                 ),
             'attributes' => 
                 array(
                     'id' => 'cadministrativo',
-                    'required'=>'required',
+                    //'required'=>'required',
                     'aria-describedby' => 'cadministrativoHelp',
+                    'placeholder' => 'Ingresar el administrativo del circuito',
+                    'class' => 'form-control input-sm',
+                    'maxlength' => 14,
+                    'pattern' => '^[0-9]{1,}$'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'xcadministrativo',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Administrativo',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'xcadministrativo',
+                    #'required'=>'required',
+                    'aria-describedby' => 'xcadministrativoHelp',
                     'placeholder' => 'Ingresar el administrativo',
                     'class' => 'form-control input-sm',
-                    'maxlength' => 14
+                    'maxlength' => 14,
+                    'pattern' => '^[0-9]{1,}$'
                 ),
             'filters' => array(
                  array('name' => 'Zend\Filter\StringTrim'),
@@ -247,16 +285,40 @@ class Wizard extends Form
             'attributes' => 
                 array(
                     'id' => 'ctelefono',
-                    'required'=>'required',
+                    #'required'=>'required',
                     'class' => 'form-control input-sm',
                     'aria-describedby' => 'ctelefonoHelp',
+                    'maxlength' => 9,
+                    'pattern' => '^[0-9]{1,}$'
                 ),
             'filters' => array(
                  array('name' => 'Zend\Filter\StringTrim'),
                  array('name' => 'Zend\Filter\StringToLower'),
              )
         ));
-    
+
+        $this->add(array(
+            'name' => 'cibenet',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Ibenet',
+                    
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'cibenet',
+                    #'required'=>'required',
+                    'class' => 'form-control input-sm',
+                    'aria-describedby' => 'cibenetHelp',
+                    'maxlength' => 19
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
         $this->add(array(
              'type' => 'Zend\Form\Element\Select',
              'name' => 'ccliente',
@@ -298,7 +360,8 @@ class Wizard extends Form
              'name' => 'cvelocidad',
              'options' => array(
                     'label' => 'Velocidad',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForVelocidad(),
+                    //'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForVelocidad(),
+                    'value_options' => $this->getOptionsForVelocidad(),
              ),
             'attributes' => 
                 array(
@@ -387,12 +450,32 @@ class Wizard extends Form
             'type' => 'Zend\Form\Element\Text',
             'options' => 
                 array(
-                    'label' => 'Nombre',
+                    'label' => 'Administrativo',
                 ),
             'attributes' => 
                 array(
                     'id' => 'bcadministrativo',
                     'aria-describedby' => 'bcadministrativoHelp',
+                    'placeholder' => 'Ingresar el administrativo del circuito',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'xbcadministrativo',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Administrativo',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'xbcadministrativo',
+                    'aria-describedby' => 'xbcadministrativoHelp',
                     'placeholder' => 'Ingresar el administrativo backup',
                     'class' => 'form-control input-sm'
                 ),
@@ -421,6 +504,25 @@ class Wizard extends Form
              )
         ));
     
+        $this->add(array(
+            'name' => 'bcibenet',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Ibenet',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'bcibenet',
+                    'class' => 'form-control input-sm',
+                    'aria-describedby' => 'bcibenetHelp',
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
         $this->add(array(
              'type' => 'Zend\Form\Element\Select',
              'name' => 'bccliente',
@@ -454,7 +556,7 @@ class Wizard extends Form
              'name' => 'bcvelocidad',
              'options' => array(
                     'label' => 'Velocidad',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForVelocidad(),
+                    'value_options' => $this->getOptionsForVelocidadBackup(),
              ),
             'attributes' => 
                 array(
@@ -495,7 +597,7 @@ class Wizard extends Form
             'attributes' => 
                 array(
                     'id' => 'eservicio',
-                    'required'=> false,
+                    'required'=> true,
                     'class' => 'form-control input-sm',
                 ),
 
@@ -512,7 +614,7 @@ class Wizard extends Form
             'attributes' => 
                 array(
                     'id' => 'enemonico',
-                   # 'required'=>'required',
+                    'required'=>'required',
                     'aria-describedby' => 'enemonicoHelp',
                     'class' => 'form-control input-sm'
                 ),
@@ -532,9 +634,10 @@ class Wizard extends Form
             'attributes' => 
                 array(
                     'id' => 'eipgestion',
-                    #'required'=>'required',
+                    'required'=>'required',
                     'aria-describedby' => 'eipgestionHelp',
-                    'class' => 'form-control input-sm'
+                    'class' => 'form-control input-sm',
+                    'pattern' => '^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
                 ),
             'filters' => array(
                  array('name' => 'Zend\Filter\StringTrim'),
@@ -593,7 +696,7 @@ class Wizard extends Form
             'attributes' => 
                 array(
                     'id' => 'efabricante',
-                    #'required'=> true,
+                    'required'=> true,
                     'class' => 'form-control input-sm',
                 ),
 
@@ -605,12 +708,13 @@ class Wizard extends Form
              'name' => 'emodelo',
              'options' => array(
                     'label' => 'Modelo',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForModelo(),
+                    //'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForModelo(),
+                    'value_options' => $this->getOptionsForModelo(),
              ),
             'attributes' => 
                 array(
                     'id' => 'emodelo',
-                    #'required'=> true,
+                    'required'=> true,
                     'class' => 'form-control input-sm',
                 ),
 
@@ -628,6 +732,25 @@ class Wizard extends Form
                 array(
                     'id' => 'eserie',
                     'aria-describedby' => 'eserieHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'elocert',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Locert',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'elocert',
+                    'aria-describedby' => 'elocertHelp',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -884,7 +1007,8 @@ class Wizard extends Form
              'name' => 'bemodelo',
              'options' => array(
                     'label' => 'Modelo',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForModelo(),
+                    //'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForModelo(),
+                    'value_options' => $this->getOptionsForModeloBackup(),
              ),
             'attributes' => 
                 array(
@@ -915,6 +1039,25 @@ class Wizard extends Form
              )
         ));
 
+        $this->add(array(
+            'name' => 'belocert',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Locert',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'belocert',
+                    'aria-describedby' => 'belocertHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
         /* Other side */
         $this->add(array(
             'name' => 'beubicacion',
@@ -984,8 +1127,10 @@ class Wizard extends Form
             'attributes' => 
                 array(
                     'id' => 'engservicio',
-                    'required'=> true,
+                   // 'required'=> true,
+                    'value' => '6', 
                     'class' => 'form-control input-sm',
+                     'disabled' => 'disabled'
                 ),
 
             'validators' => array('Int'),            
@@ -1043,7 +1188,8 @@ class Wizard extends Form
                     'id' => 'engip',
                     'required'=>'required',
                     'aria-describedby' => 'engipHelp',
-                    'class' => 'form-control input-sm'
+                    'class' => 'form-control input-sm',
+                    'pattern' => '^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
                 ),
             'filters' => array(
                  array('name' => 'Zend\Filter\StringTrim'),
@@ -1073,7 +1219,8 @@ class Wizard extends Form
              'name' => 'enguso',
              'options' => array(
                     'label' => 'Usos',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForUso(),
+                    //'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForUso(),
+                    'value_options' => $this->getOptionsForUsoEquipoNoGestionado(),
              ),
             'attributes' => 
                 array(
@@ -1343,6 +1490,43 @@ class Wizard extends Form
              )
         ));
         
+        $this->add(array(
+            'name' => 'ipwintpeppal',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Interfaz PE Ppal',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'ipwintpeppal',
+                    'aria-describedby' => 'ipwintpeppalHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'ipwintpebackup',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Interfaz PE Backup',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'ipwintpebackup',
+                    'aria-describedby' => 'ipwintpebackupHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
         
         /* IP LAN */
         $this->add(array(
@@ -1987,11 +2171,18 @@ class Wizard extends Form
     
     public function getOptionsForPoblacion()
     {
-        $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, poblacion FROM poblaciones');
+        $id = (int)$this->getProvinciaId();
+        
         $select = [];
-        foreach ($statement->execute() as $item) {
-            $select[$item['id']] = $item['poblacion'];
+        if($id>0) {
+            $dbAdapter = $this->adapter;
+            $statement = $dbAdapter->query("SELECT id, poblacion FROM poblaciones WHERE provincia_id = '" . $id . "'");
+            
+            foreach ($statement->execute() as $item) {
+                $select[$item['id']] = $item['poblacion'];
+            }
+        } else {
+            $select = array('' => 'Seleccione una opción');
         }
         return $select;        
     }   
@@ -2031,14 +2222,41 @@ class Wizard extends Form
 
     public function getOptionsForVelocidad()
     {
-        $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, velocidad FROM velocidades');
+        $id = (int)$this->getTecnologiaId();
         $select = [];
-        foreach ($statement->execute() as $item) {
-            $select[$item['id']] = $item['velocidad'];
+        if($id>0) {
+            $dbAdapter = $this->adapter;
+            $statement = $dbAdapter->query("SELECT id, velocidad FROM velocidades WHERE tecnologia_id = '" . $id  . "'");
+            $select = [];
+            foreach ($statement->execute() as $item) {
+                $select[$item['id']] = $item['velocidad'];
+            }
+        } else {
+            $select = array('' => 'Seleccione una opción');
         }
+        
         return $select;        
-    }   
+    }
+    
+    public function getOptionsForVelocidadBackup()
+    {
+        $id = (int)$this->getBackupTecnologiaId();
+        $select = [];
+        if($id>0) {
+            $dbAdapter = $this->adapter;
+            $statement = $dbAdapter->query("SELECT id, velocidad FROM velocidades WHERE tecnologia_id = '" . $id  . "'");
+            $select = [];
+            foreach ($statement->execute() as $item) {
+                $select[$item['id']] = $item['velocidad'];
+            }
+        } else {
+            $select = array('' => 'Seleccione una opción');
+        }
+        
+        return $select;        
+    }
+    
+    
 
     public function getOptionsForCriticidad()
     {
@@ -2097,14 +2315,40 @@ class Wizard extends Form
 
     public function getOptionsForModelo()
     {
-        $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, modelo FROM modelos');
+        $id = (int)$this->getFabricanteId();
         $select = [];
-        foreach ($statement->execute() as $item) {
-            $select[$item['id']] = $item['modelo'];
+        if($id>0) {
+            $dbAdapter = $this->adapter;
+            $statement = $dbAdapter->query("SELECT id, modelo FROM modelos WHERE fabricante_id = '" . $id .  "'");
+            $select = [];
+            foreach ($statement->execute() as $item) {
+                $select[$item['id']] = $item['modelo'];
+            }
+         } else {
+            $select = array('' => 'Seleccione una opción');
         }
+        
         return $select;
     }
+    
+    public function getOptionsForModeloBackup()
+    {
+        $id = (int)$this->getBackupFabricanteId();
+        $select = [];
+        if($id>0) {
+            $dbAdapter = $this->adapter;
+            $statement = $dbAdapter->query("SELECT id, modelo FROM modelos WHERE fabricante_id = '" . $id .  "'");
+            $select = [];
+            foreach ($statement->execute() as $item) {
+                $select[$item['id']] = $item['modelo'];
+            }
+            } else {
+                $select = array('' => 'Seleccione una opción');
+            }
+        
+        return $select;
+    }
+    
 
     public function getOptionsForRed()
     {
@@ -2126,6 +2370,26 @@ class Wizard extends Form
             $select[$item['id']] = $item['uso'];
         }
         return $select;
+    }
+    
+    public function getOptionsForUsoEquipoNoGestionado()
+    {
+
+        $id = (int)$this->getRedId();
+        $select = [];
+        if($id>0) {
+            $dbAdapter = $this->adapter;
+            $statement = $dbAdapter->query("SELECT id, uso FROM usos WHERE red_id = '" . $id . "'");
+            $select = [];
+            foreach ($statement->execute() as $item) {
+                $select[$item['id']] = $item['uso'];
+            }
+        } else {
+            $select = array('' => 'Seleccione una opción');
+        }
+
+        return $select;
+
     }
     
     public function getOptionsForRpv()
@@ -2185,4 +2449,63 @@ class Wizard extends Form
         return $select;
     }
 
+    public function getProvinciaId()
+    {
+        if(isset($this->provinciaId)) {
+            return $this->provinciaId;
+        } else {
+            return 0;
+        }
+    }
+    
+    public function getTecnologiaId()
+    {
+        if(isset($this->tecnologiaId)) {
+            return $this->tecnologiaId;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getBackupTecnologiaId()
+    {
+        if(isset($this->backupTecnologiaId)) {
+            return $this->backupTecnologiaId;
+        } else {
+            return 0;
+        }
+    }
+    
+    public function getFabricanteId()
+    {
+        if(isset($this->fabricanteId)) {
+            return $this->fabricanteId;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getBackupFabricanteId()
+    {
+        if(isset($this->backupFabricanteId)) {
+            return $this->backupFabricanteId;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getRedId()
+    {
+        if(isset($this->redId)) {
+            
+            return $this->redId;
+            
+        } else {
+            
+            return 0;
+
+        }
+    } 
+    
+    
 }    

@@ -19,6 +19,7 @@ class Equipo {
     protected $efabricante;
     protected $emodelo;
     protected $eserie;
+    protected $elocert;
     protected $eubicacion;
     protected $elogosalta;
     protected $eestado;
@@ -140,6 +141,15 @@ class Equipo {
 
     public function setEserie($eserie) {
         $this->eserie = $eserie;
+        return $this;
+    }
+    
+    public function getElocert() {
+        return $this->elocert;
+    }
+
+    public function setElocert($elocert) {
+        $this->elocert = $elocert;
         return $this;
     }
     

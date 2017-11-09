@@ -1,6 +1,8 @@
 <script>
 $(function(){
 
+    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+    
     if($('#ebackup').prop('checked')) {
         $('#equipo-backup').css('display','block');
     }
@@ -11,6 +13,26 @@ $(function(){
       } else {
            $('#equipo-backup').css('display','none');
       } });
+
+
+    $("#engred").change(function(){
+        var red = $("#engred option:selected").val();
+        var data = {red: red};
+        var url = '<?= $this->url('ajax-usos'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#ajax-usos").html(html);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#fill").html(html);
+            }
+        });
+    });
 
 });
 </script>
@@ -61,13 +83,13 @@ $(function(){
                                     <?php $form->get('engred')->setValue($this->information['notequipos']['0']['red_id']) ?>
                                     <?= $this->formSelect($form->get('engred')); ?>                                
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="control-label" for="usos">Usos</label>
-                                    <?php $form->get('enguso')->setValue($this->information['notequipos']['0']['uso_id']) ?>    
-                                    <?= $this->formSelect($form->get('enguso')); ?>                            
-                                </div>
-                            
+                                <div id="ajax-usos">
+                                    <div class="form-group">
+                                        <label class="control-label" for="usos">Usos</label>
+                                        <?php $form->get('enguso')->setValue($this->information['notequipos']['0']['uso_id']) ?>    
+                                        <?= $this->formSelect($form->get('enguso')); ?>                            
+                                    </div>
+                                </div>    
                             </div>
                         </div>    
                     

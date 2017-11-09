@@ -254,7 +254,66 @@ return array(
                     ),
                 ),
             ),
+
+            'circuito-update' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/circuito-update',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'circuito-update',
+                    ),
+                ),
+            ),
+
+
             
+            
+
+            'ajax-poblacion' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ajax-poblacion',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ajax-poblacion',
+                    ),
+                ),
+            ),
+            
+            'ajax-velocidad' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ajax-velocidad',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ajax-velocidad',
+                    ),
+                ),
+            ),
+
+            'ajax-modelo' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ajax-modelo',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ajax-modelo',
+                    ),
+                ),
+            ),
+
+            'ajax-usos' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ajax-usos',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ajax-usos',
+                    ),
+                ),
+            ),
+
             'delete-circuito' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -278,6 +337,18 @@ return array(
                 ),
             ),
 
+            'equipo-update' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/equipo-update',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'equipo-update',
+                    ),
+                ),
+            ),
+            
+            
             'delete-equipo' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -300,6 +371,17 @@ return array(
                 ),
             ),
 
+            'notequipo-update' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/notequipo-update',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'notequipo-update',
+                    ),
+                ),
+            ),
+            
             'delete-equipo-not-management' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -620,6 +702,16 @@ return array(
                 ),
             ),
             
+            'glan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/glan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'glan',
+                    ),
+                ),
+            ),
             
 //            'randomAction' => array(
 //                'type' => 'Segment',

@@ -59,14 +59,16 @@ class Circuito extends AbstractTableGateway {
         if(!$this->validationCircuito($circuito)) { return false;}
         
         $data = array(  'administrativo' => $circuito->getCadministrativo(),
+                        'xadministrativo' => $circuito->getXcadministrativo(),
                         'telefono' => $circuito->getCtelefono(),
+                        'ibenet' => $circuito->getCibenet(),
                         'cliente_id' => $circuito->getCcliente(),
                         'tecnologia_id' => $circuito->getCtecnologia(),
                         'velocidad_id' => $circuito->getCvelocidad(),
                         'criticidad_id' => $circuito->getCcriticidad(),
                         'factura_id' => $circuito->getCfactura(),
                         'estado_id' => $circuito->getCestado(),
-                        'es_gestionado' => (int)$circuito->getCgestionado(),
+                        //'es_gestionado' => (int)$circuito->getCgestionado(),
                         'tiene_backup' => (int)$circuito->getCbackup(),
                         'sede_id' => $circuito->getSedeId());
         
@@ -77,6 +79,7 @@ class Circuito extends AbstractTableGateway {
             $data['alta'] = date("Y-m-d H:i:s");
             $data['parent_id'] = 0;
             $data['activo'] = 1;
+            $data['es_gestionado'] = (int)$circuito->getCgestionado();
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }
@@ -110,12 +113,15 @@ class Circuito extends AbstractTableGateway {
     public function saveBackupCircuito(Entity\BackupCircuito $circuito) {
         
         $data = array(  'administrativo' => $circuito->getBcadministrativo(),
+                        'xadministrativo' => $circuito->getXbcadministrativo(),
                         'telefono' => $circuito->getBctelefono(),
-                        'cliente_id' => $circuito->getBccliente(),
+                        'ibenet' => $circuito->getBcibenet(), 
+                        //'cliente_id' => $circuito->getBccliente(),
+                        'cliente_id' => '0',
                         'tecnologia_id' => $circuito->getBctecnologia(),
                         'velocidad_id' => $circuito->getBcvelocidad(),
                         'estado_id' => $circuito->getBcestado(),
-                        'es_gestionado' => (int)$circuito->getBcgestionado(),
+                        //'es_gestionado' => (int)$circuito->getBcgestionado(),
                         'sede_id' => $circuito->getSedeId(),
                         'parent_id' => $circuito->getParentId());
         
@@ -123,6 +129,7 @@ class Circuito extends AbstractTableGateway {
         
         if ($id == 0) {
             $data['alta'] = date("Y-m-d H:i:s");
+            $data['es_gestionado'] = (int)$circuito->getBcgestionado();
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         } elseif ($id > 0) {
@@ -139,9 +146,9 @@ class Circuito extends AbstractTableGateway {
     
     public function validationCircuito($circuito)
     {
-        if(empty($circuito->getCadministrativo())) {return false;}
-        elseif(empty($circuito->getCtelefono())) {return false;}
-        elseif(0 == $circuito->getCcliente()) {return false;}
+        //if(empty($circuito->getCadministrativo())) {return false;}
+        //elseif(empty($circuito->getCtelefono())) {return false;}
+        if(0 == $circuito->getCcliente()) {return false;}
         elseif(0 == $circuito->getCtecnologia()) {return false;}
         elseif(0 == $circuito->getCvelocidad()) {return false;}
         elseif(0 == $circuito->getCcriticidad()) {return false;}
@@ -154,7 +161,7 @@ class Circuito extends AbstractTableGateway {
         $datos = array();
         
         $adapter = $this->adapter->query(
-                "SELECT c.id, c.administrativo, c.telefono, 
+                "SELECT c.id, c.administrativo, c.xadministrativo, c.telefono, c.ibenet, 
                         cl.id AS clienteId, cl.cliente,  
                         t.id AS tecnologiaId, t.tecnologia,
                         v.id AS velocidadId, v.velocidad,

@@ -212,12 +212,12 @@ class WizardService {
         $sede->setOptions($this->posts);
         $sede->setContactoId($contactoId);
         $this->sedeId = $this->sedeTable->saveSede($sede);
-        
+
         
         return $this->sedeId;
 
-    }        
-    
+    }
+
     public function updateSede()
     {
         $contacto = new \Inventario\Model\Entity\Contacto();
@@ -348,6 +348,8 @@ class WizardService {
         $contacto = new \Inventario\Model\Entity\EquipmentContacto();
         $backupEquipo = new \Inventario\Model\Entity\BackupEquipo();
 
+        #echo('POSTS: <pre>' . print_r($this->posts, true) . '</pre>');
+        
         $contacto->setOptions($this->posts);
         if(isset($this->posts['equipoContactoId'])) {
             $contacto->setId($this->posts['equipoContactoId']);
@@ -358,6 +360,8 @@ class WizardService {
         $equipo->setId($this->posts['equipoId']);
         $equipo->setContactoId($contactoId);
         $equipo->setCircuitoId($this->posts['ecircuito']);
+        
+        #echo('EQUIPO<pre>' . print_r($equipo, true) . '</pre>');
         
         $this->equipoId = $this->equipoTable->saveEquipo($equipo);
 
@@ -375,27 +379,28 @@ class WizardService {
 
     }
     
+
     
     
-    
-    
+
     
     public function persistenciaEquipoNoGestionado()
     {
         $equipo = new \Inventario\Model\Entity\EquipoNoGestionado();
         $contacto = new \Inventario\Model\Entity\EquipmentNotMngmentContacto();
         $contacto->setOptions($this->posts);
-        
+
         $contactoId = $this->contactoTable->saveEquipmentNotMngmentContacto($contacto);
         $equipo->setOptions($this->posts);
         $equipo->setContactoId($contactoId);
+        $equipo->setEngservicio(6);
         $equipo->setCircuitoId($this->circuitoId);
-        
+
         $this->equipoId = $this->equipoNoGestionadoTable->saveEquipoNoGestionado($equipo);
-                
-        return $this->equipoId; 
-    }        
-    
+
+        return $this->equipoId;
+    }
+
     
     public function updateEquipoNoGestionado()
     {

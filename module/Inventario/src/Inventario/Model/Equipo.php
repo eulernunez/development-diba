@@ -68,6 +68,7 @@ class Equipo extends AbstractTableGateway {
             
             'modelo_id' => (int)$equipo->getEmodelo(),
             'numero_serie' => $equipo->getEserie(),
+            'locert' => $equipo->getElocert(),
             'ubicacion' => $equipo->getEubicacion(),
             'pedido_logos_alta' => $equipo->getElogosalta(),
             'estado' => $equipo->getEestado(),
@@ -76,7 +77,7 @@ class Equipo extends AbstractTableGateway {
             'contacto_id' => $equipo->getContactoId(),
             'circuito_id' => $equipo->getCircuitoId());
         
-        
+
         $id = (int) $equipo->getId();
         
         if ($id == 0) {
@@ -87,9 +88,12 @@ class Equipo extends AbstractTableGateway {
             return $this->getLastInsertValue();
         }
         elseif ($id>0) { // $this->getSede($id)
-            if (!$this->update($data, array('id' => $id))) { return $id; }
+            if (!$this->update($data, array('id' => $id))) { 
+                return $id; 
+            }
             return $id;
         }
+
         else return false;
         
     }
@@ -126,6 +130,7 @@ class Equipo extends AbstractTableGateway {
             'fabricante_id' => (int)$equipo->getBefabricante(),
             'modelo_id' => (int)$equipo->getBemodelo(),
             'numero_serie' => $equipo->getBeserie(),
+            'locert' => $equipo->getBelocert(),
             'ubicacion' => $equipo->getBeubicacion(),
             'pedido_logos_alta' => $equipo->getBelogosalta(),
             'estado' => $equipo->getBeestado(),
@@ -160,7 +165,7 @@ class Equipo extends AbstractTableGateway {
         elseif(empty($equipo->getEnemonico())) {return false;}
         elseif(empty($equipo->getEipgestion())) {return false;}
         elseif(0 == $equipo->getEnivel()) {return false;}
-        elseif(0 == $equipo->getEnemonicon1()) {return false;}
+        #elseif(0 == $equipo->getEnemonicon1()) {return false;}
         elseif(0 == $equipo->getEfabricante()) {return false;}
         else {return true;}
     }
@@ -175,7 +180,7 @@ class Equipo extends AbstractTableGateway {
                     "SELECT e.id, s.id AS servicioId, s.servicio,
                         e.nemonico, e.ip_gestion, e.nivel,
                         e.nemonico_nivel1, f.id AS fabricanteId, f.fabricante,
-                        m.id AS modeloId, m.modelo, e.numero_serie, e.ubicacion,
+                        m.id AS modeloId, m.modelo, e.numero_serie, e.locert, e.ubicacion,
                         e.pedido_logos_alta, c.id AS contactoId, c.contacto, c.telefono, c.horario,
                         st.id AS estadoId, st.estado, e.observacion, e.circuito_id, e.tiene_backup, e.parent_id
                             FROM equipos AS e 
@@ -187,31 +192,106 @@ class Equipo extends AbstractTableGateway {
                                 WHERE (e.id = '" . $id . "' AND e.activo=1) OR (e.parent_id = '" . $id . "' AND e.activo=1)");
         
         $equipos = array();
-        
+        $nemonicoNivel1 = array();
         foreach ($adapter->execute() as $item) {
             $equipos[] = $item;
             $equipoCircuitoIds[$item['id']] = array(
                                                 'circuito_id' => $item['circuito_id'],
                                                 'parent' => $item['parent_id']);
+            $nemonicoNivel1[] =  array( 'id' => $item['id'],
+                                        'nemonico_nivel1' => $item['nemonico_nivel1']);
         }
         
         $datos['equipos'] = $equipos;        
         $datos['equipoCircuitoIds'] = $equipoCircuitoIds;
         
+        $datos['nemonicoNivel1'] = $nemonicoNivel1;
+        
+//////////////////////////        
+//        $adapter = $this->adapter->query(
+//                    "SELECT e.nemonico_nivel1
+//                                FROM equipos AS e 
+//                                     WHERE e.id = '" . $id . "' AND e.activo = 1");  
+//        
+//        foreach ($adapter->execute() as $item) {
+//            $nemonicoNivel1 = $item['nemonico_nivel1'];
+//        }
+//
+//        $nemonicos = array();
+//        $adapter = $this->adapter->query(
+//                    "SELECT e.id, e.nemonico, e.nemonico_nivel1
+//                        FROM equipos AS e 
+//                            WHERE e.id = '" . $nemonicoNivel1 . "' AND e.activo = 1");  
+//        
+//        foreach ($adapter->execute() as $item) {
+//            $nemonicos[$item['id']] =  $item['nemonico'];
+//        }
+
+//////////////////////
+        if(isset($nemonicoNivel1['1']['id'])) {
+            $subFilter = "OR (e.id = '" . $nemonicoNivel1['1']['id'] . "' AND e.activo = 1) OR (e.id = '" . $nemonicoNivel1['1']['nemonico_nivel1'] . "' AND e.activo=1)";
+        } else {
+            $subFilter = "";
+        }
+        
+        $stm = "SELECT e.id, s.id AS servicioId, s.servicio,
+                            e.nemonico, e.ip_gestion, e.nivel,
+                            e.nemonico_nivel1, f.id AS fabricanteId, f.fabricante,
+                            m.id AS modeloId, m.modelo, e.numero_serie, e.locert, e.ubicacion,
+                            e.pedido_logos_alta, c.id AS contactoId, c.contacto, c.telefono, c.horario,
+                            st.id AS estadoId, st.estado, e.observacion, e.circuito_id, e.tiene_backup, e.parent_id
+                                FROM equipos AS e 
+                                    LEFT JOIN servicios AS s ON e.servicio_id = s.id 
+                                    LEFT JOIN fabricantes AS f ON e.fabricante_id = f.id
+                                    LEFT JOIN modelos AS m ON e.modelo_id = m.id
+                                    LEFT JOIN contactos AS c ON e.contacto_id = c.id
+                                    LEFT JOIN estados AS st ON e.estado = st.id
+                                     WHERE (e.id = '" . $nemonicoNivel1['0']['id'] . "' AND e.activo = 1) OR (e.id = '" . $nemonicoNivel1['0']['nemonico_nivel1'] . "' AND e.activo=1) " . $subFilter;
+        
+        $adapter = $this->adapter->query($stm);
+        
+        $equipoNemonicos = array();                             
+        foreach ($adapter->execute() as $item) {
+            
+            $equipoNemonicos[$item['id']] = 
+                    array(  'nivel' => $item['nivel'],
+                            'tiene_backup' => $item['tiene_backup'],
+                            'nemonico_nivel1' => $item['nemonico_nivel1']);
+            
+            $nemonicos[$item['id']] = $item['nemonico'];  
+        }
+
+        $datos['equipoNemonicos'] = $equipoNemonicos;
+        $datos['nemonicoNivel1'] = $nemonicoNivel1;
+        $datos['nemonicos'] = $nemonicos;
+//////////////        
         $htmlcombobox = array();
         
         foreach($equipoCircuitoIds as $key => $circuito) {
             $htmlcombobox[] = $this->getCircuitosBySede($sedeId, $circuito['circuito_id'], $circuito['parent']);
         }
-        
-        $datos['htmlcombobox'] = $htmlcombobox;
 
+        $datos['htmlcombobox'] = $htmlcombobox;
+//
+//        $htmlcombobox3 = $this->createHtmlComboNemonicos($nemonicos,$nemonicoNivel1);
+//        $datos['htmlcombobox3'] = $htmlcombobox3;        
+
+        $htmlcombobox3 = array();
+        
+        $ind = 0;
+        foreach($equipoNemonicos as $key => $equipo) {
+            $htmlcombobox3[] = $this->createHtmlComboNemonicos($nemonicos,$equipo['nemonico_nivel1'],$ind);
+            $ind++;
+        }
+       
+        $datos['htmlcombobox3'] = $htmlcombobox3;
+        
         return $datos;
 
     }
-    
-    
-    
+
+
+
     public function getCircuitosBySede($sedeId,$circuitoId, $parent)
     {
 
@@ -228,7 +308,7 @@ class Equipo extends AbstractTableGateway {
             $tag = 'becircuito';
         }
 
-        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm" readonly>';
         
         foreach($select as $key => $circuito) {
             
@@ -237,12 +317,12 @@ class Equipo extends AbstractTableGateway {
             
             
         }
-        
+
         $html .= '</select>';
         
         return $html;
 
-    }        
+    }
     
     
     
@@ -253,7 +333,7 @@ class Equipo extends AbstractTableGateway {
         $htmlcombobox = array();
         
         if($backupId>0) {
-            $filter = " OR (id = '" . $backupId . "' activo=1)";
+            $filter = " OR (id = '" . $backupId . "' AND activo=1)";
         } else {
             $filter = "";
         }
@@ -294,6 +374,29 @@ class Equipo extends AbstractTableGateway {
     }        
     
     
+    
+    
+    public function createHtmlComboNemonicos($nemonicos, $equipoId, $backup = 0)
+    {
+
+        if(0 == $backup) {
+            $tag = 'enemonicon1';
+        }elseif(1 == $backup) {
+            $tag = 'benemonicon1';
+        }
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm" readonly>';
+
+        $html .= '<option value="0" >NA</option>';
+        foreach($nemonicos as $key => $value) {
+            $selected = ($key==$equipoId)?'selected':'';
+            $html .= '<option value="'. $key . '"' . $selected . ' >' . $value . '</option>';
+        }
+
+        $html .= '</select>';
+
+        return $html;
+
+    }        
     
     
     

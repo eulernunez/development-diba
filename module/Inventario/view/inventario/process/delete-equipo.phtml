@@ -64,7 +64,7 @@ $(function(){
                         <?php foreach($this->information['equiposall'] as $equipo) : ?> 
                         <tr id="<?= $equipo['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
                             <td><?= ($equipo['parent_id']==0)?'PRINCIPAL':'BACKUP' ?></td>
-                            <td><?= $equipo['nemonico_nivel1'] ?></td>
+                            <td><?= $equipo['nivel'] ?></td>
                             <td><?= $equipo['servicio'] ?></td>
                             <?php if('Cliente' != $userRole) : ?>
                                 <td><?= $equipo['nemonico'] ?></td>
@@ -80,7 +80,7 @@ $(function(){
                                 <span style="margin-left: 20px;">&nbsp;</span>
                                 <?php endif; ?>
                                 
-                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo" data-toggle="modal" data-id="<?= $equipo['id']; ?>" data-parent="<?= $equipo['parent_id']; ?>" data-target="#deleteEquipo">    
+                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo" data-toggle="modal" data-nemonico="<?= $equipo['nemonico']; ?>" data-ip="<?= $equipo['ip_gestion']; ?>" data-servicio="<?= $equipo['servicio']; ?>" data-id="<?= $equipo['id']; ?>" data-parent="<?= $equipo['parent_id']; ?>" data-target="#deleteEquipo">    
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
                             </td>  
@@ -147,8 +147,9 @@ $(function(){
                             <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
-                                <?php $form->get('enemonicon1')->setValue($this->information['equipos']['0']['nemonico_nivel1']) ?>
-                                <?= $this->formSelect($form->get('enemonicon1')); ?>
+                                <?php # $form->get('enemonicon1')->setValue($this->information['equipos']['0']['nemonico_nivel1']) ?>
+                                <?php # $this->formSelect($form->get('enemonicon1')); ?>
+                                <?= $this->information['htmlcombobox3']['0']; ?>
                                 
                             </div>
                             <?php endIf; ?>
@@ -170,6 +171,12 @@ $(function(){
                                <?= $this->formInput($form->get('eserie')); ?>
                             </div>
 
+                            <div class="form-group">
+                                <label class="control-label" for="locert">Locert</label>
+                                <?php $form->get('elocert')->setValue($this->information['equipos']['0']['locert']) ?>
+                               <?= $this->formInput($form->get('elocert')); ?>
+                            </div>
+                        
                     </div>    
                     
                     <div class="col-lg-6">    
@@ -285,12 +292,14 @@ $(function(){
                             <?php if('Cliente' != $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
-                                <?php if(isset($this->information['equipos']['1']['nemonico_nivel1'])) {
-                                    $form->get('benemonicon1')->setValue($this->information['equipos']['1']['nemonico_nivel1']);
-                                }
+                                <?php
+//                                if(isset($this->information['equipos']['1']['nemonico_nivel1'])) {
+//                                    $form->get('benemonicon1')->setValue($this->information['equipos']['1']['nemonico_nivel1']);
+//                                }
                                 ?>                                
                                 
-                                <?= $this->formSelect($form->get('benemonicon1')); ?>
+                                <?php # $this->formSelect($form->get('benemonicon1')); ?>
+                                <?= $this->information['htmlcombobox3']['1']; ?>
                             </div>
                             <?php endIf; ?>
                             <div class="form-group">
@@ -319,6 +328,16 @@ $(function(){
                                 ?>
                                 <?= $this->formInput($form->get('beserie')); ?>
                             </div>
+                        
+                            <div class="form-group">
+                                <label class="control-label" for="locert">Locert</label>
+                                <?php if(isset($this->information['equipos']['1']['locert'])) {
+                                    $form->get('belocert')->setValue($this->information['equipos']['1']['locert']);
+                                }
+                                ?>
+                                <?= $this->formInput($form->get('belocert')); ?>
+                            </div>
+
 
                     </div>    
                     

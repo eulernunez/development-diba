@@ -59,7 +59,7 @@ class EquipoNoGestionado extends AbstractTableGateway {
         if(!$this->validationEquipoNoGestionado($equipo)) { return false;}
         
         $data = array(  
-            'servicio_id' => (int)$equipo->getEngservicio(),
+            'servicio_id' => (int)'6',
             'propiedad_id' => (int)$equipo->getEngpropiedad(),
             'tipo_ip' => (int)$equipo->getEngtipoip(),
             'ip' => $equipo->getEngip(),
@@ -129,8 +129,7 @@ class EquipoNoGestionado extends AbstractTableGateway {
    
     public function validationEquipoNoGestionado(Entity\EquipoNoGestionado $equipo)
     {
-        if(0 == $equipo->getEngservicio()) {return false;}
-        elseif(0 == $equipo->getEngpropiedad()) {return false;}
+        if(0 == $equipo->getEngpropiedad()) {return false;}
         elseif(0 == $equipo->getEngtipoip()) {return false;}
         elseif(empty($equipo->getEngip())) {return false;}
         elseif(0 == $equipo->getEngred()) {return false;}

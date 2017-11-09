@@ -19,6 +19,7 @@ class BackupEquipo {
     protected $befabricante;
     protected $bemodelo;
     protected $beserie;
+    protected $belocert;
     protected $beubicacion;
     protected $belogosalta;
     protected $beestado;
@@ -142,6 +143,16 @@ class BackupEquipo {
         $this->beserie = $beserie;
         return $this;
     }
+
+    public function getBelocert() {
+        return $this->belocert;
+    }
+
+    public function setBelocert($belocert) {
+        $this->belocert = $belocert;
+        return $this;
+    }
+
     
     public function getBeubicacion() {
         return $this->beubicacion;

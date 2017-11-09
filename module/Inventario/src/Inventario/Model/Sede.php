@@ -10,7 +10,7 @@ namespace Inventario\Model;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Select;
- use Zend\Session\Container;
+use Zend\Session\Container;
 
 
 
@@ -141,14 +141,17 @@ class Sede extends AbstractTableGateway {
             $sede = $item;
         }
         
+        if(!isset($sede)) {
+            return false;
+        }
         $datos['sede'] = $sede;
         
         
         
         # CIRCUITO
         $adapter = $this->adapter->query(
-                "SELECT  c.id, c.administrativo, c.telefono, 
-                        cl.id AS clienteId, cl.cliente,  
+                "SELECT  c.id, c.administrativo, c.xadministrativo, c.telefono, c.ibenet, 
+                        cl.id AS clienteId, cl.cliente,  cl.nif,  
                         t.id AS tecnologiaId, t.tecnologia,
                         v.id AS velocidadId, v.velocidad,
                         cr.id AS criticidadId, cr.criticidad,
@@ -200,8 +203,8 @@ class Sede extends AbstractTableGateway {
         }
         
         $adapter = $this->adapter->query(
-                "SELECT  c.id, c.administrativo, c.telefono, 
-                        cl.id AS clienteId, cl.cliente,  
+                "SELECT  c.id, c.administrativo, c.xadministrativo, c.telefono, c.ibenet, 
+                        cl.id AS clienteId, cl.cliente,
                         t.id AS tecnologiaId, t.tecnologia,
                         v.id AS velocidadId, v.velocidad,
                         cr.id AS criticidadId, cr.criticidad,
@@ -229,7 +232,8 @@ class Sede extends AbstractTableGateway {
         
         if(isset($circuitos['0']['id'])&&(int)$circuitos['0']['id']>0) {
             $id = (int)$circuitos['0']['id'];
-            $adapter = $this->adapter->query("SELECT * FROM caudales WHERE circuito_id = '" . $id . "'" );
+            $statement = "SELECT * FROM caudales WHERE circuito_id = '" . $id . "'";
+            $adapter = $this->adapter->query($statement);
             foreach ($adapter->execute() as $item) {
                 $caudales['principal'][] = $item;
             }
@@ -250,12 +254,14 @@ class Sede extends AbstractTableGateway {
         $equipos = array();
         $equipoIds = array();
         
+        $nemonicos = array();
+        
         if(count($circuitoIds)>0) {
             $adapter = $this->adapter->query(
                         "SELECT e.id, s.id AS servicioId, s.servicio,
                                 e.nemonico, e.ip_gestion, e.nivel,
                                 e.nemonico_nivel1, f.id AS fabricanteId, f.fabricante,
-                                m.id AS modeloId, m.modelo, e.numero_serie, e.ubicacion,
+                                m.id AS modeloId, m.modelo, e.numero_serie, e.locert, e.ubicacion,
                                 e.pedido_logos_alta, c.id AS contactoId, c.contacto, c.telefono, c.horario,
                                 st.id AS estadoId, st.estado, e.observacion, e.circuito_id, e.tiene_backup, e.parent_id
                                     FROM equipos AS e 
@@ -269,13 +275,16 @@ class Sede extends AbstractTableGateway {
 
             foreach ($adapter->execute() as $item) {
                 $equipos[] = $item;
-                $equipoIds[] = $item['id'];       
+                $equipoIds[] = $item['id'];
+                
+                $nemonicos[$item['id']] =  $item['nemonico'];
+                
             }
         
         }
         $datos['equiposall'] = $equipos;
         $datos['equipoIds'] = $equipoIds;
-
+        $datos['nemonicos'] = $nemonicos;
 
          unset($equipos);
         $equipos = array();
@@ -289,7 +298,7 @@ class Sede extends AbstractTableGateway {
                     "SELECT e.id, s.id AS servicioId, s.servicio,
                             e.nemonico, e.ip_gestion, e.nivel,
                             e.nemonico_nivel1, f.id AS fabricanteId, f.fabricante,
-                            m.id AS modeloId, m.modelo, e.numero_serie, e.ubicacion,
+                            m.id AS modeloId, m.modelo, e.numero_serie, e.locert, e.ubicacion,
                             e.pedido_logos_alta, c.id AS contactoId, c.contacto, c.telefono, c.horario,
                             st.id AS estadoId, st.estado, e.observacion, e.circuito_id, e.tiene_backup, e.parent_id
                                 FROM equipos AS e 
@@ -319,7 +328,43 @@ class Sede extends AbstractTableGateway {
         
         $datos['htmlcombobox'] = $htmlcombobox;
         
+        ///////////////////////////////
+        $adapter = $this->adapter->query(
+                    "SELECT e.id, s.id AS servicioId, s.servicio,
+                            e.nemonico, e.ip_gestion, e.nivel,
+                            e.nemonico_nivel1, f.id AS fabricanteId, f.fabricante,
+                            m.id AS modeloId, m.modelo, e.numero_serie, e.locert, e.ubicacion,
+                            e.pedido_logos_alta, c.id AS contactoId, c.contacto, c.telefono, c.horario,
+                            st.id AS estadoId, st.estado, e.observacion, e.circuito_id, e.tiene_backup, e.parent_id
+                                FROM equipos AS e 
+                                    LEFT JOIN servicios AS s ON e.servicio_id = s.id 
+                                    LEFT JOIN fabricantes AS f ON e.fabricante_id = f.id
+                                    LEFT JOIN modelos AS m ON e.modelo_id = m.id
+                                    LEFT JOIN contactos AS c ON e.contacto_id = c.id
+                                    LEFT JOIN estados AS st ON e.estado = st.id
+                                     WHERE (e.id = '" . $equipoId . "' AND e.activo = 1) OR (e.nemonico_nivel1 = '" . $equipoId . "' AND e.activo=1)");    
 
+        $equipoNemonicos = array();                             
+        foreach ($adapter->execute() as $item) {
+            
+            $equipoNemonicos[$item['id']] = 
+                    array(  'nivel' => $item['nivel'],
+                            'tiene_backup' => $item['tiene_backup'],
+                            'nemonico_nivel1' => $item['nemonico_nivel1']);
+        }
+
+        $datos['equipoNemonicos'] = $equipoNemonicos;
+
+//        $nemonicoNivel1 = 0;
+//        $adapter = $this->adapter->query(
+//                    "SELECT e.nemonico_nivel1
+//                                FROM equipos AS e 
+//                                     WHERE e.id = '" . $equipoId . "' AND e.activo = 1");  
+//        
+//        foreach ($adapter->execute() as $item) {
+//            $nemonicoNivel1 = $item['nemonico_nivel1'];
+//        }
+        /////////////////////////////
 
         # EQUIPO NO GESTIONADO
         
@@ -405,21 +450,31 @@ class Sede extends AbstractTableGateway {
         
         $datos['htmlcombobox2'] = $htmlcombobox2;
         
-       
-        # GLAN
         
+        $htmlcombobox3 = array();
+        
+        $ind = 0;
+        foreach($equipoNemonicos as $key => $equipo) {
+            $htmlcombobox3[] = $this->createHtmlComboNemonicos($nemonicos,$equipo['nemonico_nivel1'],$ind);
+            $ind++;
+        }
+       
+        $datos['htmlcombobox3'] = $htmlcombobox3;
+
+        # GLAN
+
         $glans = array();
         $datos['glansall'] = $glans;
-        
+
         # APs
-        
+
         $aps = array();
         $datos['apsall'] = $aps;
         
-        
-        
+//        die('DATOS: <pre>' . print_r($datos, true) . '</pre>');
+
         return $datos;
-        
+
         
 //        
 //        $resultSet = $this->select(function (Select $select, $id) {
@@ -483,7 +538,7 @@ class Sede extends AbstractTableGateway {
     public function validationSede($sede)
     {
         if(empty($sede->getNombre())) {return false;}
-        elseif(empty($sede->getIdescat())) {return false;}
+        #elseif(empty($sede->getIdescat())) {return false;}
         elseif(empty($sede->getDireccion())) {return false;}
         elseif(0 == $sede->getPoblacion()) {return false;}
         elseif(0 == $sede->getProvincia()) {return false;}
@@ -537,7 +592,7 @@ class Sede extends AbstractTableGateway {
             $tag = 'enotcircuito';
         }
         
-        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm">';
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm" readonly>';
         
         foreach($circuitos as $key => $circuito) {
             $selected = ($key==$circuitoEquipo)?'selected':'';
@@ -548,6 +603,29 @@ class Sede extends AbstractTableGateway {
         
         return $html;
      
+    }
+
+    public function createHtmlComboNemonicos($nemonicos, $equipoId, $backup = 0)
+    {
+
+        if(0 == $backup) {
+            $tag = 'enemonicon1';
+        }elseif(1 == $backup) {
+            $tag = 'benemonicon1';
+        }
+        $html = '<select name="'. $tag . '" id="'. $tag . '" class="form-control input-sm" readonly>';
+
+        $html .= '<option value="0" >NA</option>';
+        foreach($nemonicos as $key => $value) {
+            $selected = ($key==$equipoId)?'selected':'';
+            $html .= '<option value="'. $key . '"' . $selected . ' >' . $value . '</option>';
+        }
+
+        $html .= '</select>';
+
+        return $html;
+
     }        
+    
     
 }

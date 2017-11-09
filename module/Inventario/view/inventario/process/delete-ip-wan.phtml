@@ -289,11 +289,17 @@ $(function(){
                     </div>
                     
                     <div class="form-group">
-                        &nbsp;
-                    </div>        
-                    <div class="form-group">
-                        &nbsp;
+                        <label class="control-label" for="ipwintpeppal">Interfaz PE Ppal</label>
+                        <?php $form->get('ipwintpeppal')->setValue($this->information['ipwans']['0']['int_pe_ppal']) ?>
+                        <?= $this->formInput($form->get('ipwintpeppal')); ?>
                     </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="ipwintpebackup">Interfaz PE Backup</label>
+                        <?php $form->get('ipwintpebackup')->setValue($this->information['ipwans']['0']['int_pe_backup']) ?>
+                        <?= $this->formInput($form->get('ipwintpebackup')); ?>
+                    </div>
+                    
                     <div class="form-group">
                         &nbsp;
                     </div>

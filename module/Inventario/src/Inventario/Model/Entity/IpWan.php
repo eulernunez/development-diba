@@ -22,6 +22,8 @@ class IpWan {
     protected $ipwmascara;
     protected $ipwpeppal;
     protected $ipwpebackup;
+    protected $ipwintpeppal;
+    protected $ipwintpebackup;
 
     protected $equipoId;
     
@@ -158,6 +160,24 @@ class IpWan {
         return $this;
     }
 
+    public function getIpwintpeppal() {
+        return $this->ipwintpeppal;
+    }
+
+    public function setIpwintpeppal($ipwintpeppal) {
+        $this->ipwintpeppal = $ipwintpeppal;
+        return $this;
+    }
+    
+    public function getIpwintpebackup() {
+        return $this->ipwintpebackup;
+    }
+
+    public function setIpwintpebackup($ipwintpebackup) {
+        $this->ipwintpebackup = $ipwintpebackup;
+        return $this;
+    }
+    
     public function getEquipoId() {
         return $this->equipoId;
     }

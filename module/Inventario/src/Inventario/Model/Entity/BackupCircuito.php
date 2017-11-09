@@ -12,7 +12,9 @@ class BackupCircuito {
 
     protected $id;
     protected $bcadministrativo;
+    protected $xbcadministrativo;
     protected $bctelefono;
+    protected $bcibenet;
     protected $bccliente;
     protected $bctecnologia;
     protected $bcvelocidad;
@@ -74,6 +76,16 @@ class BackupCircuito {
         return $this;
     }
     
+    public function getXbcadministrativo() {
+        return $this->xbcadministrativo;
+    }
+
+    public function setXbcadministrativo($xbcadministrativo) {
+        $this->xbcadministrativo = $xbcadministrativo;
+        return $this;
+    }
+    
+    
     public function getBctelefono() {
         return $this->bctelefono;
     }
@@ -83,6 +95,15 @@ class BackupCircuito {
         return $this;
     }
 
+    public function getBcibenet() {
+        return $this->bcibenet;
+    }
+
+    public function setBcibenet($bcibenet) {
+        $this->bcibenet = $bcibenet;
+        return $this;
+    }
+    
     public function getBccliente() {
         return $this->bccliente;
     }
