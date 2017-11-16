@@ -31,6 +31,9 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCancelModal">
         <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
     </button>
+<!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">
+        <i class="glyphicon glyphicon-th-list"></i>&nbsp;Reporte BI
+    </button>-->
 </div>
  
 <table id="sedes"
@@ -56,9 +59,9 @@
             <tr class="ui-state-active noselect">
                 <th data-field="state" data-checkbox="true"></th>
                 <th data-field="nombre" data-sortable="true" data-width="40%">SEDE</th>
-                <th data-field="direccion" data-sortable="true" data-width="40%">DIRECCIÓN</th>
+                <th data-field="direccion" data-sortable="true" data-width="60%">DIRECCIÓN</th>
                 <!--<th data-field="contacto" data-sortable="true" data-width="25%">CONTACTO</th>-->
-                <th data-field="fecha" data-sortable="true" data-width="10%">FECHA ALTA</th>
+                <!--<th data-field="fecha" data-sortable="true" data-width="10%">FECHA ALTA</th>-->
                 <th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>
                 <!--<th data-field="conceptId" data-sortable="true" data-width="50%">POBLACIÓN</th>-->
             </tr>
@@ -73,7 +76,7 @@
                     <td class="noWrap"><?= ucwords(strtolower($sede->nombre)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($sede->direccion)); ?></td>
                     <!--<td class="noWrap"><?php # ucwords(strtolower($sede->contacto)); ?></td>-->
-                    <td class="noWrap"><?= date("d-m-Y", strtotime($sede->fechaAlta)); ?></td> 
+                    <!--<td class="noWrap"><?= date("d-m-Y", strtotime($sede->fechaAlta)); ?></td>--> 
                     <td class="noWrap">
                         <!--  href="/tabs/<?= $sede->id; ?>" -->
                         <a class="update" href="<?php echo $this->url('tabs') . $sede->id; ?>" title="Consultar">
