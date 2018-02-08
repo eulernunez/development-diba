@@ -63,7 +63,7 @@ class Contacto extends AbstractTableGateway {
             'telefono' => $contacto->getTelefono(),
             'horario' => ''
         );
-
+        
         $id = (int) $contacto->getId();
         
         if ($id == 0) {

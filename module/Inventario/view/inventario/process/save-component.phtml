@@ -1,0 +1,126 @@
+<style>
+
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>
+
+<script>
+
+    function updateGlan() {
+
+        var url = '<?= $this->url('save-glan'); ?>';
+        $.ajax({
+           type: "POST",
+           url: url,
+           data: $('#myForm').serialize(),
+           cache: false,
+           success: function (json) {
+                    $("#save-glan").html(json);
+    //                $('.save-ipwan').addClass('disabled');
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#box").html(html);
+            }
+        });
+
+    }
+
+
+    $(function(){
+        $("html, body").animate({ scrollTop: 300 });
+    });
+
+</script>
+<div style="float:right;">
+
+    <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['componentes']['0']['glan_id']; ?>');" title="Agregar módulo(tab)">
+        <i class="glyphicon glyphicon-plus"></i>
+    </a>
+
+</div>
+<div style="clear: both;"></div>                            
+
+<div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
+
+    <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width:30%;">Componente</th>
+                <th style="width:30%;">Módelo</th>
+                <th style="width:30%;">S/N</th>
+                <th style="width:10%;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $row = 1; ?>
+            <?php foreach($this->information['componentesall'] as $component) : ?> 
+            <tr id="<?= $component['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
+                <td><?= $component['tipo'] ?></td>
+                <td><?= $component['modelo'] ?></td>
+                <td><?= $component['numero_serie'] ?></td>
+                <td> 
+                    <a class="btn btn-primary btn-xs" href="#" onclick="componentFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>
+                    <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
+                        <i class="glyphicon glyphicon-minus"></i>
+                    </a>
+                </td>  
+            </tr>
+            <?php $row++; ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div id="component-fill">
+    <div class="col-lg-6">    
+
+        <div class="form-group">
+            <label class="control-label" for="componente-tipo">Componente</label>
+            <?php $form->get('ctipo')->setValue($this->information['componentes']['0']['tipoId']) ?>
+            <?= $this->formSelect($form->get('ctipo')); ?>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="componente">Módelo</label>
+            <?php $form->get('cmodelo')->setValue($this->information['componentes']['0']['modeloId']); ?>
+             <?= $this->formSelect($form->get('cmodelo')); ?>
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">    
+
+        <div class="form-group">
+            <label class="control-label" for="component-numeroserie">N/S</label>
+            <?php $form->get('cnumeroserie')->setValue($this->information['componentes']['0']['numero_serie']); ?>
+            <?= $this->formInput($form->get('cnumeroserie')); ?>
+        </div>
+
+    </div>
+</div>
+            

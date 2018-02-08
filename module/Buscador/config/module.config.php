@@ -1,5 +1,9 @@
 <?php
-namespace Inventario;
+/*
+ * Euler Núñez
+ *
+ *  */
+namespace Buscador;
 
 
 
@@ -67,14 +71,6 @@ return array(
 				$ctr->setWizardService(
  					$serviceLocator->getServiceLocator()
  					->get('wizardService')
- 				);
-				$ctr->setGlanService(
- 					$serviceLocator->getServiceLocator()
- 					->get('glanService')
- 				);
-				$ctr->setComponentService(
- 					$serviceLocator->getServiceLocator()
- 					->get('componentService')
  				);
                                 
 			 return $ctr;
@@ -219,8 +215,7 @@ return array(
             'tabs' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
-                    //'route'    => '/tabs/[:id]',
-                    'route'    => '/tabs[/[:id][/:tab][/:item][/:value]]',
+                    'route'    => '/tabs/[:id]',
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'tabs',
@@ -458,74 +453,6 @@ return array(
                 ),
             ),
 
-            'add-glan' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/add-glan',
-                    'defaults' => array(
-                        'controller' => 'Inventario\Controller\Process',
-                        'action'     => 'add-glan',
-                    ),
-                ),
-            ),
-
-            'add-component' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/add-component',
-                    'defaults' => array(
-                        'controller' => 'Inventario\Controller\Process',
-                        'action'     => 'add-component',
-                    ),
-                ),
-            ),
-
-            'save-glan' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/save-glan',
-                    'defaults' => array(
-                        'controller' => 'Inventario\Controller\Process',
-                        'action'     => 'save-glan',
-                    ),
-                ),
-            ),
-            
-            'save-component' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/save-component',
-                    'defaults' => array(
-                        'controller' => 'Inventario\Controller\Process',
-                        'action'     => 'save-component',
-                    ),
-                ),
-            ),
-            
-            'glan-fill' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/glan-fill',
-                    'defaults' => array(
-                        'controller' => 'Inventario\Controller\Process',
-                        'action'     => 'glan-fill',
-                    ),
-                ),
-            ),
-
-            'delete-glan' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/delete-glan',
-                    'defaults' => array(
-                        'controller' => 'Inventario\Controller\Process',
-                        'action'     => 'delete-glan',
-                    ),
-                ),
-            ),
-
-
-            
             'save-ipwan' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -892,12 +819,6 @@ return array(
             },
             'ipwanService' => function ($sm) {
                 return $sm->get('Inventario\Model\IpWan');            
-            },
-            'glanService' => function ($sm) {
-                return $sm->get('Inventario\Model\Glan');            
-            },
-            'componentService' => function ($sm) {
-                return $sm->get('Inventario\Model\Component');            
             },
             'iplanService' => function ($sm) {
                 return $sm->get('Inventario\Model\IpLan');            

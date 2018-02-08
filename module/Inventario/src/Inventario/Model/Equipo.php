@@ -324,6 +324,51 @@ class Equipo extends AbstractTableGateway {
 
     }
     
+    public function getAvailableEquiposGestionadoBySede($sedeId)
+    {
+        
+        $circuitoIds = array();
+        $adapter = $this->adapter->query(
+                "SELECT  id, es_gestionado 
+                            FROM circuitos 
+                            WHERE sede_id = '" . $sedeId . "' AND activo = 1" );            
+        
+         foreach ($adapter->execute() as $item) {
+            if($item['es_gestionado']) {
+                $circuitoIds[] = $item['id'];
+            }
+        }
+        
+        $stm = "SELECT id, nemonico, ip_gestion
+                    FROM equipos
+                        WHERE circuito_id IN ("  . implode(",",$circuitoIds) . ") AND activo = 1";
+        $adapter = $this->adapter->query($stm);        
+        
+        $select = [];
+        foreach ($adapter->execute() as $item) {
+            $select[$item['id']] = $item['nemonico'];
+        }
+        
+        $html = '<select name="glannemonico" id="glannemonico" class="form-control input-sm">';
+        
+        foreach($select as $key => $equipo) {
+            $html .= '<option value="'. $key . '">' . $equipo . '</option>';
+        }
+
+        $html .= '</select>';
+        
+        $htmlcomboboxglannemonico[] = $html;
+        $datos['htmlcomboboxglannemonico'] = $htmlcomboboxglannemonico;
+
+        return $datos;
+
+        
+
+
+        
+    }        
+    
+    
     
     
     public function getAvailableEquipos($id, $backupId, $flag)

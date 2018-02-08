@@ -79,7 +79,7 @@
                     <!--<td class="noWrap"><?= date("d-m-Y", strtotime($sede->fechaAlta)); ?></td>--> 
                     <td class="noWrap">
                         <!--  href="/tabs/<?= $sede->id; ?>" -->
-                        <a class="update" href="<?php echo $this->url('tabs') . $sede->id; ?>" title="Consultar">
+                        <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
 

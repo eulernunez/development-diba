@@ -14,6 +14,10 @@
 }
 
 
+.item-selected {
+    font-weight: bold;
+    color: white;
+}
 
 
 
@@ -103,6 +107,10 @@ $(document).ready(function (e){
         $('#deleteEquipoNotManagementId').val(id);
     })
 
+    $('#deleteGlanEquipo').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        $('#deleteGlanId').val(id);
+    })
 
 
     $("#provincia").change(function(){
@@ -228,6 +236,53 @@ $(document).ready(function (e){
 
 });
 
+function addComponent(id)
+{
+
+    var data = {id: id};
+    var url = '<?= $this->url('add-component'); ?>';
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (json) {
+            $("#component-fill").html(json);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+
+
+
+
+function addGlan() {
+
+    var id = $('#sedeId').val();
+    var data = {id: id};
+    var url = '<?= $this->url('add-glan'); ?>';
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (json) {
+            $("#glan-fill").html(json);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+
+}
+
 function deleteEquipoNotManagement() {
 
     $('#deleteEquipoNotManagement').modal('hide');
@@ -281,8 +336,30 @@ function deleteEquipo() {
     
 }
 
-
-
+function deleteGlanEquipo() {
+    
+    $('#deleteGlanEquipo').modal('hide');
+    var url = '<?= $this->url('delete-glan'); ?>';
+    var id = $('#deleteGlanId').val();
+    var sedeId = $('#deleteGlanSedeId').val();
+    var data = {id: id, sedeId: sedeId};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#delete-glan").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
 
 function deleteCircuito() {
     $('#deleteCircuito').modal('hide');
@@ -398,6 +475,27 @@ function updateSede() {
 
 }
 
+function glanFill(id) {
+    var sede = $('#sedeId').val();
+    var data = {sede: sede, id: id};
+    var    url = '<?= $this->url('glan-fill'); ?>';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#glan-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+
+}
 
 
 
@@ -453,7 +551,7 @@ function equipoFill(sede, id) {
     $('#ha').removeClass('disabled');
     $('#he').removeClass('disabled');
     $('#mc').removeClass('disabled');
-    
+
    
     
     $.ajax({
@@ -786,7 +884,12 @@ $(function(){
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Nombre</label>
-                            <?php $form->get('nombre')->setValue($information['sede']['nombre']) ?>
+                            <?php   $form->get('nombre')->setValue($information['sede']['nombre']);
+                                    if('7' == $this->item) {
+                                        $form->get('nombre')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('nombre')->setAttribute('title','Dato encontrado');
+                                    }
+                            ?>
                             <?= $this->formInput($form->get('nombre')); ?>
                         </div>
 
@@ -798,8 +901,13 @@ $(function(){
 
                         <div class="form-group">
                             <label for="exampleTextarea">Dirección</label>
-                            <?php $form->get('direccion')->setValue($this->information['sede']['direccion']);
-                                  $form->get('direccion')->setAttribute('rows', 2); ?>
+                            <?php   $form->get('direccion')->setValue($this->information['sede']['direccion']);
+                                    $form->get('direccion')->setAttribute('rows', 2); 
+                                    if('8' == $this->item) {
+                                        $form->get('direccion')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('direccion')->setAttribute('title','Dato encontrado');
+                                    }
+                            ?>
                             <?= $this->formTextarea($form->get('direccion')); ?>
                         </div>
                     </div>    
@@ -903,7 +1011,7 @@ $(function(){
     <div style="padding: 4px;" class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
 
         <div class="btn-group" role="group">
-            <button type="button" id="stars" class="btn btn-primary" href="#tab1" data-toggle="tab" style="width:100%;">
+            <button type="button" id="stars" class="btn <?= ($this->tab == 0)?'btn-primary':'btn-default'; ?>" href="#tab1" data-toggle="tab" style="width:100%;">
                 <span class="glyphicon glyphicon-random" aria-hidden="true"></span>
                 <div class="hidden-xs">&nbsp;&nbsp;&nbsp;Circuitos&nbsp;&nbsp;&nbsp;&nbsp;</div>
                 <div class="hidden-xs">&nbsp;</div>
@@ -911,7 +1019,7 @@ $(function(){
         </div>
 
         <div class="btn-group" role="group">
-            <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab" style="width:100%;">
+            <button type="button" id="favorites" class="btn <?= ($this->tab == 1)?'btn-primary':'btn-default' ?>" href="#tab2" data-toggle="tab" style="width:100%;">
                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                 <div class="hidden-xs">Equipos</div>
@@ -920,7 +1028,7 @@ $(function(){
         </div>
 
         <div class="btn-group" role="group">
-            <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab" style="width:100%;">
+            <button type="button" id="following" class="btn <?= ($this->tab == 2)?'btn-primary':'btn-default' ?>" href="#tab3" data-toggle="tab" style="width:100%;">
                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 <div class="hidden-xs">Equipos</div>
@@ -953,7 +1061,7 @@ $(function(){
     
     <div class="tab-content" style="margin: 2px; padding: 2px;">
         
-        <div class="tab-pane fade in active" id="tab1">
+        <div class="tab-pane fade in <?= ($this->tab == 0)?'active':''; ?>" id="tab1">
             <div id="delete-circuito">
             <input type="hidden" id="deleteCircuitoId" name="deleteCircuitoId" value="">
             <input type="hidden" id="deleteCircuitoParentId" name="deleteCircuitoParentId" value="">
@@ -1006,12 +1114,20 @@ $(function(){
                         <?php endif; ?>    
                             <td><?= ($circuito['parent_id']==0)?'PRINCIPAL':'BACKUP' ?></td>
                             <td><?= $circuito['nif'] ?></td>
-                            <td> <?php if(preg_match("/^00000/", $circuito['administrativo'])) : ?> 
-                                <span style="color: red; font-weight: bold;" title="pseudo-administrativo" ><?= $circuito['administrativo'] ?></span>
+                            
+                                <?php if($circuito['administrativo'] == $this->value) : ?> 
+                                <td class="<?= ($this->item == 1)?'item-selected':''; ?>" style="<?= ($this->item == 1)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $circuito['administrativo']; ?></td>
                                 <?php else : ?>
-                                <?= $circuito['administrativo'] ?>
-                                <?php endif ; ?>
-                            </td>
+                                <td>
+                                    <?php if(preg_match("/^00000/", $circuito['administrativo'])) : ?> 
+                                    <span style="color: red; font-weight: bold;" title="pseudo-administrativo" ><?= $circuito['administrativo'] ?></span>
+                                    <?php else : ?>
+                                    <?= $circuito['administrativo'] ?>
+                                    <?php endif ; ?>
+                                </td>
+                                <?php endif ; ?>    
+                            
+                            
                             <td><?= $circuito['tecnologia'] ?></td>
                             <td><?= $circuito['velocidad'] ?></td>
                             <td><?= $circuito['criticidad'] ?></td>
@@ -1058,11 +1174,19 @@ $(function(){
                                 <?php
                                     $form->get('cadministrativo')->setValue($this->information['circuitos']['0']['administrativo']); 
                                     $form->get('cadministrativo')->setAttribute('readonly','readonly');
-                                    if(preg_match("/^00000/", $this->information['circuitos']['0']['administrativo'])) {
-                                        $form->get('cadministrativo')->setAttribute('title','Pseudo-administrativo');
-                                        $form->get('cadministrativo')->setAttribute('style','color:red; font; font-weight: bold;');
-                                    }        
-                                ?>            
+                                    
+                                    if($this->information['circuitos']['0']['administrativo'] === $this->value) {
+                                        $form->get('cadministrativo')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('cadministrativo')->setAttribute('title','Dato encontrado');
+                                    } else {
+                                        if(preg_match("/^00000/", $this->information['circuitos']['0']['administrativo'])) {
+                                            $form->get('cadministrativo')->setAttribute('title','Pseudo-administrativo');
+                                            $form->get('cadministrativo')->setAttribute('style','color:red; font-weight: bold;');
+                                        }
+                                    }
+                                ?>
+                                                                
+                                
                                 <?= $this->formInput($form->get('cadministrativo')); ?>
                             </div>
 
@@ -1075,13 +1199,25 @@ $(function(){
                         
                             <div class="form-group">
                                 <label class="control-label" for="exampleInputEmail1">Teléfono</label>
-                                <?php $form->get('ctelefono')->setValue($this->information['circuitos']['0']['telefono']) ?>
+                                <?php 
+                                    $form->get('ctelefono')->setValue($this->information['circuitos']['0']['telefono']);
+                                    if($this->information['circuitos']['0']['telefono'] === $this->value && !empty($this->value)) {
+                                        $form->get('ctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('ctelefono')->setAttribute('title','Dato encontrado');
+                                    }
+                                ?>
                                 <?= $this->formInput($form->get('ctelefono')); ?>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="exampleInputEmail1">Ibenet</label>
-                                <?php $form->get('cibenet')->setValue($this->information['circuitos']['0']['ibenet']) ?>
+                                <?php
+                                    $form->get('cibenet')->setValue($this->information['circuitos']['0']['ibenet']);
+                                    if($this->information['circuitos']['0']['ibenet'] === $this->value && !empty($this->value)) {
+                                        $form->get('cibenet')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('cibenet')->setAttribute('title','Dato encontrado');
+                                    }
+                                ?>
                                 <?= $this->formInput($form->get('cibenet')); ?>
                             </div>
                         
@@ -1210,7 +1346,7 @@ $(function(){
                                     $form->get('bcadministrativo')->setAttribute('readonly','readonly');
                                     if(preg_match("/^00000/", $this->information['circuitos']['1']['administrativo'])) {
                                         $form->get('bcadministrativo')->setAttribute('title','Pseudo-administrativo');
-                                        $form->get('bcadministrativo')->setAttribute('style','color:red; font; font-weight: bold;');                                        
+                                        $form->get('bcadministrativo')->setAttribute('style','color:red; font-weight: bold;');                                        
                                     }
                                 } ?>
                                 <?= $this->formInput($form->get('bcadministrativo')); ?>
@@ -1228,9 +1364,15 @@ $(function(){
                         
                             <div class="form-group">
                                 <label class="control-label" for="bctelefono">Teléfono</label>
-                                <?php if(isset($this->information['circuitos']['1']['telefono'])) {
+                                <?php
+                                
+                                if(isset($this->information['circuitos']['1']['telefono'])) {
                                     $form->get('bctelefono')->setValue($this->information['circuitos']['1']['telefono']);
-                                } ?>
+                                    if($this->information['circuitos']['1']['telefono'] === $this->value) {
+                                        $form->get('bctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                    }
+                                } 
+                                ?>
                                 <?= $this->formInput($form->get('bctelefono')); ?>
                             </div>
 
@@ -1389,7 +1531,7 @@ $(function(){
             
             </div>
         </div>
-            <div class="tab-pane fade in" id="tab2">
+            <div class="tab-pane fade in <?= ($this->tab == 1)?'active':''; ?>" id="tab2">
                 <div id="delete-equipo">
                     <input type="hidden" id="deleteEquipoId" name="deleteEquipoId" value="">
                     <input type="hidden" id="deleteEquipoParentId" name="deleteEquipoParentId" value="">
@@ -1429,8 +1571,18 @@ $(function(){
                             <td><?= $equipo['nivel'] ?></td>
                             <td><?= $equipo['servicio'] ?></td>
                             <?php if('Cliente' != $userRole) : ?>
-                                <td><?= $equipo['nemonico'] ?></td>
-                                <td><?= $equipo['ip_gestion'] ?></td>
+                                <?php if($equipo['nemonico'] == $this->value ) : ?>
+                                    <td class="<?= ($this->item == 4)?'item-selected':''; ?>" style="<?= ($this->item == 4)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $equipo['nemonico']; ?></td>
+                                <?php else: ?>
+                                    <td><?= $equipo['nemonico']; ?></td>
+                                <?php endif; ?>
+                            
+                               <?php if($equipo['ip_gestion'] == $this->value ) : ?>     
+                                    <td class="<?= ($this->item == 5)?'item-selected':''; ?>" style="<?= ($this->item == 5)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $equipo['ip_gestion']; ?></td>                                    
+                                <?php else: ?>    
+                                    <td><?= $equipo['ip_gestion'] ?></td>
+                                <?php endif; ?>
+                                
                             <?php endIf; ?>
                             <td><?= $equipo['modelo'] ?></td>
                             <td> 
@@ -1486,18 +1638,29 @@ $(function(){
                             </div>
                             
                             <?php if('Cliente' != $userRole) : ?>
-                            <div class="form-group">
-                                <label class="control-label" for="nemonico">Nemónico</label>
-                                <?php $form->get('enemonico')->setValue($this->information['equipos']['0']['nemonico']) ?>
-                                <?= $this->formInput($form->get('enemonico')); ?>
-                                
-                            </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="nemonico">Nemónico</label>
+                                    <?php 
+                                        $form->get('enemonico')->setValue($this->information['equipos']['0']['nemonico']);
+                                        if($this->information['equipos']['0']['nemonico'] == $this->value) {
+                                            $form->get('enemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                            $form->get('enemonico')->setAttribute('title','Dato encontrado');
+                                        }
+                                    ?>
+                                    <?= $this->formInput($form->get('enemonico')); ?>
+                                </div>
 
-                            <div class="form-group">
-                                <label class="control-label" for="ip-gestion">IP Gestión</label>
-                                <?php $form->get('eipgestion')->setValue($this->information['equipos']['0']['ip_gestion']) ?>
-                                <?= $this->formInput($form->get('eipgestion')); ?>
-                            </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="ip-gestion">IP Gestión</label>
+                                    <?php 
+                                        $form->get('eipgestion')->setValue($this->information['equipos']['0']['ip_gestion']);
+                                        if($this->information['equipos']['0']['ip_gestion'] == $this->value) {
+                                            $form->get('eipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                            $form->get('eipgestion')->setAttribute('title','Dato encontrado');
+                                        }
+                                    ?>
+                                    <?= $this->formInput($form->get('eipgestion')); ?>
+                                </div>
                             <?php endIf; ?>
                         
                             <div class="form-group">
@@ -1571,7 +1734,7 @@ $(function(){
                             <?= $this->formInput($form->get('ehorario')); ?>
                         </div>
                                                 
-                         <div class="form-group">
+                        <div class="form-group">
                             <label class="control-label" for="estado-equipo">Estado</label>
                             <?php $form->get('eestado')->setValue($this->information['equipos']['0']['estadoId']) ?>
                             <?= $this->formSelect($form->get('eestado')); ?>
@@ -1627,7 +1790,10 @@ $(function(){
                                 <label class="control-label" for="nemonico">Nemónico</label>
                                 <?php if(isset($this->information['equipos']['1']['nemonico'])) {
                                     $form->get('benemonico')->setValue($this->information['equipos']['1']['nemonico']);
-                                }
+                                    if($this->information['equipos']['1']['nemonico'] == $this->value) {
+                                        $form->get('benemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                    }
+                                    }
                                 ?>
                                 <?= $this->formInput($form->get('benemonico')); ?>
                             </div>
@@ -1636,6 +1802,9 @@ $(function(){
                                 <label class="control-label" for="ip-gestion">IP Gestión</label>
                                 <?php if(isset($this->information['equipos']['1']['ip_gestion'])) {
                                     $form->get('beipgestion')->setValue($this->information['equipos']['1']['ip_gestion']);
+                                    if($this->information['equipos']['1']['ip_gestion'] == $this->value) {
+                                        $form->get('beipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                    }
                                 }
                                 ?>
                                 <?= $this->formInput($form->get('beipgestion')); ?>
@@ -1659,7 +1828,14 @@ $(function(){
                                 ?>                                
                                 
                                 <?php # $this->formSelect($form->get('benemonicon1')); ?>
-                                <?= $this->information['htmlcombobox3']['1']; ?>
+                                
+                                <?php   
+                                    if (isset($this->information['htmlcombobox3']['1'])) {
+                                        echo $this->information['htmlcombobox3']['1'];
+                                    } else {
+                                        echo $this->information['htmlcombobox3']['0'];
+                                    }
+                                ?>
                             </div>
                             <?php endIf; ?>
                             <div class="form-group">
@@ -1773,7 +1949,7 @@ $(function(){
           
             </div>
         </div>
-        <div class="tab-pane fade in" id="tab3">
+        <div class="tab-pane fade in <?= ($this->tab == 2)?'active':''; ?>" id="tab3">
             <div id="delete-equipo-not-management">
                     <input type="hidden" id="deleteEquipoNotManagementId" name="deleteEquipoNotManagementId" value="">
                     <input type="hidden" id="deleteEquipoNotManagementSedeId" name="deleteEquipoNotManagementSedeId" value="<?= $this->information['sede']['id'] ;?>">
@@ -1806,7 +1982,11 @@ $(function(){
                         <tr id="<?= $notequipo['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
                             <td><?= $notequipo['propiedad'] ?></td>
                             <td><?= $notequipo['tipo'] ?></td>
-                            <td><?= $notequipo['ip'] ?></td>
+                            <?php if($notequipo['ip'] == $this->value ) : ?>     
+                                    <td class="<?= ($this->item == 5)?'item-selected':''; ?>" style="<?= ($this->item == 5)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $notequipo['ip']; ?></td>                                    
+                            <?php else: ?>    
+                                    <td><?= $notequipo['ip'] ?></td>
+                            <?php endif; ?>
                             <td><?= $notequipo['red'] ?></td>
                             <td><?= $notequipo['uso'] ?></td>
                             <td> 
@@ -1860,16 +2040,22 @@ $(function(){
 
                                 <div class="form-group">
                                     <label class="control-label" for="tipo-ip">Tipo IP</label>
-                                    <?php $form->get('engtipoip')->setValue($this->information['notequipos']['0']['tipo_ip']) ?>
+                                    <?php $form->get('engtipoip')->setValue($this->information['notequipos']['0']['tipo_ip']); ?>
                                     <?= $this->formSelect($form->get('engtipoip')); ?>                            
                                 </div>                        
 
                                 <div class="form-group">
                                     <label class="control-label" for="ip-no-gestionado">IP</label>
-                                    <?php $form->get('engip')->setValue($this->information['notequipos']['0']['ip']) ?>
+                                    <?php 
+                                        $form->get('engip')->setValue($this->information['notequipos']['0']['ip']);
+                                        if($this->information['notequipos']['0']['ip'] == $this->value) {
+                                            $form->get('engip')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                            $form->get('engip')->setAttribute('title','Dato encontrado');
+                                        }
+                                    ?>
                                     <?= $this->formInput($form->get('engip')); ?>
                                 </div>
-                        
+
                                 <div class="form-group">
                                     <label class="control-label" for="red">Red</label>
                                     <?php $form->get('engred')->setValue($this->information['notequipos']['0']['red_id']) ?>

@@ -92,6 +92,16 @@ class Module #implements FormElementProviderInterface
                     $table = new Model\IpWan($dbAdapter);
                     return $table;
                 },
+                'Inventario\Model\Glan' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Glan($dbAdapter);
+                    return $table;
+                },
+                'Inventario\Model\Component' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $table = new Model\Component($dbAdapter);
+                    return $table;
+                },
                 'Inventario\Model\IpLan' => function($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $table = new Model\IpLan($dbAdapter);

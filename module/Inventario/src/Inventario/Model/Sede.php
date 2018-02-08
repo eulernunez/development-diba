@@ -17,11 +17,28 @@ use Zend\Session\Container;
 class Sede extends AbstractTableGateway {
 
     protected $table = 'sedes';
-
+    protected $tab;
+    protected $item;
+    protected $value;
+    
     public function __construct(Adapter $adapter) {
         $this->adapter = $adapter;
     }
 
+    public function setTab($tab)
+    {
+        $this->tab = $tab;
+    }
+    
+    public function setItem($item)
+    {
+        $this->item = $item;
+    }
+    
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
     
     public function fetchAll() {
         
@@ -124,9 +141,9 @@ class Sede extends AbstractTableGateway {
 //      $row = $rowset->current();
 //        
 //      die('ROW()<pre>' . print_r($row, true) . '</pre>');
-        
+
         $datos = array();
-        
+
         # SEDE
         $statement = "SELECT s.id, s.nombre, s.idescat, s.direccion, p.id AS poblacionId, p.poblacion, pr.id AS provinciaId, pr.provincia,
                                     s.observacion, s.horario,
@@ -134,18 +151,17 @@ class Sede extends AbstractTableGateway {
 					INNER JOIN poblaciones AS p ON s.poblacion_id = p.id
 					INNER JOIN provincias AS pr ON s.provincia_id = pr.id
 					LEFT JOIN contactos AS c ON s.contacto_id = c.id WHERE s.id = '" . $id . "'";
-        
+
         $adapter = $this->adapter->query($statement);
-        
+
         foreach ($adapter->execute() as $item) {
             $sede = $item;
         }
-        
+
         if(!isset($sede)) {
             return false;
         }
         $datos['sede'] = $sede;
-        
         
         
         # CIRCUITO
@@ -172,34 +188,85 @@ class Sede extends AbstractTableGateway {
         $circuitoIds2 = array();
         $combobox = array();
         $combobox2 = array();
-        foreach ($adapter->execute() as $item) {
-            $circuitos[] = $item;
-            
-            if($item['es_gestionado']) {
-                $circuitoIds[] = $item['id'];
-                $combobox[$item['id']] = $item['administrativo'];
-            } else {
-                $circuitoIds2[] = $item['id'];
-                $combobox2[$item['id']] = $item['administrativo'];
-            }
-        }
         
-        $datos['circuitosall'] = $circuitos;
-        $datos['circuitoIds'] = $circuitoIds;
-        $datos['circuitoIds2'] = $circuitoIds2;
-        $datos['combobox'] = $combobox;
-        $datos['combobox2'] = $combobox2;
+//        $seguimiento = array(
+//            'tab' => $this->tab,
+//            'item' => $this->item,
+//            'value' => $this->value
+//        );
+        
+       
+        ///////////////////
+            if($this->tab == 0 && !empty($this->value) && $this->item>0 &&  $this->item <4  ) {
+                //if($this->item == 1 || $this->item == 2 || $this->item == 3) {
+                    $aux = array();
+                    foreach ($adapter->execute() as $item) {
+                        $aux[] = $item;
+                    }
+
+                    $index = 0;
+                    foreach($aux as $key => $value) {
+                        if(!empty(array_search($this->value, $value))) {
+                            $index = $key;
+                        }
+                    }
+                    $found = array_slice($aux, $index, 1);
+                    $foundId = (int)$found['0']['id'];
+                    
+                    unset($aux[$index]);
+                    foreach($aux as $item) {
+                        $found[] = $item;
+                    }
+
+                    foreach ($found as $item) {
+
+                        $circuitos[] = $item;
+
+                        if($item['es_gestionado']) {
+                            $circuitoIds[] = $item['id'];
+                            $combobox[$item['id']] = $item['administrativo'];
+                        } else {
+                            $circuitoIds2[] = $item['id'];
+                            $combobox2[$item['id']] = $item['administrativo'];
+                        }
+
+                    }
+                    
+                //}
+            } else {
+
+                    foreach ($adapter->execute() as $item) {
+                        $circuitos[] = $item;
+
+                        if($item['es_gestionado']) {
+                            $circuitoIds[] = $item['id'];
+                            $combobox[$item['id']] = $item['administrativo'];
+                        } else {
+                            $circuitoIds2[] = $item['id'];
+                            $combobox2[$item['id']] = $item['administrativo'];
+                        }
+                    }
+            }
+            
+            $datos['circuitosall'] = $circuitos;
+            $datos['circuitoIds'] = $circuitoIds;
+            $datos['circuitoIds2'] = $circuitoIds2;
+            $datos['combobox'] = $combobox;
+            $datos['combobox2'] = $combobox2;
 
         
         unset($circuitos);
         $circuitos = array();
         
-        $circuitoId = -1;
-        
-        if(isset($circuitoIds['0'])) {
-            $circuitoId = $circuitoIds['0'];
-        } elseif(isset($circuitoIds2['0'])) {
-            $circuitoId = $circuitoIds2['0'];
+        if(isset($foundId) && $foundId>0){
+            $circuitoId = $foundId;
+        } else {
+            $circuitoId = -1;
+            if(isset($circuitoIds['0'])) {
+                $circuitoId = $circuitoIds['0'];
+            } elseif(isset($circuitoIds2['0'])) {
+                $circuitoId = $circuitoIds2['0'];
+            }
         }
         
         $adapter = $this->adapter->query(
@@ -238,7 +305,7 @@ class Sede extends AbstractTableGateway {
                 $caudales['principal'][] = $item;
             }
         }
-        
+
         if(isset($circuitos['1']['id'])&&(int)$circuitos['1']['id']>0) {
             $id = (int)$circuitos['1']['id'];
             $adapter = $this->adapter->query("SELECT * FROM caudales WHERE circuito_id = '" . $id . "'" );
@@ -246,7 +313,7 @@ class Sede extends AbstractTableGateway {
                 $caudales['backup'][] = $item;
             }
         }
-        
+
         $datos['caudales'] = $caudales;
         
         # EQUIPO
@@ -257,8 +324,7 @@ class Sede extends AbstractTableGateway {
         $nemonicos = array();
         
         if(count($circuitoIds)>0) {
-            $adapter = $this->adapter->query(
-                        "SELECT e.id, s.id AS servicioId, s.servicio,
+            $stm = "SELECT e.id, s.id AS servicioId, s.servicio,
                                 e.nemonico, e.ip_gestion, e.nivel,
                                 e.nemonico_nivel1, f.id AS fabricanteId, f.fabricante,
                                 m.id AS modeloId, m.modelo, e.numero_serie, e.locert, e.ubicacion,
@@ -270,17 +336,48 @@ class Sede extends AbstractTableGateway {
                                         LEFT JOIN modelos AS m ON e.modelo_id = m.id
                                         LEFT JOIN contactos AS c ON e.contacto_id = c.id
                                         LEFT JOIN estados AS st ON e.estado = st.id
-                                        WHERE e.circuito_id IN ("  . implode(",",$circuitoIds) . ") AND e.activo = 1");
+                                        WHERE e.circuito_id IN ("  . implode(",",$circuitoIds) . ") AND e.activo = 1";
+            $adapter = $this->adapter->query($stm);
 
+            /*****************/
+            if($this->tab == 1 && $this->value) {
+                if($this->item == 4 || $this->item == 5 ) {
+                    $aux = array();
+                    foreach ($adapter->execute() as $item) {
+                        $aux[] = $item;
+                    }
+                    $index = 0;
+                    foreach($aux as $key => $value) {
+                        if(!empty(array_search($this->value, $value))) {
+                            $index = $key;
+                        }
+                    }
+                    $found = array_slice($aux, $index, 1);
+                    unset($aux[$index]);
+                    foreach($aux as $item) {
+                        $found[] = $item;
+                    }
 
-            foreach ($adapter->execute() as $item) {
-                $equipos[] = $item;
-                $equipoIds[] = $item['id'];
-                
-                $nemonicos[$item['id']] =  $item['nemonico'];
-                
+                    foreach ($found as $item) {
+
+                        $equipos[] = $item;
+                        $equipoIds[] = $item['id'];
+
+                        $nemonicos[$item['id']] =  $item['nemonico'];
+
+                    }
+                    
+                }
+            } else {
+                foreach ($adapter->execute() as $item) {
+
+                    $equipos[] = $item;
+                    $equipoIds[] = $item['id'];
+
+                    $nemonicos[$item['id']] =  $item['nemonico'];
+
+                }
             }
-        
         }
         $datos['equiposall'] = $equipos;
         $datos['equipoIds'] = $equipoIds;
@@ -390,12 +487,36 @@ class Sede extends AbstractTableGateway {
                                 LEFT JOIN contactos AS c ON e.contacto_id = c.id
                                 WHERE e.circuito_id IN ("  . implode(",",$circuitoIds2) . ") AND e.activo=1");
 
+            /***********/
+            if($this->tab == 2 && !empty($this->value) && $this->item == 5) {
+                
+                    $aux = array();
+                    foreach ($adapter->execute() as $item) {
+                        $aux[] = $item;
+                    }
+                    $index = 0;
+                    foreach($aux as $key => $value) {
+                        if(!empty(array_search($this->value, $value))) {
+                            $index = $key;
+                        }
+                    }
+                    $found = array_slice($aux, $index, 1);
+                    unset($aux[$index]);
+                    foreach($aux as $item) {
+                        $found[] = $item;
+                    }
 
-            foreach ($adapter->execute() as $item) {
-                $equiposNot[] = $item;
-                $equipoNotIds[] = $item['id'];       
+                    foreach ($found as $item) {
+                        $equiposNot[] = $item;
+                        $equipoNotIds[] = $item['id'];      
+                    }
+                    
+            } else {
+                foreach ($adapter->execute() as $item) {
+                    $equiposNot[] = $item;
+                    $equipoNotIds[] = $item['id'];       
+                }
             }
-        
         }
         $datos['notequiposall'] = $equiposNot;
         $datos['notequipoIds'] = $equipoNotIds;
@@ -464,14 +585,175 @@ class Sede extends AbstractTableGateway {
         # GLAN
 
         $glans = array();
-        $datos['glansall'] = $glans;
+        $glanIds = array();
 
+        /***********************************/
+        /////// DEVELOPMENT GLAN TAB - BEGIN
+        
+         if(count($equipoIds) > 0) {
+            
+            $stm = "SELECT g.id,
+                    g.actividad_tsol,
+                    g.contrato_fabricante,
+                    g.modelo_equipo,
+                    g.familia_fabricante,
+                    g.nemonico,
+                    g.ip_gestion_cliente,
+                    g.ip_gestion,
+                    g.firmware,
+                    g.mac,
+                    g.numero_serie,
+                    g.tiene_stack,
+                    g.stack,
+                    g.ubicacion,
+                    g.observaciones,
+                    c.id AS clienteId, c.cliente,
+                    e.id AS equipoId, e.nemonico AS equiponemonico,
+                    g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                    cr.id AS criticidadId, cr.criticidad,
+                    s.id AS estadoId, s.estado,
+                    ct.id AS contactoId, ct.contacto, ct.telefono 
+                    FROM glans AS g 
+                        LEFT JOIN clientes AS c ON g.cliente_id = c.id 
+                        LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                        LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
+                        LEFT JOIN estados AS s ON g.estado_id = s.id
+                    LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
+                    WHERE g.equipo_id IN ("  . implode(",",$equipoIds) . ") AND g.activo = 1";
+        
+            
+                $adapter = $this->adapter->query($stm);
+
+                foreach ($adapter->execute() as $item) {
+                    $glans[] = $item;
+                    $glanIds[] = $item['id'];
+                    //$nemonicos[$item['id']] =  $item['nemonico'];
+                }
+        }
+        
+        $datos['glansall'] = $glans;
+        $datos['glanIds'] = $glanIds;
+
+        unset($glans);
+        $glans = array();
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        $glanId = -1;
+        if(isset($glanIds['0'])) {
+        $glanId = $glanIds['0'];
+        }
+
+        $stm = "SELECT g.id,
+                g.actividad_tsol,
+                g.contrato_fabricante,
+                g.modelo_equipo,
+                g.familia_fabricante,
+                g.nemonico,
+                g.ip_gestion_cliente,
+                g.ip_gestion,
+                g.firmware,
+                g.mac,
+                g.numero_serie,
+                g.tiene_stack,
+                g.stack,
+                g.ubicacion,
+                g.observaciones,
+                g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                c.id AS clienteId, c.cliente,
+                e.id AS equipoId, e.nemonico AS equiponemonico,
+                cr.id AS criticidadId, cr.criticidad,
+                s.id AS estadoId, s.estado,
+                ct.id AS contactoId, ct.contacto, ct.telefono 
+                FROM glans AS g 
+                    LEFT JOIN clientes AS c ON g.cliente_id = c.id 
+                    LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                    LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
+                    LEFT JOIN estados AS s ON g.estado_id = s.id
+                LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
+                WHERE g.id = '" . $glanId . "' AND g.activo = 1";
+
+        $adapter = $this->adapter->query($stm);
+        $htmlcomboboxglannemonico = array();
+        
+        foreach ($adapter->execute() as $item) {
+            $glans[] = $item;
+            //$glanIds[] = $item['id'];
+        }
+            
+        $datos['glans'] = $glans;
+        $equipoEdcWan = 0;
+        if(isset($glans['0']['equipoId'])) {
+            $equipoEdcWan = (int)$glans['0']['equipoId'];
+        }
+        if($equipoEdcWan>0) {
+            $htmlcomboboxglannemonico[] = $this->createHtmlComboNemonicosGlan($nemonicos, $equipoEdcWan);
+            $datos['htmlcomboboxglannemonico'] = $htmlcomboboxglannemonico;
+        }
+        
+        $componentes = array();
+        $componentesIds = array();
+
+        if(isset($glans['0']['id'])&&(int)$glans['0']['id']>0) {
+            $id = (int)$glans['0']['id'];
+            $statement = "SELECT "
+                    . "c.id,"
+                    . "c.numero_serie,"
+                    . "t.id AS tipoId, t.tipo, "
+                    . "m.id AS modeloId, m.modelo "
+                    . "FROM componentes AS c "
+                    . "LEFT JOIN tipos AS t ON c.tipo_id = t.id "
+                    . "LEFT JOIN modelos_glan AS m ON c.modelo_id = m.id "
+                    . "WHERE c.glan_id = '" . $id . "'";
+            $adapter = $this->adapter->query($statement);
+            foreach ($adapter->execute() as $item) {
+                $componentes[] = $item;
+                $componentesIds[] = $item['id'];
+            }
+        }
+
+        $datos['componentesall'] = $componentes;
+        $datos['componenteIds'] = $componentesIds;
+
+        unset($componentes);
+        $componentes = array();
+
+        $componentId = -1;
+        if(isset($componentesIds['0'])) {
+            $componentId = $componentesIds['0'];
+        }
+
+        $statement = "SELECT "
+                    . "c.id,"
+                    . "c.numero_serie,"
+                    . "t.id AS tipoId, t.tipo, "
+                    . "m.id AS modeloId, m.modelo "
+                    . "FROM componentes AS c "
+                    . "LEFT JOIN tipos AS t ON c.tipo_id = t.id "
+                    . "LEFT JOIN modelos_glan AS m ON c.modelo_id = m.id "
+                    . "WHERE c.id = '" . $componentId . "'";
+        $adapter = $this->adapter->query($statement);
+        foreach ($adapter->execute() as $item) {
+            $componentes[] = $item;
+        }
+
+        $datos['componentes'] = $componentes;
+
+        //////  DEVELOPMENT GLAN TAB - END
+        /**********************************/
         # APs
 
         $aps = array();
         $datos['apsall'] = $aps;
         
-//        die('DATOS: <pre>' . print_r($datos, true) . '</pre>');
+        #die('_INFO_: <pre>' . print_r($datos, true) . '</pre>');
 
         return $datos;
 
@@ -627,5 +909,22 @@ class Sede extends AbstractTableGateway {
 
     }        
     
-    
+
+    public function createHtmlComboNemonicosGlan($nemonicos, $equipoId)
+    {
+
+        $html = '<select name="glannemonico" id="glannemonico" class="form-control input-sm">';
+
+        //$html .= '<option value="0" >NA</option>';
+        foreach($nemonicos as $key => $value) {
+            $selected = ($key==$equipoId)?'selected':'';
+            $html .= '<option value="'. $key . '"' . $selected . ' >' . $value . '</option>';
+        }
+
+        $html .= '</select>';
+
+        return $html;
+
+    }
+
 }
