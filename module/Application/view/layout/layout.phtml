@@ -283,7 +283,7 @@
                     </ul>
                 </li>
                 
-
+                <?php if('Cliente' != $userRole) : ?>
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#buscador-nav">
                         <i class="icon-map-marker"> </i> <span style="font-size: 12px;">Búsqueda</span>     
@@ -297,7 +297,7 @@
                          <li class=""><a href="<?php echo $this->url('filter') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Filtrador</span> </a></li>
                     </ul>
                 </li>
-                
+                <?php endIf; ?>
                 
                 
                 
