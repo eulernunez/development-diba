@@ -34,6 +34,7 @@ class ProcessController extends AbstractActionController
     
     protected $glanService;
     protected $componentService;
+    protected $apService;
     protected $wizardService;
 
     public function indexAction()
@@ -91,6 +92,11 @@ class ProcessController extends AbstractActionController
     public function setComponentService($service)
     {
         $this->componentService = $service;
+    }        
+    
+    public function setApService($service)
+    {
+        $this->apService = $service;
     }        
     
     public function setIpLanService($service)
@@ -347,7 +353,7 @@ class ProcessController extends AbstractActionController
         
         $information = $this->sedeService->getAllSedeInformation($id);
         
-        //die('INFORMACION: <pre>' . print_r($information, true) . '</pre>');
+//        die('INFORMACION: <pre>' . print_r($information, true) . '</pre>');
 //        if(1==$tab&&5==$item) {
 //            
 //            #echo ('BEGIN EquiposAll<pre>' . print_r($information['equiposall'],true) . '</pre>');
@@ -601,7 +607,7 @@ class ProcessController extends AbstractActionController
         $posts = (array)$this->request->getPost();
         $fabricanteId = $posts['fabricante'];
         $tipo = $posts['tipo'];
-        
+
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $modelo = new Modelo($dbAdapter);
 
@@ -945,6 +951,29 @@ class ProcessController extends AbstractActionController
 
     }        
 
+    public function deleteApAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $apId = $posts['id'];
+        $sedeId = $posts['sedeId'];
+
+        $this->apService->deleteApEquipo($apId);
+        $information = $this->apService->getAllApsBySede($sedeId);
+
+        $viewmodel = new ViewModel(array(
+                        'form' => $form,
+                        'information' => $information,
+                        'sedeId' => $sedeId));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }        
 
     
     
@@ -1174,11 +1203,42 @@ class ProcessController extends AbstractActionController
 //            $idbck = (int)$posts['idbck'];
 //        }
         
-        $information = $this->equipoService->getAvailableEquiposGestionadoBySede($sedeId);
-        
+//        $information = $this->equipoService->getAvailableEquiposGestionadoBySede($sedeId);
+        //die('INFORMACION: <pre>' . print_r($information, true) . '</pre>');
         $viewmodel = new ViewModel(
                 array('form' => $form,
-                      'information' => $information));
+                      'sedeId' => $sedeId
+//                      'information' => $information
+                ));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
+    public function addApAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        $sedeId = (int)$posts['id'];
+
+//        $id = $posts['id'];
+//        $idbck = 0;
+//
+//        if(isset($posts['idbck'])) {
+//            $idbck = (int)$posts['idbck'];
+//        }
+        
+//        $information = $this->equipoService->getAvailableEquiposGestionadoBySede($sedeId);
+        //die('INFORMACION: <pre>' . print_r($information, true) . '</pre>');
+        $viewmodel = new ViewModel(
+                array('form' => $form,
+                      'sedeId' => $sedeId
+//                      'information' => $information
+                ));
         
         $viewmodel->setTerminal(true);
 
@@ -1314,9 +1374,10 @@ class ProcessController extends AbstractActionController
         $contacto->setTelefono($posts['gtelefono']);
 
         $contactoId = (int)$this->contactoService->saveContacto($contacto);
-        $equipoId = (int)$posts['glannemonico'];
+        $equipoId = (int)$posts['gnemonicoequipo'];
 
         $glan->setEquipoId($equipoId);
+        $glan->setSedeId($sedeId);
         $glan->setContactoId($contactoId);
         $glanId = $this->glanService->saveGlan($glan);
 
@@ -1325,7 +1386,7 @@ class ProcessController extends AbstractActionController
 //        if(isset($posts['equipoBckId'])) {
 //            $idbck = (int)$posts['equipoBckId'];
 //        }
-        
+
         $information = $this->glanService->getAllGlansBySede($sedeId, $glanId);
 
         $viewmodel = new ViewModel(array(
@@ -1338,6 +1399,131 @@ class ProcessController extends AbstractActionController
 
     }
 
+    public function saveApAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        
+        $posts = (array)$this->request->getPost();
+        $sedeId = (int)$posts['sedeId'];
+        
+        $ap = new \Inventario\Model\Entity\Ap();
+        $ap->setOptions($posts);
+        $ap->setSedeId($sedeId);
+        
+        $apId = $this->apService->saveAp($ap);
+        $information = $this->apService->getAllApsBySede($sedeId, $apId);
+        
+        $viewmodel = new ViewModel(
+                    array(
+                        'form' => $form,
+                        'information' => $information,
+                        'selected' => $apId));
+
+        $viewmodel->setTerminal(true);
+        return $viewmodel;
+
+    }
+    
+    
+    
+    
+    public function updateGlanAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+
+        $posts = (array)$this->request->getPost();
+        $glan = new \Inventario\Model\Entity\Glan();
+        $glan->setOptions($posts);
+        $sedeId = (int)$posts['sedeId'];
+
+//        echo('POST: <pre>' . print_r($posts, true) . '</pre>');
+//        $select = 0;
+//        if(isset($posts['ipwanId'])) {
+//            $configuracion->setId($posts['ipwanId']);
+//            $select = (int)$posts['ipwanId'];
+//        }
+
+        $contacto = new \Inventario\Model\Entity\Contacto();
+        $contacto->setId($posts['glanContactoId']);
+        $contacto->setContacto($posts['gcontacto']);
+        $contacto->setTelefono($posts['gtelefono']);
+
+//        echo('CONTACTO: <pre>' . print_r($contacto, true) . '</pre>');
+        
+        $contactoId = (int)$this->contactoService->saveContacto($contacto);
+        $equipoId = (int)$posts['gnemonicoequipo'];
+        $glanEquipoId = (int)$posts['glanEquipoId'];
+
+        $glan->setId($glanEquipoId);
+        $glan->setEquipoId($equipoId);
+        $glan->setSedeId($sedeId);
+        $glan->setContactoId($contactoId);
+        
+//        die('EQUIPO: <pre>' . print_r($glan, true) . '</pre>');
+        
+        $glanId = $this->glanService->saveGlan($glan);
+
+//        $id = (int)$posts['equipoId'];
+//        $idbck = 0;
+//        if(isset($posts['equipoBckId'])) {
+//            $idbck = (int)$posts['equipoBckId'];
+//        }
+
+        $information = $this->glanService->getAllGlansBySede($sedeId, $glanId);
+
+        $viewmodel = new ViewModel(array(
+                                        'form' => $form,
+                                        'information' => $information,
+                                        'selected' => $glanId));
+
+        $viewmodel->setTerminal(true);
+        return $viewmodel;
+
+    }
+
+    
+    public function updateApAction()
+    {
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+
+        $posts = (array)$this->request->getPost();
+        $ap = new \Inventario\Model\Entity\Ap();
+        $ap->setOptions($posts);
+        $sedeId = (int)$posts['sedeId'];
+
+        $apEquipoId = (int)$posts['apEquipoId'];
+        $ap->setId($apEquipoId);
+        $ap->setSedeId($sedeId);
+        
+        $apId = $this->apService->saveAp($ap);
+        $information = $this->apService->getAllApsBySede($sedeId, $apId);
+        
+        //die('INFORMACIÓN: <pre>' . print_r($information, true) . '</pre>');
+        
+        $viewmodel = new ViewModel(array(
+                                        'form' => $form,
+                                        'information' => $information,
+                                        'selected' => $apId));
+
+        $viewmodel->setTerminal(true);
+        return $viewmodel;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public function saveComponentAction()
     {
 
@@ -1697,6 +1883,21 @@ class ProcessController extends AbstractActionController
 
         return $viewmodel;
 
+    }
+
+    public function apFillAction()
+    {
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        $sedeId = (int)$posts['sede'];
+        $apId = (int)$posts['id'];
+        $information = $this->apService->getApInfotById($apId);
+        $viewmodel = new ViewModel(
+                        array('form' => $form,
+                              'information' => $information));
+        $viewmodel->setTerminal(true);
+        return $viewmodel;
     }
     
     
