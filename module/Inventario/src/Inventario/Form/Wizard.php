@@ -2406,6 +2406,9 @@ class Wizard extends Form
 
         /* Other side*/
 
+        
+        
+        
         $this->add(array(
             'name' => 'gubicacion',
             'type' => 'Zend\Form\Element\Text',
@@ -2428,12 +2431,28 @@ class Wizard extends Form
         
         $this->add(array(
              'type' => 'Zend\Form\Element\Select',
+             'name' => 'gnemonicoequipo',
+             'options' => array(
+                    'label' => 'EDC WAN',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForNemonicos(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'gnemonicoequipo',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),
+
+        ));
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
              'name' => 'gfuncion',
              'options' => array(
-                    'label' => 'Tipo IP',
-                    'value_options' => array(   '' => 'Seleccione una opción',
-                                                '1' => 'Core',
-                                                '2' => 'Planta'),
+                    'label' => 'Función',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForFunciones(),
              ),
             'attributes' => 
                 array(
@@ -2442,8 +2461,28 @@ class Wizard extends Form
                     'class' => 'form-control input-sm',
                 ),
 
-            'validators' => array('Int'),            
-        ));        
+            'validators' => array('Int'),
+
+        ));
+        
+//        $this->add(array(
+//             'type' => 'Zend\Form\Element\Select',
+//             'name' => 'gfuncion',
+//             'options' => array(
+//                    'label' => 'Tipo IP',
+//                    'value_options' => array(   '' => 'Seleccione una opción',
+//                                                '1' => 'Core',
+//                                                '2' => 'Planta'),
+//             ),
+//            'attributes' => 
+//                array(
+//                    'id' => 'gfuncion',
+//                    'required'=> true,
+//                    'class' => 'form-control input-sm',
+//                ),
+//
+//            'validators' => array('Int'),            
+//        ));        
         
         
         
@@ -2525,7 +2564,7 @@ class Wizard extends Form
             'attributes'=>array(
                 'id' => 'gobservacion',
                 'class' => 'form-control input-sm',
-                'rows' => 6,
+                'rows' => 3,
                 'placeholder' => 'Ingresa observaciones ...',
             ),
             'options' => array(
@@ -2615,12 +2654,258 @@ class Wizard extends Form
                  array('name' => 'Zend\Filter\StringToLower'),
              )
         ));
+        
+        // APs
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'apswitch',
+            'options' => array(
+                'label' => 'Switch',
+                'value_options' => array('' => 'Seleccione una opción') 
+                    +  $this->getOptionsForSwitchs(),
+            ),
+            'attributes' => 
+                array(
+                    'id' => 'apswitch',
+                    #'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),
+        ));                
+
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'apcriticidad',
+             'options' => array(
+                    'label' => 'Criticidad',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForCriticidad(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'apcriticidad',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+
+            'validators' => array('Int'),            
+            
+        ));        
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'apestado',
+             'options' => array(
+                    'label' => 'Estado',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForEstado(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'apestado',
+                    'class' => 'form-control input-sm',
+                )
+        ));
+        
+        $this->add(array(
+            'name' => 'apcontratoextreme',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Contrato Extreme',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'apcontratoextreme',
+                    'required'=>'required',
+                    'aria-describedby' => 'apcontratoextremeHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'apnombre',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Nombre',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'apnombre',
+                    'required'=>'required',
+                    'aria-describedby' => 'apnombreHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'apipcliente',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'IP Cliente',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'apipcliente',
+                    'required'=>'required',
+                    'aria-describedby' => 'apipclienteHelp',
+                    'class' => 'form-control input-sm',
+                    'pattern' => '^(([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'apidap',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'ID AP',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'apidap',
+                    'aria-describedby' => 'apidapHelp',
+//                    'placeholder' => 'Ingresa el teléfono del contacto del equipo ...',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'apactividadtsol',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Actividad TSOL',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'apactividadtsol',
+//                    'required'=>'required',
+                    'aria-describedby' => 'apactividadtsolHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'apmodelo',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Módelo',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'apmodelo',
+//                    'required'=>'required',
+                    'aria-describedby' => 'apmodeloHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'apmac',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'MAC',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'apmac',
+//                    'required'=>'required',
+                    'aria-describedby' => 'apmacHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
  
+        $this->add(array(
+            'name' => 'apobservacion',
+            'type' => 'Zend\Form\Element\Textarea',
+            'attributes'=>array(
+                'id' => 'apobservacion',
+                'class' => 'form-control input-sm',
+                'rows' => 5,
+                'placeholder' => 'Ingresa observaciones ...',
+            ),
+            'options' => array(
+                'label' => 'Observaciones',
+            ),
+        ));
+
 
     }
-    
+
 
     // Other methods
+    public function getOptionsForSwitchs()
+    {
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query("SELECT id, nemonico FROM glans WHERE nemonico <> '' AND activo = 1");
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['nemonico'];
+        }
+        return $select;        
+    }
+
+    public function getOptionsForFunciones()
+    {
+
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query('SELECT id, funcion FROM funciones');
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['funcion'];
+        }
+        return $select;        
+
+    }        
+    
+    public function getOptionsForNemonicos()
+    {
+
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query('SELECT id, nemonico FROM equipos WHERE activo = 1 ORDER BY nemonico');
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['nemonico'];
+        }
+        return $select;        
+
+    }     
+    
+    
+    
+    
+    
     
     public function getOptionsForPoblacion()
     {

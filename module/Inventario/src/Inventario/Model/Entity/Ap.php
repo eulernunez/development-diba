@@ -1,37 +1,36 @@
 <?php
 /**
- * Description of Glan
+ * Description of Ap
  * @author Euler Nuñez
  */
 
-// module/Inventario/src/Inventario/Model/Entity/Glan.php
+// module/Inventario/src/Inventario/Model/Entity/Ap.php
 
 namespace Inventario\Model\Entity;
 
-class Glan {
+class Ap {
 
     protected $id;
-    protected $gcliente;
-    protected $gconfab;
-    protected $gactsol;
-    protected $gmodeloequipo;
-    protected $gfamfab;
-    protected $gnemonico;
-    protected $gipgestioncliente;
-    protected $gipgestion;
-    protected $gfirmware;
-    protected $gmac;
-    protected $gnumeroserie;
-    protected $gisstack;
-    protected $gstack;
-    protected $gubicacion;
-    protected $gfuncion;
-    protected $gcriticidad;
-    protected $gestado;
-    protected $gobservacion;
-
-    protected $contactoId;
-    protected $equipoId;
+    protected $apswitch;
+    protected $apcriticidad;
+    protected $apestado;
+    protected $apcontratoextreme;
+    protected $apnombre;
+    protected $apipcliente;
+    protected $apidap;
+    protected $apactividadtsol;
+    protected $apmodelo;
+    protected $apmac;
+    protected $apobservacion;
+    protected $apinternetcorporatiu;
+    protected $apinternetvisites;
+    protected $apdibaintern;
+    protected $apespaifb;
+    protected $appdapavnord;
+    protected $apmultimediaescoladona;
+    protected $appalauguell;
+    protected $apresidentrespir;
+    
     
     public function __construct(array $options = null) {
         
@@ -76,192 +75,185 @@ class Glan {
         return $this;
     }
 
-    public function getGcliente() {
-        return $this->gcliente;
+    public function getApswitch() {
+        return $this->apswitch;
     }
 
-    public function setGcliente($gcliente) {
-        $this->gcliente = $gcliente;
+    public function setApswitch($apswitch) {
+        $this->apswitch = $apswitch;
         return $this;
     }
     
-    public function getGactsol() {
-        return $this->gactsol;
+    public function getApcriticidad() {
+        return $this->apcriticidad;
     }
 
-    public function setGactsol($gactsol) {
-        $this->gactsol = $gactsol;
+    public function setApcriticidad($apcriticidad) {
+        $this->apcriticidad = $apcriticidad;
         return $this;
     }
 
-    public function getGconfab() {
-        return $this->gconfab;
+    public function getApestado() {
+        return $this->apestado;
     }
 
-    public function setGconfab($gconfab) {
-        $this->gconfab = $gconfab;
-        return $this;
-    }
-    
-    
-    public function getGmodeloequipo() {
-        return $this->gmodeloequipo;
-    }
-
-    public function setGmodeloequipo($gmodeloequipo) {
-        $this->gmodeloequipo = $gmodeloequipo;
-        return $this;
-    }
-
-    public function getGfamfab() {
-        return $this->gfamfab;
-    }
-
-    public function setGfamfab($gfamfab) {
-        $this->gfamfab = $gfamfab;
-        return $this;
-    }
-
-    public function getGnemonico() {
-        return $this->gnemonico;
-    }
-
-    public function setGnemonico($gnemonico) {
-        $this->gnemonico = $gnemonico;
-        return $this;
-    }
-
-    public function getGipgestioncliente() {
-        return $this->gipgestioncliente;
-    }
-
-    public function setGipgestioncliente($gipgestioncliente) {
-        $this->gipgestioncliente = $gipgestioncliente;
-        return $this;
-    }
-
-    public function getGipgestion() {
-        return $this->gipgestion;
-    }
-
-    public function setGipgestion($gipgestion) {
-        $this->gipgestion = $gipgestion;
+    public function setApestado($apestado) {
+        $this->apestado = $apestado;
         return $this;
     }
     
-    public function getGfirmware() {
-        return $this->gfirmware;
+    public function getApcontratoextreme() {
+        return $this->apcontratoextreme;
     }
 
-    public function setGfirmware($gfirmware) {
-        $this->gfirmware = $gfirmware;
+    public function setApcontratoextreme($apcontratoextreme) {
+        $this->apcontratoextreme = $apcontratoextreme;
         return $this;
     }
 
-    public function getGmac() {
-        return $this->gmac;
+    public function getApnombre() {
+        return $this->apnombre;
     }
 
-    public function setGmac($gmac) {
-        $this->gmac = $gmac;
+    public function setApnombre($apnombre) {
+        $this->apnombre = $apnombre;
         return $this;
     }
 
-    public function getGnumeroserie() {
-        return $this->gnumeroserie;
+    public function getApipcliente() {
+        return $this->apipcliente;
     }
 
-    public function setGnumeroserie($gnumeroserie) {
-        $this->gnumeroserie = $gnumeroserie;
-        return $this;
-    }
-    
-    public function getGisstack() {
-        return $this->gisstack;
-    }
-
-    public function setGisstack($gisstack) {
-        $this->gisstack = $gisstack;
+    public function setApipcliente($apipcliente) {
+        $this->apipcliente = $apipcliente;
         return $this;
     }
 
-            
-            
-            
-    
-    public function getGstack() {
-        return $this->gstack;
+    public function getApidap() {
+        return $this->apidap;
     }
 
-    public function setGstack($gstack) {
-        $this->gstack = $gstack;
+    public function setApidap($apidap) {
+        $this->apidap = $apidap;
         return $this;
     }
 
-    public function getGubicacion() {
-        return $this->gubicacion;
+    public function getApactividadtsol() {
+        return $this->apactividadtsol;
     }
 
-    public function setGubicacion($gubicacion) {
-        $this->gubicacion = $gubicacion;
-        return $this;
-    }
-
-
-    public function getGfuncion() {
-        return $this->gfuncion;
-    }
-
-    public function setGfuncion($gfuncion) {
-        $this->gfuncion = $gfuncion;
-        return $this;
-    }
-
-    public function getGcriticidad() {
-        return $this->gcriticidad;
-    }
-
-    public function setGcriticidad($gcriticidad) {
-        $this->gcriticidad = $gcriticidad;
-        return $this;
-    }
-
-    public function getGestado() {
-        return $this->gestado;
-    }
-
-    public function setGestado($gestado) {
-        $this->gestado = $gestado;
-        return $this;
-    }
-
-    public function getGobservacion() {
-        return $this->gobservacion;
-    }
-
-    public function setGobservacion($gobservacion) {
-        $this->gobservacion = $gobservacion;
+    public function setApactividadtsol($apactividadtsol) {
+        $this->apactividadtsol = $apactividadtsol;
         return $this;
     }
     
-    public function getContactoId() {
-        return $this->contactoId;
+    public function getApmodelo() {
+        return $this->apmodelo;
     }
 
-    public function setContactoId($contactoId) {
-        $this->contactoId = $contactoId;
+    public function setApmodelo($apmodelo) {
+        $this->apmodelo = $apmodelo;
         return $this;
     }
 
-    public function getEquipoId() {
-        return $this->equipoId;
+    public function getApmac() {
+        return $this->apmac;
     }
 
-    public function setEquipoId($equipoId) {
-        $this->equipoId = $equipoId;
+    public function setApmac($apmac) {
+        $this->apmac = $apmac;
         return $this;
     }
 
+    public function getApobservacion() {
+        return $this->apobservacion;
+    }
+
+    public function setApobservacion($apobservacion) {
+        $this->apobservacion = $apobservacion;
+        return $this;
+    }
     
+    public function getApinternetcorporatiu() {
+        return $this->apinternetcorporatiu;
+    }
+
+    public function setApinternetcorporatiu($apinternetcorporatiu) {
+        $this->apinternetcorporatiu = $apinternetcorporatiu;
+        return $this;
+    }
+
+    public function getApinternetvisites() {
+        return $this->apinternetvisites;
+    }
+
+    public function setApinternetvisites($apinternetvisites) {
+        $this->apinternetvisites = $apinternetvisites;
+        return $this;
+    }
+
+    public function getApdibaintern() {
+        return $this->apdibaintern;
+    }
+
+    public function setApdibaintern($apdibaintern) {
+        $this->apdibaintern = $apdibaintern;
+        return $this;
+    }
+    
+    public function getApespaifb() {
+        return $this->apespaifb;
+    }
+
+    public function setApespaifb($apespaifb) {
+        $this->apespaifb = $apespaifb;
+        return $this;
+    }
+
+    public function getAppdapavnord() {
+        return $this->appdapavnord;
+    }
+
+    public function setAppdapavnord($appdapavnord) {
+        $this->appdapavnord = $appdapavnord;
+        return $this;
+    }
+    
+    public function getApmultimediaescoladona() {
+        return $this->apmultimediaescoladona;
+    }
+
+    public function setApmultimediaescoladona($apmultimediaescoladona) {
+        $this->apmultimediaescoladona = $apmultimediaescoladona;
+        return $this;
+    }
+    
+    public function getAppalauguell() {
+        return $this->appalauguell;
+    }
+
+    public function setAppalauguell($appalauguell) {
+        $this->appalauguell = $appalauguell;
+        return $this;
+    }
+    
+    public function getApresidentrespir() {
+        return $this->apresidentrespir;
+    }
+
+    public function setApresidentrespir($apresidentrespir) {
+        $this->apresidentrespir = $apresidentrespir;
+        return $this;
+    }
+    
+    public function getSedeId() {
+        return $this->sedeId;
+    }
+
+    public function setSedeId($sedeId) {
+        $this->sedeId = $sedeId;
+        return $this;
+    }
+
 }
 

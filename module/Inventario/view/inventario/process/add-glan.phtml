@@ -141,7 +141,8 @@ $(function(){
                             
                             <div class="form-group">
                                 <label class="control-label" for="equipo-edc-wan">EDC WAN</label>
-                                <?= $this->information['htmlcomboboxglannemonico']['0']; ?>
+                                <?= $this->formSelect($form->get('gnemonicoequipo')); ?>
+                                <?php # $this->information['htmlcomboboxglannemonico']['0']; ?>
                             </div>
 
                             <div class="form-group">
@@ -178,7 +179,7 @@ $(function(){
                                 <label class="control-label" for="glan-observaciones">Observaciones</label>
                                 <?= $this->formTextarea($form->get('gobservacion')); ?>
                             </div>
-
+                            <input type="hidden" id="glanSedeId" name="glanSedeId" value="<?= $this->sedeId; ?>">
                             <div style="float:right; margin-top: 21px;">
                                 <a class="btn btn-primary btn-sm" href="#" onclick="saveGlan();" role="button" title="Guardar equipo Glan">
                                     <i class="glyphicon glyphicon-saved"></i>

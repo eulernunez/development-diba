@@ -76,6 +76,10 @@ return array(
  					$serviceLocator->getServiceLocator()
  					->get('componentService')
  				);
+				$ctr->setApService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('apService')
+ 				);
                                 
 			 return $ctr;
  		},
@@ -356,7 +360,28 @@ return array(
                     ),
                 ),
             ),
-            
+
+            'update-glan' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/update-glan',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'update-glan',
+                    ),
+                ),
+            ),
+
+            'update-ap' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/update-ap',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'update-ap',
+                    ),
+                ),
+            ),
             
             'delete-equipo' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -469,6 +494,17 @@ return array(
                 ),
             ),
 
+            'add-ap' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/add-ap',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'add-ap',
+                    ),
+                ),
+            ),
+            
             'add-component' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -490,6 +526,18 @@ return array(
                     ),
                 ),
             ),
+
+            'save-ap' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-ap',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'save-ap',
+                    ),
+                ),
+            ),
+
             
             'save-component' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -512,6 +560,16 @@ return array(
                     ),
                 ),
             ),
+            'ap-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ap-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ap-fill',
+                    ),
+                ),
+            ),
 
             'delete-glan' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -524,7 +582,17 @@ return array(
                 ),
             ),
 
-
+            'delete-ap' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-ap',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-ap',
+                    ),
+                ),
+            ),
+            
             
             'save-ipwan' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -898,6 +966,9 @@ return array(
             },
             'componentService' => function ($sm) {
                 return $sm->get('Inventario\Model\Component');            
+            },
+            'apService' => function ($sm) {
+                return $sm->get('Inventario\Model\Ap');            
             },
             'iplanService' => function ($sm) {
                 return $sm->get('Inventario\Model\IpLan');            

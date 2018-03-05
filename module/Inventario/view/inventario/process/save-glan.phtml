@@ -28,9 +28,22 @@ legend
 
 <script>
 
+$(function() {
+
+    $('#grid-equipos tbody tr').click(function(){
+
+        $("#grid-equipos tbody tr").each(function () {
+            $(this).removeClass('success');
+        });
+        $(this).addClass('success');
+    });
+
+});
+
+
     function updateGlan() {
 
-        var url = '<?= $this->url('save-glan'); ?>';
+        var url = '<?= $this->url('update-glan'); ?>';
         $.ajax({
            type: "POST",
            url: url,
@@ -81,10 +94,10 @@ legend
                 <td><?= $glan['ip_gestion'] ?></td>
                 <td><?= $glan['criticidad'] ?></td>
                 <td> 
-                    <a class="btn btn-primary btn-xs" href="#" onclick="glanFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
+                    <a class="btn btn-primary btn-xs" href="#" onclick="glanFill('<?= $glan['id'] ?>');" title="Consultar equipo">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
-                    <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
+                    <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo glan" data-toggle="modal" data-id="<?= $glan['id']; ?>" data-target="#deleteGlanEquipo">
                         <i class="glyphicon glyphicon-minus"></i>
                     </a>
                 </td>  
@@ -108,7 +121,8 @@ legend
                     <div class="panel-body">
 
                         <div class="col-lg-6">    
-
+                            <input type="hidden" id="glanEquipoId" name="glanEquipoId" value="<?= $this->information['glans']['0']['id']; ?>">
+                            <input type="hidden" id="glanContactoId" name="glanContactoId" value="<?= $this->information['glans']['0']['contactoId']; ?>">
                             <div class="form-group">
                                 <label class="control-label" for="contrato-fabricante">Contrato Fabricante</label>
                                 <?php $form->get('gconfab')->setValue($this->information['glans']['0']['contrato_fabricante']); ?>
@@ -192,7 +206,9 @@ legend
                             
                             <div class="form-group">
                                 <label class="control-label" for="equipo-edc-wan">EDC WAN</label>
-                                <?= $this->information['htmlcomboboxglannemonico']['0']; ?>
+                                <?php # $this->information['htmlcomboboxglannemonico']['0']; ?>
+                                <?php $form->get('gnemonicoequipo')->setValue($this->information['glans']['0']['equipoId']); ?>
+                                <?= $this->formSelect($form->get('gnemonicoequipo')); ?>
                             </div>
 
                             <div class="form-group">
@@ -237,6 +253,12 @@ legend
                                 <?= $this->formTextarea($form->get('gobservacion')); ?>
                             </div>
 
+                            <div style="float:right; margin-top: 20px;">
+                                <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateGlan();" title="Update Glan">
+                                    <i class="glyphicon glyphicon-edit"></i>
+                                </a>
+                            </div>                
+                            
                         </div>    
 
                     </div>

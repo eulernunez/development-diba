@@ -78,7 +78,8 @@ class Glan extends AbstractTableGateway {
             'criticidad_id' => (int)$glan->getGcriticidad(),
             'estado_id' => (int)$glan->getGestado(),
             'contacto_id' => (int)$glan->getContactoId(),
-            'observaciones' => $glan->getGobservacion());
+            'observaciones' => $glan->getGobservacion(),
+            'sede_id' => (int)$glan->getSedeId());
         
         $id = (int) $glan->getId();
         
@@ -161,21 +162,29 @@ class Glan extends AbstractTableGateway {
             }
         }
         
-        $stm = "SELECT id, nemonico
-                    FROM equipos
-                        WHERE circuito_id IN ("  . implode(",",$circuitoIds) . ") AND activo = 1";
-        $adapter = $this->adapter->query($stm);        
-        
         $equipoIds = array();
         $nemonicos = array();
-        foreach ($adapter->execute() as $item) {
-            $equipoIds[] = $item['id'];
-            $nemonicos[$item['id']] =  $item['nemonico'];
+        
+        if(count($circuitoIds)>0) {
+            $stm = "SELECT id, nemonico
+                        FROM equipos
+                            WHERE circuito_id IN ("  . implode(",",$circuitoIds) . ") AND activo = 1";
+
+
+            $adapter = $this->adapter->query($stm);        
+
+            foreach ($adapter->execute() as $item) {
+                $equipoIds[] = $item['id'];
+                $nemonicos[$item['id']] =  $item['nemonico'];
+            }
         }
         
         $glans = array();
         $glanIds = array();
-        $stm = "SELECT g.id,
+        $result = [];
+        
+        if(count($equipoIds)>0) {
+            $stm = "SELECT g.id,
                     g.contrato_fabricante,
                     g.actividad_tsol,
                     g.modelo_equipo,
@@ -192,21 +201,57 @@ class Glan extends AbstractTableGateway {
                     g.observaciones,
                     c.id AS clienteId, c.cliente,
                     e.id AS equipoId, e.nemonico AS equiponemonico,
-                    g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                    f.id AS funcionId, f.funcion,
                     cr.id AS criticidadId, cr.criticidad,
                     s.id AS estadoId, s.estado,
                     ct.id AS contactoId, ct.contacto, ct.telefono 
                     FROM glans AS g 
                         LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                         LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                        LEFT JOIN funciones AS f ON g.funcion_id = f.id
                         LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                         LEFT JOIN estados AS s ON g.estado_id = s.id
                     LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
                     WHERE g.equipo_id IN ("  . implode(",",$equipoIds) . ") AND g.activo = 1";
         
-            
-        $adapter = $this->adapter->query($stm);
+            $adapter = $this->adapter->query($stm);
+            $result = $adapter->execute();
+        }        
+                    
+        if(0==count($result)) {
 
+            $stm = "SELECT g.id,
+                        g.contrato_fabricante,
+                        g.actividad_tsol,
+                        g.modelo_equipo,
+                        g.familia_fabricante,
+                        g.nemonico,
+                        g.ip_gestion_cliente,
+                        g.ip_gestion,
+                        g.firmware,
+                        g.mac,
+                        g.numero_serie,
+                        g.tiene_stack,
+                        g.stack,
+                        g.ubicacion,
+                        g.observaciones,
+                        c.id AS clienteId, c.cliente,
+                        e.id AS equipoId, e.nemonico AS equiponemonico,
+                        f.id AS funcionId, f.funcion,
+                        cr.id AS criticidadId, cr.criticidad,
+                        s.id AS estadoId, s.estado,
+                        ct.id AS contactoId, ct.contacto, ct.telefono 
+                        FROM glans AS g 
+                            LEFT JOIN clientes AS c ON g.cliente_id = c.id 
+                            LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                            LEFT JOIN funciones AS f ON g.funcion_id = f.id
+                            LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
+                            LEFT JOIN estados AS s ON g.estado_id = s.id
+                        LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
+                        WHERE g.sede_id = '". $sedeId. "' AND g.activo = 1";
+            $adapter = $this->adapter->query($stm);
+
+        }
 //        foreach ($adapter->execute() as $item) {
 //            $glans[] = $item;
 //            //$glanIds[] = $item['id'];
@@ -242,13 +287,10 @@ class Glan extends AbstractTableGateway {
                     $glans[] = $item;
                     $glanIds[] = $item['id'];
                 }
-            
         }
         
         $datos['glansall'] = $glans;
         $datos['glanIds'] = $glanIds;
-        
-        
         
         if(isset($glanId) && $glanId>0){
             
@@ -278,7 +320,7 @@ class Glan extends AbstractTableGateway {
                 g.stack,
                 g.ubicacion,
                 g.observaciones,
-                g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                f.id AS funcionId, f.funcion,
                 c.id AS clienteId, c.cliente,
                 e.id AS equipoId, e.nemonico AS equiponemonico,
                 cr.id AS criticidadId, cr.criticidad,
@@ -287,6 +329,7 @@ class Glan extends AbstractTableGateway {
                 FROM glans AS g 
                     LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                     LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                    LEFT JOIN funciones AS f ON g.funcion_id = f.id
                     LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                     LEFT JOIN estados AS s ON g.estado_id = s.id
                 LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
@@ -376,16 +419,19 @@ class Glan extends AbstractTableGateway {
             }
         }
         
-        $stm = "SELECT id, nemonico
-                    FROM equipos
-                        WHERE circuito_id IN ("  . implode(",",$circuitoIds) . ") AND activo = 1";
-        $adapter = $this->adapter->query($stm);        
-        
         $equipoIds = array();
         $nemonicos = array();
-        foreach ($adapter->execute() as $item) {
-            $equipoIds[] = $item['id'];
-            $nemonicos[$item['id']] =  $item['nemonico'];
+        
+        if(count($circuitoIds)>0) {
+            $stm = "SELECT id, nemonico
+                        FROM equipos
+                        WHERE circuito_id IN ("  . implode(",",$circuitoIds) . ") AND activo = 1";
+            $adapter = $this->adapter->query($stm);        
+
+            foreach ($adapter->execute() as $item) {
+                $equipoIds[] = $item['id'];
+                $nemonicos[$item['id']] =  $item['nemonico'];
+            }
         }
         
         $glans = array();
@@ -405,7 +451,7 @@ class Glan extends AbstractTableGateway {
                 g.stack,
                 g.ubicacion,
                 g.observaciones,
-                g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                f.id AS funcionId, f.funcion,
                 c.id AS clienteId, c.cliente,
                 e.id AS equipoId, e.nemonico AS equiponemonico,
                 cr.id AS criticidadId, cr.criticidad,
@@ -414,6 +460,7 @@ class Glan extends AbstractTableGateway {
                 FROM glans AS g 
                     LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                     LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                    LEFT JOIN funciones AS f ON g.funcion_id = f.id
                     LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                     LEFT JOIN estados AS s ON g.estado_id = s.id
                 LEFT JOIN contactos AS ct ON g.contacto_id = ct.id

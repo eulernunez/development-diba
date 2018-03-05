@@ -230,13 +230,14 @@ class Component extends AbstractTableGateway {
                     g.observaciones,
                     c.id AS clienteId, c.cliente,
                     e.id AS equipoId, e.nemonico AS equiponemonico,
-                    g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                    f.id AS funcionId, f.funcion,
                     cr.id AS criticidadId, cr.criticidad,
                     s.id AS estadoId, s.estado,
                     ct.id AS contactoId, ct.contacto, ct.telefono 
                     FROM glans AS g 
                         LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                         LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                        LEFT JOIN funciones AS f ON g.funcion_id = f.id
                         LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                         LEFT JOIN estados AS s ON g.estado_id = s.id
                     LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
@@ -316,7 +317,7 @@ class Component extends AbstractTableGateway {
                 g.stack,
                 g.ubicacion,
                 g.observaciones,
-                g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                f.id AS funcionId, f.funcion,
                 c.id AS clienteId, c.cliente,
                 e.id AS equipoId, e.nemonico AS equiponemonico,
                 cr.id AS criticidadId, cr.criticidad,
@@ -325,6 +326,7 @@ class Component extends AbstractTableGateway {
                 FROM glans AS g 
                     LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                     LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                    LEFT JOIN funciones AS f ON g.funcion_id = f.id
                     LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                     LEFT JOIN estados AS s ON g.estado_id = s.id
                 LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
@@ -443,7 +445,7 @@ class Component extends AbstractTableGateway {
                 g.stack,
                 g.ubicacion,
                 g.observaciones,
-                g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                f.id AS funcionId, f.funcion,
                 c.id AS clienteId, c.cliente,
                 e.id AS equipoId, e.nemonico AS equiponemonico,
                 cr.id AS criticidadId, cr.criticidad,
@@ -452,6 +454,7 @@ class Component extends AbstractTableGateway {
                 FROM glans AS g 
                     LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                     LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                    LEFT JOIN funciones AS f ON g.funcion_id = f.id
                     LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                     LEFT JOIN estados AS s ON g.estado_id = s.id
                 LEFT JOIN contactos AS ct ON g.contacto_id = ct.id

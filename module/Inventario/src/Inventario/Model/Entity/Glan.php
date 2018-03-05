@@ -32,6 +32,7 @@ class Glan {
 
     protected $contactoId;
     protected $equipoId;
+    protected $sedeId;
     
     public function __construct(array $options = null) {
         
@@ -262,6 +263,14 @@ class Glan {
         return $this;
     }
 
-    
+    public function getSedeId() {
+        return $this->sedeId;
+    }
+
+    public function setSedeId($sedeId) {
+        $this->sedeId = $sedeId;
+        return $this;
+    }
+
 }
 

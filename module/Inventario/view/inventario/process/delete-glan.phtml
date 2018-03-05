@@ -58,6 +58,14 @@ legend
 
         $("html, body").animate({ scrollTop: 300 });
 
+        $('#grid-equipos tbody tr').click(function(){
+
+            $("#grid-equipos tbody tr").each(function () {
+                $(this).removeClass('success');
+            });
+            $(this).addClass('success');
+        });
+
     });
 
 </script>
@@ -123,9 +131,9 @@ legend
                     <div class="panel panel-default">
                         <div class="panel-body">
 
-                            <div class="col-lg-6">    
-
-
+                            <div class="col-lg-6">
+                                <input type="hidden" id="glanEquipoId" name="glanEquipoId" value="<?= $this->information['glans']['0']['id']; ?>">
+                                <input type="hidden" id="glanContactoId" name="glanContactoId" value="<?= $this->information['glans']['0']['contactoId']; ?>">
                                 <div class="form-group">
                                     <label class="control-label" for="contrato-fabricante">Contrato Fabricante</label>
                                     <?php $form->get('gconfab')->setValue($this->information['glans']['0']['contrato_fabricante']); ?>
@@ -215,7 +223,9 @@ legend
                                 
                                 <div class="form-group">
                                     <label class="control-label" for="equipo-edc-wan">EDC WAN</label>
-                                    <?= $this->information['htmlcomboboxglannemonico']['0']; ?>
+                                    <?php # $this->information['htmlcomboboxglannemonico']['0']; ?>
+                                    <?php $form->get('gnemonicoequipo')->setValue($this->information['glans']['0']['equipoId']); ?>
+                                    <?= $this->formSelect($form->get('gnemonicoequipo')); ?>                                    
                                 </div>
 
                                 <div class="form-group">
@@ -263,83 +273,100 @@ legend
                             </div>    
 
                         </div>
+                        
+                
+                                            <div id="modulo-glan" class="panel-body">
+                                                <fieldset class="col-md-12">    	
+                                                    <legend>MÓDULO ADICIONALES</legend>
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-body">
+                                                            <div Id="save-component">    
+                                                            <div style="float:right;">
 
-                        <div id="modulo-glan" class="panel-body">
-                            <fieldset class="col-md-12">    	
-                                <legend>MÓDULO ADICIONALES</legend>
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
+                                                                <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['glans']['0']['id']; ?>');" title="Agregar módulo(tab)">
+                                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                                </a>
 
-                                        <div style="float:right;">
+                                                            </div>
+                                                            <div style="clear: both;"></div>                            
 
-                                            <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar módulo">
-                                                <i class="glyphicon glyphicon-plus"></i>
-                                            </a>
+                                                            <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
 
-                                        </div>
-                                        <div style="clear: both;"></div>                            
+                                                                <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:30%;">Componente</th>
+                                                                            <th style="width:30%;">Módelo</th>
+                                                                            <th style="width:30%;">S/N</th>
+                                                                            <th style="width:10%;">Acciones</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php $row = 1; ?>
+                                                                        <?php foreach($this->information['componentesall'] as $component) : ?> 
+                                                                        <tr id="<?= $component['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
+                                                                            <td><?= $component['tipo'] ?></td>
+                                                                            <td><?= $component['modelo'] ?></td>
+                                                                            <td><?= $component['numero_serie'] ?></td>
+                                                                            <td> 
+                                                                                <a class="btn btn-primary btn-xs" href="#" onclick="componentFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
+                                                                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                                                                </a>
+                                                                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
+                                                                                    <i class="glyphicon glyphicon-minus"></i>
+                                                                                </a>
+                                                                            </td>  
+                                                                        </tr>
+                                                                        <?php $row++; ?>
+                                                                        <?php endforeach; ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                           
+                                                            <div id="component-fill">
+                                                                <?php if(isset($this->information['componentes']['0'])) : ?> 
+                                                                <div class="col-lg-6">    
 
-                                        <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label" for="componente-tipo">Componente</label>
+                                                                        <?php $form->get('ctipo')->setValue($this->information['componentes']['0']['tipoId']) ?>
+                                                                        <?= $this->formSelect($form->get('ctipo')); ?>
+                                                                    </div>
 
-                                            <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width:30%;">Componente</th>
-                                                        <th style="width:30%;">Módelo</th>
-                                                        <th style="width:30%;">S/N</th>
-                                                        <th style="width:10%;">Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $row = 1; ?>
-                                                    <?php foreach($this->information['componentesall'] as $component) : ?> 
-                                                    <tr id="<?= $component['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
-                                                        <td><?= $component['tipo'] ?></td>
-                                                        <td><?= $component['modelo'] ?></td>
-                                                        <td><?= $component['numero_serie'] ?></td>
-                                                        <td> 
-                                                            <a class="btn btn-primary btn-xs" href="#" onclick="glanFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
-                                                                <i class="glyphicon glyphicon-eye-open"></i>
-                                                            </a>
-                                                            <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
-                                                                <i class="glyphicon glyphicon-minus"></i>
-                                                            </a>
-                                                        </td>  
-                                                    </tr>
-                                                    <?php $row++; ?>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label" for="componente">Módelo</label>
+                                                                        <?php $form->get('cmodelo')->setValue($this->information['componentes']['0']['modeloId']); ?>
+                                                                         <?= $this->formSelect($form->get('cmodelo')); ?>
+                                                                    </div>
 
-    <!--                                    <div class="col-lg-6">    
-                                            <div class="form-group">
-                                                <label class="control-label" for="componente-tipo">Tipo</label>
-                                                <?php # $form->get('ctipo')->setValue($this->information['componentes']['0']['tipoId']) ?>
-                                                <?php # $this->formSelect($form->get('ctipo')); ?>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label" for="componente">Componente</label>
-                                                <?php # $form->get('ccomponente')->setValue($this->information['componentes']['0']['componente']); ?>
-                                                <?php # $this->formInput($form->get('ccomponente')); ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">    
-                                            <div class="form-group">
-                                                <label class="control-label" for="component-numeroserie">N/S</label>
-                                                <?php # $form->get('cnumeroserie')->setValue($this->information['componentes']['0']['numero_serie']); ?>
-                                                <?php # $this->formInput($form->get('cnumeroserie')); ?>
-                                            </div>
-                                        </div>    -->
+                                                                </div>
 
-                                </div> 
+                                                                <div class="col-lg-6">    
 
-                            </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label" for="component-numeroserie">N/S</label>
+                                                                        <?php $form->get('cnumeroserie')->setValue($this->information['componentes']['0']['numero_serie']); ?>
+                                                                        <?= $this->formInput($form->get('cnumeroserie')); ?>
+                                                                    </div>
 
-                        </fieldset>				
-                        <div class="clearfix"></div>
-                    </div>
+                                                                </div>
+                                                                <?php endif ?>
+                                                            </div>
+                                                            </div>    
+                                                        </div> 
 
+                                                    </div>
+
+                                                    </fieldset>				
+                                                    <div class="clearfix"></div>
+                                                </div>
+                
+
+
+                        
+                        
+                        
+                        
                     </div>
                 </fieldset>				
                 <div class="clearfix"></div>

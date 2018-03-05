@@ -28,16 +28,16 @@ legend
 
 <script>
 
-function saveGlan() {
+function saveAp() {
 
-    var url = '<?= $this->url('save-glan'); ?>';
+    var url = '<?= $this->url('save-ap'); ?>';
     $.ajax({
        type: "POST",
        url: url,
        data: $('#myForm').serialize(),
        cache: false,
        success: function (json) {
-                $("#save-glan").html(json);
+                $("#save-ap").html(json);
 //                $('.save-ipwan').addClass('disabled');
         },
         error: function (xhr, status) {
@@ -60,127 +60,133 @@ $(function(){
 });
 
 </script>
-<div id="glan-fill">
+<div id="ap-fill">
     <div class="panel panel-default">
         <div class="panel-body">
             <fieldset class="col-md-12">
-                <legend>GLAN</legend>
+                <legend>AP</legend>
                 <div class="panel panel-default">
                     <div class="panel-body">
 
-                        <div class="col-lg-6">    
-
-                            <div class="form-group">
-                                <label class="control-label" for="contrato-fabricante">Contrato Fabricante</label>
-                                <?= $this->formInput($form->get('gconfab')); ?>
-                            </div>
+                        <div class="col-lg-6">
                             
                             <div class="form-group">
-                                <label class="control-label" for="actividad-tsol">Actividad TSOL</label>
-                                <?= $this->formInput($form->get('gactsol')); ?>
+                                <label class="control-label" for="switch">Switch</label>
+                                <?= $this->formSelect($form->get('apswitch')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="modelo-equipo">Modelo Equipo</label>
-                                <?= $this->formInput($form->get('gmodeloequipo')); ?>
+                                <label class="control-label" for="contrato-extreme">Contrato Extreme</label>
+                                <?= $this->formInput($form->get('apcontratoextreme')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="familia-fabricante">Familia Fabricante</label>
-                                <?= $this->formInput($form->get('gfamfab')); ?>
+                                <label class="control-label" for="ap-nombre">Nombre</label>
+                                <?= $this->formInput($form->get('apnombre')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="glan-nemonico">Nemónico</label>
-                                <?= $this->formInput($form->get('gnemonico')); ?>
+                                <label class="control-label" for="ap-ipcliente">IP Cliente</label>
+                                <?= $this->formInput($form->get('apipcliente')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="ip-gestion-cliente">IP Gestión Cliente</label>
-                                <?= $this->formInput($form->get('gipgestioncliente')); ?>
+                                <label class="control-label" for="ap-idap">ID AP</label>
+                                <?= $this->formInput($form->get('apidap')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="ip-gestion">IP Gestión</label>
-                                <?= $this->formInput($form->get('gipgestion')); ?>
+                                <label class="control-label" for="ap-red">Red</label>
+                                <table id="grid-red-ap" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:45%;">SSID</th>
+                                            <th style="width:5%;">Act.</th>
+                                            <th style="width:45%;">SSID</th>
+                                            <th style="width:5%;">Act.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="row-input">
+                                            <td>Internet_corporatiu</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="apinetcorp" name="apinternetcorporatiu" value="1" class="form-check-input">
+                                            </td>
+                                            <td>Internet_visites</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="apinternetvisites" name="apinternetvisites" value="1" class="form-check-input">
+                                            </td>
+                                        </tr>
+                                        <tr class="row-input">
+                                            <td>Diba_intern</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="apdibaintern" name="apdibaintern" value="1" class="form-check-input">
+                                            </td>
+                                            <td>Espai F.B</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="apespaifb" name="apespaifb" value="1" class="form-check-input">
+                                            </td>
+                                        </tr>
+                                        <tr class="row-input">
+                                            <td>PDA_PavNord</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="appdapavnord" name="appdapavnord" value="1" class="form-check-input">
+                                            </td>
+                                            <td>Multimedia_Escola_Dona</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="apmultimediaescoladona" name="apmultimediaescoladona" value="1" class="form-check-input">
+                                            </td>
+                                        </tr>
+                                        <tr class="row-input">
+                                            <td>PalauGuell</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="appalauguell" name="appalauguell" value="1" class="form-check-input">
+                                            </td>
+                                            <td>Resident_Respir</td>
+                                            <td style="text-align:center;">
+                                                <input type="checkbox" id="apresidentrespir" name="apresidentrespir" value="1" class="form-check-input">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-firmware">Firmware</label>
-                                <?= $this->formInput($form->get('gfirmware')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-mac">MAC</label>
-                                <?= $this->formInput($form->get('gmac')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-numeroserie">Número Serie</label>
-                                <?= $this->formInput($form->get('gnumeroserie')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" class="form-check-label"> 
-                                    <input id="gisstack" name="gisstack" type="checkbox" value="1" class="form-check-input">
-                                    ¿Tiene stack?
-                                </label>
-                                <!--<label class="control-label" for="glan-stack">Stack</label>-->
-                                <?= $this->formInput($form->get('gstack')); ?>
-                            </div>
-
-</div                       
                         </div>    
 
-                        <div class="col-lg-6">    
+                        <div class="col-lg-6">
 
                             <div class="form-group">
-                                <label class="control-label" for="glan-cliente">Cliente</label>
-                                <?= $this->formSelect($form->get('gcliente')); ?>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="control-label" for="equipo-edc-wan">EDC WAN</label>
-                                <?= $this->information['htmlcomboboxglannemonico']['0']; ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-ubicacion">Ubicación</label>
-                                <?= $this->formInput($form->get('gubicacion')); ?>
+                                <label class="control-label" for="ap-actividad-tsol">Actividad TSOL</label>
+                                <?= $this->formInput($form->get('apactividadtsol')); ?>
                             </div>                                    
 
                             <div class="form-group">
-                                <label class="control-label" for="glan-funcion">Función</label>
-                                <?= $this->formSelect($form->get('gfuncion')); ?>
+                                <label class="control-label" for="ap-modelo">Módelo</label>
+                                <?= $this->formInput($form->get('apmodelo')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="glan-criticidad">Criticidad</label>
-                                <?= $this->formSelect($form->get('gcriticidad')); ?>
+                                <label class="control-label" for="ap-mac">MAC</label>
+                                <?= $this->formInput($form->get('apmac')); ?>
+                            </div>                                                    
+
+                            <div class="form-group">
+                                <label class="control-label" for="ap-criticidad">Criticidad</label>
+                                <?= $this->formSelect($form->get('apcriticidad')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label" for="glan-estado">Estado</label>
-                                <?= $this->formSelect($form->get('gestado')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="contacto-glan">Contacto</label>
-                                <?= $this->formInput($form->get('gcontacto')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="telefono-glan">Teléfono</label>
-                                <?= $this->formInput($form->get('gtelefono')); ?>
+                                <label class="control-label" for="ap-estado">Estado</label>
+                                <?= $this->formSelect($form->get('apestado')); ?>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label" for="glan-observaciones">Observaciones</label>
-                                <?= $this->formTextarea($form->get('gobservacion')); ?>
+                                <?= $this->formTextarea($form->get('apobservacion')); ?>
                             </div>
-
+                            
+                            <input type="hidden" id="apSedeId" name="apSedeId" value="<?= $this->sedeId; ?>">
                             <div style="float:right; margin-top: 21px;">
-                                <a class="btn btn-primary btn-sm" href="#" onclick="saveGlan();" role="button" title="Guardar equipo Glan">
+                                <a class="btn btn-primary btn-sm" href="#" onclick="saveAp();" role="button" title="Guardar equipo AP">
                                     <i class="glyphicon glyphicon-saved"></i>
                                 </a>
                             </div>
@@ -188,59 +194,6 @@ $(function(){
                         </div>
 
                     </div>
-                    <!--
-                    <div id="modulo-glan" class="panel-body">
-                        <fieldset class="col-md-12">    	
-                            <legend>MÓDULO ADICIONALES</legend>
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-
-                                    <div style="float:right;">
-
-                                        <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar módulo">
-                                            <i class="glyphicon glyphicon-plus"></i>
-                                        </a>
-
-                                    </div>
-                                    <div style="clear: both;"></div>                            
-
-                                    <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
-
-                                        <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:30%;">Tipo</th>
-                                                    <th style="width:30%;">Componente</th>
-                                                    <th style="width:30%;">N/S</th>
-                                                    <th style="width:10%;">Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label class="control-label" for="componente-tipo">Tipo</label>
-                                            <?php // $this->formSelect($form->get('ctipo')); ?>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label" for="componente">Componente</label>
-                                            <?php // $this->formInput($form->get('ccomponente')); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">    
-                                        <div class="form-group">
-                                            <label class="control-label" for="component-numeroserie">N/S</label>
-                                            <?php // $this->formInput($form->get('cnumeroserie')); ?>
-                                        </div>
-                                    </div>
-                                </div> 
-                            </div>
-                        </fieldset>				
-                        <div class="clearfix"></div>
-                    </div>
-                    -->
                 </div>
             </fieldset>				
             <div class="clearfix"></div>

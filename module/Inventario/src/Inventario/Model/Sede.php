@@ -145,6 +145,7 @@ class Sede extends AbstractTableGateway {
         $datos = array();
 
         # SEDE
+        $sedeId = $id;
         $statement = "SELECT s.id, s.nombre, s.idescat, s.direccion, p.id AS poblacionId, p.poblacion, pr.id AS provinciaId, pr.provincia,
                                     s.observacion, s.horario,
                                     c.id AS contactoId, c.contacto, c.telefono, s.fecha_alta FROM sedes AS s 
@@ -589,7 +590,7 @@ class Sede extends AbstractTableGateway {
 
         /***********************************/
         /////// DEVELOPMENT GLAN TAB - BEGIN
-        
+        $result = [];
          if(count($equipoIds) > 0) {
             
             $stm = "SELECT g.id,
@@ -609,13 +610,14 @@ class Sede extends AbstractTableGateway {
                     g.observaciones,
                     c.id AS clienteId, c.cliente,
                     e.id AS equipoId, e.nemonico AS equiponemonico,
-                    g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                    f.id AS funcionId, f.funcion,
                     cr.id AS criticidadId, cr.criticidad,
                     s.id AS estadoId, s.estado,
                     ct.id AS contactoId, ct.contacto, ct.telefono 
                     FROM glans AS g 
                         LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                         LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                        LEFT JOIN funciones AS f ON g.funcion_id = f.id
                         LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                         LEFT JOIN estados AS s ON g.estado_id = s.id
                     LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
@@ -623,28 +625,57 @@ class Sede extends AbstractTableGateway {
         
             
                 $adapter = $this->adapter->query($stm);
-
-                foreach ($adapter->execute() as $item) {
-                    $glans[] = $item;
-                    $glanIds[] = $item['id'];
-                    //$nemonicos[$item['id']] =  $item['nemonico'];
-                }
+                $result = $adapter->execute();
+                
         }
         
+        if(0==count($result)) {
+            
+            $stm = "SELECT g.id,
+                    g.actividad_tsol,
+                    g.contrato_fabricante,
+                    g.modelo_equipo,
+                    g.familia_fabricante,
+                    g.nemonico,
+                    g.ip_gestion_cliente,
+                    g.ip_gestion,
+                    g.firmware,
+                    g.mac,
+                    g.numero_serie,
+                    g.tiene_stack,
+                    g.stack,
+                    g.ubicacion,
+                    g.observaciones,
+                    c.id AS clienteId, c.cliente,
+                    e.id AS equipoId, e.nemonico AS equiponemonico,
+                    f.id AS funcionId, f.funcion,
+                    cr.id AS criticidadId, cr.criticidad,
+                    s.id AS estadoId, s.estado,
+                    ct.id AS contactoId, ct.contacto, ct.telefono 
+                    FROM glans AS g 
+                        LEFT JOIN clientes AS c ON g.cliente_id = c.id 
+                        LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                        LEFT JOIN funciones AS f ON g.funcion_id = f.id
+                        LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
+                        LEFT JOIN estados AS s ON g.estado_id = s.id
+                    LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
+                    WHERE g.sede_id = '"  .$sedeId . "' AND g.activo = 1";
+            
+                    $adapter = $this->adapter->query($stm);
+                    $result = $adapter->execute();
+        }
+        
+        foreach ($adapter->execute() as $item) {
+            $glans[] = $item;
+            $glanIds[] = $item['id'];
+            //$nemonicos[$item['id']] =  $item['nemonico'];
+        }
+
         $datos['glansall'] = $glans;
         $datos['glanIds'] = $glanIds;
 
         unset($glans);
         $glans = array();
-
-        
-        
-        
-        
-        
-        
-        
-        
         
         $glanId = -1;
         if(isset($glanIds['0'])) {
@@ -666,7 +697,7 @@ class Sede extends AbstractTableGateway {
                 g.stack,
                 g.ubicacion,
                 g.observaciones,
-                g.funcion_id AS funcionId, if(g.funcion_id = 1,'Core','Planta') as funcion,
+                f.id AS funcionId, f.funcion,
                 c.id AS clienteId, c.cliente,
                 e.id AS equipoId, e.nemonico AS equiponemonico,
                 cr.id AS criticidadId, cr.criticidad,
@@ -675,6 +706,7 @@ class Sede extends AbstractTableGateway {
                 FROM glans AS g 
                     LEFT JOIN clientes AS c ON g.cliente_id = c.id 
                     LEFT JOIN equipos AS e ON g.equipo_id = e.id
+                    LEFT JOIN funciones AS f ON g.funcion_id = f.id
                     LEFT JOIN criticidades AS cr ON g.criticidad_id = cr.id
                     LEFT JOIN estados AS s ON g.estado_id = s.id
                 LEFT JOIN contactos AS ct ON g.contacto_id = ct.id
@@ -751,13 +783,92 @@ class Sede extends AbstractTableGateway {
         # APs
 
         $aps = array();
-        $datos['apsall'] = $aps;
-        
-        #die('_INFO_: <pre>' . print_r($datos, true) . '</pre>');
+        $apIds = array();
 
+        ///////////////////////////////// INICIO AP
+        $stm = "SELECT
+                ap.id,
+                ap.contrato_extreme,
+                ap.nombre,
+                ap.ip_cliente,
+                ap.id_ap,
+                ap.actividad_tsol,
+                ap.modelo,
+                ap.mac,
+                ap.observaciones,
+                ap.es_internet_corporatiu,
+                ap.es_internet_visites,
+                ap.es_diba_intern,
+                ap.es_espai_f_b,
+                ap.es_pda_pavnord,
+                ap.es_multimedia_escola_dona,
+                ap.es_palauguell,
+                ap.es_resident_respir,
+                cr.id AS criticidadId, cr.criticidad,
+                s.id AS estadoId, s.estado,
+                sw.id AS switchId, sw.nemonico AS switch
+                FROM aps AS ap
+                    LEFT JOIN criticidades AS cr ON ap.criticidad_id = cr.id
+                    LEFT JOIN estados AS s ON ap.estado_id = s.id
+                    LEFT JOIN glans AS sw ON ap.switch_id = sw.id
+                    WHERE ap.sede_id = '"  .$sedeId . "' AND ap.activo = 1";
+
+            $adapter = $this->adapter->query($stm);
+            foreach ($adapter->execute() as $item) {
+                $aps[] = $item;
+                $apIds[] = $item['id'];
+            }
+
+        $datos['apsall'] = $aps;
+        $datos['apIds'] = $apIds;
+
+        unset($aps);
+        $aps = array();
+        
+        $apId = -1;
+        if(isset($apIds['0'])) {
+            $apId = $apIds['0'];
+        }
+
+        $stm = "SELECT 
+                ap.id,
+                ap.contrato_extreme,
+                ap.nombre,
+                ap.ip_cliente,
+                ap.id_ap,
+                ap.actividad_tsol,
+                ap.modelo,
+                ap.mac,
+                ap.observaciones,
+                ap.es_internet_corporatiu,
+                ap.es_internet_visites,
+                ap.es_diba_intern,
+                ap.es_espai_f_b,
+                ap.es_pda_pavnord,
+                ap.es_multimedia_escola_dona,
+                ap.es_palauguell,
+                ap.es_resident_respir,
+                cr.id AS criticidadId, cr.criticidad,
+                s.id AS estadoId, s.estado,
+                sw.id AS switchId, sw.nemonico AS switch
+                FROM aps AS ap
+                    LEFT JOIN criticidades AS cr ON ap.criticidad_id = cr.id
+                    LEFT JOIN estados AS s ON ap.estado_id = s.id
+                    LEFT JOIN glans AS sw ON ap.switch_id = sw.id
+                    WHERE ap.id = '"  .$apId . "' AND ap.activo = 1";
+
+            $adapter = $this->adapter->query($stm);
+        
+            foreach ($adapter->execute() as $item) {
+                $aps[] = $item;
+            }
+
+            $datos['aps'] = $aps;
+
+            //die('DATOS: <pre>' . print_r($datos, true) . '</pre>');
+        ///////////////////////////////// FIN AP
         return $datos;
 
-        
 //        
 //        $resultSet = $this->select(function (Select $select, $id) {
 //                    $select->join(array('c' => 'contactos'), 'c.id=sedes.contacto_id',array('*'),$select::JOIN_LEFT)

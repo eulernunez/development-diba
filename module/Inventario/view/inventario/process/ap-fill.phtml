@@ -103,7 +103,28 @@ function addHa() {
     });
 
 }
-    
+
+//function updateAP() {
+//
+//    var url = '<?= $this->url('update-ap'); ?>';
+//    $.ajax({
+//       type: "POST",
+//       url: url,
+//       data: $('#myForm').serialize(),
+//       cache: false,
+//       success: function (json) {
+//                $("#save-ap").html(json);
+////                $('.save-ipwan').addClass('disabled');
+//        },
+//        error: function (xhr, status) {
+//            html = "<div class='alert alert-danger'>Error!</div>"
+//            $("#box").html(html);
+//        }
+//    });
+//
+//}
+
+
     
 
 function haoneFill(id) {
@@ -126,6 +147,11 @@ function haoneFill(id) {
         }
     });
 }
+
+
+
+
+
 
 
 $(function(){
@@ -151,230 +177,155 @@ $(function(){
 <div class="panel panel-default">
     <div class="panel-body">
         <fieldset class="col-md-12">
-            <legend>GLAN</legend>
+            <legend>AP</legend>
             <div class="panel panel-default">
                 <div class="panel-body">
 
+                    <div class="col-lg-6">
+                        <input type="hidden" id="apEquipoId" name="apEquipoId" value="<?= $this->information['aps']['0']['id']; ?>">
+                        <div class="form-group">
+                            <label class="control-label" for="switch">Switch</label>
+                            <?php $form->get('apswitch')->setValue($this->information['aps']['0']['switchId']); ?>
+                            <?= $this->formSelect($form->get('apswitch')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="contrato-extreme">Contrato Extreme</label>
+                            <?php $form->get('apcontratoextreme')->setValue($this->information['aps']['0']['contrato_extreme']); ?>
+                            <?= $this->formInput($form->get('apcontratoextreme')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="ap-nombre">Nombre</label>
+                            <?php $form->get('apnombre')->setValue($this->information['aps']['0']['nombre']); ?>
+                            <?= $this->formInput($form->get('apnombre')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="ap-ipcliente">IP Cliente</label>
+                            <?php $form->get('apipcliente')->setValue($this->information['aps']['0']['ip_cliente']); ?>
+                            <?= $this->formInput($form->get('apipcliente')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="ap-idap">ID AP</label>
+                            <?php $form->get('apidap')->setValue($this->information['aps']['0']['id_ap']); ?>
+                            <?= $this->formInput($form->get('apidap')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="ap-red">Red</label>
+                            <table id="grid-red-ap" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width:45%;">SSID</th>
+                                        <th style="width:5%;">Act.</th>
+                                        <th style="width:45%;">SSID</th>
+                                        <th style="width:5%;">Act.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        $esIntCorp = (int)$this->information['aps']['0']['es_internet_corporatiu'];
+                                        $esIntVisi = (int)$this->information['aps']['0']['es_internet_visites'];
+                                        $esDibaInt = (int)$this->information['aps']['0']['es_diba_intern'];
+                                        $esEspai = (int)$this->information['aps']['0']['es_espai_f_b'];
+                                        $esPda = (int)$this->information['aps']['0']['es_pda_pavnord'];
+                                        $esEscDona = (int)$this->information['aps']['0']['es_multimedia_escola_dona'];
+                                        $esPalauguell = (int)$this->information['aps']['0']['es_palauguell'];
+                                        $esResResp = (int)$this->information['aps']['0']['es_resident_respir'];
+                                     ?>
+                                    <tr class="row-input">
+                                        <td>Internet_corporatiu</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="apinetcorp" name="apinternetcorporatiu" value="1" class="form-check-input" <?= ($esIntCorp)?'checked':''; ?>>
+                                        </td>
+                                        <td>Internet_visites</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="apinternetvisites" name="apinternetvisites" value="1" class="form-check-input" <?= ($esIntVisi)?'checked':''; ?>>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-input">
+                                        <td>Diba_intern</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="apdibaintern" name="apdibaintern" value="1" class="form-check-input" <?= ($esDibaInt)?'checked':''; ?>>
+                                        </td>
+                                        <td>Espai F.B</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="apespaifb" name="apespaifb" value="1" class="form-check-input" <?= ($esEspai)?'checked':''; ?>>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-input">
+                                        <td>PDA_PavNord</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="appdapavnord" name="appdapavnord" value="1" class="form-check-input" <?= ($esPda)?'checked':''; ?>>
+                                        </td>
+                                        <td>Multimedia_Escola_Dona</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="apmultimediaescoladona" name="apmultimediaescoladona" value="1" class="form-check-input" <?= ($esEscDona)?'checked':''; ?>>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-input">
+                                        <td>PalauGuell</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="appalauguell" name="appalauguell" value="1" class="form-check-input" <?= ($esPalauguell)?'checked':''; ?>>
+                                        </td>
+                                        <td>Resident_Respir</td>
+                                        <td style="text-align:center;">
+                                            <input type="checkbox" id="apresidentrespir" name="apresidentrespir" value="1" class="form-check-input" <?= ($esResResp)?'checked':''; ?>>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div class="col-lg-6">    
 
                         <div class="form-group">
-                            <label class="control-label" for="contrato-fabricante">Contrato Fabricante</label>
-                            <?php $form->get('gconfab')->setValue($this->information['glans']['0']['contrato_fabricante']); ?>
-                            <?= $this->formInput($form->get('gconfab')); ?>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="control-label" for="actividad-tsol">Actividad TSOL</label>
-                            <?php $form->get('gactsol')->setValue($this->information['glans']['0']['actividad_tsol']); ?>
-                            <?= $this->formInput($form->get('gactsol')); ?>
-                        </div>
+                            <label class="control-label" for="ap-actividad-tsol">Actividad TSOL</label>
+                            <?php $form->get('apactividadtsol')->setValue($this->information['aps']['0']['actividad_tsol']); ?>
+                            <?= $this->formInput($form->get('apactividadtsol')); ?>
+                        </div>                                    
 
                         <div class="form-group">
-                            <label class="control-label" for="modelo-equipo">Modelo Equipo</label>
-                            <?php $form->get('gmodeloequipo')->setValue($this->information['glans']['0']['modelo_equipo']); ?>
-                            <?= $this->formInput($form->get('gmodeloequipo')); ?>
+                            <label class="control-label" for="ap-modelo">Módelo</label>
+                            <?php $form->get('apmodelo')->setValue($this->information['aps']['0']['modelo']); ?>
+                            <?= $this->formInput($form->get('apmodelo')); ?>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label" for="familia-fabricante">Familia Fabricante</label>
-                            <?php $form->get('gfamfab')->setValue($this->information['glans']['0']['familia_fabricante']); ?>
-                            <?= $this->formInput($form->get('gfamfab')); ?>
+                            <label class="control-label" for="ap-mac">MAC</label>
+                            <?php $form->get('apmac')->setValue($this->information['aps']['0']['mac']); ?>
+                            <?= $this->formInput($form->get('apmac')); ?>
+                        </div>                                                    
+
+                        <div class="form-group">
+                            <label class="control-label" for="ap-criticidad">Criticidad</label>
+                            <?php $form->get('apcriticidad')->setValue($this->information['aps']['0']['criticidadId']) ?>
+                            <?= $this->formSelect($form->get('apcriticidad')); ?>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label" for="glan-nemonico">Nemónico</label>
-                            <?php $form->get('gnemonico')->setValue($this->information['glans']['0']['nemonico']); ?>
-                            <?= $this->formInput($form->get('gnemonico')); ?>
+                            <label class="control-label" for="ap-estado">Estado</label>
+                            <?php $form->get('apestado')->setValue($this->information['aps']['0']['estadoId']) ?>
+                            <?= $this->formSelect($form->get('apestado')); ?>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label" for="ip-gestion-cliente">IP Gestión Cliente</label>
-                            <?php $form->get('gipgestioncliente')->setValue($this->information['glans']['0']['ip_gestion_cliente']); ?>
-                            <?= $this->formInput($form->get('gipgestioncliente')); ?>
+                            <label class="control-label" for="glan-observaciones">Observaciones</label>
+                            <?php $form->get('apobservacion')->setValue($this->information['aps']['0']['observaciones']) ?>    
+                            <?= $this->formTextarea($form->get('apobservacion')); ?>
                         </div>
 
-                            <div class="form-group">
-                                <label class="control-label" for="ip-gestion">IP Gestión</label>
-                                <?php $form->get('gipgestion')->setValue($this->information['glans']['0']['ip_gestion']); ?>
-                                <?= $this->formInput($form->get('gipgestion')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-firmware">Firmware</label>
-                                <?php $form->get('gfirmware')->setValue($this->information['glans']['0']['firmware']); ?>
-                                <?= $this->formInput($form->get('gfirmware')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-mac">MAC</label>
-                                <?php $form->get('gmac')->setValue($this->information['glans']['0']['mac']); ?>
-                                <?= $this->formInput($form->get('gmac')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-numeroserie">Número Serie</label>
-                                <?php $form->get('gnumeroserie')->setValue($this->information['glans']['0']['numero_serie']); ?>
-                                <?= $this->formInput($form->get('gnumeroserie')); ?>
-                            </div>
-
-                            
-                            <div class="form-group">
-                                    <label class="control-label" class="form-check-label">
-                                        <?php $isStack = $this->information['glans']['0']['tiene_stack']; ?>
-                                        <input id="gisstack" name="gisstack" type="checkbox" value="1" class="form-check-input" <?= ($isStack)?'checked':''; ?>>
-                                        ¿Tiene stack?
-                                    </label>
-                                    <!--<label class="control-label" for="glan-stack">Stack</label>-->
-                                     <?php $form->get('gstack')->setValue($this->information['glans']['0']['stack']); ?>
-                                    <?= $this->formInput($form->get('gstack')); ?>
-
-                                </div>                             
-                        
-                        
-                        </div>    
-
-                        <div class="col-lg-6">    
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-cliente">Cliente</label>
-                                <?php $form->get('gcliente')->setValue($this->information['glans']['0']['clienteId']); ?>
-                                <?= $this->formSelect($form->get('gcliente')); ?>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="control-label" for="equipo-edc-wan">EDC WAN</label>
-                                <?= $this->information['htmlcomboboxglannemonico']['0']; ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-ubicacion">Ubicación</label>
-                                <?php $form->get('gubicacion')->setValue($this->information['glans']['0']['ubicacion']); ?>
-                                <?= $this->formInput($form->get('gubicacion')); ?>
-                            </div>                                    
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-funcion">Función</label>
-                                <?php $form->get('gfuncion')->setValue($this->information['glans']['0']['funcionId']); ?>
-                                <?= $this->formSelect($form->get('gfuncion')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-criticidad">Criticidad</label>
-                                <?php $form->get('gcriticidad')->setValue($this->information['glans']['0']['criticidadId']) ?>
-                                <?= $this->formSelect($form->get('gcriticidad')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-estado">Estado</label>
-                                <?php $form->get('gestado')->setValue($this->information['glans']['0']['estadoId']) ?>
-                                <?= $this->formSelect($form->get('gestado')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="contacto-glan">Contacto</label>
-                                <?php $form->get('gcontacto')->setValue($this->information['glans']['0']['contacto']) ?>
-                                <?= $this->formInput($form->get('gcontacto')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="telefono-glan">Teléfono</label>
-                                <?php $form->get('gtelefono')->setValue($this->information['glans']['0']['telefono']) ?>
-                                <?= $this->formInput($form->get('gtelefono')); ?>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label" for="glan-observaciones">Observaciones</label>
-                                <?php $form->get('gobservacion')->setValue($this->information['glans']['0']['observaciones']) ?>    
-                                <?= $this->formTextarea($form->get('gobservacion')); ?>
-                            </div>
-
-                        </div>    
-
-                    </div>
-
-                <div id="modulo-glan" class="panel-body">
-                    <fieldset class="col-md-12">    	
-                        <legend>MÓDULO ADICIONALES</legend>
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-
-                                <div style="float:right;">
-
-                                    <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar módulo">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                    </a>
-
-                                </div>
-                                <div style="clear: both;"></div>                            
-
-                                <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
-
-                                    <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:30%;">Componente</th>
-                                                <th style="width:30%;">Módelo</th>
-                                                <th style="width:30%;">S/N</th>
-                                                <th style="width:10%;">Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $row = 1; ?>
-                                            <?php foreach($this->information['componentesall'] as $component) : ?> 
-                                            <tr id="<?= $component['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
-                                                <td><?= $component['tipo'] ?></td>
-                                                <td><?= $component['modelo'] ?></td>
-                                                <td><?= $component['numero_serie'] ?></td>
-                                                <td> 
-                                                    <a class="btn btn-primary btn-xs" href="#" onclick="componentFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
-                                                        <i class="glyphicon glyphicon-eye-open"></i>
-                                                    </a>
-                                                    <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
-                                                        <i class="glyphicon glyphicon-minus"></i>
-                                                    </a>
-                                                </td>  
-                                            </tr>
-                                            <?php $row++; ?>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <?php if(isset($this->information['componentes']['0'])) : ?>
-                                <div class="col-lg-6">    
-
-                                    <div class="form-group">
-                                        <label class="control-label" for="componente-tipo">Componentes</label>
-                                        <?php $form->get('ctipo')->setValue($this->information['componentes']['0']['tipoId']) ?>
-                                        <?= $this->formSelect($form->get('ctipo')); ?>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label" for="componente">Módelo</label>
-                                        <?php $form->get('cmodelo')->setValue($this->information['componentes']['0']['modeloId']); ?>
-                                         <?= $this->formSelect($form->get('cmodelo')); ?>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-lg-6">    
-
-                                    <div class="form-group">
-                                        <label class="control-label" for="component-numeroserie">N/S</label>
-                                        <?php $form->get('cnumeroserie')->setValue($this->information['componentes']['0']['numero_serie']); ?>
-                                        <?= $this->formInput($form->get('cnumeroserie')); ?>
-                                    </div>
-
-                                </div>    
-                                <?php endif; ?>
-                            </div> 
-
+                        <div style="float:right; margin-top: 20px;">
+                            <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateAp();" title="Update AP">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
                         </div>
-
-                    </fieldset>				
-                    <div class="clearfix"></div>
+                    </div>    
                 </div>
-
             </div>
         </fieldset>				
         <div class="clearfix"></div>

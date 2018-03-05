@@ -112,6 +112,10 @@ $(document).ready(function (e){
         $('#deleteGlanId').val(id);
     })
 
+    $('#deleteApEquipo').on('show.bs.modal',function(e){
+        var id = $(e.relatedTarget).data().id;
+        $('#deleteApId').val(id);
+    })
 
     $("#provincia").change(function(){
         
@@ -280,8 +284,32 @@ function addGlan() {
             $("#box").html(html);
         }
     });
-
+    
 }
+
+function addAp() {
+
+    var id = $('#sedeId').val();
+    var data = {id: id};
+    var url = '<?= $this->url('add-ap'); ?>';
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (json) {
+            $("#ap-fill").html(json);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+    
+}
+
+
 
 function deleteEquipoNotManagement() {
 
@@ -361,6 +389,33 @@ function deleteGlanEquipo() {
     
 }
 
+
+
+function deleteApEquipo() {
+    
+    $('#deleteApEquipo').modal('hide');
+    var url = '<?= $this->url('delete-ap'); ?>';
+    var id = $('#deleteApId').val();
+    var sedeId = $('#deleteApSedeId').val();
+    var data = {id: id, sedeId: sedeId};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#delete-ap").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+
 function deleteCircuito() {
     $('#deleteCircuito').modal('hide');
     var url = '<?= $this->url('delete-circuito'); ?>';
@@ -408,6 +463,41 @@ function updateNotEquipos() {
 
 }
 
+function updateGlan() {
+    var url = '<?= $this->url('update-glan'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $('#myForm').serialize(),
+            cache: false,
+            success: function (json) {
+            $("#save-glan").html(json);
+//                 $('.update-equipo').addClass('disabled');
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#box").html(html);
+            }
+        });
+}
+
+function updateAp() {
+    var url = '<?= $this->url('update-ap'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $('#myForm').serialize(),
+            cache: false,
+            success: function (json) {
+            $("#save-ap").html(json);
+//                 $('.update-equipo').addClass('disabled');
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#box").html(html);
+            }
+        });
+}
 
 
 
@@ -478,7 +568,7 @@ function updateSede() {
 function glanFill(id) {
     var sede = $('#sedeId').val();
     var data = {sede: sede, id: id};
-    var    url = '<?= $this->url('glan-fill'); ?>';
+    var url = '<?= $this->url('glan-fill'); ?>';
     $.ajax({
         type: "POST",
         url: url,
@@ -494,7 +584,30 @@ function glanFill(id) {
             $("#fill").html(html);
         }
     });
+    
+}
 
+
+function apFill(id) {
+    var sede = $('#sedeId').val();
+    var data = {sede: sede, id: id};
+    var url = '<?= $this->url('ap-fill'); ?>';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#ap-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+    
 }
 
 
@@ -2204,8 +2317,9 @@ $(function(){
                                         <div class="panel panel-default">
                                             <div class="panel-body">
 
-                                                <div class="col-lg-6">    
-
+                                                <div class="col-lg-6">
+                                                    <input type="hidden" id="glanEquipoId" name="glanEquipoId" value="<?= $this->information['glans']['0']['id']; ?>">
+                                                    <input type="hidden" id="glanContactoId" name="glanContactoId" value="<?= $this->information['glans']['0']['contactoId']; ?>">
                                                     <div class="form-group">
                                                         <label class="control-label" for="contrato-fabricante">Contrato Fabricante</label>
                                                         <?php $form->get('gconfab')->setValue($this->information['glans']['0']['contrato_fabricante']); ?>
@@ -2276,9 +2390,7 @@ $(function(){
                                                         <!--<label class="control-label" for="glan-stack">Stack</label>-->
                                                          <?php $form->get('gstack')->setValue($this->information['glans']['0']['stack']); ?>
                                                         <?= $this->formInput($form->get('gstack')); ?>
-
                                                     </div>
-                                                    
 
                                                 </div>    
 
@@ -2292,7 +2404,9 @@ $(function(){
                                                     
                                                     <div class="form-group">
                                                         <label class="control-label" for="equipo-edc-wan">EDC WAN</label>
-                                                        <?= $this->information['htmlcomboboxglannemonico']['0']; ?>
+                                                        <?php # $this->information['htmlcomboboxglannemonico']['0']; ?>
+                                                        <?php $form->get('gnemonicoequipo')->setValue($this->information['glans']['0']['equipoId']); ?>
+                                                        <?= $this->formSelect($form->get('gnemonicoequipo')); ?>
                                                     </div>
 
                                                     <div class="form-group">
@@ -2336,11 +2450,18 @@ $(function(){
                                                         <?php $form->get('gobservacion')->setValue($this->information['glans']['0']['observaciones']) ?>    
                                                         <?= $this->formTextarea($form->get('gobservacion')); ?>
                                                     </div>
-
+                                                    
+                                                    <div style="float:right; margin-top: 20px;">
+                                                        <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateGlan();" title="Update Glan">
+                                                            <i class="glyphicon glyphicon-edit"></i>
+                                                        </a>
+                                                    </div>                
+                                                    
                                                 </div>    
 
                                             </div>
 
+                                            <!-- Inicio -->
                                             <div id="modulo-glan" class="panel-body">
                                                 <fieldset class="col-md-12">    	
                                                     <legend>MÓDULO ADICIONALES</legend>
@@ -2426,7 +2547,7 @@ $(function(){
                                                     </fieldset>				
                                                     <div class="clearfix"></div>
                                                 </div>
-
+                                                <!-- Fin -->
                                             </div>
                                         </fieldset>				
                                         <div class="clearfix"></div>
@@ -2445,13 +2566,18 @@ $(function(){
 
             <div style="float:right;">
 
-                <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar APs">
+                <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addAp();" title="Agregar APs">
                     <i class="glyphicon glyphicon-plus"></i>
                 </a>
 
             </div>
             <div style="clear: both;"></div>
-
+        <div id="delete-ap">
+            <input type="hidden" id="deleteApId" name="deleteApId" value="">
+            <input type="hidden" id="deleteApSedeId" name="deleteApSedeId" value="<?= $this->information['sede']['id'] ;?>">
+            
+            <div id="save-ap">
+            <!-- AP -->    
             <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
                  
                 <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
@@ -2468,16 +2594,15 @@ $(function(){
                         <?php $row = 1; ?>
                         <?php foreach($this->information['apsall'] as $ap) : ?> 
                         <tr id="<?= $ap['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
-                            <td><?= $ap['propiedad'] ?></td>
-                            <td><?= $ap['tipo'] ?></td>
-                            <td><?= $ap['ip'] ?></td>
-                            <td><?= $ap['red'] ?></td>
-                            <td><?= $ap['uso'] ?></td>
+                            <td><?= $ap['nombre'] ?></td>
+                            <td><?= $ap['ip_cliente'] ?></td>
+                            <td><?= $ap['id_ap'] ?></td>
+                            <td><?= $ap['modelo'] ?></td>
                             <td> 
-                                <a class="btn btn-primary btn-xs" href="#" onclick="apFill('<?= $this->sedeId; ?>', '<?= $ap['id'] ?>');" title="Consultar ap">
+                                <a class="btn btn-primary btn-xs" href="#" onclick="apFill('<?= $ap['id'] ?>');" title="Consultar AP">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
-                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
+                                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo AP" data-toggle="modal" data-id="<?= $ap['id']; ?>" data-target="#deleteApEquipo">
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
                             </td>  
@@ -2487,34 +2612,181 @@ $(function(){
                     </tbody>
                 </table>
             </div>
-
+            
             <div style="clear: both;"></div>
+            <div id="ap-fill">
+                <?php if(isset($this->information['aps']['0'])) : ?>
+                    <!-- INICIO AP -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <fieldset class="col-md-12">
+                                <legend>AP</legend>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
 
-    <?php if(isset($this->information['aps']['0'])) : ?>        
-              
-        <div id="ap-fill">
-            
-            
-            
-        </div>    
-            
-    <?php endif; ?>      
-            
-            
-            
-            
-            
-            
-        
-        
-        
+                                        <div class="col-lg-6">
+                                            <input type="hidden" id="glanEquipoId" name="apEquipoId" value="<?= $this->information['aps']['0']['id']; ?>">
+                                            <div class="form-group">
+                                                <label class="control-label" for="switch">Switch</label>
+                                                <?php $form->get('apswitch')->setValue($this->information['aps']['0']['switchId']); ?>
+                                                <?= $this->formSelect($form->get('apswitch')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="contrato-extreme">Contrato Extreme</label>
+                                                <?php $form->get('apcontratoextreme')->setValue($this->information['aps']['0']['contrato_extreme']); ?>
+                                                <?= $this->formInput($form->get('apcontratoextreme')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-nombre">Nombre</label>
+                                                <?php $form->get('apnombre')->setValue($this->information['aps']['0']['nombre']); ?>
+                                                <?= $this->formInput($form->get('apnombre')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-ipcliente">IP Cliente</label>
+                                                <?php $form->get('apipcliente')->setValue($this->information['aps']['0']['ip_cliente']); ?>
+                                                <?= $this->formInput($form->get('apipcliente')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-idap">ID AP</label>
+                                                <?php $form->get('apidap')->setValue($this->information['aps']['0']['id_ap']); ?>
+                                                <?= $this->formInput($form->get('apidap')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-red">Red</label>
+                                                <table id="grid-red-ap" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:45%;">SSID</th>
+                                                            <th style="width:5%;">Act.</th>
+                                                            <th style="width:45%;">SSID</th>
+                                                            <th style="width:5%;">Act.</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                            $esIntCorp = (int)$this->information['aps']['0']['es_internet_corporatiu'];
+                                                            $esIntVisi = (int)$this->information['aps']['0']['es_internet_visites'];
+                                                            $esDibaInt = (int)$this->information['aps']['0']['es_diba_intern'];
+                                                            $esEspai = (int)$this->information['aps']['0']['es_espai_f_b'];
+                                                            $esPda = (int)$this->information['aps']['0']['es_pda_pavnord'];
+                                                            $esEscDona = (int)$this->information['aps']['0']['es_multimedia_escola_dona'];
+                                                            $esPalauguell = (int)$this->information['aps']['0']['es_palauguell'];
+                                                            $esResResp = (int)$this->information['aps']['0']['es_resident_respir'];
+                                                         ?>
+                                                        <tr class="row-input">
+                                                            <td>Internet_corporatiu</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="apinetcorp" name="apinternetcorporatiu" value="1" class="form-check-input" <?= ($esIntCorp)?'checked':''; ?>>
+                                                            </td>
+                                                            <td>Internet_visites</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="apinternetvisites" name="apinternetvisites" value="1" class="form-check-input" <?= ($esIntVisi)?'checked':''; ?>>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="row-input">
+                                                            <td>Diba_intern</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="apdibaintern" name="apdibaintern" value="1" class="form-check-input" <?= ($esDibaInt)?'checked':''; ?>>
+                                                            </td>
+                                                            <td>Espai F.B</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="apespaifb" name="apespaifb" value="1" class="form-check-input" <?= ($esEspai)?'checked':''; ?>>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="row-input">
+                                                            <td>PDA_PavNord</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="appdapavnord" name="appdapavnord" value="1" class="form-check-input" <?= ($esPda)?'checked':''; ?>>
+                                                            </td>
+                                                            <td>Multimedia_Escola_Dona</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="apmultimediaescoladona" name="apmultimediaescoladona" value="1" class="form-check-input" <?= ($esEscDona)?'checked':''; ?>>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="row-input">
+                                                            <td>PalauGuell</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="appalauguell" name="appalauguell" value="1" class="form-check-input" <?= ($esPalauguell)?'checked':''; ?>>
+                                                            </td>
+                                                            <td>Resident_Respir</td>
+                                                            <td style="text-align:center;">
+                                                                <input type="checkbox" id="apresidentrespir" name="apresidentrespir" value="1" class="form-check-input" <?= ($esResResp)?'checked':''; ?>>
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">    
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-actividad-tsol">Actividad TSOL</label>
+                                                <?php $form->get('apactividadtsol')->setValue($this->information['aps']['0']['actividad_tsol']); ?>
+                                                <?= $this->formInput($form->get('apactividadtsol')); ?>
+                                            </div>                                    
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-modelo">Módelo</label>
+                                                <?php $form->get('apmodelo')->setValue($this->information['aps']['0']['modelo']); ?>
+                                                <?= $this->formInput($form->get('apmodelo')); ?>
+                                            </div>
+                                                    
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-mac">MAC</label>
+                                                <?php $form->get('apmac')->setValue($this->information['aps']['0']['mac']); ?>
+                                                <?= $this->formInput($form->get('apmac')); ?>
+                                            </div>                                                    
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-criticidad">Criticidad</label>
+                                                <?php $form->get('apcriticidad')->setValue($this->information['aps']['0']['criticidadId']) ?>
+                                                <?= $this->formSelect($form->get('apcriticidad')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="ap-estado">Estado</label>
+                                                <?php $form->get('apestado')->setValue($this->information['aps']['0']['estadoId']) ?>
+                                                <?= $this->formSelect($form->get('apestado')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="glan-observaciones">Observaciones</label>
+                                                <?php $form->get('apobservacion')->setValue($this->information['aps']['0']['observaciones']) ?>    
+                                                <?= $this->formTextarea($form->get('apobservacion')); ?>
+                                            </div>
+
+                                            <div style="float:right; margin-top: 20px;">
+                                                <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateAp();" title="Update AP">
+                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                </a>
+                                            </div>
+
+                                        </div>    
+
+                                    </div>
+                                            
+                                </div>
+                            </fieldset>				
+                        <div class="clearfix"></div>
+                    </div>
+                </div>            
+                <!-- FIN AP -->
+            <?php endif; ?>
+            </div>
+            <!-- FIN save AP -->
+            </div>
         </div>
-        
-        
-        
-    </div>
+</div>
+</div>
 
-    <?= $this->form()->closeTag($form); ?>
+<?= $this->form()->closeTag($form); ?>
 </div>
 <?php endif; ?>
 
@@ -2670,6 +2942,26 @@ $(function(){
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
                 <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteMc();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete AP -->
+<div class="modal fade" id="deleteApEquipo" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar equipo AP</h4>
+            </div>
+            <div class="modal-body">
+                <div id="msgModalDeleteEquipo"></div>
+                 <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de continuar con la eliminación?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="deleteApEquipo();" >Eliminar</button>
             </div>
         </div>
     </div>
