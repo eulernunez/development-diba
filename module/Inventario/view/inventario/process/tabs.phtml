@@ -999,7 +999,7 @@ $(function(){
                             <label for="exampleInputEmail1">Nombre</label>
                             <?php   $form->get('nombre')->setValue($information['sede']['nombre']);
                                     if('7' == $this->item) {
-                                        $form->get('nombre')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('nombre')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('nombre')->setAttribute('title','Dato encontrado');
                                     }
                             ?>
@@ -1017,7 +1017,7 @@ $(function(){
                             <?php   $form->get('direccion')->setValue($this->information['sede']['direccion']);
                                     $form->get('direccion')->setAttribute('rows', 2); 
                                     if('8' == $this->item) {
-                                        $form->get('direccion')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('direccion')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('direccion')->setAttribute('title','Dato encontrado');
                                     }
                             ?>
@@ -1150,7 +1150,7 @@ $(function(){
         </div>
 
         <div class="btn-group" role="group">
-            <button type="button" id="glan" class="btn btn-default" href="#tab4" data-toggle="tab" style="width:100%;">
+            <button type="button" id="glan" class="btn <?= ($this->tab == 3)?'btn-primary':'btn-default' ?>" href="#tab4" data-toggle="tab" style="width:100%;">
                 <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
                 <div class="hidden-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GLAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                 <div class="hidden-xs">&nbsp;</div>
@@ -1158,7 +1158,7 @@ $(function(){
         </div>
 
         <div class="btn-group" role="group">
-            <button type="button" id="accesspoint" class="btn btn-default" href="#tab5" data-toggle="tab" style="width:100%;">
+            <button type="button" id="accesspoint" class="btn <?= ($this->tab == 4)?'btn-primary':'btn-default' ?>" href="#tab5" data-toggle="tab" style="width:100%;">
                 <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
                 <div class="hidden-xs">&nbsp;&nbsp;&nbsp;&nbsp;Access&nbsp;&nbsp;&nbsp;&nbsp;</div>
                 <div class="hidden-xs">Point</div>
@@ -1229,7 +1229,7 @@ $(function(){
                             <td><?= $circuito['nif'] ?></td>
                             
                                 <?php if($circuito['administrativo'] == $this->value) : ?> 
-                                <td class="<?= ($this->item == 1)?'item-selected':''; ?>" style="<?= ($this->item == 1)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $circuito['administrativo']; ?></td>
+                                <td class="<?= ($this->item == 1)?'item-selected':''; ?>" style="<?= ($this->item == 1)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $circuito['administrativo']; ?></td>
                                 <?php else : ?>
                                 <td>
                                     <?php if(preg_match("/^00000/", $circuito['administrativo'])) : ?> 
@@ -1289,7 +1289,7 @@ $(function(){
                                     $form->get('cadministrativo')->setAttribute('readonly','readonly');
                                     
                                     if($this->information['circuitos']['0']['administrativo'] === $this->value) {
-                                        $form->get('cadministrativo')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('cadministrativo')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('cadministrativo')->setAttribute('title','Dato encontrado');
                                     } else {
                                         if(preg_match("/^00000/", $this->information['circuitos']['0']['administrativo'])) {
@@ -1315,7 +1315,7 @@ $(function(){
                                 <?php 
                                     $form->get('ctelefono')->setValue($this->information['circuitos']['0']['telefono']);
                                     if($this->information['circuitos']['0']['telefono'] === $this->value && !empty($this->value)) {
-                                        $form->get('ctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('ctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('ctelefono')->setAttribute('title','Dato encontrado');
                                     }
                                 ?>
@@ -1327,7 +1327,7 @@ $(function(){
                                 <?php
                                     $form->get('cibenet')->setValue($this->information['circuitos']['0']['ibenet']);
                                     if($this->information['circuitos']['0']['ibenet'] === $this->value && !empty($this->value)) {
-                                        $form->get('cibenet')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('cibenet')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('cibenet')->setAttribute('title','Dato encontrado');
                                     }
                                 ?>
@@ -1482,7 +1482,7 @@ $(function(){
                                 if(isset($this->information['circuitos']['1']['telefono'])) {
                                     $form->get('bctelefono')->setValue($this->information['circuitos']['1']['telefono']);
                                     if($this->information['circuitos']['1']['telefono'] === $this->value) {
-                                        $form->get('bctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('bctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                     }
                                 } 
                                 ?>
@@ -1685,13 +1685,13 @@ $(function(){
                             <td><?= $equipo['servicio'] ?></td>
                             <?php if('Cliente' != $userRole) : ?>
                                 <?php if($equipo['nemonico'] == $this->value ) : ?>
-                                    <td class="<?= ($this->item == 4)?'item-selected':''; ?>" style="<?= ($this->item == 4)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $equipo['nemonico']; ?></td>
+                                    <td class="<?= ($this->item == 4)?'item-selected':''; ?>" style="<?= ($this->item == 4)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $equipo['nemonico']; ?></td>
                                 <?php else: ?>
                                     <td><?= $equipo['nemonico']; ?></td>
                                 <?php endif; ?>
                             
                                <?php if($equipo['ip_gestion'] == $this->value ) : ?>     
-                                    <td class="<?= ($this->item == 5)?'item-selected':''; ?>" style="<?= ($this->item == 5)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $equipo['ip_gestion']; ?></td>                                    
+                                    <td class="<?= ($this->item == 5)?'item-selected':''; ?>" style="<?= ($this->item == 5)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $equipo['ip_gestion']; ?></td>                                    
                                 <?php else: ?>    
                                     <td><?= $equipo['ip_gestion'] ?></td>
                                 <?php endif; ?>
@@ -1756,7 +1756,7 @@ $(function(){
                                     <?php 
                                         $form->get('enemonico')->setValue($this->information['equipos']['0']['nemonico']);
                                         if($this->information['equipos']['0']['nemonico'] == $this->value) {
-                                            $form->get('enemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                            $form->get('enemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                             $form->get('enemonico')->setAttribute('title','Dato encontrado');
                                         }
                                     ?>
@@ -1768,7 +1768,7 @@ $(function(){
                                     <?php 
                                         $form->get('eipgestion')->setValue($this->information['equipos']['0']['ip_gestion']);
                                         if($this->information['equipos']['0']['ip_gestion'] == $this->value) {
-                                            $form->get('eipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                            $form->get('eipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                             $form->get('eipgestion')->setAttribute('title','Dato encontrado');
                                         }
                                     ?>
@@ -1904,7 +1904,7 @@ $(function(){
                                 <?php if(isset($this->information['equipos']['1']['nemonico'])) {
                                     $form->get('benemonico')->setValue($this->information['equipos']['1']['nemonico']);
                                     if($this->information['equipos']['1']['nemonico'] == $this->value) {
-                                        $form->get('benemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('benemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                     }
                                     }
                                 ?>
@@ -1916,7 +1916,7 @@ $(function(){
                                 <?php if(isset($this->information['equipos']['1']['ip_gestion'])) {
                                     $form->get('beipgestion')->setValue($this->information['equipos']['1']['ip_gestion']);
                                     if($this->information['equipos']['1']['ip_gestion'] == $this->value) {
-                                        $form->get('beipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                        $form->get('beipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                     }
                                 }
                                 ?>
@@ -2096,7 +2096,7 @@ $(function(){
                             <td><?= $notequipo['propiedad'] ?></td>
                             <td><?= $notequipo['tipo'] ?></td>
                             <?php if($notequipo['ip'] == $this->value ) : ?>     
-                                    <td class="<?= ($this->item == 5)?'item-selected':''; ?>" style="<?= ($this->item == 5)?'background-color: red;':''; ?>" title="Dato encontrado"><?= $notequipo['ip']; ?></td>                                    
+                                    <td class="<?= ($this->item == 5)?'item-selected':''; ?>" style="<?= ($this->item == 5)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $notequipo['ip']; ?></td>                                    
                             <?php else: ?>    
                                     <td><?= $notequipo['ip'] ?></td>
                             <?php endif; ?>
@@ -2162,7 +2162,7 @@ $(function(){
                                     <?php 
                                         $form->get('engip')->setValue($this->information['notequipos']['0']['ip']);
                                         if($this->information['notequipos']['0']['ip'] == $this->value) {
-                                            $form->get('engip')->setAttribute('style','color:white; font-weight: bold; background-color: red;');
+                                            $form->get('engip')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                             $form->get('engip')->setAttribute('title','Dato encontrado');
                                         }
                                     ?>
@@ -2245,7 +2245,7 @@ $(function(){
         
             </div>
         </div>
-        <div class="tab-pane fade in" id="tab4">
+        <div class="tab-pane fade in <?= ($this->tab == 3)?'active':''; ?>" id="tab4">
           
 
             <div style="float:right;">
@@ -2283,10 +2283,18 @@ $(function(){
                                     <tr id="<?= $glan['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
                                         <td><?= $glan['cliente'] ?></td>
                                         <td><?= $glan['funcion'] ?></td>
-                                        <td><?= $glan['nemonico'] ?></td>
+                                        <?php if($glan['nemonico'] == $this->value ) : ?>     
+                                                <td class="<?= ($this->item == 4)?'item-selected':''; ?>" style="<?= ($this->item == 4)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $glan['nemonico']; ?></td>                                    
+                                        <?php else: ?>    
+                                                <td><?= $glan['nemonico'] ?></td>
+                                        <?php endif; ?>
                                         <td><?= $glan['modelo_equipo'] ?></td>
                                         <td><?= $glan['numero_serie'] ?></td>
-                                        <td><?= $glan['ip_gestion'] ?></td>
+                                        <?php if($glan['ip_gestion'] == $this->value ) : ?>     
+                                                <td class="<?= ($this->item == 5)?'item-selected':''; ?>" style="<?= ($this->item == 5)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $glan['ip_gestion']; ?></td>                                    
+                                        <?php else: ?>    
+                                                <td><?= $glan['ip_gestion'] ?></td>
+                                        <?php endif; ?>
                                         <td><?= $glan['criticidad'] ?></td>
                                         <td> 
                                             <a class="btn btn-primary btn-xs" href="#" onclick="glanFill('<?= $glan['id'] ?>');" title="Consultar equipo glan">
@@ -2346,21 +2354,40 @@ $(function(){
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="glan-nemonico">Nemónico</label>
-                                                        <?php $form->get('gnemonico')->setValue($this->information['glans']['0']['nemonico']); ?>
+                                                        <?php
+                                                            $form->get('gnemonico')->setValue($this->information['glans']['0']['nemonico']);
+                                                            if($this->information['glans']['0']['nemonico'] == $this->value) {
+                                                                $form->get('gnemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                                $form->get('gnemonico')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
                                                         <?= $this->formInput($form->get('gnemonico')); ?>
                                                     </div>
 
                                                     <div class="form-group">
+                                                        <label class="control-label" for="ip-gestion">IP Gestión</label>
+                                                        <?php 
+                                                            $form->get('gipgestion')->setValue($this->information['glans']['0']['ip_gestion']); 
+                                                            if($this->information['glans']['0']['ip_gestion'] == $this->value) {
+                                                                $form->get('gipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                                $form->get('gipgestion')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
+                                                        <?= $this->formInput($form->get('gipgestion')); ?>
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
                                                         <label class="control-label" for="ip-gestion-cliente">IP Gestión Cliente</label>
-                                                        <?php $form->get('gipgestioncliente')->setValue($this->information['glans']['0']['ip_gestion_cliente']); ?>
+                                                        <?php
+                                                            $form->get('gipgestioncliente')->setValue($this->information['glans']['0']['ip_gestion_cliente']);
+                                                            if($this->information['glans']['0']['ip_gestion_cliente'] == $this->value) {
+                                                                $form->get('gipgestioncliente')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                                $form->get('gipgestioncliente')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
                                                         <?= $this->formInput($form->get('gipgestioncliente')); ?>
                                                     </div>
 
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="ip-gestion">IP Gestión</label>
-                                                        <?php $form->get('gipgestion')->setValue($this->information['glans']['0']['ip_gestion']); ?>
-                                                        <?= $this->formInput($form->get('gipgestion')); ?>
-                                                    </div>
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="glan-firmware">Firmware</label>
@@ -2370,7 +2397,14 @@ $(function(){
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="glan-mac">MAC</label>
-                                                        <?php $form->get('gmac')->setValue($this->information['glans']['0']['mac']); ?>
+                                                        <?php 
+                                                            $form->get('gmac')->setValue($this->information['glans']['0']['mac']); 
+                                                            if($this->information['glans']['0']['mac'] == $this->value) {
+                                                                $form->get('gmac')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                                $form->get('gmac')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        
+                                                        ?>
                                                         <?= $this->formInput($form->get('gmac')); ?>
                                                     </div>
 
@@ -2562,7 +2596,7 @@ $(function(){
                 </div>  
             </div>
         </div>
-        <div class="tab-pane fade in" id="tab5">
+        <div class="tab-pane fade in <?= ($this->tab == 4)?'active':''; ?>" id="tab5">
 
             <div style="float:right;">
 
@@ -2595,8 +2629,17 @@ $(function(){
                         <?php foreach($this->information['apsall'] as $ap) : ?> 
                         <tr id="<?= $ap['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
                             <td><?= $ap['nombre'] ?></td>
-                            <td><?= $ap['ip_cliente'] ?></td>
-                            <td><?= $ap['id_ap'] ?></td>
+                        
+                            <?php if($ap['ip_cliente'] == $this->value ) : ?>     
+                                <td class="<?= ($this->item == 51)?'item-selected':''; ?>" style="<?= ($this->item == 51)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $ap['ip_cliente']; ?></td>                                    
+                            <?php else: ?>    
+                                <td><?= $ap['ip_cliente'] ?></td>
+                            <?php endif; ?>
+                            <?php if($ap['id_ap'] == $this->value ) : ?>     
+                                <td class="<?= ($this->item == 52)?'item-selected':''; ?>" style="<?= ($this->item == 52)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $ap['id_ap']; ?></td>                                    
+                            <?php else: ?>    
+                                <td><?= $ap['id_ap'] ?></td>
+                            <?php endif; ?>
                             <td><?= $ap['modelo'] ?></td>
                             <td> 
                                 <a class="btn btn-primary btn-xs" href="#" onclick="apFill('<?= $ap['id'] ?>');" title="Consultar AP">
@@ -2646,13 +2689,25 @@ $(function(){
 
                                             <div class="form-group">
                                                 <label class="control-label" for="ap-ipcliente">IP Cliente</label>
-                                                <?php $form->get('apipcliente')->setValue($this->information['aps']['0']['ip_cliente']); ?>
+                                                <?php 
+                                                    $form->get('apipcliente')->setValue($this->information['aps']['0']['ip_cliente']);
+                                                    if($this->information['aps']['0']['ip_cliente'] == $this->value) {
+                                                        $form->get('apipcliente')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                        $form->get('apipcliente')->setAttribute('title','Dato encontrado');
+                                                    }
+                                                ?>
                                                 <?= $this->formInput($form->get('apipcliente')); ?>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="control-label" for="ap-idap">ID AP</label>
-                                                <?php $form->get('apidap')->setValue($this->information['aps']['0']['id_ap']); ?>
+                                                <?php 
+                                                    $form->get('apidap')->setValue($this->information['aps']['0']['id_ap']);
+                                                    if($this->information['aps']['0']['id_ap'] == $this->value) {
+                                                        $form->get('apidap')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                        $form->get('apidap')->setAttribute('title','Dato encontrado');
+                                                    }
+                                                ?>
                                                 <?= $this->formInput($form->get('apidap')); ?>
                                             </div>
 

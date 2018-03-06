@@ -13,19 +13,27 @@ class SearchService {
     protected $adapter;
     protected $params;
     protected $fields = 
-                array( 
-                    'sede' => array( 
-                             '7' => 's.nombre',
-                             '8' => 's.direccion'),
-                    'circuito' => array( 
-                             '1' => 'c.administrativo',
-                             '2' => 'c.telefono',
-                             '3' => 'c.ibenet'),
-                    'equipo' => array( 
-                             '4' => 'e.nemonico',
-                             '5' => 'e.ip_gestion'),
-                    'not_mng_equipo' => array( 
-                             '5' => 'e.ip'));
+        array(
+            'sede' => array( 
+                     '7' => 's.nombre',
+                     '8' => 's.direccion'),
+            'circuito' => array( 
+                     '1' => 'c.administrativo',
+                     '2' => 'c.telefono',
+                     '3' => 'c.ibenet'),
+            'equipo' => array( 
+                     '4' => 'e.nemonico',
+                     '5' => 'e.ip_gestion'),
+            'not_mng_equipo' => array( 
+                     '5' => 'e.ip'),
+            'glans' => array( 
+                     '4' => 'g.nemonico',
+                     '41' => 'g.mac',
+                     '5' => 'g.ip_gestion',
+                     '51' => 'g.ip_gestion_cliente'),
+            'aps' => array( 
+                     '51' => 'a.ip_cliente',
+                     '52' => 'a.id_ap'));
 
     const SEDE = 1;
     const NOMBRE_SEDE = 7;
@@ -41,7 +49,15 @@ class SearchService {
     const IP_DE_GESTION = 5;
 
     const NOT_MANAGEMENT_HARDWARE = 4;
+    
+    const GLANS = 5;
+    const MAC = 41;
+    const IP_DE_GESTION_DE_CLIENTE = 51;
 
+    const APS = 6;
+    const ID_ACCESS_POINT = 52;
+
+    
     public function setAdapter($adapter) {
         $this->adapter = $adapter;
         return $this;
@@ -117,12 +133,42 @@ class SearchService {
 
             }
 
+            if(self::GLANS == $section) {
+                if(self::NEMONICO == $parameters || self::MAC == $parameters
+                   || self::IP_DE_GESTION == $parameters || self::IP_DE_GESTION_DE_CLIENTE) {
+                    $result = array(
+                            'section' => '3',
+                            'parameter' => $parameters,
+                            'multiple' => '0',
+                            'sede' => $this->searchInGlan($parameters));
+                    return $result;
+                }
+            }
+            if(self::APS == $section) {
+                
+                if(self::IP_DE_GESTION_DE_CLIENTE == $parameters || self::ID_ACCESS_POINT == $parameters) {
+                    $result = array(
+                            'section' => '4',
+                            'parameter' => $parameters,
+                            'multiple' => '0',
+                            'sede' => $this->searchInAp($parameters));
+                    return $result;
+                }
+            }
+
         }
      
         if(!empty($textSearch)) {
-
-            $sedes = $this->searchInSede(7);
+            $sedesAll =  $this->searchInSedeAll();
+            if(count($sedesAll)>1) {
+                $result = array(  'section' => '0',
+                        'parameter' => '0',
+                        'multiple' => '1',
+                        'sede' => $sedesAll);
+                return $result;
+            }
             
+            $sedes = $this->searchInSede(7);
             if($sedes) {
                 $multiple = is_array($sedes)?1:0;
                 $result = array(  'section' => '0',
@@ -141,7 +187,7 @@ class SearchService {
                         'sede' => $sedes1);
                 return $result;
             }
-            
+
             $sedes2 = $this->searchInCircuito(1);
             if ($sedes2) {
                 $result = array(  'section' => '0',
@@ -197,12 +243,123 @@ class SearchService {
                 return $result;
             }
 
+            $sedes8 = $this->searchInGlan(4);
+            if($sedes8) {
+                $result = array(  'section' => '3',
+                        'parameter' => '4',
+                        'multiple' => '0',
+                        'sede' => $sedes8);
+                return $result;
+            }
+
+            $sedes9 = $this->searchInGlan(41);
+            if($sedes9) {
+                $result = array(  'section' => '3',
+                        'parameter' => '41',
+                        'multiple' => '0',
+                        'sede' => $sedes9);
+                return $result;
+            }
+
+            $sedes10 = $this->searchInGlan(5);
+            if($sedes10) {
+                $result = array(  'section' => '3',
+                        'parameter' => '5',
+                        'multiple' => '0',
+                        'sede' => $sedes10);
+                return $result;
+            }
+
+            $sedes11 = $this->searchInGlan(51);
+            if($sedes11) {
+                $result = array(  'section' => '3',
+                        'parameter' => '51',
+                        'multiple' => '0',
+                        'sede' => $sedes11);
+                return $result;
+            }
+
+            $sedes12 = $this->searchInAp(51);
+            if($sedes12) {
+                $result = array(  'section' => '4',
+                        'parameter' => '51',
+                        'multiple' => '0',
+                        'sede' => $sedes12);
+                return $result;
+            }
+
+            $sedes13 = $this->searchInAp(52);
+            if($sedes13) {
+                $result = array(  'section' => '4',
+                        'parameter' => '52',
+                        'multiple' => '0',
+                        'sede' => $sedes13);
+                return $result;
+            }
+
         }
 
         return 0;
 
     }
 
+    #IpCliente  &ID_AP
+    public function searchInAp($p)
+    {
+
+        $textSearch = (string)$this->params['search'];
+        $value = rtrim($textSearch);
+        $statement = "SELECT a.id AS ApId, a.*, "
+                     . "s.id AS SedeId, s.* "
+                     . "FROM aps AS a "
+                     . "INNER JOIN sedes AS s ON a.sede_id = s.id "
+                     . "WHERE " . $this->fields['aps'][$p] . " = '" . $value . "'";
+        
+        $adapter = $this->adapter->query($statement);
+
+        foreach ($adapter->execute() as $item) {
+            $sede = $item;
+        }
+        $sedeId = 0;
+        if(isset($sede['id'])) {
+            $sedeId = (int)$sede['id'];
+        }
+        return $sedeId;
+        
+        
+    }        
+    
+    
+    
+    
+    
+    
+    #Nemonico&Mac&IpGestion&IpGestionCliente
+    public function searchInGlan($p)
+    {
+        
+        $textSearch = (string)$this->params['search'];
+        $value = rtrim($textSearch);
+        $statement = "SELECT g.id AS GlanId, g.*, "
+                     . "s.id AS SedeId, s.* "
+                     . "FROM glans AS g "
+                     . "INNER JOIN sedes AS s ON g.sede_id = s.id "
+                     . "WHERE " . $this->fields['glans'][$p] . " = '" . $value . "'";
+        
+        $adapter = $this->adapter->query($statement);
+
+        foreach ($adapter->execute() as $item) {
+            $sede = $item;
+        }
+        
+        $sedeId = 0;
+        if(isset($sede['id'])) {
+            $sedeId = (int)$sede['id'];
+        }
+        return $sedeId;
+
+    }
+    
     #Ip
     public function searchInNotManagementEquipo($p)
     {
@@ -280,6 +437,44 @@ class SearchService {
             $sedeId = (int)$sede['id'];
         }
         return $sedeId;
+
+    }
+    
+    #SedeAll
+    public function searchInSedeAll()
+    {
+
+        $textSearch = (string)$this->params['search'];
+        $value = rtrim($textSearch);
+        $statement = "SELECT s.* "
+                     . "FROM sedes AS s "
+                     . "WHERE s.nombre LIKE '%" . $value . "%' OR s.direccion LIKE '%" . $value . "%'";
+
+        $adapter = $this->adapter->query($statement);
+
+        $result = $adapter->execute();
+        
+        
+        $counter = count($result);
+        
+        
+        $sedes = 0;
+        if($counter == 1) {
+            
+            foreach ($result as $item) {
+                $sede = $item;
+            }
+            $sedeId = (int)$sede['id'];
+            
+            return $sedeId;
+
+        } elseif($counter > 1)  {
+            
+            return $this->convertedObjects($result);
+
+        }
+        
+        return $sedes;
 
     }
     

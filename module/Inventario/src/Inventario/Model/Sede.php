@@ -665,12 +665,35 @@ class Sede extends AbstractTableGateway {
                     $result = $adapter->execute();
         }
         
-        foreach ($adapter->execute() as $item) {
-            $glans[] = $item;
-            $glanIds[] = $item['id'];
-            //$nemonicos[$item['id']] =  $item['nemonico'];
+        /*Searcher*/
+        if($this->tab == 3 && !empty($this->value)) {
+            if($this->item == 4 || $this->item == 41 || $this->item == 5 || $this->item == 51) {
+                $aux = array();
+                foreach ($adapter->execute() as $item) {
+                    $aux[] = $item;
+                }
+                $index = 0;
+                foreach($aux as $key => $value) {
+                    if(!empty(array_search($this->value, $value))) {
+                        $index = $key;
+                    }
+                }
+                $found = array_slice($aux, $index, 1);
+                unset($aux[$index]);
+                foreach($aux as $item) {
+                    $found[] = $item;
+                }
+                foreach ($found as $item) {
+                    $glans[] = $item;
+                    $glanIds[] = $item['id'];      
+                }
+            }
+        } else {
+            foreach ($adapter->execute() as $item) {
+                $glans[] = $item;
+                $glanIds[] = $item['id'];
+            }
         }
-
         $datos['glansall'] = $glans;
         $datos['glanIds'] = $glanIds;
 
@@ -814,10 +837,36 @@ class Sede extends AbstractTableGateway {
                     WHERE ap.sede_id = '"  .$sedeId . "' AND ap.activo = 1";
 
             $adapter = $this->adapter->query($stm);
+
+        /*Searcher*/
+        if($this->tab == 4 && !empty($this->value)) {
+            if($this->item == 51 || $this->item == 52) {
+                $aux = array();
+                foreach ($adapter->execute() as $item) {
+                    $aux[] = $item;
+                }
+                $index = 0;
+                foreach($aux as $key => $value) {
+                    if(!empty(array_search($this->value, $value))) {
+                        $index = $key;
+                    }
+                }
+                $found = array_slice($aux, $index, 1);
+                unset($aux[$index]);
+                foreach($aux as $item) {
+                    $found[] = $item;
+                }
+                foreach ($found as $item) {
+                    $aps[] = $item;
+                    $apIds[] = $item['id'];      
+                }
+            }
+        } else {
             foreach ($adapter->execute() as $item) {
                 $aps[] = $item;
                 $apIds[] = $item['id'];
             }
+        }
 
         $datos['apsall'] = $aps;
         $datos['apIds'] = $apIds;
