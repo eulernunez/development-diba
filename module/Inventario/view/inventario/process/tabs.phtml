@@ -1245,13 +1245,13 @@ $(function(){
                             <td><?= $circuito['velocidad'] ?></td>
                             <td><?= $circuito['criticidad'] ?></td>
                             <td> 
-                                <?php if(0==$circuito['parent_id']) : ?>
+                                <?php # if(0==$circuito['parent_id']) : ?>
                                 <a class="btn btn-primary btn-xs" href="#" onclick="circuitoFill('<?= $circuito['id'] ?>');" title="Consultar circuito">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
-                                <?php else : ?>
-                                <span style="margin-left: 20px;">&nbsp;</span>
-                                <?php endif; ?>
+                                <?php # else : ?>
+                                <!--<span style="margin-left: 20px;">&nbsp;</span>-->
+                                <?php # endif; ?>
                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar circuito" data-toggle="modal" data-administrativo="<?= $circuito['administrativo']; ?>" data-nif="<?= $circuito['nif']; ?>" data-id="<?= $circuito['id']; ?>" data-parent="<?= $circuito['parent_id']; ?>" data-target="#deleteCircuito">
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
@@ -1481,7 +1481,7 @@ $(function(){
                                 
                                 if(isset($this->information['circuitos']['1']['telefono'])) {
                                     $form->get('bctelefono')->setValue($this->information['circuitos']['1']['telefono']);
-                                    if($this->information['circuitos']['1']['telefono'] === $this->value) {
+                                    if($this->information['circuitos']['1']['telefono'] === $this->value && !empty($this->value)) {
                                         $form->get('bctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                     }
                                 } 
@@ -1699,13 +1699,13 @@ $(function(){
                             <?php endIf; ?>
                             <td><?= $equipo['modelo'] ?></td>
                             <td> 
-                                <?php if(0==$equipo['parent_id']) : ?>
+                                <?php # if(0==$equipo['parent_id']) : ?>
                                 <a class="btn btn-primary btn-xs" href="#" onclick="equipoFill('<?= $this->sedeId; ?>', '<?= $equipo['id'] ?>');" title="Consultar equipo">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
-                                <?php else : ?>
-                                <span style="margin-left: 20px;">&nbsp;</span>
-                                <?php endif; ?>
+                                <?php # else : ?>
+                                <!--<span style="margin-left: 20px;">&nbsp;</span>-->
+                                <?php # endif; ?>
                                 
                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo" data-toggle="modal" data-nemonico="<?= $equipo['nemonico']; ?>" data-ip="<?= $equipo['ip_gestion']; ?>" data-servicio="<?= $equipo['servicio']; ?>" data-id="<?= $equipo['id']; ?>" data-parent="<?= $equipo['parent_id']; ?>" data-target="#deleteEquipo">    
                                     <i class="glyphicon glyphicon-minus"></i>
