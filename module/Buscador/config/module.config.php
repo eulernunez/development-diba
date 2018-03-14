@@ -17,26 +17,42 @@ return array(
         'invokables' => array(
             'Buscador\Controller\Index' => Controller\IndexController::class,
             //'Buscador\Controller\Search' => Controller\SearchController::class,
-            'Buscador\Controller\Filter' => Controller\FilterController::class,
+            //'Buscador\Controller\Filter' => Controller\FilterController::class,
         ),
         
         'factories' => array(
             
-                'Buscador\Controller\Search' => function($serviceLocator) {
-                        $ctr = new \Buscador\Controller\SearchController();
-                        $ctr->setSearchService(
-                                $serviceLocator->getServiceLocator()
-                                ->get('searchService')
-                        );
+            'Buscador\Controller\Search' => function($serviceLocator) {
+                $ctr = new \Buscador\Controller\SearchController();
+                $ctr->setSearchService(
+                        $serviceLocator->getServiceLocator()
+                        ->get('searchService')
+                );
 
                  return $ctr;
             },
+                    
+            'Buscador\Controller\Filter' => function($serviceLocator) {
+                $ctr = new \Buscador\Controller\FilterController();
+                $ctr->setFilterService(
+                        $serviceLocator->getServiceLocator()
+                        ->get('filterService')
+                );
+
+                 return $ctr;
+            },
+                    
+                    
+                    
+                    
+                    
+                    
         ),
     ),
     
     'router' => array(
         'routes' => array(
-
+            
             'search' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -69,6 +85,17 @@ return array(
                     ),
                 ),
             ),
+            
+            'process-filter' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/process-filter',
+                    'defaults' => array(
+                        'controller' => 'Buscador\Controller\Filter',
+                        'action'     => 'execute',
+                    ),
+                ),
+            ),            
 
 //            'wizard' => array(
 //                'type' => 'Zend\Mvc\Router\Http\Segment',
@@ -175,6 +202,11 @@ return array(
                 $searchService = new \Buscador\Model\Search\SearchService();
                 $searchService->setAdapter($sm->get('Zend_Adapter'));
                 return $searchService;
+            },
+            'filterService' => function ($sm) {
+                $filterService = new \Buscador\Model\Filter\FilterService();
+                $filterService->setAdapter($sm->get('Zend_Adapter'));
+                return $filterService;
             },
             'Zend_Adapter' => function($serviceLocator) {
                 return $serviceLocator->get('Zend\Db\Adapter\Adapter');        

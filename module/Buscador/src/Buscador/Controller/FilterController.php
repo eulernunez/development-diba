@@ -8,11 +8,51 @@
 namespace Buscador\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+use Inventario\Form\Wizard;
 
 class FilterController extends AbstractActionController
 {
+    
+    protected $filterService;
+
+    public function setFilterService($service) {
+        $this->filterService = $service;
+        return $this;
+    }
+    
     public function indexAction()
     {
-        return [];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        
+        return new ViewModel(array(
+                'form' => $form
+            ));
+        
     }
+    
+    public function executeAction()
+    {
+
+        $params = $this->getRequest()->getQuery()->toArray();
+        $this->filterService->setParams($params);
+        $sedes = $this->filterService->process();
+
+        #die('RESULT: <pre>' . print_r($sedes, true) . '</pre>');
+        
+        if(is_array($sedes)) {
+
+            $viewmodel = 
+                    new ViewModel(
+                            array('sedes' => $sedes));
+            $viewmodel->setTerminal(true);
+
+            return $viewmodel;
+
+        }
+
+    }
+
 }

@@ -585,6 +585,10 @@ class ProcessController extends AbstractActionController
         $posts = (array)$this->request->getPost();
         $tecnologiaId = $posts['tecnologia'];
         $tipo = $posts['tipo'];
+        $custom = 0;
+        if(isset($posts['custom'])) {
+            $custom = (int)$posts['custom'];
+        }
         
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $velocidad = new Velocidad($dbAdapter);
@@ -593,7 +597,8 @@ class ProcessController extends AbstractActionController
 
         $viewmodel = new ViewModel(
                         array('velocidades' => $velocidades,
-                              'tipo' => $tipo));
+                              'tipo' => $tipo,
+                              'custom' => $custom ));
 
         $viewmodel->setTerminal(true);
 
@@ -607,7 +612,12 @@ class ProcessController extends AbstractActionController
         $posts = (array)$this->request->getPost();
         $fabricanteId = $posts['fabricante'];
         $tipo = $posts['tipo'];
+        $custom = 0;
+        if(isset($posts['custom'])) {
+            $custom = (int)$posts['custom'];
+        }
 
+        
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $modelo = new Modelo($dbAdapter);
 
@@ -615,7 +625,8 @@ class ProcessController extends AbstractActionController
 
         $viewmodel = new ViewModel(
                         array('modelos' => $modelos,
-                              'tipo' => $tipo));
+                              'tipo' => $tipo,
+                            'custom' => $custom ));
 
         $viewmodel->setTerminal(true);
 

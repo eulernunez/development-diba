@@ -29,13 +29,13 @@
 
     .form-group
     {
-        margin-bottom: 2px;
+        margin-bottom: 1px;
     }
 
     .form-control
     {
         /*height: 26px;*/
-        font-size: 12px;
+        font-size: 11px;
 
     }
 
@@ -76,44 +76,115 @@
     
 </style>                
 
+<script type="text/javascript">
+
+    $(document).ready(function (e){
+
+        $("#provincia").change(function(){
+
+            var provincia = $("#provincia option:selected").val();
+            var data = {provincia: provincia};
+            var    url = '<?= $this->url('ajax-poblacion'); ?>';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                cache: false,
+                success: function (html) {
+                    $("#ajax-poblacion").html(html);
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#fill").html(html);
+                }
+            });
+
+        });
+
+        $("#ctecnologia").change(function() {
+            var tecnologia = $("#ctecnologia option:selected").val();
+            var data = {tecnologia: tecnologia, tipo: 1, custom: 1};
+            var    url = '<?= $this->url('ajax-velocidad'); ?>';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                cache: false,
+                success: function (html) {
+                    $("#ajax-velocidad").html(html);
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#fill").html(html);
+                }
+            });
+        });
+        
+
+        $("#efabricante").change(function(){
+            var fabricante = $("#efabricante option:selected").val();
+            var data = {fabricante: fabricante, tipo: 1, custom:1};
+            var    url = '<?= $this->url('ajax-modelo'); ?>';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                cache: false,
+                success: function (html) {
+                    $("#ajax-modelo").html(html);
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#fill").html(html);
+                }
+            });
+        });
+        
+    });
+
+
+    function filter() {
+        var url = '<?= $this->url('process-filter'); ?>';
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: $('#filterForm').serialize(),
+            cache: false,
+            beforeSend: function() {
+                $("#fill-search").html("<img style='display: block; margin:auto;' src='<?= $this->basePath() . '/img/loading.gif' ;?>' />");
+            },
+            success: function (json) {
+                $("#fill-search").html(json);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#box").html(html);
+            }
+        });
+    }
+</script>
+
 <fieldset class="col-md-12">
     <legend>Filtros de Búsqueda</legend>
     <div class="panel panel-default">
         <div class="panel-body">
+            <form id="filterForm" >    
             <div class="col-lg-2">
                 <fieldset class="form-group  custom-fieldset"> 
                     <legend class="custom-legend" title="Sedes">
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Sedes
                     </legend>
-                    <div class="col-lg-12">
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Provincia</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>                        
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Población</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>
+                    <div class="col-lg-13">
+                        <div class="form-group">
+                            <label class="custom-label" for="parameterSelect">Provincia</label>
+                            <?= $this->formSelect($form->get('provincia')); ?>
+                        </div>
+                        <div id="ajax-poblacion">
+                            <div  class="form-group">
+                                <label class="custom-label" for="poblacion">Población</label>
+                                <?= $this->formSelect($form->get('poblacion')); ?>    
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
                 <div class="form-group">
@@ -122,265 +193,128 @@
                 <div class="form-group">
                     &nbsp;        
                 </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div>
-                    <a class="btn btn-primary btn-lg" href="#" role="button" onclick="Filtrar();" title="Filtrar">
+                <div style="margin-top:18px;">
+                    <a class="btn btn-primary btn-lg" href="#" role="button" onclick="filter();" title="Filtrar">
                         <i class="glyphicon glyphicon-filter"></i>
                     </a>
                 </div>
             </div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-4">
 
                 <fieldset class="form-group  custom-fieldset">
                     <legend class="custom-legend" title="Circuitos">
                         <span class="glyphicon glyphicon-random" aria-hidden="true"></span> Circuitos
                     </legend>
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                     <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Cliente</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>                        
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Tecnología</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
+                        <label class="custom-label" for="client-select">Cliente</label>
+                        <?= $this->formSelect($form->get('ccliente')); ?>
                     </div>
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Velocidad</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>                        
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Criticidad</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
                     </div>
-
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Estados</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>
-                        
-                        
-                        
-                    </div>
-                    
-                    <div class="col-lg-6">
-
-                    <fieldset class="form-group  custom-fieldset">
-                        <legend class="custom-legend" title="Circuitos">Gestionado</legend>
+                    <div class="col-lg-8">    
                         <div class="form-group">
-                            <div class="radio custom-radio">
-                                <label>
-                                    <input type="radio" name="optionsGestionado" id="optionsoptionsGestionado1" value="option1" checked="checked" /> Todos
-                                </label>
-                            </div>
-                            <div class="radio custom-radio">
-                                <label>
-                                    <input type="radio" name="optionsGestionado" id="optionsoptionsGestionado2" value="option2" /> Gestionado
-                                </label>
-                            </div>
-                            <div class="radio custom-radio">
-                                <label>
-                                    <input type="radio" name="optionsGestionado" id="optionsoptionsGestionado3" value="option3" /> No gestionado
-                                </label>
+                            <label class="custom-label" for="parameterSelect">Tecnología</label>
+                            <?= $this->formSelect($form->get('ctecnologia')); ?>
+                        </div>
+                        <div id="ajax-velocidad">
+                            <div class="form-group">
+                                <label class="custom-label" for="velocidad">Velocidad</label>
+                                <?= $this->formSelect($form->get('cvelocidad')); ?>
                             </div>
                         </div>
-                    </fieldset>        
 
-                    <fieldset class="form-group  custom-fieldset">
-                        <legend class="custom-legend" title="Backup">Backup</legend>
                         <div class="form-group">
-                            <div class="radio custom-radio">
-                                <label>
-                                    <input type="radio" name="optionsBackup" id="optionsBackup1" value="option1" checked="checked" /> Todos
-                                </label>
-                            </div>
-                            <div class="radio custom-radio">
-                                <label>
-                                    <input type="radio" name="optionsBackup" id="optionsBackup2" value="option2" /> Con backup
-                                </label>
-                            </div>
-                            <div class="radio custom-radio">
-                                <label>
-                                    <input type="radio" name="optionsBackup" id="optionsBackup3" value="option3" /> Sin backup
-                                </label>
-                            </div>
+                            <label class="custom-label" for="parameterSelect">Criticidad</label>
+                            <?= $this->formSelect($form->get('ccriticidad')); ?>                    
                         </div>
-                    </fieldset>        
-
-
-
-
-
-                        
-                        
-                        
                     </div>
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    <div class="col-lg-4">
+
+                        <div class="form-group">
+                            <label class="custom-label" for="estado-circuito">Estados</label>
+                            <select class="form-control input-sm" id="estado-circuito" name="estado-circuito">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Pre-alta</option>
+                                <option value="2">Alta</option>
+                                <option value="3">Pre-baja</option>
+                                <option value="4">Baja</option>
+                            </select>                                 
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="custom-label" for="gestion">Gestión</label>
+                            <select class="form-control input-sm" id="gestion" name="gestion">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>                                 
+                        </div>
+                        <div class="form-group">
+                            <label class="custom-label" for="principal-circuito">Principal&nbsp;<span title="Circuito principal/backup" style="cursor: pointer;" class="glyphicon glyphicon-question-sign"></span></label>
+                            <select class="form-control input-sm" id="principal-circuito" name="principal-circuito">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>                                 
+                        </div>
+                    </div>
                 </fieldset>    
-
             </div>    
-
             <div class="col-lg-3">    
                 <fieldset class="form-group  custom-fieldset">
                     <legend class="custom-legend" title="Equipos gestionados">
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Equipos Gestionados
+<!--                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>-->
+                        Equipos Gestionados
                     </legend>
                     
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         
                         <div class="form-group">
                             <label class="custom-label" for="parameterSelect">Servicio</label>
-                            <select class="form-control input-sm" id="parameters" name="parameters">
-                                <option>Todos</option>
-                                <option>Administrativo</option>
-                                <option>Teléfono</option>
-                                <option>Ibenet</option>
-                                <option>Nemónico</option>
-                                <option>IP de gestión</option>
-                                <option>VPN</option>
-                                <option>Dirección</option>
-                                <option>Nombre de la sede</option>
-                            </select>                    
+                            <?= $this->formSelect($form->get('eservicio')); ?>
                         </div>
 
                         <div class="form-group">
-                            <label class="custom-label" for="parameterSelect">Fabricante</label>
-                            <select class="form-control input-sm" id="parameters" name="parameters">
-                                <option>Todos</option>
-                                <option>Administrativo</option>
-                                <option>Teléfono</option>
-                                <option>Ibenet</option>
-                                <option>Nemónico</option>
-                                <option>IP de gestión</option>
-                                <option>VPN</option>
-                                <option>Dirección</option>
-                                <option>Nombre de la sede</option>
-                            </select>                    
+                            <label class="custom-label" for="equipo-fabricante">Fabricante</label>
+                            <?= $this->formSelect($form->get('efabricante')); ?>
                         </div>
 
-                        <div class="form-group">
-                            <label class="custom-label" for="parameterSelect">Modelo</label>
-                            <select class="form-control input-sm" id="parameters" name="parameters">
-                                <option>Todos</option>
-                                <option>Administrativo</option>
-                                <option>Teléfono</option>
-                                <option>Ibenet</option>
-                                <option>Nemónico</option>
-                                <option>IP de gestión</option>
-                                <option>VPN</option>
-                                <option>Dirección</option>
-                                <option>Nombre de la sede</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="custom-label" for="parameterSelect">Estados</label>
-                            <select class="form-control input-sm" id="parameters" name="parameters">
-                                <option>Todos</option>
-                                <option>Administrativo</option>
-                                <option>Teléfono</option>
-                                <option>Ibenet</option>
-                                <option>Nemónico</option>
-                                <option>IP de gestión</option>
-                                <option>VPN</option>
-                                <option>Dirección</option>
-                                <option>Nombre de la sede</option>
-                            </select>                    
-                        </div>    
+                        <div id="ajax-modelo">
+                            <div class="form-group">
+                                <label class="custom-label" for="modelo">Modelo</label>
+                                <?= $this->formSelect($form->get('emodelo')); ?>
+                            </div>
+                        </div>                        
                         
                     </div>
                         
                     <div class="col-lg-6">
-
-                        <fieldset class="form-group  custom-fieldset">
-                            <legend class="custom-legend" title="Backup de Equipos">Backup</legend>
-                            <div class="form-group">
-                                <div class="radio custom-radio">
-                                    <label>
-                                        <input type="radio" name="optionsBackupEquipo" id="optionsBackupEquipo1" value="option1" checked="checked" /> Todos
-                                    </label>
-                                </div>
-                                <div class="radio custom-radio">
-                                    <label>
-                                        <input type="radio" name="optionsBackupEquipo" id="optionsBackupEquipo2" value="option2" /> Con backup
-                                    </label>
-                                </div>
-                                <div class="radio custom-radio">
-                                    <label>
-                                        <input type="radio" name="optionsBackupEquipo" id="optionsBackupEquipo3" value="option3" /> Sin backup
-                                    </label>
-                                </div>
-                            </div>
-                        </fieldset>
-
+                        <div class="form-group">
+                            <label class="custom-label" for="estado-equipo">Estados</label>
+                            <select class="form-control input-sm" id="estado-equipo" name="estado-equipo">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Pre-alta</option>
+                                <option value="2">Alta</option>
+                                <option value="3">Pre-baja</option>
+                                <option value="4">Baja</option>
+                            </select>                                 
+                        </div>
                     </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="custom-label" for="principal-equipo">Principal&nbsp;<span title="Equipo principal/backup" style="cursor: pointer;" class="glyphicon glyphicon-question-sign"></span></label>
+                            <select class="form-control input-sm" id="principal-equipo" name="principal-equipo">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>                                 
+                        </div>
+                    </div>
+                    
                     
                 </fieldset>    
             </div>    
@@ -388,103 +322,36 @@
 
             <div class="col-lg-3">    
                 <fieldset class="form-group  custom-fieldset">
-                    <legend class="custom-legend" title="Equipos No Gestionados">
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Equipos No gestionados
+                    <legend class="custom-legend" title="Equipos No Gestionados" style="font-size:10px;">
+                        <!--<span class="glyphicon glyphicon-user" aria-hidden="true"></span>-->
+                        <!--<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>--> 
+                        Equipos no gestionados
                     </legend>
-                    <div class="col-lg-6">
-
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Propiedad Router</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>                        
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Tipo IP</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Redes</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>
-                    <div class="form-group">
-                        <label class="custom-label" for="parameterSelect">Usos</label>
-                        <select class="form-control input-sm" id="parameters" name="parameters">
-                            <option>Todos</option>
-                            <option>Administrativo</option>
-                            <option>Teléfono</option>
-                            <option>Ibenet</option>
-                            <option>Nemónico</option>
-                            <option>IP de gestión</option>
-                            <option>VPN</option>
-                            <option>Dirección</option>
-                            <option>Nombre de la sede</option>
-                        </select>                    
-                    </div>
-
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="custom-label" for="propiedad-equipo">Propiedad Router</label>
+                            <select class="form-control input-sm" id="propiedad-equipo" name="propiedad-equipo">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Teléfonica</option>
+                                <option value="2">Cliente</option>
+                            </select>                                 
+                        </div>
+                        <div class="form-group">
+                            <label class="custom-label" for="tipo-ip">Tipo IP</label>
+                            <select class="form-control input-sm" id="tipo-ip" name="tipo-ip">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Dinámico</option>
+                                <option value="2">Estático</option>
+                            </select>                    
+                        </div>
+                        
                     </div>
 
                 </fieldset>
             </div>
-
-            
-            
-            
-            
-            
-<!--            <div class="col-lg-1">
-                        <fieldset class="form-group">
-                        <legend>Esquemas</legend>
-                            <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="32" width="32" style="border:1px solid black;">
-                            <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="32" width="32" style="border:1px solid black;">
-                            <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="32" width="32" style="border:1px solid black;">
-                            <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="32" width="32" style="border:1px solid black;">
-                            <img src="http://www.huawei.com/ucmf/groups/public/documents/webasset/ar1200.jpg" alt="Smiley face" height="32" width="32" style="border:1px solid black;">
-                        </fieldset>    
-                        <button type="submit" class="btn btn-primary">IMG:Upload galeria de imagenes</button>
-
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div style="float:right; ">
-                    <a class="btn btn-primary btn-lg" href="#" role="button" onclick="Filtrar();" title="Filtrar">
-                        <i class="glyphicon glyphicon-sort-by-attributes-alt"></i>
-                    </a>
-                </div>
-            </div>-->
-            
+            </form>
         </div>
     </div>
-
 </fieldset>
-
-
+<div id="fill-search">
+</div>

@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label class="control-label" for="<?= ($this->tipo==1)?'emodelo':'bemodelo'; ?>">Modelo</label>
+    <label class="<?= ($this->custom==1)?'custom-label':'control-label'; ?>" for="<?= ($this->tipo==1)?'emodelo':'bemodelo'; ?>">Modelo</label>
     <select name="<?= ($this->tipo==1)?'emodelo':'bemodelo'; ?>" id="<?= ($this->tipo==1)?'emodelo':'bemodelo'; ?>" class="form-control input-sm">
         <?php foreach ($this->modelos as $key => $value ) : ?>
             <option value="<?= $key; ?>"><?= $value; ?></option>
