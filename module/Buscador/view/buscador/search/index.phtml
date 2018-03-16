@@ -16,6 +16,9 @@ function buscar() {
         url: url,
         data: $('#searchForm').serialize(),
         cache: false,
+        beforeSend: function() {
+            $("#fill-search").html("<img style='display: block; margin:auto;' src='<?= $this->basePath() . '/img/loading.gif' ;?>' />");
+        },
         success: function (json) {
 
             var isJson;
