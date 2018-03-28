@@ -1651,6 +1651,15 @@ $(function(){
                     <input type="hidden" id="deleteEquipoSedeId" name="deleteEquipoSedeId" value="<?= $this->information['sede']['id'] ;?>">
 
                 <div id="equipo-update">
+                    <?php
+                        $equiposNumber = 0;
+                        if(isset($this->information['equiposall'])) {
+                            $equiposNumber = count($this->information['equiposall']);
+                        }
+                    ?>
+                    <div style="float:left;">
+                        <button type="button" class="btn btn-primary" title="Número de equipos"><?= '# ' . $equiposNumber; ?></button>
+                    </div>                    
                     <div style="float:right;">
 
                         <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/2" role="button" title="Agregar equipo">
@@ -2066,7 +2075,16 @@ $(function(){
             <div id="delete-equipo-not-management">
                     <input type="hidden" id="deleteEquipoNotManagementId" name="deleteEquipoNotManagementId" value="">
                     <input type="hidden" id="deleteEquipoNotManagementSedeId" name="deleteEquipoNotManagementSedeId" value="<?= $this->information['sede']['id'] ;?>">
-                <div id="equipo-not-update">        
+                <div id="equipo-not-update">
+                    <?php
+                        $equiposNoGestionadosNumber = 0;
+                        if(isset($this->information['notequiposall'])) {
+                            $equiposNoGestionadosNumber = count($this->information['notequiposall']);
+                        }
+                    ?>
+                    <div style="float:left;">
+                        <button type="button" class="btn btn-primary" title="Número de equipos no gestionados"><?= '# ' . $equiposNoGestionadosNumber; ?></button>
+                    </div>                    
                     <div style="float:right;">
 
                         <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/3" role="button" title="Agregar equipo no gestionado">
@@ -2246,8 +2264,17 @@ $(function(){
             </div>
         </div>
         <div class="tab-pane fade in <?= ($this->tab == 3)?'active':''; ?>" id="tab4">
-          
-
+            <?php
+                $glansNumber = 0;
+                if(isset($this->information['glansall'])) {
+                    $glansNumber = count($this->information['glansall']);
+                }
+            ?>
+            <div style="float:left;">
+                <button type="button" class="btn btn-primary" title="Número de equipos glan"><?= '# ' . $glansNumber; ?></button>
+            </div>          
+            
+            
             <div style="float:right;">
 
                 <a class="btn btn-primary btn-sm" href="#" onclick="addGlan();" role="button" title="Agregar equipo glan">
@@ -2501,10 +2528,21 @@ $(function(){
                                                     <legend>MÓDULO ADICIONALES</legend>
                                                     <div class="panel panel-default">
                                                         <div class="panel-body">
-                                                            <div Id="save-component">    
+                                                            <div Id="save-component">
+                                                            <?php
+                                                                $modulosNumber = 0;
+                                                                if(isset($this->information['componentesall'])) {
+                                                                    $modulosNumber = count($this->information['componentesall']);
+                                                                }
+                                                            ?>
+                                                            <div style="float:left;">
+                                                                <button type="button" class="btn btn-primary" title="Número de módulos"><?= '# ' . $modulosNumber; ?></button>
+                                                            </div>                                                                
+                                                                
+                                                                
                                                             <div style="float:right;">
 
-                                                                <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['glans']['0']['id']; ?>');" title="Agregar módulo(tab)">
+                                                                <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['glans']['0']['id']; ?>');" title="Agregar módulo">
                                                                     <i class="glyphicon glyphicon-plus"></i>
                                                                 </a>
 
@@ -2597,7 +2635,15 @@ $(function(){
             </div>
         </div>
         <div class="tab-pane fade in <?= ($this->tab == 4)?'active':''; ?>" id="tab5">
-
+            <?php
+                $apsNumber = 0;
+                if(isset($this->information['apsall'])) {
+                    $apsNumber = count($this->information['apsall']);
+                }
+            ?>
+            <div style="float:left;">
+                <button type="button" class="btn btn-primary" title="Número de circuitos"><?= '# ' . $apsNumber; ?></button>
+            </div>
             <div style="float:right;">
 
                 <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addAp();" title="Agregar APs">

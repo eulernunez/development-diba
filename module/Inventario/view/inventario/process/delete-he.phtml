@@ -157,8 +157,17 @@ $(function(){
 <div class="panel panel-default">
     <div class="panel-body">
         <input type="hidden" id="deleteHeId" name="deleteHeId" value="">
+        <?php
+            $heNumber = 0;
+            if(isset($this->information['hes'])) {
+                $heNumber = count($this->information['hes']);
+            }
+        ?>
+        <div style="float:left;">
+            <button type="button" class="btn btn-primary" title="Número de hardware especial"><?= '# ' . $heNumber; ?></button>
+        </div>
         <div style="float:right;">
-            <a class="btn btn-primary btn-sm" href="#" onclick="addHe();" role="button" title="Agregar hardware">
+            <a class="btn btn-primary btn-sm" href="#" onclick="addHe();" role="button" title="Agregar hardware especial">
                 <i class="glyphicon glyphicon-plus"></i>
             </a>
         </div>    

@@ -72,6 +72,15 @@ $(function(){
 
 });
 </script>
+<?php
+    $equiposNumber = 0;
+    if(isset($this->information['equiposall'])) {
+        $equiposNumber = count($this->information['equiposall']);
+    }
+?>
+<div style="float:left;">
+    <button type="button" class="btn btn-primary" title="Número de equipos"><?= '# ' . $equiposNumber; ?></button>
+</div>                    
 
 <div style="float:right;">
 

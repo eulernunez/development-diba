@@ -36,9 +36,11 @@ class FilterService {
             $poblacion = (int)$this->params['poblacion'];
         }
         $filterProvincia = '';
-        if($poblacion>0){
+        if($provincia>0&&$poblacion>0){
             $filterProvincia = "s.provincia_id =" . $provincia . " AND s.poblacion_id = " . $poblacion;
-        }elseif(0==$poblacion) {
+        }elseif($provincia>0&&$poblacion<0) {
+            $filterProvincia = "s.provincia_id =" . $provincia;
+        }elseif(0==$provincia) {
             $filterProvincia = "true";
         }
 
@@ -52,7 +54,7 @@ class FilterService {
         if($cliente>0){
             $filterCliente = " AND c.cliente_id =" . $cliente;
         }elseif(0==$cliente) {
-            $filterCliente = " AND true";
+            $filterCliente = "";
         }
 
         #TECNOLOGIA
@@ -65,10 +67,12 @@ class FilterService {
             $velocidad = (int)$this->params['cvelocidad'];
         }
         $filterTecnologia = '';
-        if($tecnologia>0){
+        if($tecnologia>0&&$velocidad>0){
             $filterTecnologia = " AND c.tecnologia_id =" . $tecnologia . " AND c.velocidad_id = " . $velocidad;
+        }elseif($tecnologia>0&&$velocidad<0){
+            $filterTecnologia = " AND c.tecnologia_id =" . $tecnologia;
         }elseif(0==$tecnologia) {
-            $filterTecnologia = " AND true";
+            $filterTecnologia = "";
         }
         
         #CRITICIDAD
@@ -80,7 +84,7 @@ class FilterService {
         if($criticidad>0){
             $filterCriticidad = " AND c.criticidad_id =" . $criticidad;
         }elseif(0==$criticidad) {
-            $filterCriticidad = " AND true";
+            $filterCriticidad = "";
         }
 
         #ESTADOS
@@ -92,7 +96,7 @@ class FilterService {
         if($estado>0 && $estado<9) {
             $filterEstado = " AND c.estado_id =" . $estado;
         }elseif(9==$estado) {
-            $filterEstado = " AND true";
+            $filterEstado = "";
         }
         
         #PRINCIPAL
@@ -106,7 +110,7 @@ class FilterService {
         }elseif(0==$principal) {
             $filterPrincipal = " AND c.parent_id>0";
         }elseif(9==$principal) {
-            $filterPrincipal = " AND true";
+            $filterPrincipal = "";
         }
 
         #GESTIONADO
@@ -118,7 +122,7 @@ class FilterService {
         if($gestion>0 && $gestion<9) {
             $filterGestion = " AND c.es_gestionado =" . $gestion;
         }elseif(9==$estado) {
-            $filterGestion = " AND true";
+            $filterGestion = "";
         }
 
     #EQUIPO
@@ -131,7 +135,7 @@ class FilterService {
         if($servicio>0) {
             $filterServicio = " AND e.servicio_id =" . $servicio;
         }elseif(0==$servicio) {
-            $filterServicio = " AND true";
+            $filterServicio = "";
         }
 
         #FABRICANTE
@@ -144,10 +148,12 @@ class FilterService {
             $modelo = (int)$this->params['emodelo'];
         }
         $filterFabricante = '';
-        if($fabricante>0){
+        if($fabricante>0&&$modelo>0){
             $filterFabricante = " AND e.fabricante_id =" . $fabricante . " AND e.modelo_id = " . $modelo;
+        }elseif($fabricante>0&&$modelo<0) {
+            $filterFabricante = " AND e.fabricante_id =" . $fabricante;
         }elseif(0==$fabricante) {
-            $filterFabricante = " AND true";
+            $filterFabricante = "";
         }
 
         #ESTADO-EQUIPO
@@ -159,7 +165,7 @@ class FilterService {
         if($equipoEstado>0 && $equipoEstado<9) {
             $filterEquipoEstado = " AND e.estado =" . $equipoEstado;
         }elseif(9==$equipoEstado) {
-            $filterEquipoEstado = " AND true";
+            $filterEquipoEstado = "";
         }
 
         #PRINCIPAL-EQUIPO
@@ -173,7 +179,7 @@ class FilterService {
         }elseif(0==$equipoPrincipal) {
             $filterEquipoPrincipal = " AND e.parent_id>0";
         }elseif(9==$equipoPrincipal) {
-            $filterEquipoPrincipal = " AND true";
+            $filterEquipoPrincipal = "";
         }
         
     #EQUIPO NO GESTIONADO
@@ -186,7 +192,7 @@ class FilterService {
         if($propiedadRouter>0 && $propiedadRouter<9) {
             $filterPropiedadRouter = " AND eng.propiedad_id =" . $propiedadRouter;
         }elseif(9==$propiedadRouter) {
-            $filterPropiedadRouter = " AND true";
+            $filterPropiedadRouter = "";
         }
 
         #TIPO IP
@@ -198,37 +204,119 @@ class FilterService {
         if($tipoIp>0 && $tipoIp<9) {
             $filterTipoIp = " AND eng.tipo_ip =" . $tipoIp;
         }elseif(9==$tipoIp) {
-            $filterTipoIp = " AND true";
+            $filterTipoIp = "";
+        }
+
+    #GLAN
+        #CLIENTE
+        $gcliente = 0;
+        if(isset($this->params['gcliente'])) {
+            $gcliente = (int)$this->params['gcliente'];
+        }
+        $filterGlanCliente = '';
+        if($gcliente>0){
+            $filterGlanCliente = " AND g.cliente_id =" . $gcliente;
+        }elseif(0==$gcliente) {
+            $filterGlanCliente = "";
+        }
+
+        #CRITICIDAD
+        $gcriticidad = 0;
+        if(isset($this->params['gcriticidad'])) {
+            $gcriticidad = (int)$this->params['gcriticidad'];
+        }
+        $filterGlanCriticidad = '';
+        if($gcriticidad>0){
+            $filterGlanCriticidad = " AND g.criticidad_id =" . $gcriticidad;
+        }elseif(0==$gcriticidad) {
+            $filterGlanCriticidad = "";
+        }
+        
+        #FUNCTION
+        $gfuncion = 0;
+        if(isset($this->params['gfuncion'])) {
+            $gfuncion = (int)$this->params['gfuncion'];
+        }
+        $filterGlanFuncion = '';
+        if($gfuncion>0){
+            $filterGlanFuncion = " AND g.funcion_id =" . $gfuncion;
+        }elseif(0==$gfuncion) {
+            $filterGlanFuncion = "";
+        }        
+
+        #ESTADO-EQUIPO-GLAN
+        $glanEquipoEstado = 9;
+        if(isset($this->params['estado-equipo-glan'])) {
+            $glanEquipoEstado = (int)$this->params['estado-equipo-glan'];
+        }
+        $filterGlanEquipoEstado = '';
+        if($glanEquipoEstado>0 && $glanEquipoEstado<9) {
+            $filterGlanEquipoEstado = " AND g.estado_id =" . $glanEquipoEstado;
+        }elseif(9==$glanEquipoEstado) {
+            $filterGlanEquipoEstado = "";
+        }
+
+    #AP
+        #CRITICIDAD
+        $apcriticidad = 0;
+        if(isset($this->params['apcriticidad'])) {
+            $apcriticidad = (int)$this->params['apcriticidad'];
+        }
+        $filterApCriticidad = '';
+        if($apcriticidad>0){
+            $filterApCriticidad = " AND a.criticidad_id =" . $apcriticidad;
+        }elseif(0==$apcriticidad) {
+            $filterApCriticidad = "";
+        }
+
+        #ESTADO
+        $apEquipoEstado = 9;
+        if(isset($this->params['estado-equipo-ap'])) {
+            $apEquipoEstado = (int)$this->params['estado-equipo-ap'];
+        }
+        $filterApEquipoEstado = '';
+        if($apEquipoEstado>0 && $apEquipoEstado<9) {
+            $filterApEquipoEstado = " AND a.estado_id =" . $apEquipoEstado;
+        }elseif(9==$apEquipoEstado) {
+            $filterApEquipoEstado = "";
         }
 
         $statement =
-                "SELECT s.*"
-                    . " FROM sedes AS s"
-                    . " LEFT JOIN circuitos AS c ON c.sede_id = s.id"
-                    . " LEFT JOIN equipos AS e ON e.circuito_id = c.id "
-                    . " LEFT JOIN equipos_no_gestionados AS eng ON eng.circuito_id = c.id WHERE "                            
-                    . $filterProvincia 
-                    . $filterCliente 
-                    . $filterTecnologia
-                    . $filterCriticidad
-                    . $filterEstado
-                    . $filterPrincipal
-                    . $filterGestion
-                    . $filterServicio
-                    . $filterFabricante
-                    . $filterEquipoEstado
-                    . $filterEquipoPrincipal
-                    . $filterPropiedadRouter
-                    . $filterTipoIp;
+            "SELECT s.*"
+                . " FROM sedes AS s"
+                . " LEFT JOIN circuitos AS c ON c.sede_id = s.id"
+                . " LEFT JOIN equipos AS e ON e.circuito_id = c.id"
+                . " LEFT JOIN equipos_no_gestionados AS eng ON eng.circuito_id = c.id"
+                . " LEFT JOIN glans AS g ON g.sede_id = s.id"
+                . " LEFT JOIN aps AS a ON a.sede_id = s.id  WHERE "                            
+                . $filterProvincia 
+                . $filterCliente 
+                . $filterTecnologia
+                . $filterCriticidad
+                . $filterEstado
+                . $filterPrincipal
+                . $filterGestion
+                . $filterServicio
+                . $filterFabricante
+                . $filterEquipoEstado
+                . $filterEquipoPrincipal
+                . $filterPropiedadRouter
+                . $filterTipoIp
+                . $filterGlanCliente
+                . $filterGlanCriticidad
+                . $filterGlanFuncion
+                . $filterGlanEquipoEstado
+                . $filterApCriticidad
+                . $filterApEquipoEstado;
 
-//        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
-        
+        //echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
+
         $adapter = $this->adapter->query($statement);
 
         $result = $adapter->execute();
 
         return $this->convertedObjects($result);
-        
+
     }
 
     

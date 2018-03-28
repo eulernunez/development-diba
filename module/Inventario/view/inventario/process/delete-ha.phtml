@@ -156,6 +156,15 @@ $(function(){
 <div class="panel panel-default">
     <div class="panel-body">
         <input type="hidden" id="deleteHaId" name="deleteHaId" value="">
+        <?php
+            $haNumber = 0;
+            if(isset($this->information['has'])) {
+                $haNumber = count($this->information['has']);
+            }
+        ?>
+        <div style="float:left;">
+            <button type="button" class="btn btn-primary" title="Número de hardware adicional"><?= '# ' . $haNumber; ?></button>
+        </div>
         <div style="float:right;">
             <a class="btn btn-primary btn-sm" href="#" onclick="addHa();" role="button" title="Agregar hardware adicional">
                 <i class="glyphicon glyphicon-plus"></i>

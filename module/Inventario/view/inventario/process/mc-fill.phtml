@@ -155,6 +155,15 @@ $(function(){
 <div class="panel panel-default">
     <div class="panel-body">
         <input type="hidden" id="deleteMcId" name="deleteMcId" value="">
+        <?php
+            $multicastNumber = 0;
+            if(isset($this->information['mcs'])) {
+                $multicastNumber = count($this->information['mcs']);
+            }
+        ?>
+        <div style="float:left;">
+            <button type="button" class="btn btn-primary" title="Número de configuraciones multicast"><?= '# ' . $multicastNumber; ?></button>
+        </div>
         <div style="float:right;">
             <a class="btn btn-primary btn-sm" href="#" onclick="addMc();" role="button" title="Agregar multicast">
                 <i class="glyphicon glyphicon-plus"></i>

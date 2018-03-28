@@ -45,6 +45,15 @@ $(function(){
 
 });
 </script>
+<?php
+    $equiposNoGestionadosNumber = 0;
+    if(isset($this->information['notequiposall'])) {
+        $equiposNoGestionadosNumber = count($this->information['notequiposall']);
+    }
+?>
+<div style="float:left;">
+    <button type="button" class="btn btn-primary" title="Número de equipos no gestionados"><?= '# ' . $equiposNoGestionadosNumber; ?></button>
+</div>                    
 
 <div style="float:right;">
 

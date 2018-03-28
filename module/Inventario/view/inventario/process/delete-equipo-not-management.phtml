@@ -14,6 +14,15 @@ $(function(){
 
 <input type="hidden" id="deleteEquipoNotManagementId" name="deleteEquipoNotManagementId" value="">
 <input type="hidden" id="deleteEquipoNotManagementSedeId" name="deleteEquipoNotManagementSedeId" value="<?= $this->information['sede']['id'] ;?>">
+<?php
+    $equiposNoGestionadosNumber = 0;
+    if(isset($this->information['notequiposall'])) {
+        $equiposNoGestionadosNumber = count($this->information['notequiposall']);
+    }
+?>
+<div style="float:left;">
+    <button type="button" class="btn btn-primary" title="Número de equipos no gestionados"><?= '# ' . $equiposNoGestionadosNumber; ?></button>
+</div>                    
 <div style="float:right;">
     <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/3" role="button" title="Agregar equipo no gestionado">
         <i class="glyphicon glyphicon-plus"></i>

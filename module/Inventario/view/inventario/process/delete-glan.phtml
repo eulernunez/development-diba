@@ -280,10 +280,19 @@ legend
                                                     <legend>MÓDULO ADICIONALES</legend>
                                                     <div class="panel panel-default">
                                                         <div class="panel-body">
-                                                            <div Id="save-component">    
+                                                            <div Id="save-component">
+                                                            <?php
+                                                                $modulosNumber = 0;
+                                                                if(isset($this->information['componentesall'])) {
+                                                                    $modulosNumber = count($this->information['componentesall']);
+                                                                }
+                                                            ?>
+                                                            <div style="float:left;">
+                                                                <button type="button" class="btn btn-primary" title="Número de módulos"><?= '# ' . $modulosNumber; ?></button>
+                                                            </div>                                                                
                                                             <div style="float:right;">
 
-                                                                <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['glans']['0']['id']; ?>');" title="Agregar módulo(tab)">
+                                                                <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['glans']['0']['id']; ?>');" title="Agregar módulo">
                                                                     <i class="glyphicon glyphicon-plus"></i>
                                                                 </a>
 

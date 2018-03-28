@@ -1,6 +1,11 @@
 <script>
 
-$(document).ready(function (e){
+$(function(){
+    $("#search").keypress(function(e){
+        if(e.which == 13){
+            buscar();
+        }
+    });
 });
 
 function buscar() {
@@ -131,7 +136,7 @@ function buscar() {
         <div class="panel-body">
 
         <div>
-            <form id="searchForm" method="get">
+            <form id="searchForm" method="get" onsubmit="return false;">
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="section">Sección</label>

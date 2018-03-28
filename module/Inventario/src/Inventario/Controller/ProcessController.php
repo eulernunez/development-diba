@@ -564,14 +564,20 @@ class ProcessController extends AbstractActionController
 
         $posts = (array)$this->request->getPost();
         $provinciaId = $posts['provincia'];
+        $custom = 0;
+        if(isset($posts['custom'])) {
+            $custom = (int)$posts['custom'];
+        }
         
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $poblacion = new Poblacion($dbAdapter);
         
         $poblaciones = $poblacion->getOptionsForPoblacion($provinciaId);
-        
+        //die('$poblaciones Id: <pre>' . print_r($poblaciones, true) . '</pre>');
         $viewmodel = new ViewModel(
-                        array('poblaciones' => $poblaciones));
+                        array(
+                            'poblaciones' => $poblaciones,
+                            'custom' => $custom));
 
         $viewmodel->setTerminal(true);
         

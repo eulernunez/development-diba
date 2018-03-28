@@ -32,6 +32,15 @@ $(function(){
                     <input type="hidden" id="deleteEquipoId" name="deleteEquipoId" value="">
                     <input type="hidden" id="deleteEquipoParentId" name="deleteEquipoParentId" value="">
                     <input type="hidden" id="deleteEquipoSedeId" name="deleteEquipoSedeId" value="<?= $this->information['sede']['id'] ;?>">
+                    <?php
+                        $equiposNumber = 0;
+                        if(isset($this->information['equiposall'])) {
+                            $equiposNumber = count($this->information['equiposall']);
+                        }
+                    ?>
+                    <div style="float:left;">
+                        <button type="button" class="btn btn-primary" title="Número de equipos"><?= '# ' . $equiposNumber; ?></button>
+                    </div>                    
 
                 
                     <div style="float:right;">

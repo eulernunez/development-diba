@@ -159,6 +159,16 @@ $(function(){
 <div class="panel panel-default">
     <div class="panel-body">
         <input type="hidden" id="deleteIpWanId" name="deleteIpWanId" value="">
+            <?php
+                $ipwansNumber = 0;
+                if(isset($this->information['ipwans'])) {
+                    $ipwansNumber = count($this->information['ipwans']);
+                }
+            ?>
+            <div style="float:left;">
+                <button type="button" class="btn btn-primary" title="Número de configuraciones Ip Wan"><?= '# ' . $ipwansNumber; ?></button>
+            </div>
+        
         <div style="float:right;">
             <a class="btn btn-primary btn-sm" href="#" onclick="addIpwan();" role="button" title="Agregar direccionamiento Wan">
                 <i class="glyphicon glyphicon-plus"></i>

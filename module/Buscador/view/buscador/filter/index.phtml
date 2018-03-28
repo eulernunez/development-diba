@@ -35,7 +35,7 @@
     .form-control
     {
         /*height: 26px;*/
-        font-size: 11px;
+        font-size: 9px;
 
     }
 
@@ -83,7 +83,7 @@
         $("#provincia").change(function(){
 
             var provincia = $("#provincia option:selected").val();
-            var data = {provincia: provincia};
+            var data = {provincia: provincia, custom: 1};
             var    url = '<?= $this->url('ajax-poblacion'); ?>';
             $.ajax({
                 type: "POST",
@@ -174,7 +174,7 @@
                     <legend class="custom-legend" title="Sedes">
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Sedes
                     </legend>
-                    <div class="col-lg-13">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             <label class="custom-label" for="parameterSelect">Provincia</label>
                             <?= $this->formSelect($form->get('provincia')); ?>
@@ -193,26 +193,45 @@
                 <div class="form-group">
                     &nbsp;        
                 </div>
-                <div style="margin-top:18px;">
+                <div class="form-group">
+                    &nbsp;        
+                </div>
+                <div class="form-group">
+                    &nbsp;        
+                </div>
+                <div class="form-group">
+                    &nbsp;        
+                </div>
+                <div class="form-group">
+                    &nbsp;        
+                </div>
+                
+                <div style="float: left;">
                     <a class="btn btn-primary btn-lg" href="#" role="button" onclick="filter();" title="Filtrar">
                         <i class="glyphicon glyphicon-filter"></i>
                     </a>
                 </div>
+                <div style="float: right;">
+                    <a class="btn btn-primary btn-lg" href="<?= $this->url('filter'); ?>" role="button" title="Refresh">
+                        <i class="glyphicon glyphicon-refresh"></i>
+                    </a>
+                </div>
+                
             </div>
 
-            <div class="col-lg-4">
+            <div class="col-lg-3">
 
                 <fieldset class="form-group  custom-fieldset">
                     <legend class="custom-legend" title="Circuitos">
                         <span class="glyphicon glyphicon-random" aria-hidden="true"></span> Circuitos
                     </legend>
                     <div class="col-lg-12">
-                    <div class="form-group">
-                        <label class="custom-label" for="client-select">Cliente</label>
-                        <?= $this->formSelect($form->get('ccliente')); ?>
+                        <div class="form-group">
+                            <label class="custom-label" for="client-select">Cliente</label>
+                            <?= $this->formSelect($form->get('ccliente')); ?>
+                        </div>
                     </div>
-                    </div>
-                    <div class="col-lg-8">    
+                    <div class="col-lg-12">    
                         <div class="form-group">
                             <label class="custom-label" for="parameterSelect">Tecnología</label>
                             <?= $this->formSelect($form->get('ctecnologia')); ?>
@@ -224,14 +243,19 @@
                             </div>
                         </div>
 
+                    </div>
+                    
+                    
+                    
+                    <div class="col-lg-6" style="margin-top:10px;">
+
                         <div class="form-group">
                             <label class="custom-label" for="parameterSelect">Criticidad</label>
                             <?= $this->formSelect($form->get('ccriticidad')); ?>                    
                         </div>
-                    </div>
-                    
-                    <div class="col-lg-4">
 
+                        
+                        
                         <div class="form-group">
                             <label class="custom-label" for="estado-circuito">Estados</label>
                             <select class="form-control input-sm" id="estado-circuito" name="estado-circuito">
@@ -242,7 +266,8 @@
                                 <option value="4">Baja</option>
                             </select>                                 
                         </div>
-                        
+                    </div>    
+                    <div class="col-lg-6" style="margin-top:10px;">    
                         <div class="form-group">
                             <label class="custom-label" for="gestion">Gestión</label>
                             <select class="form-control input-sm" id="gestion" name="gestion">
@@ -251,6 +276,8 @@
                                 <option value="0">No</option>
                             </select>                                 
                         </div>
+                    </div>
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label class="custom-label" for="principal-circuito">Principal&nbsp;<span title="Circuito principal/backup" style="cursor: pointer;" class="glyphicon glyphicon-question-sign"></span></label>
                             <select class="form-control input-sm" id="principal-circuito" name="principal-circuito">
@@ -262,15 +289,15 @@
                     </div>
                 </fieldset>    
             </div>    
-            <div class="col-lg-3">    
+            <div class="col-lg-2">    
                 <fieldset class="form-group  custom-fieldset">
-                    <legend class="custom-legend" title="Equipos gestionados">
-<!--                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>-->
+                    <legend class="custom-legend" title="Equipos gestionados" style='font-size: 10px;'>
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                         Equipos Gestionados
                     </legend>
                     
-                    <div class="col-lg-12">
+                    <div class="col-lg-14">
                         
                         <div class="form-group">
                             <label class="custom-label" for="parameterSelect">Servicio</label>
@@ -291,7 +318,7 @@
                         
                     </div>
                         
-                    <div class="col-lg-6">
+                    <div class="col-lg-14">
                         <div class="form-group">
                             <label class="custom-label" for="estado-equipo">Estados</label>
                             <select class="form-control input-sm" id="estado-equipo" name="estado-equipo">
@@ -304,7 +331,7 @@
                         </div>
                     </div>
                     
-                    <div class="col-lg-6">
+                    <div class="col-lg-14">
                         <div class="form-group">
                             <label class="custom-label" for="principal-equipo">Principal&nbsp;<span title="Equipo principal/backup" style="cursor: pointer;" class="glyphicon glyphicon-question-sign"></span></label>
                             <select class="form-control input-sm" id="principal-equipo" name="principal-equipo">
@@ -320,11 +347,11 @@
             </div>    
 
 
-            <div class="col-lg-3">    
+            <div class="col-lg-2">    
                 <fieldset class="form-group  custom-fieldset">
-                    <legend class="custom-legend" title="Equipos No Gestionados" style="font-size:10px;">
-                        <!--<span class="glyphicon glyphicon-user" aria-hidden="true"></span>-->
-                        <!--<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>--> 
+                    <legend class="custom-legend" title="Equipos No Gestionados" style='font-size: 10px;'>
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 
                         Equipos no gestionados
                     </legend>
                     <div class="col-lg-12">
@@ -347,6 +374,72 @@
                         
                     </div>
 
+                </fieldset>
+                
+                
+                
+                
+            </div>
+
+                <div class="col-lg-3" style="padding: 4px; background-color: #f5f5f5;"> 
+                
+                    <fieldset class="form-group custom-fieldset" style='background-color: #f5f5f5;'>
+                    <legend class="custom-legend" title="Equipos Glans" style='background-color: #f5f5f5;'>
+                        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        Glans
+                    </legend>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="custom-label" for="glan-client-select">Cliente</label>
+                            <?= $this->formSelect($form->get('gcliente')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="custom-label" for="glan-function-select">Función</label>
+                            <?= $this->formSelect($form->get('gfuncion')); ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="custom-label" for="glan-criticidad-select">Criticidad</label>
+                            <?= $this->formSelect($form->get('gcriticidad')); ?>
+                        </div>
+                    </div>    
+                    <div class="col-lg-6">    
+                        <div class="form-group">
+                            <label class="custom-label" for="estado-equipo-glan">Estados</label>
+                            <select class="form-control input-sm" id="estado-equipo-glan" name="estado-equipo-glan">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Pre-alta</option>
+                                <option value="2">Alta</option>
+                                <option value="3">Pre-baja</option>
+                                <option value="4">Baja</option>
+                            </select>                                 
+                        </div>
+                    </div>
+
+                </fieldset>
+                <fieldset class="form-group  custom-fieldset"  style='margin-top:30px; background-color: #f5f5f5;'>
+                    <legend class="custom-legend" title="Equipos Access Point" style='background-color: #f5f5f5;'>
+                        <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
+                        Access Point
+                    </legend>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="custom-label" for="aps-criticidad-select">Criticidad</label>
+                            <?= $this->formSelect($form->get('apcriticidad')); ?>
+                        </div>
+                        <div class="form-group">
+                            <label class="custom-label" for="estado-equipo-glan">Estados</label>
+                            <select class="form-control input-sm" id="estado-equipo-ap" name="estado-equipo-ap">
+                                <option value="9" selected>Todos</option>
+                                <option value="1">Pre-alta</option>
+                                <option value="2">Alta</option>
+                                <option value="3">Pre-baja</option>
+                                <option value="4">Baja</option>
+                            </select>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
             </form>

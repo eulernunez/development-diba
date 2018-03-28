@@ -268,7 +268,15 @@ $(function() {
                             <legend>MÓDULO ADICIONALES</legend>
                             <div class="panel panel-default">
                                 <div class="panel-body">
-
+                                    <?php
+                                        $modulosNumber = 0;
+                                        if(isset($this->information['componentesall'])) {
+                                            $modulosNumber = count($this->information['componentesall']);
+                                        }
+                                    ?>
+                                    <div style="float:left;">
+                                        <button type="button" class="btn btn-primary" title="Número de módulos"><?= '# ' . $modulosNumber; ?></button>
+                                    </div>                                                                
                                     <div style="float:right;">
 
                                         <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar módulo">

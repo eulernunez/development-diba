@@ -54,9 +54,18 @@ legend
     });
 
 </script>
+<?php
+    $modulosNumber = 0;
+    if(isset($this->information['componentesall'])) {
+        $modulosNumber = count($this->information['componentesall']);
+    }
+?>
+<div style="float:left;">
+    <button type="button" class="btn btn-primary" title="Número de módulos"><?= '# ' . $modulosNumber; ?></button>
+</div>                                                                
 <div style="float:right;">
 
-    <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['componentes']['0']['glan_id']; ?>');" title="Agregar módulo(tab)">
+    <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['componentes']['0']['glan_id']; ?>');" title="Agregar módulo">
         <i class="glyphicon glyphicon-plus"></i>
     </a>
 
