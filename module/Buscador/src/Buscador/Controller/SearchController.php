@@ -10,6 +10,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use stdClass;
 use Inventario\Model\Sede;
+use Buscador\Form\Search;
+use Buscador\Model\Parameter;
 
 
 class SearchController extends AbstractActionController
@@ -24,7 +26,15 @@ class SearchController extends AbstractActionController
     
     public function indexAction()
     {
-        return [];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Search($dbAdapter);
+        
+        return new ViewModel(array(
+                'form' => $form
+            ));
+
+//        return [];
     }
     
     public function executeAction()
@@ -73,5 +83,27 @@ class SearchController extends AbstractActionController
 
         
     }
+
+    public function ajaxParameterAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $sectionId = $posts['section'];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $parameter = new Parameter($dbAdapter);
+        
+        $parameters = $parameter->getOptionsForParameter($sectionId);
+//        die('$Parameters : <pre>' . print_r($parameters, true) . '</pre>');
+        $viewmodel = new ViewModel(
+                        array(
+                            'parameters' => $parameters));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }        
+
     
 }

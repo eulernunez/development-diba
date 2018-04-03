@@ -6,6 +6,33 @@ $(function(){
             buscar();
         }
     });
+    
+    $("#section").change(function(){
+
+        var section = $("#section option:selected").val();
+        var data = {section: section};
+        var    url = '<?= $this->url('ajax-parameter'); ?>';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#ajax-parameter").html(html);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#fill").html(html);
+            }
+        });
+
+    });
+    
+    
+    
+    
+    
+    
 });
 
 function buscar() {
@@ -140,33 +167,14 @@ function buscar() {
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="section">Sección</label>
-                    <select class="form-control input-sm" id="section" name="section">
-                        <option value="0">Todos</option>
-                        <option value="1">Sedes</option>
-                        <option value="2">Circuitos</option>
-                        <option value="3">Equipos gestionados</option>
-                        <option value="4">Equipos no gestionados</option>
-                        <option value="5">GLAN</option>
-                        <option value="6">Access Points</option>
-                    </select>                    
+                     <?= $this->formSelect($form->get('section')); ?>
                 </div>
-                <div class="form-group" style="margin-top: 12px;">
-                    <label for="parameter">Parámetros</label>
-                    <select class="form-control input-sm" id="parameters" name="parameters">
-                        <option value="0">Todos</option>
-                        <option value="1">Administrativo</option>
-                        <option value="2">Teléfono</option>
-                        <option value="3">Ibenet</option>
-                        <option value="4">Nemónico</option>
-                        <option value="41">Mac</option>
-                        <option value="5">IP de gestión</option>
-                        <option value="51">IP gestión de cliente</option>
-                        <option value="52">ID AP</option>
-                        <!--<option value="6">VPN</option>-->
-                        <option value="7">Nombre de la sede</option>
-                        <option value="8">Dirección</option>
-                    </select>                    
-                </div>
+                <div id="ajax-parameter">
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label for="parameter">Parámetros</label>
+                        <?= $this->formSelect($form->get('parameters')); ?>                   
+                    </div>
+                </div>    
             </div>
             <div class="col-lg-9">    
                 <div class="form-group">&nbsp;</div>

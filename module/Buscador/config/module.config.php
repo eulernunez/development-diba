@@ -95,7 +95,18 @@ return array(
                         'action'     => 'execute',
                     ),
                 ),
-            ),            
+            ),
+
+            'ajax-parameter' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ajax-parameter',
+                    'defaults' => array(
+                        'controller' => 'Buscador\Controller\Search',
+                        'action'     => 'ajax-parameter',
+                    ),
+                ),
+            ),
 
 //            'wizard' => array(
 //                'type' => 'Zend\Mvc\Router\Http\Segment',
