@@ -12,7 +12,9 @@ return array(
         'Users',
         'UsersACL',
         'Inventario',
-        'Buscador'
+        'Buscador',
+        'Provision',
+        
     ),
 
     // These are various options for the listeners attached to the ModuleManager
