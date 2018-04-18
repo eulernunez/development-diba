@@ -6,12 +6,15 @@
 // module/Buscador/src/Buscador/Model/Search/SearchService.php
 
 namespace Buscador\Model\Search;
+use Buscador\Model\Service;
 
 
-class SearchService {
+class SearchService extends Service {
 
     protected $adapter;
     protected $params;
+    protected $clientScopeFilter;
+    
     protected $fields = 
         array(
             'sede' => array( 
@@ -57,6 +60,19 @@ class SearchService {
     const APS = 6;
     const ID_ACCESS_POINT = 52;
 
+
+    public function __construct() {
+        
+        parent::__construct();
+        
+        #Client Scope Filter
+        $this->clientScopeFilter = "";
+        if('Cliente' == $this->userRole) {
+            $this->clientScopeFilter = " AND s.nif ='" . $this->nif . "'";
+        }
+
+
+    }
     
     public function setAdapter($adapter) {
         $this->adapter = $adapter;
@@ -313,7 +329,7 @@ class SearchService {
                      . "s.id AS SedeId, s.* "
                      . "FROM aps AS a "
                      . "INNER JOIN sedes AS s ON a.sede_id = s.id "
-                     . "WHERE " . $this->fields['aps'][$p] . " = '" . $value . "'";
+                     . "WHERE " . $this->fields['aps'][$p] . " = '" . $value . "'" . $this->clientScopeFilter;
         
         $adapter = $this->adapter->query($statement);
 
@@ -344,7 +360,7 @@ class SearchService {
                      . "s.id AS SedeId, s.* "
                      . "FROM glans AS g "
                      . "INNER JOIN sedes AS s ON g.sede_id = s.id "
-                     . "WHERE " . $this->fields['glans'][$p] . " = '" . $value . "'";
+                     . "WHERE " . $this->fields['glans'][$p] . " = '" . $value . "'" . $this->clientScopeFilter;
         
         $adapter = $this->adapter->query($statement);
 
@@ -372,7 +388,7 @@ class SearchService {
                      . "FROM equipos_no_gestionados AS e "
                      . "INNER JOIN circuitos AS c ON e.circuito_id = c.id "
                      . "INNER JOIN sedes AS s ON c.sede_id = s.id "
-                     . "WHERE " . $this->fields['not_mng_equipo'][$p] . " = '" . $value . "'";
+                     . "WHERE " . $this->fields['not_mng_equipo'][$p] . " = '" . $value . "'" . $this->clientScopeFilter;
         
         $adapter = $this->adapter->query($statement);
         
@@ -399,7 +415,7 @@ class SearchService {
                      . "FROM equipos AS e "
                      . "INNER JOIN circuitos AS c ON e.circuito_id = c.id "
                      . "INNER JOIN sedes AS s ON c.sede_id = s.id "
-                     . "WHERE " . $this->fields['equipo'][$p] . " = '" . $value . "'";
+                     . "WHERE " . $this->fields['equipo'][$p] . " = '" . $value . "'" . $this->clientScopeFilter;
         
         $adapter = $this->adapter->query($statement);
         
@@ -424,7 +440,7 @@ class SearchService {
                      . "s.id AS SedeId, s.* "
                      . "FROM circuitos AS c "
                      . "INNER JOIN sedes AS s ON c.sede_id = s.id "
-                     . "WHERE " . $this->fields['circuito'][$p] . " = '" . $value . "'";
+                     . "WHERE " . $this->fields['circuito'][$p] . " = '" . $value . "'" . $this->clientScopeFilter;
         
         $adapter = $this->adapter->query($statement);
 
@@ -448,8 +464,8 @@ class SearchService {
         $value = rtrim($textSearch);
         $statement = "SELECT s.* "
                      . "FROM sedes AS s "
-                     . "WHERE s.nombre LIKE '%" . $value . "%' OR s.direccion LIKE '%" . $value . "%'";
-
+                     . "WHERE (s.nombre LIKE '%" . $value . "%' OR s.direccion LIKE '%" . $value . "%')" . $this->clientScopeFilter;
+       
         $adapter = $this->adapter->query($statement);
 
         $result = $adapter->execute();
@@ -486,7 +502,7 @@ class SearchService {
         $value = rtrim($textSearch);
         $statement = "SELECT s.* "
                      . "FROM sedes AS s "
-                     . "WHERE " . $this->fields['sede'][$p] . " LIKE '%" . $value . "%'";
+                     . "WHERE " . $this->fields['sede'][$p] . " LIKE '%" . $value . "%'" . $this->clientScopeFilter;
 
         $adapter = $this->adapter->query($statement);
 

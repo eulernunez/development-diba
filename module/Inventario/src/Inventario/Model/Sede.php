@@ -666,7 +666,7 @@ class Sede extends AbstractTableGateway {
         }
         
         /*Searcher*/
-        if($this->tab == 3 && !empty($this->value)) {
+        if($this->tab == 3 && !empty($this->value)) { 
             if($this->item == 4 || $this->item == 41 || $this->item == 5 || $this->item == 51) {
                 $aux = array();
                 foreach ($adapter->execute() as $item) {
@@ -674,10 +674,16 @@ class Sede extends AbstractTableGateway {
                 }
                 $index = 0;
                 foreach($aux as $key => $value) {
-                    if(!empty(array_search($this->value, $value))) {
-                        $index = $key;
+                    foreach($value as $item) {
+                        if(strtolower($this->value) == strtolower($item)) {
+                            $index = $key;
+                        }
                     }
+//                    if(!empty(array_search($this->value, $value))) {
+//                        $index = $key;
+//                    }
                 }
+                //die('$index: <pre>' . print_r($index, true) . '</pre>');
                 $found = array_slice($aux, $index, 1);
                 unset($aux[$index]);
                 foreach($aux as $item) {

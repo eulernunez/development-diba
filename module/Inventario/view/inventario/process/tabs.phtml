@@ -2310,7 +2310,7 @@ $(function(){
                                     <tr id="<?= $glan['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
                                         <td><?= $glan['cliente'] ?></td>
                                         <td><?= $glan['funcion'] ?></td>
-                                        <?php if($glan['nemonico'] == $this->value ) : ?>     
+                                        <?php if(strtolower($glan['nemonico']) == strtolower($this->value)) : ?>     
                                                 <td class="<?= ($this->item == 4)?'item-selected':''; ?>" style="<?= ($this->item == 4)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $glan['nemonico']; ?></td>                                    
                                         <?php else: ?>    
                                                 <td><?= $glan['nemonico'] ?></td>

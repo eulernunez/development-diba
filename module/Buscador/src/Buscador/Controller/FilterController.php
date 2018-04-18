@@ -40,13 +40,19 @@ class FilterController extends AbstractActionController
         $this->filterService->setParams($params);
         $sedes = $this->filterService->process();
 
-        #die('RESULT: <pre>' . print_r($sedes, true) . '</pre>');
-        
+    #   die('RESULT: <pre>' . print_r($params, true) . '</pre>');
+        $glanFilter = false;
+        $glanQuery = (string)$params['glan-query'];
+        if(!empty($glanQuery)) {
+            $glanFilter = true;
+        }
+
         if(is_array($sedes)) {
 
             $viewmodel = 
                     new ViewModel(
-                            array('sedes' => $sedes));
+                            array('sedes' => $sedes,
+                                  'glanFilter' => $glanFilter));
             $viewmodel->setTerminal(true);
 
             return $viewmodel;

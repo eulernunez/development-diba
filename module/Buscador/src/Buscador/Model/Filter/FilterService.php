@@ -6,12 +6,19 @@
 // module/Buscador/src/Buscador/Model/Filter/FilterService.php
 
 namespace Buscador\Model\Filter;
+use Buscador\Model\Service;
 
-class FilterService {
+class FilterService extends Service {
     
     protected $adapter;
     protected $params;
     
+    public function __construct() {
+        
+        parent::__construct();
+
+    }
+
     public function setAdapter($adapter) {
         $this->adapter = $adapter;
         return $this;
@@ -281,15 +288,43 @@ class FilterService {
             $filterApEquipoEstado = "";
         }
 
+        #glan-query
+        $filterGlan = false;
+        $glanTable = "";
+        $filterGlanQuery = "";
+        $glanQuery = (string)$this->params['glan-query'];
+
+        if(!empty($glanQuery)) {
+            $filterGlan = true;
+            $glanTable = ", g.*"; 
+            $filterGlanQuery = " AND (g.nemonico LIKE '%" . $glanQuery. "%'"
+                               . " OR g.ubicacion LIKE '%" . $glanQuery. "%'"
+                               . " OR g.ip_gestion_cliente LIKE '%" . $glanQuery. "%'"
+                               . " OR g.ip_gestion LIKE '%" . $glanQuery. "%'"
+                               . " OR g.modelo_equipo LIKE '%" . $glanQuery. "%')";
+        }
+
+        
+        
+        
+        
+        
+        #Client Scope Filter
+        $clientScopeFilter = "";
+        if('Cliente' == $this->userRole) {
+            $clientScopeFilter = " AND s.nif ='" . $this->nif . "'";
+        }
+        
         $statement =
-            "SELECT s.*"
+            "SELECT s.*, s.id AS sedeId" . $glanTable
                 . " FROM sedes AS s"
                 . " LEFT JOIN circuitos AS c ON c.sede_id = s.id"
                 . " LEFT JOIN equipos AS e ON e.circuito_id = c.id"
                 . " LEFT JOIN equipos_no_gestionados AS eng ON eng.circuito_id = c.id"
                 . " LEFT JOIN glans AS g ON g.sede_id = s.id"
-                . " LEFT JOIN aps AS a ON a.sede_id = s.id  WHERE "                            
+                . " LEFT JOIN aps AS a ON a.sede_id = s.id  WHERE "
                 . $filterProvincia 
+                . $clientScopeFilter
                 . $filterCliente 
                 . $filterTecnologia
                 . $filterCriticidad
@@ -307,15 +342,20 @@ class FilterService {
                 . $filterGlanFuncion
                 . $filterGlanEquipoEstado
                 . $filterApCriticidad
-                . $filterApEquipoEstado;
+                . $filterApEquipoEstado
+                . $filterGlanQuery;
 
-        //echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
+        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
 
         $adapter = $this->adapter->query($statement);
 
         $result = $adapter->execute();
 
-        return $this->convertedObjects($result);
+        if(true == $filterGlan) {
+            return $this->convertedGlansObjects($result);
+        } else {
+            return $this->convertedObjects($result);
+        }
 
     }
 
@@ -327,7 +367,7 @@ class FilterService {
 
         foreach ($result as $row) {
             $entity = new \stdClass;
-            $entity->id = $row['id'];
+            $entity->id = $row['sedeId'];
             $entity->nombre = $row['nombre'];
             $entity->idescat = $row['idescat'];
             $entity->direccion = $row['direccion'];
@@ -340,8 +380,22 @@ class FilterService {
     }
     
     
-    
-    
+    public function convertedGlansObjects($result)
+    {
+        $entities = array();
+        foreach ($result as $row) {
+            $entity = new \stdClass;
+            $entity->id = $row['sedeId'];
+            $entity->nombre = $row['nombre'];
+            $entity->idescat = $row['idescat'];
+            $entity->direccion = $row['direccion'];
+            $entity->fechaAlta = $row['fecha_alta'];
+            $entity->nemonico = $row['nemonico'];
+            $entities[$row['nemonico']] = $entity;
+        }
+        return $entities;
+    }
 
+    
     
 }
