@@ -8,6 +8,7 @@ namespace Provision\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Db\Adapter\Driver\Pdo\Resul;
 
 
 class SupplyTracingController extends AbstractActionController
@@ -27,19 +28,18 @@ class SupplyTracingController extends AbstractActionController
     
     public function openAction()
     {
-       
-        $tramites = $this->supplyTracingService->process();
-        #die('RESULT: <pre>' . print_r($sedes, true) . '</pre>');
-        if(is_array($tramites)) {
+
+        $tramites = $this->supplyTracingService->getFormalities();
+        
+        if(is_object($tramites)) { 
+
             $viewmodel = 
                     new ViewModel(
                             array('tramites' => $tramites));
-            $viewmodel->setTerminal(true);
-
             return $viewmodel;
-        }        
-        
-       
+
+         }    
+            
     }
 
 

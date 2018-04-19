@@ -154,7 +154,7 @@ body.padTop53 {
 
 @media (min-width: 992px) {
   #left {
-    width: 220px;
+    width: 150px;
   }
   #left #menu.affix {
     width: 220px;
@@ -166,7 +166,7 @@ body.padTop53 {
     width: 100px;
   }
   #content {
-    margin-left: 220px;
+    margin-left: 150px;
   }
   .side-right #content {
     margin-right: 220px;

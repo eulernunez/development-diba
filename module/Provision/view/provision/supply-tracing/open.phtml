@@ -1,1 +1,102 @@
-Hi!
+<?=  $this->headLink()
+        ->appendStylesheet($this->basePath() . '/css/bootstrap-table/bootstrap-table.min.css'); ?>
+
+<?php echo $this->headScript()
+        ->appendFile($this->basePath() . '/js/bootstrap-table/bootstrap-table.js.') 
+        ->appendFile($this->basePath() . '/js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js.'); ?>
+
+<style>
+
+</style>
+
+<script>
+//    $(function(){
+//        $("html, body").animate({ scrollTop: 300 });
+//    });
+</script>
+
+
+<div class="inner">
+    <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
+
+    <div id="toolbar">
+    <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
+            <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
+        </button>
+        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCloseModal">
+            <i class="glyphicon glyphicon-remove"></i>&nbsp;Eliminar
+        </button>-->
+        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCancelModal">
+            <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
+        </button>
+    <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">
+            <i class="glyphicon glyphicon-th-list"></i>&nbsp;Reporte BI
+        </button>-->
+    </div>
+ 
+    <table id="sedes"
+           data-toggle="table"
+           data-buttons-align="right"
+           data-card-visible="true"
+           data-page-list="[10, 15, 30, 50, 100, All]"
+           data-page-size="10"
+           data-pagination="true"
+           data-pagination-detail-h-align="right"
+           data-pagination-h-align="left"
+           data-search="false"
+           data-search-align="right"
+           data-show-refresh="false"
+           data-show-toggle="false"
+           data-smart-display="true"
+           data-toolbar="#toolbar"
+           data-trim-on-search="true"
+           data-undefined-text=""
+           data-show-export="true"
+           class="bootstrap-table ticketList table-nowrap">
+        <thead style="font-size: 10px;">
+            <tr class="ui-state-active noselect">
+                <!--<th data-field="state" data-checkbox="true"></th>-->
+                <th data-field="cif" data-sortable="true" data-width="5%">NIF</th>
+                <th data-field="entitat" data-sortable="true" data-width="15%">ENTITAT</th>
+                <th data-field="servicio" data-sortable="true" data-width="12%">SERVICIO</th>
+                <!--<th data-field="lote" data-sortable="true" data-width="5%">LOTE</th>-->
+                <th data-field="solicitante" data-sortable="true" data-width="5%">SOLICITANTE</th>
+                <!--<th data-field="midas" data-sortable="true" data-width="5%">MIDAS</th>-->
+                <th data-field="inicio" data-sortable="true" data-width="5%">PETICIÓN</th>
+                <th data-field="linea" data-sortable="true" data-width="5%">ADM/Tel/Ext</th>
+                <th data-field="peticion" data-sortable="true" data-width="5%">TIPO</th>
+                <th data-field="tramitador" data-sortable="true" data-width="5%">TRAMITADOR</th>
+                <th data-field="sede" data-sortable="true" data-width="15%">SEDE</th>
+                <!--<th data-field="descripcion" data-sortable="true" data-width="5%">DESCRIPCIÓN</th>-->
+                <th data-field="estado" data-sortable="true" data-width="5%">ESTADO</th>
+                <th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 10px;">
+            <?php foreach ($this->tramites as $item) : ?>
+                <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
+                    <!--<td></td>-->
+                    <td class="noWrap"><?= $item['nif']; ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item['cliente'])); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item['servicio'])); ?></td>
+                    <!--<td class="noWrap"><?= ucwords(strtolower($item['lote'])); ?></td>-->
+                    <td class="noWrap"><?= ucwords(strtolower($item['solicitante'])); ?></td>
+                    <!--<td class="noWrap"><?= ucwords(strtolower($item['midas'])); ?></td>-->
+                    <td class="noWrap"><?= date("d-m-Y", strtotime($item['inicio'])); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item['linea'])); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item['peticion'])); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item['tramitador'])); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item['nombre'])); ?></td>
+                    <!--<td class="noWrap"><?= ucwords(strtolower($item['descripcion'])); ?></td>-->
+                    <td class="noWrap"><?= ucwords(strtolower($item['estados'])); ?></td>
+                    <td class="noWrap">
+                        <a class="update" href="#" title="Consultar">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <div class="clearfix">&nbsp;</div>
+</div>
