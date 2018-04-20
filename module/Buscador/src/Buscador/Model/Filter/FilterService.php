@@ -297,18 +297,21 @@ class FilterService extends Service {
         if(!empty($glanQuery)) {
             $filterGlan = true;
             $glanTable = ", g.*"; 
-            $filterGlanQuery = " AND (g.nemonico LIKE '%" . $glanQuery. "%'"
-                               . " OR g.ubicacion LIKE '%" . $glanQuery. "%'"
-                               . " OR g.ip_gestion_cliente LIKE '%" . $glanQuery. "%'"
-                               . " OR g.ip_gestion LIKE '%" . $glanQuery. "%'"
-                               . " OR g.modelo_equipo LIKE '%" . $glanQuery. "%')";
+            $filterGlanQuery 
+                = " AND (g.nemonico LIKE '%" . $glanQuery. "%'"
+                . " OR g.ubicacion LIKE '%" . $glanQuery. "%'"
+                . " OR g.ip_gestion_cliente LIKE '%" . $glanQuery. "%'"
+                . " OR g.ip_gestion LIKE '%" . $glanQuery. "%'"
+                . " OR g.modelo_equipo LIKE '%" . $glanQuery. "%'"
+                . " OR g.familia_fabricante LIKE '%" . $glanQuery. "%'"
+                . " OR g.numero_serie LIKE '%" . $glanQuery. "%'"
+                . " OR g.observaciones LIKE '%" . $glanQuery. "%'"
+                . " OR g.mac LIKE '%" . $glanQuery. "%'"
+                . " OR g.firmware LIKE '%" . $glanQuery. "%'"    
+                . " OR s.nombre LIKE '%" . $glanQuery. "%'"
+                . " OR s.direccion LIKE '%" . $glanQuery. "%')";
         }
 
-        
-        
-        
-        
-        
         #Client Scope Filter
         $clientScopeFilter = "";
         if('Cliente' == $this->userRole) {
@@ -345,7 +348,7 @@ class FilterService extends Service {
                 . $filterApEquipoEstado
                 . $filterGlanQuery;
 
-        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
+//        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
 
         $adapter = $this->adapter->query($statement);
 
@@ -391,7 +394,9 @@ class FilterService extends Service {
             $entity->direccion = $row['direccion'];
             $entity->fechaAlta = $row['fecha_alta'];
             $entity->nemonico = $row['nemonico'];
-            $entities[$row['nemonico']] = $entity;
+            if(strlen($row['nemonico'])>1) {
+                $entities[$row['nemonico']] = $entity;
+            }
         }
         return $entities;
     }

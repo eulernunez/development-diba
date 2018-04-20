@@ -73,13 +73,13 @@
                     <td class="noWrap"><?= ucwords(strtolower($sede->nombre)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($sede->direccion)); ?></td>
                     <?php if($this->glanFilter) : ?>
-                    <td class="noWrap"><?= ucwords(strtolower($sede->nemonico)); ?></td>
+                    <td class="noWrap"><?= strtolower($sede->nemonico); ?></td>
                     <?php endif ; ?>
                     <!--<td class="noWrap"><?= date("d-m-Y", strtotime($sede->fechaAlta)); ?></td>--> 
                     <td class="noWrap">
                         <!--  href="/tabs/<?= $sede->id; ?>" -->
-                        <?php if($this->glanFilter) : ?>
-                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id . '/3/4/' . $sede->nemonico; ?>" title="Consultar">
+                        <?php if($this->glanFilter && strlen($sede->nemonico)>1) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id . '/3/4/' . $sede->nemonico . '/' . $this->glanQuery;?>" title="Consultar">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a>
                         <?php else: ?>

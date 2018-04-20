@@ -345,6 +345,7 @@ class ProcessController extends AbstractActionController
         $tab = (int)$this->params()->fromRoute('tab');
         $item = (int)$this->params()->fromRoute('item');
         $value = (string)$this->params()->fromRoute('value');
+        $othervalue = (string)$this->params()->fromRoute('othervalue');
         
         $this->sedeService->setTab($tab);
         $this->sedeService->setItem($item);
@@ -425,6 +426,7 @@ class ProcessController extends AbstractActionController
             'tab' => $tab,
             'item' => $item,
             'value' => $value,
+            'othervalue' => $othervalue,
             'comboBoxCircuitoBck' => $comboBoxCircuitoBck     
         ));
 

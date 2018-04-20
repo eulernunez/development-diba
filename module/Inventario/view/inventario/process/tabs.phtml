@@ -2369,13 +2369,25 @@ $(function(){
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="modelo-equipo">Modelo Equipo</label>
-                                                        <?php $form->get('gmodeloequipo')->setValue($this->information['glans']['0']['modelo_equipo']); ?>
+                                                        <?php
+                                                            $form->get('gmodeloequipo')->setValue($this->information['glans']['0']['modelo_equipo']); 
+                                                            if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['glans']['0']['modelo_equipo']),strtolower($this->othervalue)) !== false) {
+                                                                $form->get('gmodeloequipo')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                                $form->get('gmodeloequipo')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
                                                         <?= $this->formInput($form->get('gmodeloequipo')); ?>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="familia-fabricante">Familia Fabricante</label>
-                                                        <?php $form->get('gfamfab')->setValue($this->information['glans']['0']['familia_fabricante']); ?>
+                                                        <?php
+                                                            $form->get('gfamfab')->setValue($this->information['glans']['0']['familia_fabricante']); 
+                                                            if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['glans']['0']['familia_fabricante']),strtolower($this->othervalue)) !== false) {
+                                                                $form->get('gfamfab')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                                $form->get('gfamfab')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
                                                         <?= $this->formInput($form->get('gfamfab')); ?>
                                                     </div>
 
@@ -2383,8 +2395,11 @@ $(function(){
                                                         <label class="control-label" for="glan-nemonico">Nemónico</label>
                                                         <?php
                                                             $form->get('gnemonico')->setValue($this->information['glans']['0']['nemonico']);
-                                                            if($this->information['glans']['0']['nemonico'] == $this->value) {
+                                                            if(strlen($this->othervalue)==0&&strtolower($this->information['glans']['0']['nemonico']) == strtolower($this->value)) {
                                                                 $form->get('gnemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                                $form->get('gnemonico')->setAttribute('title','Dato encontrado');
+                                                            }elseif(strlen($this->othervalue)>0&&strpos(strtolower($this->information['glans']['0']['nemonico']),strtolower($this->othervalue)) !== false) {
+                                                                $form->get('gnemonico')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
                                                                 $form->get('gnemonico')->setAttribute('title','Dato encontrado');
                                                             }
                                                         ?>
@@ -2395,8 +2410,11 @@ $(function(){
                                                         <label class="control-label" for="ip-gestion">IP Gestión</label>
                                                         <?php 
                                                             $form->get('gipgestion')->setValue($this->information['glans']['0']['ip_gestion']); 
-                                                            if($this->information['glans']['0']['ip_gestion'] == $this->value) {
+                                                            if(strlen($this->othervalue)==0&&$this->information['glans']['0']['ip_gestion'] == $this->value) {
                                                                 $form->get('gipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                                $form->get('gipgestion')->setAttribute('title','Dato encontrado');
+                                                            }elseif(strlen($this->othervalue)>0&&strpos($this->information['glans']['0']['ip_gestion'],$this->othervalue) !== false) {
+                                                                $form->get('gipgestion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
                                                                 $form->get('gipgestion')->setAttribute('title','Dato encontrado');
                                                             }
                                                         ?>
@@ -2407,10 +2425,13 @@ $(function(){
                                                         <label class="control-label" for="ip-gestion-cliente">IP Gestión Cliente</label>
                                                         <?php
                                                             $form->get('gipgestioncliente')->setValue($this->information['glans']['0']['ip_gestion_cliente']);
-                                                            if($this->information['glans']['0']['ip_gestion_cliente'] == $this->value) {
+                                                            if(strlen($this->othervalue)==0&&$this->information['glans']['0']['ip_gestion_cliente'] == $this->value) {
                                                                 $form->get('gipgestioncliente')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                                                 $form->get('gipgestioncliente')->setAttribute('title','Dato encontrado');
-                                                            }
+                                                            }elseif(strlen($this->othervalue)>0&&strpos($this->information['glans']['0']['ip_gestion_cliente'],$this->othervalue) !== false) {
+                                                                $form->get('gipgestioncliente')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                                $form->get('gipgestioncliente')->setAttribute('title','Dato encontrado');
+                                                            }  
                                                         ?>
                                                         <?= $this->formInput($form->get('gipgestioncliente')); ?>
                                                     </div>
@@ -2418,7 +2439,14 @@ $(function(){
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="glan-firmware">Firmware</label>
-                                                        <?php $form->get('gfirmware')->setValue($this->information['glans']['0']['firmware']); ?>
+                                                        <?php 
+                                                            $form->get('gfirmware')->setValue($this->information['glans']['0']['firmware']); 
+                                                            if(strlen($this->othervalue)>0&&strpos($this->information['glans']['0']['firmware'],$this->othervalue) !== false) {
+                                                                $form->get('gfirmware')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                                $form->get('gfirmware')->setAttribute('title','Dato encontrado');
+                                                            }                                                            
+                                                            
+                                                        ?>
                                                         <?= $this->formInput($form->get('gfirmware')); ?>
                                                     </div>
 
@@ -2426,8 +2454,11 @@ $(function(){
                                                         <label class="control-label" for="glan-mac">MAC</label>
                                                         <?php 
                                                             $form->get('gmac')->setValue($this->information['glans']['0']['mac']); 
-                                                            if($this->information['glans']['0']['mac'] == $this->value) {
+                                                            if(strlen($this->othervalue)==0&&$this->information['glans']['0']['mac'] == $this->value) {
                                                                 $form->get('gmac')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                                                $form->get('gmac')->setAttribute('title','Dato encontrado');
+                                                            }elseif(strlen($this->othervalue)>0&&strpos($this->information['glans']['0']['mac'],$this->othervalue) !== false) {
+                                                                $form->get('gmac')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
                                                                 $form->get('gmac')->setAttribute('title','Dato encontrado');
                                                             }
                                                         
@@ -2437,7 +2468,13 @@ $(function(){
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="glan-numeroserie">Número Serie</label>
-                                                        <?php $form->get('gnumeroserie')->setValue($this->information['glans']['0']['numero_serie']); ?>
+                                                        <?php
+                                                            $form->get('gnumeroserie')->setValue($this->information['glans']['0']['numero_serie']); 
+                                                            if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['glans']['0']['numero_serie']),strtolower($this->othervalue)) !== false) {
+                                                                $form->get('gnumeroserie')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                                $form->get('gnumeroserie')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
                                                         <?= $this->formInput($form->get('gnumeroserie')); ?>
                                                     </div>
 
@@ -2472,7 +2509,13 @@ $(function(){
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="glan-ubicacion">Ubicación</label>
-                                                        <?php $form->get('gubicacion')->setValue($this->information['glans']['0']['ubicacion']); ?>
+                                                        <?php 
+                                                            $form->get('gubicacion')->setValue($this->information['glans']['0']['ubicacion']); 
+                                                            if(strlen($this->othervalue)>0&&strpos($this->information['glans']['0']['ubicacion'],$this->othervalue) !== false) {
+                                                                $form->get('gubicacion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                                $form->get('gubicacion')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
                                                         <?= $this->formInput($form->get('gubicacion')); ?>
                                                     </div>                                    
 
@@ -2508,7 +2551,13 @@ $(function(){
 
                                                     <div class="form-group">
                                                         <label class="control-label" for="glan-observaciones">Observaciones</label>
-                                                        <?php $form->get('gobservacion')->setValue($this->information['glans']['0']['observaciones']) ?>    
+                                                        <?php 
+                                                            $form->get('gobservacion')->setValue($this->information['glans']['0']['observaciones']); 
+                                                            if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['glans']['0']['observaciones']),strtolower($this->othervalue)) !== false) {
+                                                                $form->get('gobservacion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                                $form->get('gobservacion')->setAttribute('title','Dato encontrado');
+                                                            }
+                                                        ?>
                                                         <?= $this->formTextarea($form->get('gobservacion')); ?>
                                                     </div>
                                                     

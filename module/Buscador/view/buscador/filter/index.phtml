@@ -169,7 +169,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <form id="filterForm" >    
-            <div class="col-lg-2">
+            <div class="col-lg-3">
                 <fieldset class="form-group  custom-fieldset"> 
                     <legend class="custom-legend" title="Sedes">
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Sedes
@@ -289,7 +289,7 @@
                     </div>
                 </fieldset>    
             </div>    
-            <div class="col-lg-2">    
+            <div class="col-lg-3">    
                 <fieldset class="form-group  custom-fieldset">
                     <legend class="custom-legend" title="Equipos gestionados" style='font-size: 10px;'>
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -344,10 +344,10 @@
                     
                     
                 </fieldset>    
-            </div>    
+            </div>
 
 
-            <div class="col-lg-2">    
+            <div class="col-lg-3">    
                 <fieldset class="form-group  custom-fieldset">
                     <legend class="custom-legend" title="Equipos No Gestionados" style='font-size: 10px;'>
                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -381,7 +381,7 @@
                 
             </div>
 
-                <div class="col-lg-3" style="padding: 4px; background-color: #f5f5f5;"> 
+                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 20px;"> 
                 
                     <fieldset class="form-group custom-fieldset" style='background-color: #f5f5f5;'>
                     <legend class="custom-legend" title="Equipos Glans" style='background-color: #f5f5f5;'>
@@ -391,27 +391,27 @@
                         
                     <div class="col-lg-12">    
                         <div class="form-group">
-                            <input type="text" class="form-control" id="glan-query" name="glan-query" placeholder="Filtrar ..."/>
+                            <input type="text" class="form-control" id="glan-query" name="glan-query" placeholder="Filtrar por esta coincidencia ..."/>
                         </div>                
                     </div>            
                         
                     
                         
-                    <div class="col-lg-6">
+<!--                    <div class="col-lg-6">
                         <div class="form-group">
                             <label class="custom-label" for="glan-client-select">Cliente</label>
-                            <?= $this->formSelect($form->get('gcliente')); ?>
+                            <?php # $this->formSelect($form->get('gcliente')); ?>
                         </div>
 
                         <div class="form-group">
                             <label class="custom-label" for="glan-function-select">Función</label>
-                            <?= $this->formSelect($form->get('gfuncion')); ?>
+                            <?php # $this->formSelect($form->get('gfuncion')); ?>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="custom-label" for="glan-criticidad-select">Criticidad</label>
-                            <?= $this->formSelect($form->get('gcriticidad')); ?>
+                            <?php # $this->formSelect($form->get('gcriticidad')); ?>
                         </div>
                     </div>    
                     <div class="col-lg-6">    
@@ -425,10 +425,10 @@
                                 <option value="4">Baja</option>
                             </select>                                 
                         </div>
-                    </div>
+                    </div>-->
                     
                 </fieldset>
-                <fieldset class="form-group  custom-fieldset"  style='background-color: #f5f5f5;'>
+<!--                <fieldset class="form-group  custom-fieldset"  style='background-color: #f5f5f5;'>
                     <legend class="custom-legend" title="Equipos Access Point" style='background-color: #f5f5f5;'>
                         <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
                         Access Point
@@ -436,7 +436,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label class="custom-label" for="aps-criticidad-select">Criticidad</label>
-                            <?= $this->formSelect($form->get('apcriticidad')); ?>
+                            <?php # $this->formSelect($form->get('apcriticidad')); ?>
                         </div>
                         <div class="form-group">
                             <label class="custom-label" for="estado-equipo-glan">Estados</label>
@@ -449,7 +449,7 @@
                             </select>
                         </div>
                     </div>
-                </fieldset>
+                </fieldset>-->
                     
                     
                 </div>

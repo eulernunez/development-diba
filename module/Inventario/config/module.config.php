@@ -224,7 +224,7 @@ return array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
                     //'route'    => '/tabs/[:id]',
-                    'route'    => '/tabs[/[:id][/:tab][/:item][/:value]]',
+                    'route'    => '/tabs[/[:id][/:tab][/:item][/:value][/:othervalue]]',
                     'defaults' => array(
                         'controller' => 'Inventario\Controller\Process',
                         'action'     => 'tabs',

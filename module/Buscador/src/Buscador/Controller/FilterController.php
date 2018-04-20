@@ -52,7 +52,8 @@ class FilterController extends AbstractActionController
             $viewmodel = 
                     new ViewModel(
                             array('sedes' => $sedes,
-                                  'glanFilter' => $glanFilter));
+                                  'glanFilter' => $glanFilter,
+                                  'glanQuery' => $glanQuery));
             $viewmodel->setTerminal(true);
 
             return $viewmodel;

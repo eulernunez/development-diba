@@ -1070,7 +1070,7 @@ class Sede extends AbstractTableGateway {
         }
 
         $html .= '</select>';
-
+        
         return $html;
 
     }        
