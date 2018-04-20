@@ -2511,7 +2511,7 @@ $(function(){
                                                         <label class="control-label" for="glan-ubicacion">Ubicación</label>
                                                         <?php 
                                                             $form->get('gubicacion')->setValue($this->information['glans']['0']['ubicacion']); 
-                                                            if(strlen($this->othervalue)>0&&strpos($this->information['glans']['0']['ubicacion'],$this->othervalue) !== false) {
+                                                            if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['glans']['0']['ubicacion']),strtolower($this->othervalue)) !== false) {
                                                                 $form->get('gubicacion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
                                                                 $form->get('gubicacion')->setAttribute('title','Dato encontrado');
                                                             }
