@@ -40,7 +40,11 @@
            data-card-visible="true"
            data-page-list="[10, 15, 30, 50, 100, All]"
            data-page-size="10"
+           <?php if($this->glanFilter) : ?>
+           data-pagination="false"
+           <?php else : ?>
            data-pagination="true"
+           <?php endif ?>
            data-pagination-detail-h-align="right"
            data-pagination-h-align="left"
            data-search="false"

@@ -80,6 +80,14 @@
 
     $(document).ready(function (e){
 
+        $("#glan-query").keypress(function(e){
+            if(e.which == 13){
+                e.preventDefault();
+                filter();
+                return false;
+            }
+        });
+
         $("#provincia").change(function(){
 
             var provincia = $("#provincia option:selected").val();
@@ -168,7 +176,7 @@
     <legend>Filtros de Búsqueda</legend>
     <div class="panel panel-default">
         <div class="panel-body">
-            <form id="filterForm" >    
+            <form id="filterForm">    
             <div class="col-lg-3">
                 <fieldset class="form-group  custom-fieldset"> 
                     <legend class="custom-legend" title="Sedes">
@@ -187,38 +195,39 @@
                         </div>
                     </div>
                 </fieldset>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
-                <div class="form-group">
-                    &nbsp;        
-                </div>
                 
-                <div style="float: left;">
-                    <a class="btn btn-primary btn-lg" href="#" role="button" onclick="filter();" title="Filtrar">
-                        <i class="glyphicon glyphicon-filter"></i>
-                    </a>
-                </div>
-                <div style="float: right;">
-                    <a class="btn btn-primary btn-lg" href="<?= $this->url('filter'); ?>" role="button" title="Refresh">
-                        <i class="glyphicon glyphicon-refresh"></i>
-                    </a>
-                </div>
+                <fieldset class="form-group custom-fieldset" style="margin-top: 20px;">
+                    <legend class="custom-legend" title="Wan">
+                        <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
+                        WAN
+                    </legend>
+                    <div class="col-lg-12">    
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="wan-query" name="wan-query" placeholder="Filtrar por esta coincidencia ..."/>
+                        </div>                
+                    </div>            
+                </fieldset>
+            
+                <fieldset class="form-group custom-fieldset" style="margin-top: 21px;">
+                    <legend class="custom-legend" title="Opciones">
+                    </legend>
+                     <div class="col-lg-12">    
+                         <div id="filter-button" style="float: left;">
+                             <a class="btn btn-primary btn-lg" href="#" role="button" onclick="filter();" title="Filtrar">
+                                 <i class="glyphicon glyphicon-filter"></i>
+                             </a>
+                         </div>
+                         <div style="float: right;">
+                             <a class="btn btn-primary btn-lg" href="<?= $this->url('filter'); ?>" role="button" title="Refresh">
+                                 <i class="glyphicon glyphicon-refresh"></i>
+                             </a>
+                         </div>
+                     </div>            
+                 </fieldset>                
+            </div>                
                 
-            </div>
-
+                
+                
             <div class="col-lg-3">
 
                 <fieldset class="form-group  custom-fieldset">
@@ -381,7 +390,7 @@
                 
             </div>
 
-                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 20px;"> 
+                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 16px;"> 
                 
                     <fieldset class="form-group custom-fieldset" style='background-color: #f5f5f5;'>
                     <legend class="custom-legend" title="Equipos Glans" style='background-color: #f5f5f5;'>
@@ -460,6 +469,26 @@
                     </div>                
                 </div>-->
                 
+                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 16px;"> 
+                
+                    <fieldset class="form-group custom-fieldset" style='background-color: #f5f5f5;'>
+                        <legend class="custom-legend" title="Equipos Access Point" style='background-color: #f5f5f5;'>
+                            <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
+                            Access Point
+                        </legend>
+                        <div class="col-lg-12">    
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="ap-query" name="ap-query" placeholder="Filtrar por esta coincidencia ..."/>
+                            </div>                
+                        </div>            
+                    </fieldset>
+                </div>
+
+
+
+
+
+
             </form>
         </div>
     </div>
