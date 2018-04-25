@@ -40,7 +40,7 @@
            data-card-visible="true"
            data-page-list="[10, 15, 30, 50, 100, All]"
            data-page-size="10"
-           <?php if($this->glanFilter) : ?>
+           <?php if($this->glanFilter||$this->apFilter) : ?>
            data-pagination="false"
            <?php else : ?>
            data-pagination="true"
@@ -64,6 +64,8 @@
                 <th data-field="direccion" data-sortable="true" data-width="60%">DIRECCIÓN</th>
                 <?php if($this->glanFilter) : ?>
                 <th data-field="contacto" data-sortable="true" data-width="25%">NEMÓNICO GLAN</th>
+                <?php elseif ($this->apFilter) : ?>
+                <th data-field="contacto" data-sortable="true" data-width="25%">ID AP</th>
                 <?php endif ; ?>
                 <!--<th data-field="fecha" data-sortable="true" data-width="10%">FECHA ALTA</th>-->
                 <th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>
@@ -71,19 +73,26 @@
             </tr>
         </thead>
         <tbody>
+            <?php if(is_array($this->sedes)) : ?>
             <?php foreach ($this->sedes as $sede) : ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
                     <td></td>
                     <td class="noWrap"><?= ucwords(strtolower($sede->nombre)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($sede->direccion)); ?></td>
                     <?php if($this->glanFilter) : ?>
-                    <td class="noWrap"><?= strtolower($sede->nemonico); ?></td>
+                        <td class="noWrap"><?= strtolower($sede->nemonico); ?></td>
+                    <?php elseif($this->apFilter) : ?>
+                        <td class="noWrap"><?= strtolower($sede->idap); ?></td>
                     <?php endif ; ?>
                     <!--<td class="noWrap"><?= date("d-m-Y", strtotime($sede->fechaAlta)); ?></td>--> 
                     <td class="noWrap">
                         <!--  href="/tabs/<?= $sede->id; ?>" -->
                         <?php if($this->glanFilter && strlen($sede->nemonico)>1) : ?>
                             <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id . '/3/4/' . $sede->nemonico . '/' . $this->glanQuery;?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->apFilter && strlen($sede->idap)>1) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id . '/4/52/' . $sede->idap . '/' . $this->apQuery;?>" title="Consultar">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a>
                         <?php else: ?>
@@ -95,6 +104,7 @@
                     <!--<td class="noWrap"></td>-->
                 </tr>
             <?php endforeach; ?>
+            <?php endif; ?>    
         </tbody>
     </table>
     <div class="clearfix">&nbsp;</div>

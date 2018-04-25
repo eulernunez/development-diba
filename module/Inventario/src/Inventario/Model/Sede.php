@@ -853,9 +853,14 @@ class Sede extends AbstractTableGateway {
                 }
                 $index = 0;
                 foreach($aux as $key => $value) {
-                    if(!empty(array_search($this->value, $value))) {
-                        $index = $key;
+                    foreach($value as $item) {
+                        if(strtolower($this->value) == strtolower($item)) {
+                            $index = $key;
+                        }
                     }
+//                    if(!empty(array_search($this->value, $value))) {
+//                        $index = $key;
+//                    }
                 }
                 $found = array_slice($aux, $index, 1);
                 unset($aux[$index]);

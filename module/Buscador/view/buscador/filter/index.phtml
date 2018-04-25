@@ -88,6 +88,14 @@
             }
         });
 
+        $("#ap-query").keypress(function(e){
+            if(e.which == 13){
+                e.preventDefault();
+                filter();
+                return false;
+            }
+        });
+
         $("#provincia").change(function(){
 
             var provincia = $("#provincia option:selected").val();

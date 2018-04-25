@@ -1002,6 +1002,10 @@ $(function(){
                                         $form->get('nombre')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('nombre')->setAttribute('title','Dato encontrado');
                                     }
+                                    if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['sede']['nombre']),strtolower($this->othervalue)) !== false) {
+                                        $form->get('nombre')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                        $form->get('nombre')->setAttribute('title','Dato encontrado');
+                                    }
                             ?>
                             <?= $this->formInput($form->get('nombre')); ?>
                         </div>
@@ -1020,6 +1024,11 @@ $(function(){
                                         $form->get('direccion')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('direccion')->setAttribute('title','Dato encontrado');
                                     }
+                                    if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['sede']['direccion']),strtolower($this->othervalue)) !== false) {
+                                        $form->get('direccion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                        $form->get('direccion')->setAttribute('title','Dato encontrado');
+                                    }
+                                    
                             ?>
                             <?= $this->formTextarea($form->get('direccion')); ?>
                         </div>
@@ -2778,7 +2787,13 @@ $(function(){
 
                                             <div class="form-group">
                                                 <label class="control-label" for="ap-nombre">Nombre</label>
-                                                <?php $form->get('apnombre')->setValue($this->information['aps']['0']['nombre']); ?>
+                                                <?php 
+                                                $form->get('apnombre')->setValue($this->information['aps']['0']['nombre']); 
+                                                if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['aps']['0']['nombre']),strtolower($this->othervalue)) !== false) {
+                                                    $form->get('apnombre')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                    $form->get('apnombre')->setAttribute('title','Dato encontrado');
+                                                }
+                                                ?>
                                                 <?= $this->formInput($form->get('apnombre')); ?>
                                             </div>
 
@@ -2786,10 +2801,16 @@ $(function(){
                                                 <label class="control-label" for="ap-ipcliente">IP Cliente</label>
                                                 <?php 
                                                     $form->get('apipcliente')->setValue($this->information['aps']['0']['ip_cliente']);
-                                                    if($this->information['aps']['0']['ip_cliente'] == $this->value) {
+                                                    
+                                                    if(strlen($this->othervalue)==0&&$this->information['aps']['0']['ip_cliente'] == $this->value) {
                                                         $form->get('apipcliente')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                                         $form->get('apipcliente')->setAttribute('title','Dato encontrado');
-                                                    }
+                                                    }elseif(strlen($this->othervalue)>0&&strpos($this->information['aps']['0']['ip_cliente'],$this->othervalue) !== false) {
+                                                        $form->get('apipcliente')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                        $form->get('apipcliente')->setAttribute('title','Dato encontrado');
+                                                    }                                                    
+                                                    
+                                                    
                                                 ?>
                                                 <?= $this->formInput($form->get('apipcliente')); ?>
                                             </div>
@@ -2798,10 +2819,13 @@ $(function(){
                                                 <label class="control-label" for="ap-idap">ID AP</label>
                                                 <?php 
                                                     $form->get('apidap')->setValue($this->information['aps']['0']['id_ap']);
-                                                    if($this->information['aps']['0']['id_ap'] == $this->value) {
+                                                    if(strlen($this->othervalue)==0&&$this->information['aps']['0']['id_ap'] == $this->value) {
                                                         $form->get('apidap')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                                         $form->get('apidap')->setAttribute('title','Dato encontrado');
-                                                    }
+                                                    }elseif(strlen($this->othervalue)>0&&strpos($this->information['aps']['0']['id_ap'],$this->othervalue) !== false) {
+                                                        $form->get('apidap')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                        $form->get('apidap')->setAttribute('title','Dato encontrado');
+                                                    }                                                    
                                                 ?>
                                                 <?= $this->formInput($form->get('apidap')); ?>
                                             </div>
@@ -2878,19 +2902,39 @@ $(function(){
 
                                             <div class="form-group">
                                                 <label class="control-label" for="ap-actividad-tsol">Actividad TSOL</label>
-                                                <?php $form->get('apactividadtsol')->setValue($this->information['aps']['0']['actividad_tsol']); ?>
+                                                <?php 
+                                                    $form->get('apactividadtsol')->setValue($this->information['aps']['0']['actividad_tsol']); 
+                                                    if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['aps']['0']['actividad_tsol']),strtolower($this->othervalue)) !== false) {
+                                                        $form->get('apactividadtsol')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                        $form->get('apactividadtsol')->setAttribute('title','Dato encontrado');
+                                                    }
+                                                ?>
                                                 <?= $this->formInput($form->get('apactividadtsol')); ?>
                                             </div>                                    
 
                                             <div class="form-group">
                                                 <label class="control-label" for="ap-modelo">Módelo</label>
-                                                <?php $form->get('apmodelo')->setValue($this->information['aps']['0']['modelo']); ?>
+                                                <?php
+                                                    $form->get('apmodelo')->setValue($this->information['aps']['0']['modelo']);
+                                                    if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['aps']['0']['modelo']),strtolower($this->othervalue)) !== false) {
+                                                        $form->get('apmodelo')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                        $form->get('apmodelo')->setAttribute('title','Dato encontrado');
+                                                    }
+                                                
+                                                ?>
                                                 <?= $this->formInput($form->get('apmodelo')); ?>
                                             </div>
                                                     
                                             <div class="form-group">
                                                 <label class="control-label" for="ap-mac">MAC</label>
-                                                <?php $form->get('apmac')->setValue($this->information['aps']['0']['mac']); ?>
+                                                <?php 
+                                                    $form->get('apmac')->setValue($this->information['aps']['0']['mac']); 
+                                                    if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['aps']['0']['mac']),strtolower($this->othervalue)) !== false) {
+                                                        $form->get('apmac')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                        $form->get('apmac')->setAttribute('title','Dato encontrado');
+                                                    }                                                
+                                                    
+                                                ?>
                                                 <?= $this->formInput($form->get('apmac')); ?>
                                             </div>                                                    
 
@@ -2908,7 +2952,13 @@ $(function(){
 
                                             <div class="form-group">
                                                 <label class="control-label" for="glan-observaciones">Observaciones</label>
-                                                <?php $form->get('apobservacion')->setValue($this->information['aps']['0']['observaciones']) ?>    
+                                                <?php 
+                                                $form->get('apobservacion')->setValue($this->information['aps']['0']['observaciones']); 
+                                                if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['aps']['0']['observaciones']),strtolower($this->othervalue)) !== false) {
+                                                    $form->get('apobservacion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                                    $form->get('apobservacion')->setAttribute('title','Dato encontrado');
+                                                }
+                                                ?>    
                                                 <?= $this->formTextarea($form->get('apobservacion')); ?>
                                             </div>
 

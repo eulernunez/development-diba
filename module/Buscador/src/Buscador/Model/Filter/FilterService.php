@@ -312,6 +312,28 @@ class FilterService extends Service {
                 . " OR s.direccion LIKE '%" . $glanQuery. "%')";
         }
 
+        #ap-query
+        $filterAp = false;
+        $apTable = "";
+        $filterApQuery = "";
+        $apQuery = (string)$this->params['ap-query'];
+
+        if(!empty($apQuery)) {
+            $filterAp = true;
+            $apTable = ", a.*"; 
+            $filterApQuery 
+                = " AND (a.contrato_extreme LIKE '%" . $apQuery . "%'"
+                . " OR a.nombre LIKE '%" . $apQuery . "%'"
+                . " OR a.ip_cliente LIKE '%" . $apQuery . "%'"
+                . " OR a.id_ap LIKE '%" . $apQuery . "%'"
+                . " OR a.actividad_tsol LIKE '%" . $apQuery . "%'"
+                . " OR a.modelo LIKE '%" . $apQuery . "%'"
+                . " OR a.mac LIKE '%" . $apQuery . "%'"
+                . " OR a.observaciones LIKE '%" . $apQuery . "%'"
+                . " OR s.nombre LIKE '%" . $apQuery . "%'"
+                . " OR s.direccion LIKE '%" . $apQuery . "%')";
+        }
+        
         #Client Scope Filter
         $clientScopeFilter = "";
         if('Cliente' == $this->userRole) {
@@ -319,7 +341,7 @@ class FilterService extends Service {
         }
         
         $statement =
-            "SELECT s.*, s.id AS sedeId" . $glanTable
+            "SELECT s.*, s.id AS sedeId, s.nombre AS sedeNombre" . $glanTable . $apTable
                 . " FROM sedes AS s"
                 . " LEFT JOIN circuitos AS c ON c.sede_id = s.id"
                 . " LEFT JOIN equipos AS e ON e.circuito_id = c.id"
@@ -346,16 +368,22 @@ class FilterService extends Service {
                 . $filterGlanEquipoEstado
                 . $filterApCriticidad
                 . $filterApEquipoEstado
-                . $filterGlanQuery;
-
+                . $filterGlanQuery
+                . $filterApQuery;
+        
 //        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
 
+        if(true == $filterGlan && true == $filterAp) {
+            return [];
+        }
+        
         $adapter = $this->adapter->query($statement);
-
         $result = $adapter->execute();
-
+        
         if(true == $filterGlan) {
             return $this->convertedGlansObjects($result);
+        } elseif(true == $filterAp) {
+            return $this->convertedApsObjects($result);
         } else {
             return $this->convertedObjects($result);
         }
@@ -371,7 +399,7 @@ class FilterService extends Service {
         foreach ($result as $row) {
             $entity = new \stdClass;
             $entity->id = $row['sedeId'];
-            $entity->nombre = $row['nombre'];
+            $entity->nombre = $row['sedeNombre'];
             $entity->idescat = $row['idescat'];
             $entity->direccion = $row['direccion'];
             $entity->fechaAlta = $row['fecha_alta'];
@@ -389,7 +417,7 @@ class FilterService extends Service {
         foreach ($result as $row) {
             $entity = new \stdClass;
             $entity->id = $row['sedeId'];
-            $entity->nombre = $row['nombre'];
+            $entity->nombre = $row['sedeNombre'];
             $entity->idescat = $row['idescat'];
             $entity->direccion = $row['direccion'];
             $entity->fechaAlta = $row['fecha_alta'];
@@ -401,6 +429,23 @@ class FilterService extends Service {
         return $entities;
     }
 
+    public function convertedApsObjects($result)
+    {
+        $entities = array();
+        foreach ($result as $row) {
+            $entity = new \stdClass;
+            $entity->id = $row['sedeId'];
+            $entity->nombre = $row['sedeNombre'];
+            $entity->idescat = $row['idescat'];
+            $entity->direccion = $row['direccion'];
+            $entity->fechaAlta = $row['fecha_alta'];
+            $entity->idap = $row['id_ap'];
+            if(strlen($row['id_ap'])>1) {
+                $entities[$row['id_ap']] = $entity;
+            }
+        }
+        return $entities;
+    }
     
     
 }
