@@ -90,7 +90,7 @@
                     <!--<td class="noWrap"><?= ucwords(strtolower($item['descripcion'])); ?></td>-->
                     <td class="noWrap"><?= ucwords(strtolower($item['estados'])); ?></td>
                     <td class="noWrap">
-                        <a class="update" href="#" title="Consultar">
+                        <a class="update" href="<?php echo $this->url('supply') . '/' . $item['id']; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </td>

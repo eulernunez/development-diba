@@ -32,6 +32,16 @@ return array(
                     ),
                 ),
             ),
+            'supply' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/supply[/[:id]]',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'supply',
+                    ),
+                ),
+            ),            
         ),
     ),
     'view_manager' => array (

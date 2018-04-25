@@ -38,10 +38,14 @@ class SupplyTracingController extends AbstractActionController
                             array('tramites' => $tramites));
             return $viewmodel;
 
-         }    
-            
+         }  
+  
     }
 
+    public function supplyAction()
+    {
+        $id = $this->params()->fromRoute('id');
+    }        
 
     
 }
