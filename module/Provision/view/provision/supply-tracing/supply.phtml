@@ -234,11 +234,18 @@
 			//var h = currentTime.getHours();
 			//var m = currentTime.getMinutes();
 			//var s = currentTime.getSeconds();
-
 			
+                        
 			/* NEW */
-						
-			var date_past = new Date(2018,03,08,00,30,00);
+			var year =  '<?= $this->information['tramite']['0']['year']; ?>';
+                        var month =  '<?= $this->information['tramite']['0']['month']; ?>';
+                        var day =  '<?= $this->information['tramite']['0']['day']; ?>';
+                        var hour =  '<?= $this->information['tramite']['0']['hour']; ?>';
+                        var minut =  '<?= $this->information['tramite']['0']['minut']; ?>';
+                        var second =  '<?= $this->information['tramite']['0']['second']; ?>';
+                        // 2018,03,08,00,30,00
+			var date_past = new Date(year,month,day,hour,minut,second);
+                        //alert('DATE PASADO ' + date_past);
 			var date_now = new Date();
 
 			var seconds = Math.floor((date_now - (date_past))/1000);

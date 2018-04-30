@@ -44,7 +44,17 @@ class SupplyTracingController extends AbstractActionController
 
     public function supplyAction()
     {
+        
         $id = $this->params()->fromRoute('id');
+        
+        $information = $this->supplyTracingService->getFormality($id);
+        
+        $viewmodel = 
+                    new ViewModel(
+                            array('information' => $information));
+        return $viewmodel;
+
+
     }        
 
     
