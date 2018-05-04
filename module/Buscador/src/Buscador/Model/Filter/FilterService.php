@@ -416,7 +416,7 @@ class FilterService extends Service {
                 . $filterApQuery
                 . $filterWanQuery;
         
-        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
+//        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
 
         
         if(true == $filterWan && true == $filterGlan && true == $filterAp) {
