@@ -334,6 +334,50 @@ class FilterService extends Service {
                 . " OR s.direccion LIKE '%" . $apQuery . "%')";
         }
         
+        #wan-query
+        $filterWan = false;
+        $filterWanQuery = "";
+        $wanQuery = (string)$this->params['wan-query'];
+        $wanTable = "";
+        if(!empty($wanQuery)) {
+            $filterWan = true;
+            //Circuito
+            $wanTable = 
+                ",c.administrativo,IF(LOCATE('". $wanQuery . "',c.administrativo),'1','0') AS IsAdministrativo";
+            $wanTable .=
+                ",c.telefono,IF(LOCATE('" . $wanQuery . "',c.telefono),'1','0') AS IsTelefono";
+            $wanTable .=
+                ",c.ibenet,IF(LOCATE('" . $wanQuery . "',c.ibenet),'1','0') AS IsIbenet";
+            // Equipo
+            $wanTable .=
+                ",e.nemonico,IF(LOCATE('" . $wanQuery . "',e.nemonico),'1','0') AS IsNemonicoEquipo";
+            $wanTable .=
+                ",e.ip_gestion,IF(LOCATE('" . $wanQuery . "',e.ip_gestion),'1','0') AS IsIpGestionEquipo";
+            $wanTable .= 
+                ",IF(LOCATE('". $wanQuery . "',e.numero_serie),'1','0') AS IsNumeroSerieEquipo";            
+            $wanTable .= 
+                ",IF(LOCATE('". $wanQuery . "',e.locert),'1','0') AS IsLocertEquipo";            
+            $wanTable .= 
+                ",IF(LOCATE('". $wanQuery . "',e.observacion),'1','0') AS IsObservacionEquipo";
+            //Sede
+            $wanTable .= 
+                ",IF(LOCATE('". $wanQuery . "',s.nombre),'1','0') AS IsNameSede";
+            $wanTable .= 
+                ",IF(LOCATE('". $wanQuery . "',s.direccion),'1','0') AS IsAddressSede";
+
+            $filterWanQuery 
+                = " AND (c.administrativo LIKE '%" . $wanQuery . "%'"
+                . " OR c.telefono LIKE '%" . $wanQuery . "%'"
+                . " OR c.ibenet LIKE '%" . $wanQuery . "%'"
+                . " OR e.nemonico LIKE '%" . $wanQuery . "%'"
+                . " OR e.ip_gestion LIKE '%" . $wanQuery . "%'"
+                . " OR e.numero_serie LIKE '%" . $wanQuery . "%'"
+                . " OR e.locert LIKE '%" . $wanQuery . "%'"
+                . " OR e.observacion LIKE '%" . $wanQuery . "%'"
+                . " OR s.nombre LIKE '%" . $wanQuery . "%'"
+                . " OR s.direccion LIKE '%" . $wanQuery . "%')";
+        }
+
         #Client Scope Filter
         $clientScopeFilter = "";
         if('Cliente' == $this->userRole) {
@@ -341,7 +385,7 @@ class FilterService extends Service {
         }
         
         $statement =
-            "SELECT s.*, s.id AS sedeId, s.nombre AS sedeNombre" . $glanTable . $apTable
+            "SELECT s.*, s.id AS sedeId, s.nombre AS sedeNombre" . $wanTable . $glanTable . $apTable
                 . " FROM sedes AS s"
                 . " LEFT JOIN circuitos AS c ON c.sede_id = s.id"
                 . " LEFT JOIN equipos AS e ON e.circuito_id = c.id"
@@ -369,10 +413,24 @@ class FilterService extends Service {
                 . $filterApCriticidad
                 . $filterApEquipoEstado
                 . $filterGlanQuery
-                . $filterApQuery;
+                . $filterApQuery
+                . $filterWanQuery;
         
-//        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
+        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
 
+        
+        if(true == $filterWan && true == $filterGlan && true == $filterAp) {
+            return [];
+        }
+        
+        if(true == $filterWan && true == $filterGlan) {
+            return [];
+        }
+
+        if(true == $filterWan && true == $filterAp) {
+            return [];
+        }
+        
         if(true == $filterGlan && true == $filterAp) {
             return [];
         }
@@ -384,6 +442,8 @@ class FilterService extends Service {
             return $this->convertedGlansObjects($result);
         } elseif(true == $filterAp) {
             return $this->convertedApsObjects($result);
+        } elseif(true == $filterWan) {
+            return $this->convertedWansObjects($result);                        
         } else {
             return $this->convertedObjects($result);
         }
@@ -403,13 +463,47 @@ class FilterService extends Service {
             $entity->idescat = $row['idescat'];
             $entity->direccion = $row['direccion'];
             $entity->fechaAlta = $row['fecha_alta'];
-            $entities[$row['id']] = $entity;
+            $entities[$row['sedeId']] = $entity;
         }
 
         return $entities;
 
     }
     
+    public function convertedWansObjects($result)
+    {
+
+        $entities = array();
+
+        foreach ($result as $row) {
+            $entity = new \stdClass;
+            $entity->id = $row['sedeId'];
+            $entity->nombre = $row['sedeNombre'];
+            $entity->idescat = $row['idescat'];
+            $entity->direccion = $row['direccion'];
+            $entity->fechaAlta = $row['fecha_alta'];
+            $entity->isAdministrativo = $row['IsAdministrativo'];
+            $entity->administrativo = $row['administrativo'];
+            $entity->isTelefono = $row['IsTelefono'];
+            $entity->telefono = $row['telefono'];
+            $entity->isIbenet = $row['IsIbenet'];
+            $entity->ibenet = $row['ibenet'];
+            $entity->isNemonico = $row['IsNemonicoEquipo'];
+            $entity->nemonico = $row['nemonico'];
+            $entity->isIpGestionEquipo = $row['IsIpGestionEquipo'];
+            $entity->ipGestion = $row['ip_gestion'];
+            $entity->isNumeroSerieEquipo = $row['IsNumeroSerieEquipo'];
+            $entity->isLocertEquipo = $row['IsLocertEquipo'];
+            $entity->isObservacionEquipo = $row['IsObservacionEquipo'];
+            $entity->isNameSede = $row['IsNameSede'];
+            $entity->isAddressSede = $row['IsAddressSede'];
+            
+            $entities[$row['sedeId']] = $entity;
+        }
+
+        return $entities;
+
+    }
     
     public function convertedGlansObjects($result)
     {

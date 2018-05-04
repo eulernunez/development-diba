@@ -95,6 +95,42 @@
                             <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id . '/4/52/' . $sede->idap . '/' . $this->apQuery;?>" title="Consultar">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a>
+                        <?php elseif($this->wanFilter && $sede->isAdministrativo) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/0/1/' . $sede->administrativo . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter && $sede->isTelefono) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/0/2/' . $sede->telefono . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter && $sede->isIbenet) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/0/3/' . $sede->ibenet . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter && $sede->isNemonico) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/1/4/' . $sede->nemonico . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter && $sede->isIpGestionEquipo) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/1/5/' . $sede->ipGestion . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter && ($sede->isNumeroSerieEquipo||$sede->isLocertEquipo||$sede->isObservacionEquipo)) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/1/4/' . $sede->nemonico . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter && $sede->isNameSede) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/0/7/' . $sede->nombre . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter && $sede->isAddressSede) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/0/8/' . $sede->direccion . '/' . $this->wanQuery; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->wanFilter) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id; ?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit" style="color: red;"></i>
+                            </a>
                         <?php else: ?>
                             <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id; ?>" title="Consultar">
                                 <i class="glyphicon glyphicon-edit"></i>

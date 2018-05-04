@@ -1296,11 +1296,14 @@ $(function(){
                                 <?php
                                     $form->get('cadministrativo')->setValue($this->information['circuitos']['0']['administrativo']); 
                                     $form->get('cadministrativo')->setAttribute('readonly','readonly');
-                                    
-                                    if($this->information['circuitos']['0']['administrativo'] === $this->value) {
+                                    if(strlen($this->othervalue)==0&&(strtolower($this->information['circuitos']['0']['administrativo']) == strtolower($this->value))) {
                                         $form->get('cadministrativo')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                         $form->get('cadministrativo')->setAttribute('title','Dato encontrado');
-                                    } else {
+                                    }elseif(strlen($this->othervalue)>0&&strpos(strtolower($this->information['circuitos']['0']['administrativo']),strtolower($this->othervalue)) !== false) {
+                                        $form->get('cadministrativo')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                        $form->get('cadministrativo')->setAttribute('title','Dato encontrado');
+                                    }
+                                    else {
                                         if(preg_match("/^00000/", $this->information['circuitos']['0']['administrativo'])) {
                                             $form->get('cadministrativo')->setAttribute('title','Pseudo-administrativo');
                                             $form->get('cadministrativo')->setAttribute('style','color:red; font-weight: bold;');
@@ -1323,8 +1326,11 @@ $(function(){
                                 <label class="control-label" for="exampleInputEmail1">Teléfono</label>
                                 <?php 
                                     $form->get('ctelefono')->setValue($this->information['circuitos']['0']['telefono']);
-                                    if($this->information['circuitos']['0']['telefono'] === $this->value && !empty($this->value)) {
+                                    if(strlen($this->othervalue)==0&&(strtolower($this->information['circuitos']['0']['telefono']) == strtolower($this->value))&&!empty($this->value)) {
                                         $form->get('ctelefono')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                        $form->get('ctelefono')->setAttribute('title','Dato encontrado');
+                                    }elseif(strlen($this->othervalue)>0&&strpos(strtolower($this->information['circuitos']['0']['telefono']),strtolower($this->othervalue)) !== false) {
+                                        $form->get('ctelefono')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
                                         $form->get('ctelefono')->setAttribute('title','Dato encontrado');
                                     }
                                 ?>
@@ -1335,8 +1341,11 @@ $(function(){
                                 <label class="control-label" for="exampleInputEmail1">Ibenet</label>
                                 <?php
                                     $form->get('cibenet')->setValue($this->information['circuitos']['0']['ibenet']);
-                                    if($this->information['circuitos']['0']['ibenet'] === $this->value && !empty($this->value)) {
+                                    if(strlen($this->othervalue)==0&&(strtolower($this->information['circuitos']['0']['ibenet']) == strtolower($this->value))&&!empty($this->value)) {
                                         $form->get('cibenet')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                        $form->get('cibenet')->setAttribute('title','Dato encontrado');
+                                    }elseif(strlen($this->othervalue)>0&&strpos(strtolower($this->information['circuitos']['0']['ibenet']),strtolower($this->othervalue)) !== false) {
+                                        $form->get('cibenet')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
                                         $form->get('cibenet')->setAttribute('title','Dato encontrado');
                                     }
                                 ?>
@@ -1773,8 +1782,11 @@ $(function(){
                                     <label class="control-label" for="nemonico">Nemónico</label>
                                     <?php 
                                         $form->get('enemonico')->setValue($this->information['equipos']['0']['nemonico']);
-                                        if($this->information['equipos']['0']['nemonico'] == $this->value) {
+                                        if(strlen($this->othervalue)==0&&strtolower($this->information['equipos']['0']['nemonico']) == strtolower($this->value)) {
                                             $form->get('enemonico')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
+                                            $form->get('enemonico')->setAttribute('title','Dato encontrado');
+                                        }elseif(strlen($this->othervalue)>0&&strpos(strtolower($this->information['equipos']['0']['nemonico']),strtolower($this->othervalue)) !== false) {
+                                            $form->get('enemonico')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
                                             $form->get('enemonico')->setAttribute('title','Dato encontrado');
                                         }
                                     ?>
@@ -1785,10 +1797,16 @@ $(function(){
                                     <label class="control-label" for="ip-gestion">IP Gestión</label>
                                     <?php 
                                         $form->get('eipgestion')->setValue($this->information['equipos']['0']['ip_gestion']);
-                                        if($this->information['equipos']['0']['ip_gestion'] == $this->value) {
+                                        if(strlen($this->othervalue)==0&&strtolower($this->information['equipos']['0']['ip_gestion']) == strtolower($this->value)) {
                                             $form->get('eipgestion')->setAttribute('style','color:white; font-weight: bold; background-color: red; cursor:pointer;');
                                             $form->get('eipgestion')->setAttribute('title','Dato encontrado');
+                                        }elseif(strlen($this->othervalue)>0&&strpos(strtolower($this->information['equipos']['0']['ip_gestion']),strtolower($this->othervalue)) !== false) {
+                                            $form->get('eipgestion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                            $form->get('eipgestion')->setAttribute('title','Dato encontrado');
                                         }
+                                        
+                                        
+                                        
                                     ?>
                                     <?= $this->formInput($form->get('eipgestion')); ?>
                                 </div>
@@ -1822,12 +1840,24 @@ $(function(){
                             </div>
                             <div class="form-group">
                                 <label class="control-label" for="serie">N/S</label>
-                                <?php $form->get('eserie')->setValue($this->information['equipos']['0']['numero_serie']) ?>
+                                <?php 
+                                    $form->get('eserie')->setValue($this->information['equipos']['0']['numero_serie']);
+                                    if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['equipos']['0']['numero_serie']),strtolower($this->othervalue)) !== false) {
+                                        $form->get('eserie')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                        $form->get('eserie')->setAttribute('title','Dato encontrado');
+                                    }                                
+                                ?>
                                <?= $this->formInput($form->get('eserie')); ?>
                             </div>
                             <div class="form-group">
                                 <label class="control-label" for="locert">Locert</label>
-                                <?php $form->get('elocert')->setValue($this->information['equipos']['0']['locert']) ?>
+                                <?php
+                                    $form->get('elocert')->setValue($this->information['equipos']['0']['locert']);
+                                    if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['equipos']['0']['locert']),strtolower($this->othervalue)) !== false) {
+                                        $form->get('elocert')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                        $form->get('elocert')->setAttribute('title','Dato encontrado');
+                                    }
+                                ?>
                                <?= $this->formInput($form->get('elocert')); ?>
                             </div>
 
@@ -1873,8 +1903,14 @@ $(function(){
                         <?php if('Cliente' != $userRole) : ?>
                          <div class="form-group">
                             <label class="control-label" for="observacion-equipo">Observaciones</label>
-                            <?php $form->get('eobservacion')->setValue($this->information['equipos']['0']['observacion']);
-                            #$form->get('observacion')->setAttribute('rows', 1);  ?>
+                            <?php 
+                                $form->get('eobservacion')->setValue($this->information['equipos']['0']['observacion']);
+                                if(strlen($this->othervalue)>0&&strpos(strtolower($this->information['equipos']['0']['observacion']),strtolower($this->othervalue)) !== false) {
+                                    $form->get('eobservacion')->setAttribute('style','color:red; font-weight: bold; border: 2px solid red; cursor:pointer;');
+                                    $form->get('eobservacion')->setAttribute('title','Dato encontrado');
+                                }
+                                #$form->get('observacion')->setAttribute('rows', 1);  
+                            ?>
                             <?= $this->formTextarea($form->get('eobservacion')); ?>
                         </div>
                         <?php endIf; ?>

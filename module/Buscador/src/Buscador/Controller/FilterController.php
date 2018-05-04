@@ -52,6 +52,12 @@ class FilterController extends AbstractActionController
         if(!empty($apQuery)) {
             $apFilter = true;
         }
+
+        $wanFilter = false;
+        $wanQuery = (string)$params['wan-query'];
+        if(!empty($wanQuery)) {
+            $wanFilter = true;
+        }
         
         if(is_array($sedes)) {
 
@@ -61,7 +67,9 @@ class FilterController extends AbstractActionController
                                   'glanFilter' => $glanFilter,
                                   'glanQuery' => $glanQuery,
                                   'apFilter' => $apFilter,
-                                  'apQuery' => $apQuery
+                                  'apQuery' => $apQuery,
+                                  'wanFilter' => $wanFilter,
+                                  'wanQuery' => $wanQuery   
                                 ));
             $viewmodel->setTerminal(true);
 
