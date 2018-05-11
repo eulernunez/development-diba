@@ -235,34 +235,36 @@
 			//var m = currentTime.getMinutes();
 			//var s = currentTime.getSeconds();
 			
-                        
-			/* NEW */
-			var year =  '<?= $this->information['tramite']['0']['year']; ?>';
-                        var month =  '<?= $this->information['tramite']['0']['month']; ?>';
-                        var day =  '<?= $this->information['tramite']['0']['day']; ?>';
-                        var hour =  '<?= $this->information['tramite']['0']['hour']; ?>';
-                        var minut =  '<?= $this->information['tramite']['0']['minut']; ?>';
-                        var second =  '<?= $this->information['tramite']['0']['second']; ?>';
-                        // 2018,03,08,00,30,00
-			var date_past = new Date(year,month,day,hour,minut,second);
-                        //alert('DATE PASADO ' + date_past);
-			var date_now = new Date();
 
-			var seconds = Math.floor((date_now - (date_past))/1000);
-			
+                    /* NEW */
+			var year =  '<?= $this->information['tramite']['0']['inicioSplit']['year']; ?>';
+                        var month =  '<?= $this->information['tramite']['0']['inicioSplit']['month']; ?>';
+                        var day =  '<?= $this->information['tramite']['0']['inicioSplit']['day']; ?>';
+                        var hour =  '<?= $this->information['tramite']['0']['inicioSplit']['hour']; ?>';
+                        var minut =  '<?= $this->information['tramite']['0']['inicioSplit']['minut']; ?>';
+                        var second =  '<?= $this->information['tramite']['0']['inicioSplit']['second']; ?>';
+			var date_past = new Date(year,month,day,hour,minut,second);
+                        var date_process;
+                        <?php if(isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
+                            var year2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['year']; ?>';
+                            var month2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['month']; ?>';
+                            var day2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['day']; ?>';
+                            var hour2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['hour']; ?>';
+                            var minut2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['minut']; ?>';
+                            var second2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['second']; ?>';
+                            date_process = new Date(year2,month2,day2,hour2,minut2,second2);    
+                        <?php else : ?>
+                             date_process = new Date();
+                        <?php endif ?> ;
+
+                        // 1st REAL WATCH    
+                        var seconds = Math.floor((date_process - (date_past))/1000);
 			var minutes = Math.floor(seconds/60);
 			var hours = Math.floor(minutes/60);
 			var days = Math.floor(hours/24);
-			
-			//alert('MINUTES : ' + minutes);
-			//alert('HOURS : ' + hours);
 			var h = hours-(days*24);
-			//var m = minutes-(days*24*60)-(hours*60);
 			var m = minutes-(hours*60);
-			//alert('CALCULO : ' + minutes + ' DAY : ' + days*24*60 + ' HOURS : ' + hours*60);
-			//var s = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
 			var s = seconds-(minutes*60);
-			//alert('	m : ' + m);
 			var d = days;
 			
 			/* END */
@@ -271,7 +273,50 @@
 			animation(gVars.blue, m, 60);
 			animation(gVars.orange, h, 24);
 			animation(gVars.red, d, 360);
-		
+                        
+                        //2nd Timelife all 
+                        var secondsAll = Math.floor((new Date() - (date_past))/1000);
+			var minutesAll = Math.floor(secondsAll/60);
+			var hoursAll = Math.floor(minutesAll/60);
+			var daysAll = Math.floor(hoursAll/24);
+			var hAll = hoursAll-(daysAll*24);
+			var mAll = minutesAll-(hoursAll*60);
+			var sAll = secondsAll-(minutesAll*60);
+			var dAll = daysAll;
+                
+                        $("#days").text(dAll);
+                        $("#hours").text(hAll);
+                        $("#minutes").text(mAll);
+                        $("#seconds").text(sAll);
+                        
+                        //3th Stop watch in process
+                        var secondsStop = Math.floor((new Date() - (date_process))/1000);
+			var minutesStop = Math.floor(secondsStop/60);
+			var hoursStop = Math.floor(minutesStop/60);
+			var daysStop = Math.floor(hoursStop/24);
+			var hStop = hoursStop-(daysStop*24);
+			var mStop = minutesStop-(hoursStop*60);
+			var sStop = secondsStop-(minutesStop*60);
+			var dStop = daysStop;
+                
+                        if(sStop%2===0) {
+                            $("#secondsstop").css("color","red");
+                            $("#minutesstop").css("color","red");
+                            $("#hoursstop").css("color","red");
+                            $("#daysstop").css("color","red");
+                        } else {
+                            $("#secondsstop").css("color","#FA5858");
+                            $("#minutesstop").css("color","#FA5858");
+                            $("#hoursstop").css("color","#FA5858");
+                            $("#daysstop").css("color","#FA5858");
+                        }
+                            
+                        $("#daysstop").text(dStop);
+                        $("#hoursstop").text(hStop);
+                        $("#minutesstop").text(mStop);
+                        $("#secondsstop").text(sStop);
+                        
+                        
 		},1000);
 	}
 	
@@ -383,6 +428,20 @@ $(document).ready(function (e){
     
     });
 </script>-->
+<?php
+    $form = $this->form;
+    #$form->setAttribute('action', $this->url('wizard'));
+    $form->setAttribute('id', 'supply');
+    $form->setAttribute('role', 'form');
+    $form->setAttribute('data-toggle', 'validator');
+    $form->setAttribute('accept-charset', 'utf-8');
+    #$form->setAttribute('novalidate', 'novalidate');
+    $form->prepare();
+?>
+
+
+
+ <?= $this->form()->openTag($form); ?>
 <fieldset class="col-md-12">
     <legend>Seguimiento de Provisiones</legend>
     <div class="panel panel-default">
@@ -411,153 +470,223 @@ $(document).ready(function (e){
                     <div class="col-lg-4">    
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Entidad</label>
-                                <select class="form-control" id="exampleSelect1">
-                                    <option>Ajuntament de Baga</option>
-                                    <option>Ajuntament de El Brull</option>
-                                    <option>Ajuntament de Calonge de Segarra</option>
-                                    <option>Diputacion de Barcelona</option>
-                                    <option>Serveis Municipal de Montseny S.L.</option>
-                                    <option>Xarxa Audiovisual Local</option>
-                                </select>
+                                <label for="entidad">Entidad</label>
+                                <?php $form->get('cliente')->setValue($this->information['tramite']['0']['clienteId']) ?>
+                                <?= $this->formSelect($form->get('cliente')); ?>                                
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputEmail1">NIF</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <label for="nif">NIF</label>
+                                <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" value="<?= $this->information['tramite']['0']['nif']; ?>">
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Fecha de Solicitud</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <label for="inicio">Fecha de Solicitud</label>
+                                <?php
+                                    $form->get('inicio')->setValue($information['tramite']['0']['inicio']);
+                                ?>
+                                <?= $this->formInput($form->get('inicio')); ?>
                             </div>
                         
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Solicitante</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <label for="solicitante">Solicitante</label>
+                                <?php
+                                    $form->get('solicitante')->setValue($information['tramite']['0']['solicitante']);
+                                ?>
+                                <?= $this->formInput($form->get('solicitante')); ?>
                             </div>
                         
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Adm/Tel/Ext</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <label for="linea">Adm/Tel/Ext</label>
+                                <?php
+                                    $form->get('linea')->setValue($information['tramite']['0']['linea']);
+                                ?>
+                                <?= $this->formInput($form->get('linea')); ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputEmail1">MIDAS</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <label for="midas">Midas</label>
+                                <?php
+                                    $form->get('midas')->setValue($information['tramite']['0']['midas']);
+                                ?>
+                                <?= $this->formInput($form->get('midas')); ?>
                             </div>
                         
                             <div class="form-group">
-                                <label for="exampleSelect1">Sede</label>
-                                <select class="form-control" id="exampleSelect1">
-                                    <option>Ajuntament de Baga</option>
-                                    <option>Ajuntament de El Brull</option>
-                                    <option>Ajuntament de Calonge de Segarra</option>
-                                    <option>Diputacion de Barcelona</option>
-                                    <option>Serveis Municipal de Montseny S.L.</option>
-                                    <option>Xarxa Audiovisual Local</option>
-                                </select>
+                                <label for="sede">Sede</label>
+                                <?php $form->get('sede')->setValue($this->information['tramite']['0']['sedeId']) ?>
+                                <?= $this->formSelect($form->get('sede')); ?>                                
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Lote</label>
-                                <select class="form-control" id="exampleSelect1">
-                                    <option>Lote 2</option>
-                                    <option>Lote 3 </option>
-                                </select>
+                                <label for="lote">Lote</label>
+                                <?php $form->get('lote')->setValue($this->information['tramite']['0']['loteId']) ?>
+                                <?= $this->formSelect($form->get('lote')); ?>                                
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleSelect1">Servicio</label>
-                                <select class="form-control" id="exampleSelect1">
-                                    <option>Macrolan</option>
-                                    <option>DataInternet</option>
-                                </select>
+                                <label for="servicio">Servicio</label>
+                                <?php $form->get('servicio')->setValue($this->information['tramite']['0']['servicioId']) ?>
+                                <?= $this->formSelect($form->get('servicio')); ?>                                
                             </div>
 
                     </div>    
                     
-                    <div class="col-lg-4">    
-
+                    <div class="col-lg-4">
+                        
                         <div class="form-group">
-                            <label for="exampleSelect1">Tipo de Petición</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>Alta</option>
-                                <option>Baja</option>
-                            </select>
+                            <label for="peticion">Tipo de Petición</label>
+                            <?php $form->get('peticion')->setValue($this->information['tramite']['0']['servicioId']) ?>
+                            <?= $this->formSelect($form->get('peticion')); ?>
                         </div>
 
                         <div class="form-group">
-                            <label for="exampleSelect1">Tramitador</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>Edgar</option>
-                                <option>Marta</option>
-                                <option>Oscar</option>
-                            </select>
+                            <label for="tramitador">Tramitador</label>
+                            <?php $form->get('tramitador')->setValue($this->information['tramite']['0']['tramitadorId']) ?>
+                            <?= $this->formSelect($form->get('tramitador')); ?>
                         </div>
                     
                         <div class="form-group">
-                                <label for="exampleInputEmail1">ODIN VOZ</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="odinvoz">Odin Voz</label>
+                            <?php
+                                $form->get('odinvoz')->setValue($information['tramite']['0']['odin_voz']);
+                            ?>
+                            <?= $this->formInput($form->get('odinvoz')); ?>                                
                         </div>
                         
                         <div class="form-group">
-                                <label for="exampleInputEmail1">BJ</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="bj">BJ</label>
+                            <?php
+                                $form->get('bj')->setValue($information['tramite']['0']['bj']);
+                            ?>
+                            <?= $this->formInput($form->get('bj')); ?>
                         </div>
                         
                         <div class="form-group">
-                                <label for="exampleInputEmail1">ODIN DATOS</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        </div>
-                        
-                        <div class="form-group">
-                                <label for="exampleInputEmail1">SG</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        </div>
-                        
-                        <div class="form-group">
-                                <label for="exampleInputEmail1">Atlas</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="odindatos">Odin Datos</label>
+                            <?php
+                                $form->get('odindatos')->setValue($information['tramite']['0']['odin_datos']);
+                            ?>
+                            <?= $this->formInput($form->get('odindatos')); ?>
                         </div>
 
                         <div class="form-group">
-                                <label for="exampleInputEmail1">Visord</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="sg">SG</label>
+                            <?php
+                                $form->get('sg')->setValue($information['tramite']['0']['sgc']);
+                            ?>
+                            <?= $this->formInput($form->get('sg')); ?>
+
                         </div>
                         
                         <div class="form-group">
-                            <label for="exampleSelect1">Estado</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>En curso</option>
-                                <option>Coordinada</option>
-                                <option>Incidencia</option>
-                            </select>
+                            <label for="atlas">Atlas</label>
+                            <?php
+                                $form->get('atlas')->setValue($information['tramite']['0']['atlas']);
+                            ?>
+                            <?= $this->formInput($form->get('atlas')); ?>
                         </div>
-                        
+
+                        <div class="form-group">
+                            <label for="visord">Visord</label>
+                            <?php
+                                $form->get('atlas')->setValue($information['tramite']['0']['visord']);
+                            ?>
+                            <?= $this->formInput($form->get('atlas')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <?php $form->get('estado')->setValue($this->information['tramite']['0']['estadoId']) ?>
+                            <?= $this->formSelect($form->get('estado')); ?>                        
+                        </div>
                     </div>    
-        
-                    <div class="col-lg-4">    
+
+                    <div class="col-lg-4">
                         <div class="form-group">
-                            <label for="exampleTextarea">Observación</label>
-                            <textarea class="form-control input-sm" rows="4"></textarea>
+                            <label for="descripcion">Descripción</label>
+                             <?php 
+                                $form->get('descripcion')->setValue($this->information['tramite']['0']['descripcion']);
+                                #$form->get('observacion')->setAttribute('rows', 1);  
+                            ?>
+                            <?= $this->formTextarea($form->get('descripcion')); ?>
                         </div>                        
-
-                       
-
                     </div>    
-        
-        
         
     </div>
     <div class="tab-pane fade in" id="tab2">
         <div id="fancyClock"></div>
+        <div style="padding: 4px; margin-left: 4px;">
+            <button type="button" class="btn btn-primary" title="Pause" onclick="pauseWatch();"><span class="glyphicon glyphicon-pause"></span></button>
+            <button type="button" class="btn btn-primary" title="Play"><span class="glyphicon glyphicon-play"></span></button>
+            <button type="button" class="btn btn-primary" title="Stop"><span class="glyphicon glyphicon-stop"></span></button>
+        </div>
+        <div class="clearfix"></div>
+        <div style="border: 1px solid #cdcdcd;">
+            <table id="grid-circuitos" class="table table-bordered table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th style="width:4%;">#</th>
+                        <th style="width:20%;">Descripción</th>
+                        <th style="width:13%;">Inicio</th>
+                        <th style="width:13%;">Fin</th>
+                        <th style="width:5%;">Dias</th>
+                        <th style="width:5%;">H</th>
+                        <th style="width:5%;">m</th>
+                        <th style="width:5%;">s</th>
+                        <th style="width:30%;">Motivo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Trámite de Provisión</td>
+                        <td><?= $this->information['tramite']['0']['inicio']; ?></td>
+                        <td></td>
+                        <td><span id='days'></span></td>
+                        <td><span id='hours'></span></td>
+                        <td><span id='minutes'></span></td>
+                        <td><span id='seconds'></span></td>
+                        <td></td>
+                    </tr>
+                    <?php $contador = 2;
+                    foreach($this->information['parada'] as $item) : ?>
+                    <?php if(!empty($item['inicio']) && empty($item['fin'])) : ?>
+                    <tr style="font-weight: bold; color: red;">
+                            <td><?= $contador; ?></td>
+                            <td>Parada <?= $contador-1; ?></td>
+                            <td><?= $item['inicio']; ?></td>
+                            <td></td>
+                            <td><span id='daysstop'></span></td>
+                            <td><span id='hoursstop'></span></td>
+                            <td><span id='minutesstop'></span></td>
+                            <td><span id='secondsstop'></span></td>
+                            <td></td>
+                        </tr>
+                    <?php elseif(!empty($item['inicio']) && !empty($item['fin'])) : ?>
+                        <tr>
+                            <td><?= $contador; ?></td>
+                            <td>Parada <?= $contador-1; ?></td>
+                            <td><?= $item['inicio']; ?></td>
+                            <td><?= $item['fin']; ?></td>
+                            <td><?= $item['days']; ?></td>
+                            <td><?= $item['hours']; ?></td>
+                            <td><?= $item['minutes']; ?></td>
+                            <td><?= $item['seconds']; ?></td>
+                            <td></td>
+                        </tr>
+                    <?php endif; ?>    
+                    <?php $contador++;
+                    endforeach;
+                    ?>
+                </tbody>     
+            </table>
+        </div>
     </div>
-    
     <div class="clearfix"></div>
 </div>
             
 </div>
 </div>
-</fieldset>    
-            
+</fieldset>
+<?= $this->form()->closeTag($form); ?>

@@ -7,6 +7,7 @@
 namespace Provision\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Provision\Form\Supply;
 use Zend\View\Model\ViewModel;
 use Zend\Db\Adapter\Driver\Pdo\Resul;
 
@@ -44,17 +45,19 @@ class SupplyTracingController extends AbstractActionController
 
     public function supplyAction()
     {
-        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $id = $this->params()->fromRoute('id');
-        
+
         $information = $this->supplyTracingService->getFormality($id);
-        
+        $form = new Supply($dbAdapter);
+        //die('$information: <pre>' . print_r($information, true) . '</pre>');
+
         $viewmodel = 
-                    new ViewModel(
-                            array('information' => $information));
+            new ViewModel(
+                    array('information' => $information,
+                          'form' => $form));
+
         return $viewmodel;
-
-
     }        
 
     
