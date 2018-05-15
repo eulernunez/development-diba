@@ -31,7 +31,7 @@ class SupplyTracingController extends AbstractActionController
     {
 
         $tramites = $this->supplyTracingService->getFormalities();
-        
+
         if(is_object($tramites)) { 
 
             $viewmodel = 
@@ -60,5 +60,51 @@ class SupplyTracingController extends AbstractActionController
         return $viewmodel;
     }        
 
+    
+    public function watchStoppingAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+
+        
+        $id = (int)$posts['id'];
+        //$paradaId = (int)$posts['parada'];
+        
+        /* Update el registro con la fecha y motivo en TABLE [paradas] */
+        
+        
+        
+        $this->supplyTracingService->setPostParams($posts);
+        $result = $this->supplyTracingService->watchStopping();
+        
+        $information = $this->supplyTracingService->getFormality($id);
+        //die('$information: <pre>' . print_r($information, true) . '</pre>');
+        $viewmodel = new ViewModel(array(
+                                    'information' => $information));
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }
+
+    public function restartWatchAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+
+        $id = (int)$posts['id'];
+        
+        
+        $this->supplyTracingService->setPostParams($posts);
+        $result = $this->supplyTracingService->restartWatch();
+        $information = $this->supplyTracingService->getFormality($id);
+        
+        $viewmodel = new ViewModel(array(
+                                    'information' => $information));
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }
     
 }

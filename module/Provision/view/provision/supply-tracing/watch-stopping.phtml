@@ -1,0 +1,378 @@
+<script type="text/javascript" style="display:none">
+<!--
+
+(function($){
+	
+	// A global array used by the functions of the plug-in:
+	var gVars = {};
+
+	// Extending the jQuery core:
+	$.fn.tzineClock = function(opts){
+	
+		// "this" contains the elements that were selected when calling the plugin: $('elements').tzineClock();
+		// If the selector returned more than one element, use the first one:
+		
+		var container = this.eq(0);
+	
+		if(!container)
+		{
+			try{
+				console.log("Invalid selector!");
+			} catch(e){}
+			
+			return false;
+		}
+		
+		if(!opts) opts = {}; 
+		
+		var defaults = {
+			/* Additional options will be added in future versions of the plugin. */
+		};
+		
+		/* Merging the provided options with the default ones (will be used in future versions of the plugin): */
+		$.each(defaults,function(k,v){
+			opts[k] = opts[k] || defaults[k];
+		})
+
+		// Calling the setUp function and passing the container,
+		// will be available to the setUp function as "this":
+		setUp.call(container);
+		
+		return this;
+	}
+	
+	function setUp()
+	{
+		// The colors of the dials:
+		var colors = ['red', 'orange', 'blue','green'];
+		
+		var tmp;
+		
+		for(var i=0;i<4;i++)
+		{
+			// Creating a new element and setting the color as a class name:
+			
+			tmp = $('<div>').attr('class',colors[i]+' clock').html(
+				'<div class="display"></div>'+
+				
+				'<div class="front left"></div>'+
+				
+				'<div class="rotate left">'+
+					'<div class="bg left"></div>'+
+				'</div>'+
+				
+				'<div class="rotate right">'+
+					'<div class="bg right"></div>'+
+				'</div>'
+			);
+			
+			// Appending to the container:
+			$(this).append(tmp);
+			
+			// Assigning some of the elements as variables for speed:
+			tmp.rotateLeft = tmp.find('.rotate.left');
+			tmp.rotateRight = tmp.find('.rotate.right');
+			tmp.display = tmp.find('.display');
+			
+			// Adding the dial as a global variable. Will be available as gVars.colorName
+			gVars[colors[i]] = tmp;
+		}
+		
+		// Setting up a interval, executed every 1000 milliseconds:
+		setInterval(function(){
+		
+			//var currentTime = new Date();
+			//var h = currentTime.getHours();
+			//var m = currentTime.getMinutes();
+			//var s = currentTime.getSeconds();
+			
+
+                    /* NEW */
+			var year =  '<?= $this->information['tramite']['0']['inicioSplit']['year']; ?>';
+                        var month =  '<?= $this->information['tramite']['0']['inicioSplit']['month']; ?>';
+                        var day =  '<?= $this->information['tramite']['0']['inicioSplit']['day']; ?>';
+                        var hour =  '<?= $this->information['tramite']['0']['inicioSplit']['hour']; ?>';
+                        var minut =  '<?= $this->information['tramite']['0']['inicioSplit']['minut']; ?>';
+                        var second =  '<?= $this->information['tramite']['0']['inicioSplit']['second']; ?>';
+			var date_past = new Date(year,month,day,hour,minut,second);
+                        var date_process;
+                        <?php if(isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
+                            var year2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['year']; ?>';
+                            var month2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['month']; ?>';
+                            var day2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['day']; ?>';
+                            var hour2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['hour']; ?>';
+                            var minut2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['minut']; ?>';
+                            var second2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['second']; ?>';
+                            date_process = new Date(year2,month2,day2,hour2,minut2,second2);    
+                        <?php else : ?>
+                             date_process = new Date();
+                        <?php endif ?> ;
+
+                        // 1st REAL WATCH    
+                        var seconds = Math.floor((date_process - (date_past))/1000);
+			var minutes = Math.floor(seconds/60);
+			var hours = Math.floor(minutes/60);
+			var days = Math.floor(hours/24);
+			var h = hours-(days*24);
+			var m = minutes-(hours*60);
+			var s = seconds-(minutes*60);
+			var d = days;
+			
+			/* END */
+			
+			animation(gVars.green, s, 60);
+			animation(gVars.blue, m, 60);
+			animation(gVars.orange, h, 24);
+			animation(gVars.red, d, 360);
+                        
+                        //2nd Timelife all 
+                        var secondsAll = Math.floor((new Date() - (date_past))/1000);
+			var minutesAll = Math.floor(secondsAll/60);
+			var hoursAll = Math.floor(minutesAll/60);
+			var daysAll = Math.floor(hoursAll/24);
+			var hAll = hoursAll-(daysAll*24);
+			var mAll = minutesAll-(hoursAll*60);
+			var sAll = secondsAll-(minutesAll*60);
+			var dAll = daysAll;
+                
+                        $("#days").text(dAll);
+                        $("#hours").text(hAll);
+                        $("#minutes").text(mAll);
+                        $("#seconds").text(sAll);
+                        
+                        //3th Stop watch in process
+                        var currentDate = new Date();
+                        var secondsStop = Math.floor((currentDate - (date_process))/1000);
+			var minutesStop = Math.floor(secondsStop/60);
+			var hoursStop = Math.floor(minutesStop/60);
+			var daysStop = Math.floor(hoursStop/24);
+			var hStop = hoursStop-(daysStop*24);
+			var mStop = minutesStop-(hoursStop*60);
+			var sStop = secondsStop-(minutesStop*60);
+			var dStop = daysStop;
+                        if(sStop%2===0) {
+                            $("#secondsstop2").css("color","red");
+                            $("#minutesstop2").css("color","red");
+                            $("#hoursstop2").css("color","red");
+                            $("#daysstop2").css("color","red");
+                        } else {
+                            $("#secondsstop2").css("color","#FA5858");
+                            $("#minutesstop2").css("color","#FA5858");
+                            $("#hoursstop2").css("color","#FA5858");
+                            $("#daysstop2").css("color","#FA5858");
+                        }
+                            
+                        $("#daysstop2").text(dStop);
+                        $("#hoursstop2").text(hStop);
+                        $("#minutesstop2").text(mStop);
+                        $("#secondsstop2").text(sStop);
+                        
+                        var mthp = parseInt(currentDate.getMonth()) + 1;
+                        mthp = mthp<10?'0'+mthp:mthp;
+                        var dp= currentDate.getDate()<10?'0'+currentDate.getDate():currentDate.getDate();
+                        var hp= currentDate.getHours()<10?'0'+currentDate.getHours():currentDate.getHours();
+                        var mp= currentDate.getMinutes()<10?'0'+currentDate.getMinutes():currentDate.getMinutes();
+                        var sp= currentDate.getSeconds()<10?'0'+currentDate.getSeconds():currentDate.getSeconds();
+                        
+                        var dformat = currentDate.getFullYear() + '-' + mthp + '-' + dp + ' ' + hp + ':' + mp + ':' + sp;
+
+                        $("#datestop2").text(dformat);            
+                        
+                        
+                        
+                        
+		},1000);
+	}
+	
+	function animation(clock, current, total)
+	{
+		// Calculating the current angle:
+		var angle = (360/total)*(current+1);
+	
+		var element;
+                
+		if(current==0)
+		{
+			// Hiding the right half of the background:
+			clock.rotateRight.hide();
+			
+			// Resetting the rotation of the left part:
+			rotateElement(clock.rotateLeft,0);
+		}
+		
+		if(angle<=180)
+		{
+			// The left part is rotated, and the right is currently hidden:
+			element = clock.rotateLeft;
+		}
+		else
+		{
+			// The first part of the rotation has completed, so we start rotating the right part:
+			clock.rotateRight.show();
+			clock.rotateLeft.show();
+			
+			rotateElement(clock.rotateLeft,180);
+			
+			element = clock.rotateRight;
+			angle = angle-180;
+		}
+
+		rotateElement(element,angle);
+		
+		// Setting the text inside of the display element, inserting a leading zero if needed:
+		clock.display.html(current<10?'0'+current:current);
+	}
+	
+	function rotateElement(element,angle)
+	{
+		// Rotating the element, depending on the browser:
+		var rotate = 'rotate('+angle+'deg)';
+		
+		if(element.css('MozTransform')!=undefined)
+			element.css('MozTransform',rotate);
+			
+		else if(element.css('WebkitTransform')!=undefined)
+			element.css('WebkitTransform',rotate);
+	
+		// A version for internet explorer using filters, works but is a bit buggy (no surprise here):
+		else if(element.css("filter")!=undefined)
+		{
+			var cos = Math.cos(Math.PI * 2 / 360 * angle);
+			var sin = Math.sin(Math.PI * 2 / 360 * angle);
+			
+			element.css("filter","progid:DXImageTransform.Microsoft.Matrix(M11="+cos+",M12=-"+sin+",M21="+sin+",M22="+cos+",SizingMethod='auto expand',FilterType='nearest neighbor')");
+	
+			element.css("left",-Math.floor((element.width()-200)/2));
+			element.css("top",-Math.floor((element.height()-200)/2));
+		}
+	
+	}
+	
+})(jQuery)
+//-->
+</script>
+
+<script type="text/javascript" style="display:none">
+<!--
+$(document).ready(function(e){
+	/* This code is executed after the DOM has been completely loaded */
+
+	$('#fancyClock').tzineClock();
+
+        $(".btn-pref .btn").click(function () {
+            $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+            // $(".tab").addClass("active"); // instead of this do the below 
+            $(this).removeClass("btn-default").addClass("btn-primary");   
+        });
+
+        $('#stopWatch').on('show.bs.modal',function(e){
+            //var id = $(e.relatedTarget).data().id;
+        })
+
+
+
+
+});
+
+function watchStopping() {
+    $('#stopWatch').modal('hide');
+    var url = '<?= $this->url('watch-stopping'); ?>';
+     var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    //var parentId = $('#deleteCircuitoParentId').val();
+    
+    var data = {id: id};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#watch-stopping").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+
+
+//-->
+</script>
+
+<div id="fancyClock"></div>
+<?php if(false): ?>
+<div style="padding: 4px; margin-left: 4px;">
+    <!--<button type="button" class="btn btn-primary btn-lg" title="Pause"><span class="glyphicon glyphicon-pause"></span></button>-->
+    <button type="button" class="btn btn-primary btn-lg" title="Reanudar" data-toggle="modal" data-target="#playWatch" style=" width:28%;">
+        <span class="glyphicon glyphicon-play"></span>
+    </button>
+    <button type="button" class="btn btn-primary btn-lg" title="Parar" data-toggle="modal" data-id="<?= $this->information['tramite']['0']['id']; ?>" data-paradaid="<?= $this->information['tramite']['0']['paradaId']; ?>" data-target="#stopWatch" style=" width:28%;">
+        <span class="glyphicon glyphicon-stop"></span>
+    </button>
+</div>
+<?php endif ?>
+<div class="clearfix"></div>
+<div style="border: 1px solid #cdcdcd;">
+    <table id="grid-circuitos" class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width:4%;">#</th>
+                <th style="width:20%;">Descripción</th>
+                <th style="width:13%;">Inicio</th>
+                <th style="width:13%;">Fin</th>
+                <th style="width:5%;">Días</th>
+                <th style="width:5%;">H</th>
+                <th style="width:5%;">m</th>
+                <th style="width:5%;">s</th>
+                <th style="width:30%;">Motivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Trámite de Provisión</td>
+                <td><?= $this->information['tramite']['0']['inicio']; ?></td>
+                <td></td>
+                <td><span id='days'></span></td>
+                <td><span id='hours'></span></td>
+                <td><span id='minutes'></span></td>
+                <td><span id='seconds'></span></td>
+                <td></td>
+            </tr>
+            <?php $contador = 2;
+            foreach($this->information['parada'] as $item) : ?>
+            <?php if(!empty($item['inicio']) && empty($item['fin'])) : ?>
+            <tr style="font-weight: bold; color: red;">
+                    <td><?= $contador; ?></td>
+                    <td>Parada <?= $contador-1; ?></td>
+                    <td><?= $item['inicio']; ?></td>
+                    <td><span id='datestop2'></span></td>
+                    <td><span id='daysstop2'></span></td>
+                    <td><span id='hoursstop2'></span></td>
+                    <td><span id='minutesstop2'></span></td>
+                    <td><span id='secondsstop2'></span></td>
+                    <td><?= $item['motivo']; ?></td>
+                </tr>
+            <?php elseif(!empty($item['inicio']) && !empty($item['fin'])) : ?>
+                <tr>
+                    <td><?= $contador; ?></td>
+                    <td>Parada <?= $contador-1; ?></td>
+                    <td><?= $item['inicio']; ?></td>
+                    <td><?= $item['fin']; ?></td>
+                    <td><?= $item['days']; ?></td>
+                    <td><?= $item['hours']; ?></td>
+                    <td><?= $item['minutes']; ?></td>
+                    <td><?= $item['seconds']; ?></td>
+                    <td><?= $item['motivo']; ?></td>
+                </tr>
+            <?php endif; ?>    
+            <?php $contador++;
+            endforeach;
+            ?>
+        </tbody>     
+    </table>
+</div>

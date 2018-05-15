@@ -41,7 +41,27 @@ return array(
                         'action'     => 'supply',
                     ),
                 ),
-            ),            
+            ),
+            'watch-stopping' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/watch-stopping',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'watch-stopping',
+                    ),
+                ),
+            ),
+            'restart-watch' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/restart-watch',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'restart-watch',
+                    ),
+                ),
+            ),
         ),
     ),
     'view_manager' => array (

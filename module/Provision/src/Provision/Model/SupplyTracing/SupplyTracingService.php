@@ -38,7 +38,7 @@ class SupplyTracingService {
                             LEFT JOIN tramitadores AS tr ON t.tramitador_id = tr.id
                             LEFT JOIN estado_tramites AS e ON t.estado_id = e.id
                             WHERE e.visible = '1'";
-         
+
         $adapter = $this->adapter->query($statement);
         $result = $adapter->execute();
 
@@ -58,7 +58,7 @@ class SupplyTracingService {
                 p.id AS peticionId, p.peticion,
                 tr.id AS tramitadorId, tramitador,
                 e.id AS estadoId, e.estados, e.visible,
-                pr.id AS paradaId, pr.inicio AS inicioParada, pr.active AS situacionParada
+                pr.id AS paradaId, pr.inicio AS inicioParada, pr.active AS situacionParada, pr.motivo
                     FROM tramitaciones AS t
                             LEFT JOIN sedes AS s ON t.sede_id = s.id
                             LEFT JOIN lotes AS l ON t.lote_id = l.id
@@ -124,5 +124,57 @@ class SupplyTracingService {
         return $item;
 
     }
+    
+    public function watchStopping() {
+        
+        $parada = new \Provision\Model\Entity\Parada();
+        $id = (int)$this->posts['parada'];
+        $motivo = $this->posts['motivo'];
+        $parada->setId($id);
+        $parada->setMotivo($motivo);
+        
+        $handler = new \Provision\Model\Parada($this->adapter);
+        $result = $handler->watchStopping($parada);
+        //die('$parada:<pre>' . print_r($parada,true) . '</pre>');
+        
+        return true; 
+        
+    }
+    
+    public function restartWatch() {
+        
+        $parada = new \Provision\Model\Entity\Parada();
+        $id = (int)$this->posts['parada'];
+        $fin = $this->posts['fin'];
+        $tramiteId = (int)$this->posts['id'];
+        $d = (int)$this->posts['d'];
+        $h = (int)$this->posts['h'];
+        $m = (int)$this->posts['m'];
+        $s = (int)$this->posts['s'];
+        
+        $parada->setId($id);
+        $parada->setFin($fin);
+        $parada->setDays($d);
+        $parada->setHours($h);
+        $parada->setMinutes($m);
+        $parada->setSeconds($s);
+        $parada->setTramitacionId($tramiteId);
+        
+        $handler = new \Provision\Model\Parada($this->adapter);
+        $result = $handler->restartWatch($parada);
+        
+        return true; 
+        
+        
+        
+    }
+    
+    
+            
+    public function setPostParams($posts) {
+        $this->posts = $posts;
+        return $this;
+    }
+    
     
 }

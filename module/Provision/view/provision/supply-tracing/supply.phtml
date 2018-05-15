@@ -274,7 +274,7 @@
 			animation(gVars.orange, h, 24);
 			animation(gVars.red, d, 360);
                         
-                        //2nd Timelife all 
+                        //2nd Timelife all
                         var secondsAll = Math.floor((new Date() - (date_past))/1000);
 			var minutesAll = Math.floor(secondsAll/60);
 			var hoursAll = Math.floor(minutesAll/60);
@@ -283,14 +283,15 @@
 			var mAll = minutesAll-(hoursAll*60);
 			var sAll = secondsAll-(minutesAll*60);
 			var dAll = daysAll;
-                
+
                         $("#days").text(dAll);
                         $("#hours").text(hAll);
                         $("#minutes").text(mAll);
                         $("#seconds").text(sAll);
                         
                         //3th Stop watch in process
-                        var secondsStop = Math.floor((new Date() - (date_process))/1000);
+                        var currentDate = new Date();
+                        var secondsStop = Math.floor((currentDate - (date_process))/1000);
 			var minutesStop = Math.floor(secondsStop/60);
 			var hoursStop = Math.floor(minutesStop/60);
 			var daysStop = Math.floor(hoursStop/24);
@@ -298,7 +299,7 @@
 			var mStop = minutesStop-(hoursStop*60);
 			var sStop = secondsStop-(minutesStop*60);
 			var dStop = daysStop;
-                
+
                         if(sStop%2===0) {
                             $("#secondsstop").css("color","red");
                             $("#minutesstop").css("color","red");
@@ -316,6 +317,24 @@
                         $("#minutesstop").text(mStop);
                         $("#secondsstop").text(sStop);
                         
+                        // To DDBB
+                        
+                        var mthp = parseInt(currentDate.getMonth()) + 1;
+                        mthp = mthp<10?'0'+mthp:mthp;
+                        var dp= currentDate.getDate()<10?'0'+currentDate.getDate():currentDate.getDate();
+                        var hp= currentDate.getHours()<10?'0'+currentDate.getHours():currentDate.getHours();
+                        var mp= currentDate.getMinutes()<10?'0'+currentDate.getMinutes():currentDate.getMinutes();
+                        var sp= currentDate.getSeconds()<10?'0'+currentDate.getSeconds():currentDate.getSeconds();
+                        
+                        var dformat = currentDate.getFullYear() + '-' + mthp + '-' + dp + ' ' + hp + ':' + mp + ':' + sp;
+
+                        $("#datestop").text(dformat);            
+                                    
+                        $("#dateprocess").val(dformat);
+                        $("#dayprocess").val(dStop);
+                        $("#hourprocess").val(hStop);
+                        $("#minuteprocess").val(mStop);
+                        $("#secondprocess").val(sStop);
                         
 		},1000);
 	}
@@ -401,9 +420,76 @@ $(document).ready(function(e){
             $(this).removeClass("btn-default").addClass("btn-primary");   
         });
 
+        $('#stopWatch').on('show.bs.modal',function(e){
+            //var id = $(e.relatedTarget).data().id;
+        })
 
+        $('#playWatch').on('show.bs.modal',function(e){
+            //var id = $(e.relatedTarget).data().id;
+        })
 
 });
+
+function watchStopping() {
+    $('#stopWatch').modal('hide');
+    var url = '<?= $this->url('watch-stopping'); ?>';
+    var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    var parada = '<?= $this->information['tramite']['0']['paradaId']; ?>';
+    var motivo = $('#motivo').val();
+    
+    var data = {id: id, parada: parada, motivo: motivo};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#watch-stopping").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+    
+}
+
+function restartWatch() {
+
+    $('#playWatch').modal('hide');
+    var url = '<?= $this->url('restart-watch'); ?>';
+    var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    var parada = '<?= $this->information['tramite']['0']['paradaId']; ?>';
+    var fin = $('#dateprocess').val();
+    var d = $('#dayprocess').val();
+    var h = $('#hourprocess').val();
+    var m = $('#minuteprocess').val();
+    var s = $('#secondprocess').val();
+    
+    var data = {id: id, parada: parada, fin: fin, d: d, h: h, m: m, s: s};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#watch-stopping").html(html);
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+
+
+}
+
+
+
 //-->
 </script>
 
@@ -466,7 +552,7 @@ $(document).ready(function (e){
 </div>
 <div class="tab-content" style="margin: 2px; padding: 2px;">
     <div class="tab-pane fade in active" id="tab1">
-        
+        <?php if(isset($this->information['tramite']['0'])) : ?>
                     <div class="col-lg-4">    
 
                             <div class="form-group">
@@ -612,14 +698,24 @@ $(document).ready(function (e){
                             <?= $this->formTextarea($form->get('descripcion')); ?>
                         </div>                        
                     </div>    
-        
+        <?php endif; ?>
     </div>
     <div class="tab-pane fade in" id="tab2">
+        <?php if(isset($this->information['tramite']['0'])) : ?>
+        <div id='watch-stopping'>
         <div id="fancyClock"></div>
         <div style="padding: 4px; margin-left: 4px;">
-            <button type="button" class="btn btn-primary" title="Pause" onclick="pauseWatch();"><span class="glyphicon glyphicon-pause"></span></button>
-            <button type="button" class="btn btn-primary" title="Play"><span class="glyphicon glyphicon-play"></span></button>
-            <button type="button" class="btn btn-primary" title="Stop"><span class="glyphicon glyphicon-stop"></span></button>
+            <!--<button type="button" class="btn btn-primary btn-lg" title="Pause"><span class="glyphicon glyphicon-pause"></span></button>-->
+            <?php if(isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
+            <button type="button" class="btn btn-primary btn-lg" title="Reanudar la tramitación" data-toggle="modal" data-target="#playWatch" style=" width:26%;">
+                <span class="glyphicon glyphicon-play"></span>
+            </button>
+            <?php else : ?>
+            <button type="button" class="btn btn-primary btn-lg" title="Parar la tramitación" data-toggle="modal" data-id="<?= $this->information['tramite']['0']['id']; ?>" data-paradaid="<?= $this->information['tramite']['0']['paradaId']; ?>" data-target="#stopWatch" style=" width:26%;">
+                <span class="glyphicon glyphicon-stop"></span>
+            </button>
+            
+            <?php endif ;?>
         </div>
         <div class="clearfix"></div>
         <div style="border: 1px solid #cdcdcd;">
@@ -630,7 +726,7 @@ $(document).ready(function (e){
                         <th style="width:20%;">Descripción</th>
                         <th style="width:13%;">Inicio</th>
                         <th style="width:13%;">Fin</th>
-                        <th style="width:5%;">Dias</th>
+                        <th style="width:5%;">Días</th>
                         <th style="width:5%;">H</th>
                         <th style="width:5%;">m</th>
                         <th style="width:5%;">s</th>
@@ -656,12 +752,12 @@ $(document).ready(function (e){
                             <td><?= $contador; ?></td>
                             <td>Parada <?= $contador-1; ?></td>
                             <td><?= $item['inicio']; ?></td>
-                            <td></td>
+                            <td><span id='datestop'></span></td>
                             <td><span id='daysstop'></span></td>
                             <td><span id='hoursstop'></span></td>
                             <td><span id='minutesstop'></span></td>
                             <td><span id='secondsstop'></span></td>
-                            <td></td>
+                            <td><?= $item['motivo']; ?></td>
                         </tr>
                     <?php elseif(!empty($item['inicio']) && !empty($item['fin'])) : ?>
                         <tr>
@@ -673,7 +769,7 @@ $(document).ready(function (e){
                             <td><?= $item['hours']; ?></td>
                             <td><?= $item['minutes']; ?></td>
                             <td><?= $item['seconds']; ?></td>
-                            <td></td>
+                            <td><?= $item['motivo']; ?></td>
                         </tr>
                     <?php endif; ?>    
                     <?php $contador++;
@@ -682,7 +778,15 @@ $(document).ready(function (e){
                 </tbody>     
             </table>
         </div>
+        </div>
+         <?php endif; ?>
     </div>
+    <input type="hidden" id="dayprocess" name="dayprocess" value="">
+    <input type="hidden" id="hourprocess" name="hourprocess" value="">
+    <input type="hidden" id="minuteprocess" name="minuteprocess" value="">
+    <input type="hidden" id="secondprocess" name="secondprocess" value="">
+    <input type="hidden" id="dateprocess" name="dateprocess" value="">
+    
     <div class="clearfix"></div>
 </div>
             
@@ -690,3 +794,43 @@ $(document).ready(function (e){
 </div>
 </fieldset>
 <?= $this->form()->closeTag($form); ?>
+
+<!-- Modal Watch stopping  -->
+<div class="modal fade" id="stopWatch" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Watch stopping</h4>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de detener el reloj?</p>
+                <textarea id="motivo" name="motivo" rows="3" style="width: 100%;" placeholder="Ingrese el motivo ..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="watchStopping();" >Detener</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Watch play  -->
+<div class="modal fade" id="playWatch" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Restart watch</h4>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de reanudar el reloj?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="restartWatch();" >Reanudar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
