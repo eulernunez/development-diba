@@ -80,9 +80,6 @@
     $userRole = $session->offsetGet('userRole');
     $firstName = $session->offsetGet('firstName');
     $lastName = $session->offsetGet('lastName');
-
-
-
 ?>
      <!-- END HEAD -->
      <!-- BEGIN BODY -->
@@ -156,29 +153,19 @@
 
             <ul id="menu" class="collapse">
 
-                
                 <li class="panel">
-<!--                    <a href="index.html" >
-                        <i class="icon-table"></i> Dashboard
-                    </a>-->
-                    
                     <a href="<?php echo $this->url('application') ?>">
                         <i class="icon-table"></i> <span style="font-size: 12px;"><?php echo $this->translate('Dashboard') ?></span>
                     </a>
                     
                 </li>
+                
 
-
-
+            <?php if(false) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
                         <i class="icon-tasks"> </i> <span style="font-size: 12px;">Administración</span>
 	   
-<!--                        <span class="pull-right">
-                          <i class="icon-angle-left"></i>
-                        </span>
-                       &nbsp; <span class="label label-default">6</span>&nbsp;-->
-                       
                     </a>
                     <ul class="collapse" id="component-nav">
                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Generar Factura Pre</span> </a></li>
@@ -189,17 +176,12 @@
                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Llistat d'Usuaris Lot3</span> </a></li>
                     </ul>
                 </li>
+            <?php endif ?>    
 
-
+            <?php if(false) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#DDL-nav">
                         <i class=" icon-sitemap"></i> <span style="font-size: 12px;">Facturación</span>
-	   
-<!--                        <span class="pull-right">
-                            <i class="icon-angle-left"></i>
-                        </span>
-                        &nbsp; <span class="label label-default">3</span>&nbsp;-->
-                        
                     </a>
                     <ul class="collapse" id="DDL-nav">
                         <li>
@@ -229,7 +211,9 @@
 
                     </ul>
                 </li>
-
+            <?php endif ?>    
+            
+            <?php if('Administrador' == $userRole || 'Ventas' == $userRole || 'Ingeniero' == $userRole ) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#provisio-nav">
                         <i class=" icon-sitemap"></i> <span style="font-size: 12px;">Provisión</span>
@@ -256,80 +240,37 @@
 
                     </ul>
                 </li>
+             <?php endif ?>
                 
-<!--                <li class="panel">
-                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#provisio-nav">
-                        <i class="icon-tasks"> </i> <span style="font-size: 12px;">Provisiones</span>     
-                <!--                        <span class="pull-right">
-                          <i class="icon-angle-left"></i>
-                        </span>
-                       &nbsp; <span class="label label-default">2</span>&nbsp; -- >
-                      
-                    </a>'open-supply
-                    <ul class="collapse" id="provisio-nav">
-                       
-                        <li class=""><a href="<?php // echo $this->url('open-supply-tracing') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Seguimiento Datos</span> </a></li>
-                         <li class=""><a href="<?php //  echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Seguimiento Móviles</span> </a></li>
-                    </ul>
-                </li>   -->
 
-
+            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Cliente' == $userRole || 'Ingeniero' == $userRole) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#inventari-nav">
                         <i class="icon-bar-chart"> </i> <span style="font-size: 12px;">Inventario</span>     
-<!--                        <span class="pull-right">
-                          <i class="icon-angle-left"></i>
-                        </span>
-                       &nbsp; <span class="label label-default">1</span>&nbsp;-->
                     </a>
                     <ul class="collapse" id="inventari-nav">
                         <li class="">
-                            <!--<a href="button.html"><i class="icon-angle-right"></i> Planta Instal lada </a>-->
                             <a href="<?php echo $this->url('list') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> <?= $this->translate('Planta Instalada') ?> </span></a>
-                        
                         </li>
-                        
-<!--                        <li class="">
-                            <a href="#"><i class="icon-angle-right"></i> Clientes </a>
-                        </li>-->
-                        
-<!--                        <li class="">
-                            <a href="<?php echo $this->url('tramite') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Sedes') ?></a>
-                        </li>-->
-                        
-<!--                        <li class="">
-                            <a href="<?php echo $this->url('alta') ?>"><i class="icon-angle-right"></i> <?php echo $this->translate('Alta de Planta') ?></a>
-                        </li>-->
-                        <?php if('Cliente' != $userRole) : ?>
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <li class="">
                                 <a href="<?php echo $this->url('wizard') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> <?= $this->translate('Wizard') ?> </span></a>
                             </li>
                         <?php endIf; ?>
-                            
-                            
-                            
                     </ul>
                 </li>
                 
-                <?php# if('Cliente' != $userRole) : ?>
+                
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#buscador-nav">
                         <i class="icon-map-marker"> </i> <span style="font-size: 12px;">Búsqueda</span>     
-<!--                        <span class="pull-right">
-                          <i class="icon-angle-left"></i>
-                        </span>
-                       &nbsp; <span class="label label-default">2</span>&nbsp;-->
                     </a>
                     <ul class="collapse" id="buscador-nav">
                         <li class=""><a href="<?php echo $this->url('search') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Buscador</span> </a></li>
                          <li class=""><a href="<?php echo $this->url('filter') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Filtrador</span> </a></li>
                     </ul>
                 </li>
-                <?php # endIf; ?>
-                
-                
-                
-                
+                <?php endIf; ?>
                 
             </ul>
 

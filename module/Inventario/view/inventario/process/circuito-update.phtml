@@ -159,6 +159,15 @@ $(function(){
         $circuitosNumber = count($this->information['circuitosall']);
     }
 ?>
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+    $firstName = $session->offsetGet('firstName');
+    $lastName = $session->offsetGet('lastName');
+?>
+
+
 <div style="float:left;">
     <button type="button" class="btn btn-primary" title="Número de circuitos"><?= '# ' . $circuitosNumber; ?></button>
 </div>
@@ -335,9 +344,9 @@ $(function(){
                         </div>
                         
                         <div class="grid-caudal" style="display: none;">
-                            
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <button id="add" type="button" title="Agregar caudal" class="btn btn-primary btn-xs" style="float: right;  margin-right: 18px;"><i class="glyphicon glyphicon-plus"></i></button>
-                            
+                            <?php endIf; ?>
                             <div style="clear:both;"></div>
                             <div class="panel-body">
 
@@ -363,9 +372,11 @@ $(function(){
                                                             <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
                                                     <td>
                                                         <!--<input type="button" class="borrar" value="Eliminar" />-->
+                                                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                         <a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar">
                                                             <i class="glyphicon glyphicon-minus"></i>
                                                         </a>
+                                                        <?php endIf; ?>
                                                     </td>
                                                 </tr>
                                                 <?php $cont++; ?>
@@ -495,7 +506,9 @@ $(function(){
 
                         <div class="grid-caudal-backup" style="display: none;">
                             <!--<button id="add-backup" type="button" class="btn btn-primary btn-sm" style="float: right;">IMG:Add</button>-->
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <button id="add-backup" type="button" title="Agregar caudal" class="btn btn-primary btn-xs" style="float: right; margin-right: 18px;"><i class="glyphicon glyphicon-plus"></i></button>
+                            <?php endIf; ?>
                             <div style="clear:both;"></div>
                             <div class="panel-body">
 
@@ -520,9 +533,11 @@ $(function(){
                                                         <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
                                                 <td>
                                                     <!--<input type="button" class="borrar" value="Eliminar" />-->
+                                                    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                     <a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar">
                                                         <i class="glyphicon glyphicon-minus"></i>
                                                     </a>
+                                                    <?php endIf; ?>
                                                 </td>
                                             </tr>
                                             <?php $cont++; ?>
@@ -558,13 +573,13 @@ $(function(){
             
             
             <div class="clearfix"></div>                
-                        
+            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>            
             <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
                 <a class="btn btn-primary btn-sm update-circuito" href="#" role="button" onclick="updateCircuitos();" title="Update circuito">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
             </div>     
-            
+            <?php endIf; ?>
         </fieldset>				
         <div class="clearfix"></div>
     </div>

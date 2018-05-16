@@ -1,3 +1,8 @@
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+?>
 <script>
 $(function(){
 
@@ -24,9 +29,11 @@ $(function(){
     <button type="button" class="btn btn-primary" title="Número de equipos no gestionados"><?= '# ' . $equiposNoGestionadosNumber; ?></button>
 </div>                    
 <div style="float:right;">
+    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
     <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/3" role="button" title="Agregar equipo no gestionado">
         <i class="glyphicon glyphicon-plus"></i>
     </a>
+    <?php endIf; ?>
 </div>
 <div style="clear: both;"></div>
 
@@ -56,9 +63,11 @@ $(function(){
                                 <a class="btn btn-primary btn-xs" href="#" onclick="notequipoFill('<?= $this->sedeId; ?>', '<?= $notequipo['id'] ?>');" title="Consultar equipo">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
+                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo no gestionado" data-toggle="modal" data-id="<?= $notequipo['id']; ?>" data-target="#deleteEquipoNotManagement">    
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
+                                <?php endIf; ?>
                             </td>  
                         </tr>
                         <?php $row++; ?>
@@ -159,13 +168,15 @@ $(function(){
                 </div>
 
             </div>
-            
-            <div class="clearfix"></div>                
-                        
+
+            <div class="clearfix"></div>
+
             <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
+                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                 <a class="btn btn-primary btn-sm update-notequipo" href="#" role="button" onclick="updateNotEquipos();" title="Update equipo no gestionado">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
+                <?php endIf; ?>
             </div>     
 
         </fieldset>				

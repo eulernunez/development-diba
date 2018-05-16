@@ -1074,7 +1074,7 @@ $(function(){
                             <?= $this->formInput($form->get('telefono')); ?>
                         </div>
 
-                        <?php if('Cliente' != $userRole) : ?>
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                         <div class="form-group">
                             <label for="exampleTextarea">Observación</label>
                             <?php $form->get('observacion')->setValue($this->information['sede']['observacion']);
@@ -1116,11 +1116,13 @@ $(function(){
                         <div class="form-group">
                             &nbsp;        
                         </div>
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                         <div style="float:right; ">
                             <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateSede();" title="Update sede">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a>
-                        </div>                
+                        </div>
+                        <?php endIf; ?>
                     </div>
                 </div>
             </div>
@@ -1200,12 +1202,14 @@ $(function(){
                 <button type="button" class="btn btn-primary" title="Número de circuitos"><?= '# ' . $circuitosNumber; ?></button>
             </div>
             
+            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>   
             <div style="float:right;">
                 <?php $sedeId = $this->information['sede']['id'] ;?>
                 <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/1" role="button" title="Agregar circuito">
                     <i class="glyphicon glyphicon-plus"></i>
                 </a>
             </div>
+            <?php endIf; ?>
             <div style="clear: both;"></div>
             
             <div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
@@ -1261,10 +1265,11 @@ $(function(){
                                 <?php # else : ?>
                                 <!--<span style="margin-left: 20px;">&nbsp;</span>-->
                                 <?php # endif; ?>
+                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar circuito" data-toggle="modal" data-administrativo="<?= $circuito['administrativo']; ?>" data-nif="<?= $circuito['nif']; ?>" data-id="<?= $circuito['id']; ?>" data-parent="<?= $circuito['parent_id']; ?>" data-target="#deleteCircuito">
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
-                                
+                                <?php endIf; ?>
                             </td>  
                         </tr>
                     <?php endforeach; ?>
@@ -1413,9 +1418,9 @@ $(function(){
                         </div>
                         
                         <div class="grid-caudal" style="display: none;">
-                            
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <button id="add" type="button" title="Agregar caudal" class="btn btn-primary btn-xs" style="float: right;  margin-right: 18px;"><i class="glyphicon glyphicon-plus"></i></button>
-                            
+                            <?php endIf; ?>
                             <div style="clear:both;"></div>
                             <div class="panel-body">
 
@@ -1440,9 +1445,11 @@ $(function(){
                                                         <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
                                                 <td>
                                                     <!--<input type="button" class="borrar" value="Eliminar" />-->
+                                                    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                     <a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar">
                                                         <i class="glyphicon glyphicon-minus"></i>
                                                     </a>
+                                                    <?php endIf; ?>
                                                 </td>
                                             </tr>
                                             <?php $cont++; ?>
@@ -1572,7 +1579,9 @@ $(function(){
                         
                         <div class="grid-caudal-backup" style="display: none;">
                             <!--<button id="add-backup" type="button" class="btn btn-primary btn-sm" style="float: right;">IMG:Add</button>-->
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <button id="add-backup" type="button" title="Agregar caudal" class="btn btn-primary btn-xs" style="float: right; margin-right: 18px;"><i class="glyphicon glyphicon-plus"></i></button>
+                            <?php endIf; ?>
                             <div style="clear:both;"></div>
                             <div class="panel-body">
 
@@ -1598,9 +1607,11 @@ $(function(){
                                                         <option value="2" <?= ('2'==$item['unidad'])?'selected':'' ?>>%</option></select></td>
                                                 <td>
                                                     <!--<input type="button" class="borrar" value="Eliminar" />-->
+                                                    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                     <a class="btn btn-primary btn-xs borrar" href="#" title="Eliminar">
                                                         <i class="glyphicon glyphicon-minus"></i>
                                                     </a>
+                                                    <?php endIf; ?>
                                                 </td>
                                             </tr>
                                             <?php $cont++; ?>
@@ -1636,13 +1647,14 @@ $(function(){
             </div>
                             
         <div class="clearfix"></div>                
-                        
+        
+        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
         <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
             <a class="btn btn-primary btn-sm update-circuito" href="#" role="button" onclick="updateCircuitos();" title="Update circuito">
                 <i class="glyphicon glyphicon-edit"></i>
             </a>
         </div>     
-        
+        <?php endIf; ?>
           
                         
                     
@@ -1679,10 +1691,11 @@ $(function(){
                         <button type="button" class="btn btn-primary" title="Número de equipos"><?= '# ' . $equiposNumber; ?></button>
                     </div>                    
                     <div style="float:right;">
-
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                         <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/2" role="button" title="Agregar equipo">
                             <i class="glyphicon glyphicon-plus"></i>
                         </a>
+                        <?php endIf; ?> 
                     </div>    
                     <div style="clear: both;"></div>
             
@@ -1695,7 +1708,7 @@ $(function(){
                             <th>Tipo</th>
                             <th>Nivel</th>
                             <th>Servicio</th>
-                            <?php if('Cliente' != $userRole) : ?>
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <th>Nemónico</th>
                                 <th>IP Gestión</th>
                             <?php endIf; ?>
@@ -1710,7 +1723,7 @@ $(function(){
                             <td><?= ($equipo['parent_id']==0)?'PRINCIPAL':'BACKUP' ?></td>
                             <td><?= $equipo['nivel'] ?></td>
                             <td><?= $equipo['servicio'] ?></td>
-                            <?php if('Cliente' != $userRole) : ?>
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <?php if($equipo['nemonico'] == $this->value ) : ?>
                                     <td class="<?= ($this->item == 4)?'item-selected':''; ?>" style="<?= ($this->item == 4)?'background-color: red; cursor:pointer;':''; ?>" title="Dato encontrado"><?= $equipo['nemonico']; ?></td>
                                 <?php else: ?>
@@ -1733,10 +1746,11 @@ $(function(){
                                 <?php # else : ?>
                                 <!--<span style="margin-left: 20px;">&nbsp;</span>-->
                                 <?php # endif; ?>
-                                
+                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo" data-toggle="modal" data-nemonico="<?= $equipo['nemonico']; ?>" data-ip="<?= $equipo['ip_gestion']; ?>" data-servicio="<?= $equipo['servicio']; ?>" data-id="<?= $equipo['id']; ?>" data-parent="<?= $equipo['parent_id']; ?>" data-target="#deleteEquipo">    
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
+                                <?php endIf; ?>
                             </td>  
                         </tr>
                         <?php $row++; ?>
@@ -1746,7 +1760,8 @@ $(function(){
             </div>
             <div style="clear: both;"></div>
 
-    <?php if(isset($this->information['equipos']['0'])) : ?>        
+    <?php if(isset($this->information['equipos']['0'])) : ?>
+            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
             <div>
                 <button id="ipwan" type="button" title="Direccionamiento Wan" class="btn btn-primary" onclick="ipwanFill();">Direccionamiento WAN</button>
                 <button id="iplan" type="button" title="Direccionamiento Lan" class="btn btn-primary" onclick="iplanFill();">Direccionamiento LAN</button>
@@ -1754,7 +1769,7 @@ $(function(){
                 <button id="he"    type="button" title="Hardware Especial" class="btn btn-primary" onclick="heFill();">Hardware RPV 13918</button>
                 <button id="mc"    type="button" title="Configuración Multicast" class="btn btn-primary" onclick="mcFill();">Configuración Multicast</button>
             </div> 
-        
+            <?php endIf; ?>
             <div id="equipo-fill">
         <div id="ipwan-fill">
     <div class="panel panel-default">
@@ -1777,7 +1792,7 @@ $(function(){
                                 <?= $this->formSelect($form->get('eservicio')); ?>
                             </div>
                             
-                            <?php if('Cliente' != $userRole) : ?>
+                           <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <div class="form-group">
                                     <label class="control-label" for="nemonico">Nemónico</label>
                                     <?php 
@@ -1818,7 +1833,7 @@ $(function(){
                                 <?= $this->formSelect($form->get('enivel')); ?>
                                 
                             </div>
-                            <?php if('Cliente' != $userRole) : ?>
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
                                 <?php # $form->get('enemonicon1')->setValue($this->information['equipos']['0']['nemonico_nivel1']) ?>
@@ -1870,7 +1885,7 @@ $(function(){
                             <?php $form->get('eubicacion')->setValue($this->information['equipos']['0']['ubicacion']) ?>
                             <?= $this->formInput($form->get('eubicacion')); ?>
                         </div>
-                        <?php if('Cliente' != $userRole) : ?>
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                         <div class="form-group">
                             <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
                             <?php $form->get('elogosalta')->setValue($this->information['equipos']['0']['pedido_logos_alta']) ?>
@@ -1900,7 +1915,7 @@ $(function(){
                             <?php $form->get('eestado')->setValue($this->information['equipos']['0']['estadoId']) ?>
                             <?= $this->formSelect($form->get('eestado')); ?>
                         </div>
-                        <?php if('Cliente' != $userRole) : ?>
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                          <div class="form-group">
                             <label class="control-label" for="observacion-equipo">Observaciones</label>
                             <?php 
@@ -1952,7 +1967,7 @@ $(function(){
                                 ?>
                                 <?= $this->formSelect($form->get('beservicio')); ?>
                             </div>
-                            <?php if('Cliente' != $userRole) : ?>
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico">Nemónico</label>
                                 <?php if(isset($this->information['equipos']['1']['nemonico'])) {
@@ -1985,7 +2000,7 @@ $(function(){
                                 ?>                                
                                 <?= $this->formSelect($form->get('benivel')); ?>
                             </div>
-                            <?php if('Cliente' != $userRole) : ?>
+                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                             <div class="form-group">
                                 <label class="control-label" for="nemonico-n1">Nemónico N1</label>
                                 <?php
@@ -2053,7 +2068,7 @@ $(function(){
                             ?>
                             <?= $this->formInput($form->get('beubicacion')); ?>
                         </div>
-                        <?php if('Cliente' != $userRole) : ?>
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                         <div class="form-group">
                             <label class="control-label" for="logos-alta">Pedido LOGOS Alta</label>
                             <?php if(isset($this->information['equipos']['1']['pedido_logos_alta'])) {
@@ -2086,12 +2101,13 @@ $(function(){
             </div>
         
             <div class="clearfix"></div>
+            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
             <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
                 <a class="btn btn-primary btn-sm update-equipo" href="#" role="button" onclick="updateEquipos();" title="Update equipo">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
             </div>
-            
+            <?php endIf; ?>
             
         </fieldset>				
         <div class="clearfix"></div>
@@ -2131,11 +2147,11 @@ $(function(){
                         <button type="button" class="btn btn-primary" title="Número de equipos no gestionados"><?= '# ' . $equiposNoGestionadosNumber; ?></button>
                     </div>                    
                     <div style="float:right;">
-
+                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                         <a class="btn btn-primary btn-sm" href="<?= $this->url('wizard') . '/'. $sedeId; ?>/3" role="button" title="Agregar equipo no gestionado">
                             <i class="glyphicon glyphicon-plus"></i>
                         </a>
-
+                        <?php endIf; ?>
                     </div>
             <div style="clear: both;"></div>
 
@@ -2169,9 +2185,11 @@ $(function(){
                                 <a class="btn btn-primary btn-xs" href="#" onclick="notequipoFill('<?= $this->sedeId; ?>', '<?= $notequipo['id'] ?>');" title="Consultar equipo">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
+                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo no gestionado" data-toggle="modal" data-id="<?= $notequipo['id']; ?>" data-target="#deleteEquipoNotManagement">    
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
+                                <?php endIf; ?>
                             </td>  
                         </tr>
                         <?php $row++; ?>
@@ -2282,9 +2300,11 @@ $(function(){
             <div class="clearfix"></div>                
                         
             <div style="float:right; padding-top: 14px; padding-bottom: 14px;">
+                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                 <a class="btn btn-primary btn-sm update-notequipo" href="#" role="button" onclick="updateNotEquipos();" title="Update equipo no gestionado">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
+                <?php endIf; ?>
             </div>     
 
         </fieldset>				
@@ -2321,11 +2341,11 @@ $(function(){
             
             
             <div style="float:right;">
-
+                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                 <a class="btn btn-primary btn-sm" href="#" onclick="addGlan();" role="button" title="Agregar equipo glan">
                     <i class="glyphicon glyphicon-plus"></i>
                 </a>
-
+                <?php endIf; ?>
             </div>
             <div style="clear: both;"></div>
 
@@ -2372,9 +2392,11 @@ $(function(){
                                             <a class="btn btn-primary btn-xs" href="#" onclick="glanFill('<?= $glan['id'] ?>');" title="Consultar equipo glan">
                                                 <i class="glyphicon glyphicon-eye-open"></i>
                                             </a>
+                                            <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                             <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo glan" data-toggle="modal" data-id="<?= $glan['id']; ?>" data-target="#deleteGlanEquipo">
                                                 <i class="glyphicon glyphicon-minus"></i>
                                             </a>
+                                            <?php endIf; ?>
                                         </td>  
                                     </tr>
                                     <?php $row++; ?>
@@ -2607,9 +2629,11 @@ $(function(){
                                                     </div>
                                                     
                                                     <div style="float:right; margin-top: 20px;">
+                                                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                         <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateGlan();" title="Update Glan">
                                                             <i class="glyphicon glyphicon-edit"></i>
                                                         </a>
+                                                        <?php endIf; ?>
                                                     </div>                
                                                     
                                                 </div>    
@@ -2635,11 +2659,11 @@ $(function(){
                                                                 
                                                                 
                                                             <div style="float:right;">
-
+                                                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                                 <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['glans']['0']['id']; ?>');" title="Agregar módulo">
                                                                     <i class="glyphicon glyphicon-plus"></i>
                                                                 </a>
-
+                                                                <?php endIf; ?>
                                                             </div>
                                                             <div style="clear: both;"></div>                            
 
@@ -2665,9 +2689,11 @@ $(function(){
                                                                                 <a class="btn btn-primary btn-xs" href="#" onclick="componentFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
                                                                                     <i class="glyphicon glyphicon-eye-open"></i>
                                                                                 </a>
+                                                                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
                                                                                     <i class="glyphicon glyphicon-minus"></i>
                                                                                 </a>
+                                                                                <?php endIf; ?>
                                                                             </td>  
                                                                         </tr>
                                                                         <?php $row++; ?>
@@ -2739,11 +2765,11 @@ $(function(){
                 <button type="button" class="btn btn-primary" title="Número de circuitos"><?= '# ' . $apsNumber; ?></button>
             </div>
             <div style="float:right;">
-
+                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                 <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addAp();" title="Agregar APs">
                     <i class="glyphicon glyphicon-plus"></i>
                 </a>
-
+                <?php endIf; ?>
             </div>
             <div style="clear: both;"></div>
         <div id="delete-ap">
@@ -2785,9 +2811,11 @@ $(function(){
                                 <a class="btn btn-primary btn-xs" href="#" onclick="apFill('<?= $ap['id'] ?>');" title="Consultar AP">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                 </a>
+                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>    
                                 <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo AP" data-toggle="modal" data-id="<?= $ap['id']; ?>" data-target="#deleteApEquipo">
                                     <i class="glyphicon glyphicon-minus"></i>
                                 </a>
+                                <?php endIf; ?>
                             </td>  
                         </tr>
                         <?php $row++; ?>
@@ -2999,9 +3027,11 @@ $(function(){
                                             </div>
 
                                             <div style="float:right; margin-top: 20px;">
+                                                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                                 <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateAp();" title="Update AP">
                                                     <i class="glyphicon glyphicon-edit"></i>
                                                 </a>
+                                                <?php endIf; ?>
                                             </div>
 
                                         </div>    

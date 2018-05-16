@@ -1,3 +1,8 @@
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+?>
 <style>
 
 fieldset 
@@ -97,9 +102,11 @@ $(function() {
                     <a class="btn btn-primary btn-xs" href="#" onclick="glanFill('<?= $glan['id'] ?>');" title="Consultar equipo">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
+                    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                     <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo glan" data-toggle="modal" data-id="<?= $glan['id']; ?>" data-target="#deleteGlanEquipo">
                         <i class="glyphicon glyphicon-minus"></i>
                     </a>
+                    <?php endIf; ?>
                 </td>  
             </tr>
             <?php $row++; ?>
@@ -254,9 +261,11 @@ $(function() {
                             </div>
 
                             <div style="float:right; margin-top: 20px;">
+                                 <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                 <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateGlan();" title="Update Glan">
                                     <i class="glyphicon glyphicon-edit"></i>
                                 </a>
+                                <?php endIf; ?>
                             </div>                
                             
                         </div>    
@@ -278,11 +287,11 @@ $(function() {
                                         <button type="button" class="btn btn-primary" title="Número de módulos"><?= '# ' . $modulosNumber; ?></button>
                                     </div>                                                                
                                     <div style="float:right;">
-
+                                        <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                         <a class="btn btn-primary btn-sm" href="#" role="button" title="Agregar módulo">
                                             <i class="glyphicon glyphicon-plus"></i>
                                         </a>
-
+                                        <?php endIf; ?>
                                     </div>
                                     <div style="clear: both;"></div>                            
 

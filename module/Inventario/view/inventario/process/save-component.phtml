@@ -1,3 +1,9 @@
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+?>
+
 <style>
 
 fieldset 
@@ -64,11 +70,11 @@ legend
     <button type="button" class="btn btn-primary" title="Número de módulos"><?= '# ' . $modulosNumber; ?></button>
 </div>                                                                
 <div style="float:right;">
-
+    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
     <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addComponent('<?= $this->information['componentes']['0']['glan_id']; ?>');" title="Agregar módulo">
         <i class="glyphicon glyphicon-plus"></i>
     </a>
-
+    <?php endIf; ?>
 </div>
 <div style="clear: both;"></div>                            
 
@@ -94,9 +100,11 @@ legend
                     <a class="btn btn-primary btn-xs" href="#" onclick="componentFill('<?= $this->sedeId; ?>', '<?= $glan['id'] ?>');" title="Consultar equipo">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
+                    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                     <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo">
                         <i class="glyphicon glyphicon-minus"></i>
                     </a>
+                    <?php endIf; ?>
                 </td>  
             </tr>
             <?php $row++; ?>

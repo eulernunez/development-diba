@@ -1,3 +1,9 @@
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+?>
+
 <style>
 
 fieldset 
@@ -89,9 +95,11 @@ legend
                     <a class="btn btn-primary btn-xs" href="#" onclick="apFill('<?= $ap['id'] ?>');" title="Consultar AP">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
+                    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                     <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo AP" data-toggle="modal" data-id="<?= $ap['id']; ?>" data-target="#deleteApEquipo">
                         <i class="glyphicon glyphicon-minus"></i>
                     </a>
+                    <?php endIf; ?>
                 </td>  
             </tr>
             <?php $row++; ?>
@@ -250,9 +258,11 @@ legend
                                 </div>
 
                                 <div style="float:right; margin-top: 20px;">
+                                    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
                                     <a class="btn btn-primary btn-sm update-sede" href="#" role="button" onclick="updateAp();" title="Update AP">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
+                                    <?php endIf; ?>
                                 </div>
 
                             </div>    
