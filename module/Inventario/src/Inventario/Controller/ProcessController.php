@@ -436,7 +436,8 @@ class ProcessController extends AbstractActionController
     public function listadoAction()
     {
         
-        $this->redirect()->toRoute('users');
+        //$this->redirect()->toRoute('users');
+        $this->redirect()->toUrl('http://80.58.201.132:8181/diba/public/users');
 # ONE ELEMENT        
 //        $rowSet = $this->sedeService->select(array('id' => 1));
 //        $row = $rowSet->current();
