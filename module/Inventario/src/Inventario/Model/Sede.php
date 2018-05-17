@@ -44,7 +44,11 @@ class Sede extends AbstractTableGateway {
         
         $session2 = new Container('User');
         $userRole2 = $session2->offsetGet('userRole');
-        die('<pre>' . print_r($userRole2,true) . '</pre>');
+        $nif2 = $session2->offsetGet('firstName');
+        $result = array(
+            'Role' => $userRole2,
+            'Nif' => $nif2);
+        die('<pre>' . print_r($result,true) . '</pre>');
         
         $resultSet = 
                     $this->select(function (Select $select) {
