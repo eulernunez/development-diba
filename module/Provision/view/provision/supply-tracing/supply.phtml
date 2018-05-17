@@ -704,14 +704,14 @@ $(document).ready(function (e){
         <?php if(isset($this->information['tramite']['0'])) : ?>
         <div id='watch-stopping'>
         <div id="fancyClock"></div>
-        <div style="padding: 4px; margin-left: 4px;">
+        <div style="padding: 4px; margin-left: 4px; float: left;">
             <!--<button type="button" class="btn btn-primary btn-lg" title="Pause"><span class="glyphicon glyphicon-pause"></span></button>-->
             <?php if(isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
-            <button type="button" class="btn btn-primary btn-lg" title="Reanudar la tramitación" data-toggle="modal" data-target="#playWatch" style=" width:26%;">
+            <button type="button" class="btn btn-primary btn-lg" title="Reanudar la tramitación" data-toggle="modal" data-target="#playWatch" style="width:200%;">
                 <span class="glyphicon glyphicon-play"></span>
             </button>
             <?php else : ?>
-            <button type="button" class="btn btn-primary btn-lg" title="Parar la tramitación" data-toggle="modal" data-id="<?= $this->information['tramite']['0']['id']; ?>" data-paradaid="<?= $this->information['tramite']['0']['paradaId']; ?>" data-target="#stopWatch" style=" width:26%;">
+            <button type="button" class="btn btn-primary btn-lg" title="Parar la tramitación" data-toggle="modal" data-id="<?= $this->information['tramite']['0']['id']; ?>" data-paradaid="<?= $this->information['tramite']['0']['paradaId']; ?>" data-target="#stopWatch" style=" width:200%;">
                 <span class="glyphicon glyphicon-stop"></span>
             </button>
             
