@@ -435,7 +435,8 @@ class ProcessController extends AbstractActionController
     
     public function listadoAction()
     {
-
+        
+        $this->redirect()->toRoute('users');
 # ONE ELEMENT        
 //        $rowSet = $this->sedeService->select(array('id' => 1));
 //        $row = $rowSet->current();
