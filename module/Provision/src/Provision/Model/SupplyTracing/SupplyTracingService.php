@@ -18,7 +18,7 @@ class SupplyTracingService {
         return $this;
     }
 
-    public function getFormalities() {
+    public function getFormalities($visible = 1) {
 
         $statement =
             "SELECT t.*,
@@ -37,7 +37,7 @@ class SupplyTracingService {
                             LEFT JOIN peticiones AS p ON t.peticion_id = p.id		
                             LEFT JOIN tramitadores AS tr ON t.tramitador_id = tr.id
                             LEFT JOIN estado_tramites AS e ON t.estado_id = e.id
-                            WHERE e.visible = '1'";
+                            WHERE e.visible = '" . $visible . "' AND t.activo = '1' ORDER BY t.inicio DESC"; 
 
         $adapter = $this->adapter->query($statement);
         $result = $adapter->execute();
@@ -46,7 +46,7 @@ class SupplyTracingService {
 
     }
     
-    public function getFormality($id)
+    public function getFormality($id, $visible = 1)
     {
         $datos = [];
         $statement =
@@ -68,7 +68,7 @@ class SupplyTracingService {
                             LEFT JOIN tramitadores AS tr ON t.tramitador_id = tr.id
                             LEFT JOIN estado_tramites AS e ON t.estado_id = e.id
                             LEFT JOIN paradas AS pr ON pr.tramitacion_id = t.id
-                            WHERE e.visible = '1' AND t.id = '" . $id ."' AND pr.active = '1'";
+                            WHERE e.visible = '" . $visible . "' AND t.id = '" . $id ."' AND pr.active = '1' AND t.activo = '1'";
         $adapter = $this->adapter->query($statement);
 
         $tramite = array();
@@ -78,6 +78,9 @@ class SupplyTracingService {
             
             if($item['inicio']){
                 $item['inicioSplit'] = $this->formattingDate($item['inicio']);
+            }
+            if($item['fin']){
+                $item['finSplit'] = $this->formattingDate($item['fin']);
             }
             if($item['inicioParada']){
                 $item['inicioParadaSplit'] = $this->formattingDate($item['inicioParada']);
@@ -101,6 +104,22 @@ class SupplyTracingService {
         }
         
         $datos['parada'] = $parada;
+        
+        $statement =
+            "SELECT cm.*
+                    FROM comentarios AS cm
+                            WHERE cm.tramitacion_id = '" . $id ."'";
+        $adapter3 = $this->adapter->query($statement);
+        
+        $comentarios = array();
+        foreach ($adapter3->execute() as $item) {
+            
+            $comentarios[] = $item;
+        }
+        
+        $datos['comentarios'] = $comentarios;
+        
+        
         
         return $datos;
 
@@ -175,6 +194,142 @@ class SupplyTracingService {
         $this->posts = $posts;
         return $this;
     }
+    
+    
+    public function saveSupply() {
+
+        $supply = new \Provision\Model\Entity\Supply();
+        $supply->setOptions($this->posts);
+
+        //Analyze EUREKA
+        //$myDateTime = DateTime::createFromFormat('Y-m-d', $dateString);
+        //$newDateString = $myDateTime->format('d-m-Y');
+        
+        $inicialDate = explode(' ', $this->posts['inicio']);
+        $dateString = (string)$inicialDate['0'];
+        $newDateString = date_format(date_create_from_format('d/m/Y', $dateString), 'Y-m-d');
+        $newDateString = $newDateString . ' ' . (string)$inicialDate['1'];
+
+        $supply->setInicio($newDateString);
+
+        $handler = new \Provision\Model\Supply($this->adapter);
+        $tramitacionId = $handler->saveSupply($supply);
+
+        $parada = new \Provision\Model\Entity\Parada();
+        $parada->setTramitacionId($tramitacionId);
+
+        $stoper = new \Provision\Model\Parada($this->adapter);
+
+        $result = $stoper->initializeWatch($parada);
+        
+        return $result;
+        
+    }
+    
+    public function updateSupply() {
+
+        $supply = new \Provision\Model\Entity\Supply();
+        $id = (int)$this->posts['supplyId'];
+        $supply->setId($id);
+
+        $supply->setOdinvoz($this->posts['odinvoz']);
+        $supply->setBj($this->posts['bj']);
+        $supply->setOdindatos($this->posts['odindatos']);
+        $supply->setSg($this->posts['sg']);
+        $supply->setAtlas($this->posts['atlas']);
+        $supply->setVisord($this->posts['visord']);
+        $supply->setEstado($this->posts['estado']);
+        $supply->setDescripcion($this->posts['descripcion']);
+        
+        $handler = new \Provision\Model\Supply($this->adapter);
+        $tramitacionId = $handler->saveSupply($supply);
+        
+        return true;
+    }
+
+
+    public function finishSupply() {
+
+        $comment = new \Provision\Model\Entity\Comentario();
+        $comentario = (string)$this->posts['finishComment'];
+        $supplyId = (int)$this->posts['id'];
+        $comment->setAsunto('Finalizado');
+        $comment->setComment($comentario);
+        $comment->setTramitacionId($supplyId);
+        
+        $handler = new \Provision\Model\Comentario($this->adapter);
+        $handler->saveComentario($comment);
+        
+        $supply = new \Provision\Model\Entity\Supply();
+        $supply->setId($supplyId);
+        
+        $handler2 = new \Provision\Model\Supply($this->adapter);
+        $result = $handler2->finishSupply($supply);
+        
+        return $result;
+        
+    }
+
+    public function removeSupply() {
+
+        $comment = new \Provision\Model\Entity\Comentario();
+        $comentario = (string)$this->posts['removeComment'];
+        $supplyId = (int)$this->posts['id'];
+        $comment->setAsunto('Anulado');
+        $comment->setComment($comentario);
+        $comment->setTramitacionId($supplyId);
+        
+        $handler = new \Provision\Model\Comentario($this->adapter);
+        $handler->saveComentario($comment);
+        
+        $supply = new \Provision\Model\Entity\Supply();
+        $supply->setId($supplyId);
+        
+        $handler2 = new \Provision\Model\Supply($this->adapter);
+        $result = $handler2->removeSupply($supply);
+        
+        return $result;
+        
+    }
+    
+    public function deleteSupply() {
+
+        $comment = new \Provision\Model\Entity\Comentario();
+        $comentario = (string)$this->posts['deleteComment'];
+        $supplyId = (int)$this->posts['id'];
+        $comment->setAsunto('Eliminado');
+        $comment->setComment($comentario);
+        $comment->setTramitacionId($supplyId);
+        
+        $handler = new \Provision\Model\Comentario($this->adapter);
+        $handler->saveComentario($comment);
+        
+        $supply = new \Provision\Model\Entity\Supply();
+        $supply->setId($supplyId);
+        
+        $handler2 = new \Provision\Model\Supply($this->adapter);
+        $result = $handler2->deleteSupply($supply);
+        
+        return $result;
+        
+    }
+
+    public function addComment() {
+        
+        $comment = new \Provision\Model\Entity\Comentario();
+        $comentario = (string)$this->posts['addComment'];
+        $supplyId = (int)$this->posts['id'];
+        $comment->setAsunto('Comentario');
+        $comment->setComment($comentario);
+        $comment->setTramitacionId($supplyId);
+        
+        $handler = new \Provision\Model\Comentario($this->adapter);
+        $handler->saveComentario($comment);
+        
+        return true;
+
+    }
+    
     
     
 }

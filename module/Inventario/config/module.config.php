@@ -327,6 +327,17 @@ return array(
                 ),
             ),
 
+            'ajax-nif' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/ajax-nif',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'ajax-nif',
+                    ),
+                ),
+            ),
+            
             'delete-circuito' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(

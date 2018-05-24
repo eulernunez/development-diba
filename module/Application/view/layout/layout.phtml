@@ -213,7 +213,7 @@
                 </li>
             <?php endif ?>    
             
-            <?php if('Administrador' == $userRole || 'Ventas' == $userRole || 'Ingeniero' == $userRole ) : ?>    
+            <?php if('Administrador' == $userRole || 'Ventas' == $userRole || 'Ingeniero' == $userRole || 'OperadorODP' == $userRole ) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#provisio-nav">
                         <i class=" icon-sitemap"></i> <span style="font-size: 12px;">Provisión</span>
@@ -230,10 +230,13 @@
                            
                             <ul class="collapse" id="provisio-nav-sub">
                                 <li>
+                                    <a href="<?php echo $this->url('create') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Alta</span> </a>
+                                </li>
+                                <li>
                                     <a href="<?php echo $this->url('open-supply-tracing') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Abiertas</span> </a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Cerradas</span> </a>
+                                    <a href="<?php echo $this->url('close-supply-tracing') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Cerradas</span> </a>
                                 </li>
                             </ul>
                         </li>

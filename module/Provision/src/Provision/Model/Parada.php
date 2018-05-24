@@ -22,6 +22,18 @@ class Parada extends AbstractTableGateway {
 
 
     
+    public function initializeWatch(Entity\Parada $parada) {
+        
+        $data = array(
+          'tramitacion_id' => $parada->getTramitacionId(),
+           'active' => 1 
+        );
+        
+          if (!$this->insert($data)) { return false; }
+                return $this->getLastInsertValue();
+                
+    }
+    
     
     public function watchStopping(Entity\Parada $parada) {
         

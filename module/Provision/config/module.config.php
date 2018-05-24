@@ -32,10 +32,21 @@ return array(
                     ),
                 ),
             ),
+            'close-supply-tracing' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/close-supply-tracing',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'close',
+                    ),
+                ),
+            ),
+            
             'supply' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
-                    'route'    => '/supply[/[:id]]',
+                    'route'    => '/supply[/[:id][/:visible]]',
                     'defaults' => array(
                         'controller' => 'Provision\Controller\SupplyTracing',
                         'action'     => 'supply',
@@ -62,6 +73,77 @@ return array(
                     ),
                 ),
             ),
+            'create' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/create',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'create',
+                    ),
+                ),
+            ),
+            'save-supply' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/save-supply',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'save-supply',
+                    ),
+                ),
+            ),
+            'update-supply' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/update-supply',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'update-supply',
+                    ),
+                ),
+            ),
+            'supply-finish' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/supply-finish',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'supply-finish',
+                    ),
+                ),
+            ),
+            'supply-remove' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/supply-remove',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'supply-remove',
+                    ),
+                ),
+            ),
+            'supply-delete' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/supply-delete',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'supply-delete',
+                    ),
+                ),
+            ),
+            'add-comment' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/add-comment',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'add-comment',
+                    ),
+                ),
+            ),
+            
         ),
     ),
     'view_manager' => array (

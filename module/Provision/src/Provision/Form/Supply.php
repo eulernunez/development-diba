@@ -51,7 +51,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'linea',
-                    //'required'=>'required',
+                    'required'=>'required',
                     'aria-describedby' => 'lineaHelp',
                     'placeholder' => 'Ingresa la línea',
                     'class' => 'form-control input-sm',
@@ -74,7 +74,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'midas',
-                    //'required'=>'required',
+                    'required'=>'required',
                     'aria-describedby' => 'midasHelp',
                     'placeholder' => 'Ingresa el midas',
                     'class' => 'form-control input-sm',
@@ -97,7 +97,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'inicio',
-                    'required'=>'required',
+                    'readonly'=>'true',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -229,7 +229,7 @@ class Supply extends Form
              ),
             'attributes' => 
                 array(
-                    'id' => 'ccliente',
+                    'id' => 'cliente',
                     'required'=> true,
                     'class' => 'form-control input-sm',
                 ),
@@ -337,6 +337,7 @@ class Supply extends Form
             'type' => 'Zend\Form\Element\Textarea',
             'attributes'=>array(
                 'id' => 'descripcion',
+                 'required'=>'required',
                 'class' => 'form-control input-sm',
                 'rows' => 6,
                 'placeholder' => 'Ingresa la descripción ...',
@@ -418,7 +419,7 @@ class Supply extends Form
     public function getOptionsForEstado()
     {
         $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, estados FROM estado_tramites');
+        $statement = $dbAdapter->query('SELECT id, estados FROM estado_tramites WHERE visible = 1');
         $select = [];
         foreach ($statement->execute() as $item) {
             $select[$item['id']] = $item['estados'];

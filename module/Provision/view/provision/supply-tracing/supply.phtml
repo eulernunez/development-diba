@@ -244,8 +244,19 @@
                         var minut =  '<?= $this->information['tramite']['0']['inicioSplit']['minut']; ?>';
                         var second =  '<?= $this->information['tramite']['0']['inicioSplit']['second']; ?>';
 			var date_past = new Date(year,month,day,hour,minut,second);
+                        
                         var date_process;
-                        <?php if(isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
+                        var finish = false;
+                        <?php if(isset($this->information['tramite']['0']['finSplit'])) : ?>
+                            var year2 =  '<?= $this->information['tramite']['0']['finSplit']['year']; ?>';
+                            var month2 =  '<?= $this->information['tramite']['0']['finSplit']['month']; ?>';
+                            var day2 =  '<?= $this->information['tramite']['0']['finSplit']['day']; ?>';
+                            var hour2 =  '<?= $this->information['tramite']['0']['finSplit']['hour']; ?>';
+                            var minut2 =  '<?= $this->information['tramite']['0']['finSplit']['minut']; ?>';
+                            var second2 =  '<?= $this->information['tramite']['0']['finSplit']['second']; ?>';
+                            date_process = new Date(year2,month2,day2,hour2,minut2,second2);    
+                            finish = true;
+                        <?php elseif(isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
                             var year2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['year']; ?>';
                             var month2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['month']; ?>';
                             var day2 =  '<?= $this->information['tramite']['0']['inicioParadaSplit']['day']; ?>';
@@ -275,7 +286,13 @@
 			animation(gVars.red, d, 360);
                         
                         //2nd Timelife all
-                        var secondsAll = Math.floor((new Date() - (date_past))/1000);
+                        var timelifeAll;
+                        if(finish) {
+                            timelifeAll = date_process;
+                        } else {
+                            timelifeAll = new Date();
+                        } 
+                        var secondsAll = Math.floor((timelifeAll - (date_past))/1000);
 			var minutesAll = Math.floor(secondsAll/60);
 			var hoursAll = Math.floor(minutesAll/60);
 			var daysAll = Math.floor(hoursAll/24);
@@ -427,6 +444,28 @@ $(document).ready(function(e){
         $('#playWatch').on('show.bs.modal',function(e){
             //var id = $(e.relatedTarget).data().id;
         })
+        
+        $('#comments').on('show.bs.modal',function(e){
+            //var id = $(e.relatedTarget).data().id;
+        })
+
+        $('#supplyDelete').on('show.bs.modal',function(e){
+            //var id = $(e.relatedTarget).data().id;
+        })
+
+        $('#supplyRemove').on('show.bs.modal',function(e){
+            //var id = $(e.relatedTarget).data().id;
+        })
+
+        <?php if($this->information['tramite']['0']['visible'] == 2) : ?>
+            $('.supply-submit').addClass('disabled');
+            $('.supply-finish').addClass('disabled');
+            $('.supply-remove').addClass('disabled');
+            $('.supply-delete').addClass('disabled');
+            $('.comments').addClass('disabled');                
+        <?php endIf; ?>        
+
+
 
 });
 
@@ -489,6 +528,138 @@ function restartWatch() {
 }
 
 
+function supplyFinish() {
+
+    $('#supplyFinish').modal('hide');
+    var url = '<?= $this->url('supply-finish'); ?>';
+    var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    var finishComment = $('#finish-comment').val();
+    
+    var data = {id: id, finishComment: finishComment};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#ajax-comments").html(html);
+             $('.supply-submit').addClass('disabled');
+             $('.supply-finish').addClass('disabled');
+             $('.supply-remove').addClass('disabled');
+             $('.supply-delete').addClass('disabled');
+             $('.comments').addClass('disabled');
+             $('#favorites').addClass('disabled');
+             
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+
+}
+
+function supplyRemove() {
+
+    $('#supplyRemove').modal('hide');
+    var url = '<?= $this->url('supply-remove'); ?>';
+    var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    var removeComment = $('#remove-comment').val();
+    
+    var data = {id: id, removeComment: removeComment};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#ajax-comments").html(html);
+             $('.supply-submit').addClass('disabled');
+             $('.supply-finish').addClass('disabled');
+             $('.supply-remove').addClass('disabled');
+             $('.supply-delete').addClass('disabled');
+             $('.comments').addClass('disabled');
+             $('#favorites').addClass('disabled');
+             
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+
+}
+
+function supplyDelete() {
+
+    $('#supplyDelete').modal('hide');
+    var url = '<?= $this->url('supply-delete'); ?>';
+    var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    var deleteComment = $('#delete-comment').val();
+    
+    var data = {id: id, deleteComment: deleteComment};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#ajax-comments").html(html);
+             $('.supply-submit').addClass('disabled');
+             $('.supply-finish').addClass('disabled');
+             $('.supply-remove').addClass('disabled');
+             $('.supply-delete').addClass('disabled');
+             $('.comments').addClass('disabled');
+             $('#favorites').addClass('disabled');
+             
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+
+}
+
+
+function addComment() {
+
+    $('#comments').modal('hide');
+    var url = '<?= $this->url('add-comment'); ?>';
+    var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    var addComment = $('#add-comment').val();
+    
+    var data = {id: id, addComment: addComment};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+             $("#ajax-comments").html(html);
+             
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+
+}
+
+
+
+
+
+
 
 //-->
 </script>
@@ -516,12 +687,12 @@ $(document).ready(function (e){
 </script>-->
 <?php
     $form = $this->form;
-    #$form->setAttribute('action', $this->url('wizard'));
+    $form->setAttribute('action', $this->url('update-supply'));
     $form->setAttribute('id', 'supply');
     $form->setAttribute('role', 'form');
-    $form->setAttribute('data-toggle', 'validator');
+    //$form->setAttribute('data-toggle', 'validator');
     $form->setAttribute('accept-charset', 'utf-8');
-    #$form->setAttribute('novalidate', 'novalidate');
+    $form->setAttribute('novalidate', 'novalidate');
     $form->prepare();
 ?>
 
@@ -544,7 +715,7 @@ $(document).ready(function (e){
     </div>
     <div class="btn-group" role="group">
         <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab" style="width:100%;">
-            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
             <div class="hidden-xs">&nbsp;&nbsp;&nbsp;&nbsp;SLA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <div class="hidden-xs">&nbsp;</div>
         </button>
@@ -557,13 +728,16 @@ $(document).ready(function (e){
 
                             <div class="form-group">
                                 <label for="entidad">Entidad</label>
-                                <?php $form->get('cliente')->setValue($this->information['tramite']['0']['clienteId']) ?>
+                                <?php 
+                                    $form->get('cliente')->setValue($this->information['tramite']['0']['clienteId']);
+                                    $form->get('cliente')->setAttribute('disabled','true');
+                                ?>
                                 <?= $this->formSelect($form->get('cliente')); ?>                                
                             </div>
 
                             <div class="form-group">
                                 <label for="nif">NIF</label>
-                                <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" value="<?= $this->information['tramite']['0']['nif']; ?>">
+                                <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="<?= $this->information['tramite']['0']['nif']; ?>">
                             </div>
 
                             <div class="form-group">
@@ -578,6 +752,7 @@ $(document).ready(function (e){
                                 <label for="solicitante">Solicitante</label>
                                 <?php
                                     $form->get('solicitante')->setValue($information['tramite']['0']['solicitante']);
+                                    $form->get('solicitante')->setAttribute('readonly','true');
                                 ?>
                                 <?= $this->formInput($form->get('solicitante')); ?>
                             </div>
@@ -586,6 +761,7 @@ $(document).ready(function (e){
                                 <label for="linea">Adm/Tel/Ext</label>
                                 <?php
                                     $form->get('linea')->setValue($information['tramite']['0']['linea']);
+                                    $form->get('linea')->setAttribute('readonly','readonly');
                                 ?>
                                 <?= $this->formInput($form->get('linea')); ?>
                             </div>
@@ -594,25 +770,35 @@ $(document).ready(function (e){
                                 <label for="midas">Midas</label>
                                 <?php
                                     $form->get('midas')->setValue($information['tramite']['0']['midas']);
+                                    $form->get('midas')->setAttribute('readonly','true');
                                 ?>
                                 <?= $this->formInput($form->get('midas')); ?>
                             </div>
                         
                             <div class="form-group">
                                 <label for="sede">Sede</label>
-                                <?php $form->get('sede')->setValue($this->information['tramite']['0']['sedeId']) ?>
+                                <?php
+                                    $form->get('sede')->setValue($this->information['tramite']['0']['sedeId']);
+                                    $form->get('sede')->setAttribute('disabled','true');
+                                ?>
                                 <?= $this->formSelect($form->get('sede')); ?>                                
                             </div>
 
                             <div class="form-group">
                                 <label for="lote">Lote</label>
-                                <?php $form->get('lote')->setValue($this->information['tramite']['0']['loteId']) ?>
+                                <?php
+                                    $form->get('lote')->setValue($this->information['tramite']['0']['loteId']);
+                                    $form->get('lote')->setAttribute('disabled','true');
+                                ?>
                                 <?= $this->formSelect($form->get('lote')); ?>                                
                             </div>
 
                             <div class="form-group">
                                 <label for="servicio">Servicio</label>
-                                <?php $form->get('servicio')->setValue($this->information['tramite']['0']['servicioId']) ?>
+                                <?php
+                                    $form->get('servicio')->setValue($this->information['tramite']['0']['servicioId']);
+                                    $form->get('servicio')->setAttribute('disabled','true');
+                                ?>
                                 <?= $this->formSelect($form->get('servicio')); ?>                                
                             </div>
 
@@ -622,13 +808,19 @@ $(document).ready(function (e){
                         
                         <div class="form-group">
                             <label for="peticion">Tipo de Petición</label>
-                            <?php $form->get('peticion')->setValue($this->information['tramite']['0']['servicioId']) ?>
+                            <?php
+                                $form->get('peticion')->setValue($this->information['tramite']['0']['servicioId']);
+                                $form->get('peticion')->setAttribute('disabled','true');
+                            ?>
                             <?= $this->formSelect($form->get('peticion')); ?>
                         </div>
 
                         <div class="form-group">
                             <label for="tramitador">Tramitador</label>
-                            <?php $form->get('tramitador')->setValue($this->information['tramite']['0']['tramitadorId']) ?>
+                            <?php
+                                $form->get('tramitador')->setValue($this->information['tramite']['0']['tramitadorId']);
+                                $form->get('tramitador')->setAttribute('disabled','true');
+                            ?>
                             <?= $this->formSelect($form->get('tramitador')); ?>
                         </div>
                     
@@ -676,9 +868,9 @@ $(document).ready(function (e){
                         <div class="form-group">
                             <label for="visord">Visord</label>
                             <?php
-                                $form->get('atlas')->setValue($information['tramite']['0']['visord']);
+                                $form->get('visord')->setValue($information['tramite']['0']['visord']);
                             ?>
-                            <?= $this->formInput($form->get('atlas')); ?>
+                            <?= $this->formInput($form->get('visord')); ?>
                         </div>
 
                         <div class="form-group">
@@ -696,9 +888,52 @@ $(document).ready(function (e){
                                 #$form->get('observacion')->setAttribute('rows', 1);  
                             ?>
                             <?= $this->formTextarea($form->get('descripcion')); ?>
-                        </div>                        
-                    </div>    
-        <?php endif; ?>
+                        </div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div class="form-group">&nbsp;</div>
+                        <div style="float:right;">
+                            <button class="btn btn-primary supply-submit" title="Guardar cambios" type="submit"><span class="glyphicon glyphicon-edit"></span></button>
+                            <button class="btn btn-primary supply-finish" title="Finalizar" type="button" data-toggle="modal" data-target="#supplyFinish"><span class="glyphicon glyphicon-ok"></span></button>
+                            <button class="btn btn-primary supply-remove" title="Anular" type="button" data-toggle="modal" data-target="#supplyRemove"><span class="glyphicon glyphicon-remove"></span></button>
+                            <button class="btn btn-primary supply-delete" title="Eliminar el trámite" type="button" data-toggle="modal" data-target="#supplyDelete"><span class="glyphicon glyphicon-trash"></span></button>
+                            <button class="btn btn-primary comments" title="Añadir comentarios" type="button" data-toggle="modal" data-target="#comments"><span class="glyphicon glyphicon-comment"></span></button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="supplyId" name="supplyId" value="<?= $this->information['tramite']['0']['id'] ?>">
+        
+                    <div class="clearfix"></div>
+        
+                    <?php if(count($this->information['comentarios'])>0) : ?>     
+                        <?php foreach($this->information['comentarios'] as $item ) : ?>
+                        <div style="height: 20px;">
+                        </div>
+                        <fieldset class="col-md-12">
+                            <legend><span class="glyphicon glyphicon-comment"></span>&nbsp;<?= $item['asunto']; ?> </legend>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <?= $item['comentario']; ?>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    <div id="ajax-comments"></div>
+
+        <?php endif; ?>            
+    
     </div>
     <div class="tab-pane fade in" id="tab2">
         <?php if(isset($this->information['tramite']['0'])) : ?>
@@ -706,6 +941,7 @@ $(document).ready(function (e){
         <div id="fancyClock"></div>
         <div style="padding: 4px; margin-left: 4px; float: left;">
             <!--<button type="button" class="btn btn-primary btn-lg" title="Pause"><span class="glyphicon glyphicon-pause"></span></button>-->
+        <?php if(empty($this->information['tramite']['0']['fin'])) : ?>    
             <?php if(isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
             <button type="button" class="btn btn-primary btn-lg" title="Reanudar la tramitación" data-toggle="modal" data-target="#playWatch" style="width:200%;">
                 <span class="glyphicon glyphicon-play"></span>
@@ -714,8 +950,8 @@ $(document).ready(function (e){
             <button type="button" class="btn btn-primary btn-lg" title="Parar la tramitación" data-toggle="modal" data-id="<?= $this->information['tramite']['0']['id']; ?>" data-paradaid="<?= $this->information['tramite']['0']['paradaId']; ?>" data-target="#stopWatch" style=" width:200%;">
                 <span class="glyphicon glyphicon-stop"></span>
             </button>
-            
             <?php endif ;?>
+        <?php endif ;?>    
         </div>
         <div class="clearfix"></div>
         <div style="border: 1px solid #cdcdcd;">
@@ -738,7 +974,7 @@ $(document).ready(function (e){
                         <td>1</td>
                         <td>Trámite de Provisión</td>
                         <td><?= $this->information['tramite']['0']['inicio']; ?></td>
-                        <td></td>
+                        <td><?= $this->information['tramite']['0']['fin']; ?></td>
                         <td><span id='days'></span></td>
                         <td><span id='hours'></span></td>
                         <td><span id='minutes'></span></td>
@@ -834,3 +1070,83 @@ $(document).ready(function (e){
     </div>
 </div>
 
+<!-- Modal Comments  -->
+<div class="modal fade" id="comments" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Comentario</h4>
+            </div>
+            <div class="modal-body">
+<!--                <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de reanudar el reloj?</p>-->
+                <textarea id="add-comment" name="add-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="addComment();" >Comentar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Supply Delete   -->
+<div class="modal fade" id="supplyDelete" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar</h4>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de eliminar el trámite?</p>
+                <textarea id="delete-comment" name="delete-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="supplyDelete();" >Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Supply Remove   -->
+<div class="modal fade" id="supplyRemove" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Anular</h4>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de anular el trámite?</p>
+                <textarea id="remove-comment" name="remove-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="supplyRemove();" >Anular</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Supply Finish   -->
+<div class="modal fade" id="supplyFinish" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Finalizar</h4>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; margin-top: 20px;">Va a proceder a finalizar el trámite.</p>
+                <textarea id="finish-comment" name="finish-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="supplyFinish();" >Finalizar</button>
+            </div>
+        </div>
+    </div>
+</div>

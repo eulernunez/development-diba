@@ -15,6 +15,7 @@ use Inventario\Model\Poblacion;
 Use Inventario\Model\Velocidad;
 Use Inventario\Model\Modelo;
 Use Inventario\Model\Uso;
+Use Inventario\Model\Cliente;
 
 class ProcessController extends AbstractActionController
 {
@@ -655,6 +656,26 @@ class ProcessController extends AbstractActionController
         
         $viewmodel = new ViewModel(
                         array('usos' => $usos));
+
+        $viewmodel->setTerminal(true);
+        
+        return $viewmodel;
+        
+    }        
+    
+    public function ajaxNifAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $clienteId = $posts['id'];
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $handler = new Cliente($dbAdapter);
+        
+        $cliente = $handler->getNifForCliente($clienteId);
+        
+        $viewmodel = new ViewModel(
+                        array('cliente' => $cliente));
 
         $viewmodel->setTerminal(true);
         

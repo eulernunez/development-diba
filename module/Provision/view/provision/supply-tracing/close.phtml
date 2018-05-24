@@ -18,6 +18,7 @@
 
 <div class="inner">
     <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
+
     <div id="toolbar">
     <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
             <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
@@ -89,7 +90,7 @@
                     <!--<td class="noWrap"><?= ucwords(strtolower($item['descripcion'])); ?></td>-->
                     <td class="noWrap"><?= ucwords(strtolower($item['estados'])); ?></td>
                     <td class="noWrap">
-                        <a class="update" href="<?php echo $this->url('supply') . '/' . $item['id']; ?>" title="Consultar">
+                        <a class="update" href="<?php echo $this->url('supply') . '/' . $item['id'] . '/2'; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </td>

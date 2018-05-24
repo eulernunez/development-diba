@@ -1,0 +1,8 @@
+<div class="form-group">
+    <label for="nif">NIF</label>
+    <?php if(!empty($this->cliente)) : ?>
+        <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="<?= $this->cliente; ?>">
+    <?php else: ?>
+        <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="">
+    <?php endif ?>
+</div>
