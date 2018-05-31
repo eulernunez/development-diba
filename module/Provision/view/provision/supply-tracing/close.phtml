@@ -6,6 +6,77 @@
         ->appendFile($this->basePath() . '/js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js.'); ?>
 
 <style>
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+    .form-group
+    {
+        margin-bottom: 1px;
+    }
+
+/*    .form-control
+    {
+        height: 26px;
+        font-size: 9px;
+
+    }*/
+
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+    
+    /* Custom */
+    .custom-fieldset
+    {
+        background-color:#ffffff;
+    }
+    .custom-legend
+    {
+        width: 60%;
+        font-size: 12px;
+        border: 0px solid #ddd;
+    }
+    .custom-label
+    {
+        font-size: 12px;
+    }
+    .custom-radio
+    {
+        font-size: 10px;
+    }
 
 </style>
 
@@ -16,10 +87,32 @@
 </script>
 
 
-<div class="inner">
+<div class="inner" style="min-height:0px;">
+
+<fieldset class="col-md-12">
+    <legend>Trámites cerrados</legend>
+    <div class="panel panel-default">
+        <div class="panel-body">
+    
+    
+    
+    
     <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
 
     <div id="toolbar">
+<!--        <div class="col-lg-6" style="padding-left: 0px;">
+            <div class="form-group input-group" >
+                <input type="text" class="form-control" id="search" name="search" placeholder="Buscar..."/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="buscarSupply();">
+                        <i class="icon-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>    -->
+        
+        
+        
     <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
             <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
         </button>
@@ -99,4 +192,7 @@
         </tbody>
     </table>
     <div class="clearfix">&nbsp;</div>
+</div>
+</div>
+</fieldset>
 </div>

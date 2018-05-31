@@ -1,5 +1,286 @@
-<div class="inner"> 
-    <div class="row">
-        
+<!-- ========== PRELOADER ========== -->
+<div id="loading">
+    <div class="inner">
+        <div class="loading_effect">
+            <div class="object" id="object_one"></div>
+            <div class="object" id="object_two"></div>
+            <div class="object" id="object_three"></div>
+        </div>
     </div>
+</div>
+    
+    
+<div id="classic_slider" class="rev_slider" style="display:none">
+    <ul>
+        <!-- SLIDE NR. 1 -->
+        <li data-transition="crossfade">
+            <!-- MAIN IMAGE -->
+            <img src="<?= $this->basePath(). '/assets/revolution/images/slider/slider-1.jpg'; ?>" 
+                 alt="Image" 
+                 title="slider_bg2"
+                 data-bgposition="center center" 
+                 data-bgfit="cover" 
+                 data-bgrepeat="no-repeat" 
+                 data-bgparallax="10" 
+                 class="rev-slidebg" 
+                 data-no-retina="">
+            <!-- LAYER NR. 1 -->
+            <div class="tp-caption tp-resizeme"
+                data-x="center" 
+                data-hoffset="" 
+                data-y="180" 
+                data-voffset=""
+                data-responsive_offset="on" 
+                data-fontsize="['60','50','40','30']" 
+                data-lineheight="['60','50','40','30']"
+                data-whitespace="nowrap"
+                data-frames='[{"delay":1000,"speed":1500,"frame":"0","from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'
+               style="z-index: 5; color: black; font-weight: 900;"> LOCAL RET </div>
+            <!-- LAYER NR. 2 -->
+            <div class="tp-caption tp-resizeme"
+                data-x="center" 
+                data-hoffset="" 
+                data-y="320" 
+                data-voffset=""
+                data-responsive_offset="on" 
+                data-fontsize="['60','50','40','30']" 
+                data-lineheight="['60','50','40','30']"
+                data-whitespace="nowrap"
+                data-frames='[{"delay":3000,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'
+                style="z-index: 5; color: black; font-weight: 900;"> Compra Agregada </div>
+<!--               <div class="tp-caption tp-resizeme" 
+                    data-x="center" 
+                    data-hoffset="" 
+                    data-y="410" 
+                    data-voffset=""
+                    data-responsive_offset="on" 
+                    data-fontsize="16" 
+                    data-lineheight="16"
+                    data-whitespace="nowrap"
+                    data-frames='[{"delay":1500,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'
+                    style="z-index: 6; color: #fff;">Compra Agregada</div>-->
+               <!-- LAYER NR. 3 -->
+            <div class="tp-caption tp-shape tp-shapewrapper  tp-resizeme"
+                 data-x="center" 
+                 data-hoffset="-170" 
+                 data-y="414"
+                 data-voffset=""
+                 data-responsive_offset="on" 
+                 data-width="['100']" 
+                 data-height="['4']"
+                 data-transform_idle="o:1;"
+                 data-transform_in="x:[175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1500;e:Power3.easeOut;" 
+                 data-transform_out="opacity:0;s:500;" 
+                 data-mask_in="x:[-100%];y:0;s:inherit;e:inherit;" 
+                 data-start="2000"
+                 <!--style="z-index: 7;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">--> 
+            </div>
+               <!-- LAYER NR. 4 -->
+               <div class="tp-caption tp-shape tp-shapewrapper tp-resizeme" 
+                    data-x="center"
+                    data-hoffset="-170" 
+                    data-y="418" 
+                    data-voffset=""
+                    data-responsive_offset="on" 
+                    data-width="['100']" 
+                    data-height="['4']" 
+                    data-transform_idle="o:1;"
+                    data-transform_in="x:[175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1500;e:Power3.easeOut;" 
+                    data-transform_out="opacity:0;s:500;"
+                    data-mask_in="x:[-100%];y:0;s:inherit;e:inherit;"
+                    data-start="2100"
+                    <!--style="z-index: 7;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">-->
+               </div>
+               <!-- LAYER NR. 5 -->
+               <div class="tp-caption tp-shape tp-shapewrapper tp-resizeme"
+                    data-x="center" 
+                    data-hoffset="170"
+                    data-y="414"
+                    data-voffset=""
+                    data-responsive_offset="on" 
+                    data-width="['100']" 
+                    data-height="['4']" 
+                    data-transform_idle="o:1;" 
+                    data-transform_in="x:[-175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1500;e:Power3.easeOut;" 
+                    data-transform_out="opacity:0;s:500;"
+                    data-mask_in="x:[100%];y:0;s:inherit;e:inherit;" 
+                    data-start="2000" 
+                    <!--style="z-index: 7;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">--> 
+               </div>
+               <!-- LAYER NR. 6 -->
+               <div class="tp-caption tp-shape tp-shapewrapper tp-resizeme"  
+                    data-x="center"
+                    data-hoffset="170" 
+                    data-y="418" 
+                    data-voffset=""
+                    data-responsive_offset="on" 
+                    data-width="['100']" 
+                    data-height="['4']" 
+                    data-transform_idle="o:1;"
+                    data-transform_in="x:[-175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1500;e:Power3.easeOut;" 
+                    data-transform_out="opacity:0;s:500;" 
+                    data-mask_in="x:[100%];y:0;s:inherit;e:inherit;" 
+                    data-start="2100"
+                    <!--style="z-index: 7;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">-->
+               </div>
+                <!-- LAYER NR. 7 -->
+<!--                <a class="tp-caption button btn_blue" 
+                   href="booking-form.html"
+                   data-x="center"
+                   data-hoffset="-100"
+                   data-y="480" 
+                   data-voffset=""
+                   data-responsive_offset="on" 
+                   data-fontsize="14"
+                   data-whitespace="nowrap"
+                   data-frames='[{"delay":2400,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'
+                   style="z-index: 11;"><i class="fa fa-calendar"></i>BOOK A ROOM NOW
+                 </a>-->
+                <!-- LAYER NR. 8 -->
+<!--                <a class="tp-caption button btn_yellow " 
+                   href="contact.html"
+                   data-x="center" 
+                   data-hoffset="108"
+                   data-y="480" 
+                   data-voffset=""
+                   data-responsive_offset="on" 
+                   data-fontsize="14"
+                   data-whitespace="nowrap"
+                   data-frames='[{"delay":2400,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'
+                   style="z-index: 11;"><i class="fa fa-envelope-o" aria-hidden="true"></i>CONTACT US NOW
+                </a>-->
+                <!-- LAYER NR. 9 -->
+                <div class="tp-caption tp_m_title tp-resizeme" 
+                     data-x="center" 
+                     data-hoffset="" 
+                     data-y="200"
+                     data-voffset=""
+                     data-responsive_offset="on" 
+                     data-fontsize="['18','18','16','16']"
+                     data-lineheight="['18','18','16','16']"
+                     data-whitespace="nowrap"
+                     data-frames='[{"delay":1800,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <!-- LAYER NR. 10 -->
+<!--                <div class="tp-caption tp_m_title tp-resizeme"
+                     data-x="center"
+                     data-hoffset="" 
+                     data-y="240" 
+                     data-voffset=""
+                     data-responsive_offset="on" 
+                     data-fontsize="['25','25','18','18']" 
+                     data-lineheight="['25','25','18','18']"
+                     data-whitespace="nowrap"
+                     data-frames='[{"delay":1800,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'>
+                    Star Luxury Hotel
+                </div>-->
+            </li>
+                    <!-- SLIDE NR. 3 -->
+            <li data-transition="crossfade">
+                <!-- MAIN IMAGE -->
+                <img src="<?= $this->basePath(). '/assets/revolution/images/slider/slider-3.jpg'; ?>" 
+                     alt="Image" 
+                     title="slider_bg3"
+                     data-bgposition="center center"
+                     data-bgfit="cover" 
+                     data-bgrepeat="no-repeat"
+                     data-bgparallax="10" 
+                     class="rev-slidebg"
+                     data-no-retina="">
+                <!-- LAYER NR. 1 -->
+                <div class="tp-caption tp-resizeme" 
+                     data-x="center" 
+                     data-hoffset="" 
+                     data-y="110" 
+                     data-voffset=""
+                     data-responsive_offset="on" 
+                     data-fontsize="['80','70','60','40']" 
+                     data-lineheight="['80','70','60','40']"
+                     data-whitespace="nowrap"
+                     data-frames='[{"delay":1000,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'
+                     style="z-index: 5; color: #fff; font-weight: 900;">PORTAL WEB
+                </div>
+                        <!-- LAYER NR. 2 -->
+<!--                        <div class="tp-caption tp-resizeme" 
+                             data-x="center" 
+                             data-hoffset=""
+                             data-y="410"
+                             data-voffset=""
+                             data-responsive_offset="on" 
+                             data-fontsize="16" 
+                             data-lineheight="16"
+                             data-whitespace="nowrap"
+                             data-frames='[{"delay":1500,"speed":1500,"frame":"0","from":"y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;","mask":"x:0px;y:[100%];s:inherit;e:inherit;","to":"o:1;","ease":"Power2.easeInOut"},{"delay":"wait","speed":500,"frame":"999","to":"auto:auto;","ease":"Power3.easeInOut"}]'
+                             style="z-index: 6; color: #fff;">Diputación Barcelona
+                        </div>-->
+            <!-- LAYER NR. 3 -->
+            <div class="tp-caption tp-shape tp-shapewrapper tp-resizeme" 
+                data-x="center" 
+                data-hoffset="-180" 
+                data-y="414" 
+                data-voffset=""
+                data-width="['100']" 
+                data-height="['4']" 
+                data-transform_idle="o:1;" 
+                data-transform_in="x:[175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1000;e:Power3.easeOut;" 
+                data-transform_out="opacity:0;s:300;" 
+                data-mask_in="x:[-100%];y:0;s:inherit;e:inherit;"
+                data-start="2300" 
+                data-responsive_offset="on" 
+                <!--style="z-index: 7;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">--> 
+           </div>
+           <!-- LAYER NR. 4 -->
+           <div class="tp-caption tp-shape tp-shapewrapper tp-resizeme" 
+                data-x="center"
+                data-hoffset="-180" 
+                data-y="418" 
+                data-voffset=""
+                data-width="['100']" 
+                data-height="['4']" 
+                data-transform_idle="o:1;" 
+                data-transform_in="x:[175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1000;e:Power3.easeOut;" 
+                data-transform_out="opacity:0;s:300;"
+                data-mask_in="x:[-100%];y:0;s:inherit;e:inherit;" 
+                data-start="2400" 
+                data-responsive_offset="on" 
+                <!--style="z-index: 8;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">--> 
+           </div>
+           <!-- LAYER NR. 5 -->
+           <div class="tp-caption tp-shape tp-shapewrapper tp-resizeme" 
+                data-x="center"
+                data-hoffset="180"
+                data-y="414" 
+                data-voffset=""
+                data-width="['100']"
+                data-height="['4']" 
+                data-transform_idle="o:1;" 
+                data-transform_in="x:[-175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1000;e:Power3.easeOut;" 
+                data-transform_out="opacity:0;s:300;" data-mask_in="x:[100%];y:0;s:inherit;e:inherit;" 
+                data-start="2300" 
+                data-responsive_offset="on" 
+                <!--style="z-index: 9;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">-->
+           </div>
+           <!-- LAYER NR. 6 -->
+           <div class="tp-caption tp-shape tp-shapewrapper tp-resizeme" 
+                data-x="center" 
+                data-hoffset="180"
+                data-y="418" 
+                data-voffset=""
+                data-width="['100']" 
+                data-height="['4']" 
+                data-transform_idle="o:1;" 
+                data-transform_in="x:[-175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;s:1000;e:Power3.easeOut;" 
+                data-transform_out="opacity:0;s:300;" 
+                data-mask_in="x:[100%];y:0;s:inherit;e:inherit;" 
+                data-start="2400" 
+                data-responsive_offset="on" 
+                <!--style="z-index: 10;background: url(<?= $this->basePath(). '/assets/revolution/images/icons/wave_white.svg'; ?>);">--> 
+           </div>
+       </li>
+   </ul>
 </div>

@@ -56,7 +56,10 @@ class Supply extends AbstractTableGateway {
                 'atlas' => $supply->getAtlas(),
                 'visord' => $supply->getVisord(),
                 'estado_id' => $supply->getEstado(),
-                'descripcion' => $supply->getDescripcion()
+                //'descripcion' => $supply->getDescripcion(),
+                'linea' => $supply->getLinea(),
+                'midas' => $supply->getMidas(),
+                'sede_id' => $supply->getSede(),
             );
             
             //die('<pre>' . print_r($updateInfo, true) . '</pre>');
@@ -118,6 +121,26 @@ class Supply extends AbstractTableGateway {
             $updateInfo = array(
                 'activo' => '0',
                 'fin' => date("Y-m-d H:i:s")
+            );
+            
+            if ($this->update($updateInfo, array('id' => $id))) { 
+                return $id; 
+            }
+            
+        }
+        
+        return false;
+        
+    }
+    
+    public function reopenSupply(Entity\Supply $supply) {
+        
+        $id = (int) $supply->getId();
+
+        if ($id>0) { // $this->getSede($id)
+            $updateInfo = array(
+                'estado_id' => '1',
+                'fin' => null
             );
             
             if ($this->update($updateInfo, array('id' => $id))) { 

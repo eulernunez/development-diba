@@ -51,7 +51,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'linea',
-                    'required'=>'required',
+                    //'required'=>'required',
                     'aria-describedby' => 'lineaHelp',
                     'placeholder' => 'Ingresa la línea',
                     'class' => 'form-control input-sm',
@@ -74,7 +74,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'midas',
-                    'required'=>'required',
+                    //'required'=>'required',
                     'aria-describedby' => 'midasHelp',
                     'placeholder' => 'Ingresa el midas',
                     'class' => 'form-control input-sm',
@@ -116,7 +116,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'odinvoz',
-                    'required'=>'required',
+                //    'required'=>'required',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -135,7 +135,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'bj',
-                    'required'=>'required',
+                //    'required'=>'required',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -154,7 +154,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'odindatos',
-                    'required'=>'required',
+                //    'required'=>'required',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -173,7 +173,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'sg',
-                    'required'=>'required',
+                //    'required'=>'required',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -192,7 +192,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'atlas',
-                    'required'=>'required',
+                //    'required'=>'required',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -211,7 +211,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'visord',
-                    'required'=>'required',
+                //    'required'=>'required',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(
@@ -246,7 +246,7 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'sede',
-                    'required'=> true,
+                //    'required'=> true,
                     'class' => 'form-control input-sm',
                 ),
             'validators' => array('Int'),            
@@ -310,6 +310,86 @@ class Supply extends Form
             'attributes' => 
                 array(
                     'id' => 'tramitador',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));
+        // Comment
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'comentarista',
+             'options' => array(
+                    'label' => 'Tramitador',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForTramitador(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'comentarista',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));
+        // Finish
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'comentaristaf',
+             'options' => array(
+                    'label' => 'Tramitador',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForTramitador(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'comentaristaf',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));
+        // Reopen
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'comentaristar',
+             'options' => array(
+                    'label' => 'Tramitador',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForTramitador(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'comentaristar',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'comentaristaa',
+             'options' => array(
+                    'label' => 'Tramitador',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForTramitador(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'comentaristaa',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));
+
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'comentaristad',
+             'options' => array(
+                    'label' => 'Tramitador',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForTramitador(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'comentaristad',
                     'required'=> true,
                     'class' => 'form-control input-sm',
                 ),

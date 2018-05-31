@@ -18,6 +18,7 @@ class Parada {
     protected $hours;
     protected $minutes;
     protected $seconds;
+    protected $totals;
     
     protected $motivo;
     
@@ -143,4 +144,13 @@ class Parada {
         return $this;
     }
     
-}    
+    public function getTotals() {
+        return $this->totals;
+    }
+
+    public function setTotals($totals) {
+        $this->totals = $totals;
+        return $this;
+    }
+
+}

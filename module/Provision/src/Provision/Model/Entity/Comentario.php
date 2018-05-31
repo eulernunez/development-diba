@@ -13,9 +13,10 @@ class Comentario {
     protected $id;
     protected $asunto;
     protected $comment;
+    protected $created;
     
     protected $tramitacionId;
-    
+    protected $comentaristaId;
     
     
     public function __construct(array $options = null) {
@@ -81,6 +82,15 @@ class Comentario {
         return $this;
     }
     
+    public function getCreated() {
+        return $this->created;
+    }
+
+    public function setCreated($created) {
+        $this->created = $created;
+        return $this;
+    }
+    
     public function getTramitacionId() {
         return $this->tramitacionId;
     }
@@ -89,6 +99,14 @@ class Comentario {
         $this->tramitacionId = $tramitacionId;
         return $this;
     }
-    
-    
-}    
+
+    public function getComentaristaId() {
+        return $this->comentaristaId;
+    }
+
+    public function setComentaristaId($comentaristaId) {
+        $this->comentaristaId = $comentaristaId;
+        return $this;
+    }
+
+}

@@ -24,16 +24,18 @@ class Comentario extends AbstractTableGateway {
         
         //if(!$this->validationSupply($supply)) { return false;}
         
-        $data = array(  
+        $data = array(
             'asunto' => $comment->getAsunto(),
             'comentario' => $comment->getComment(),
-            'tramitacion_id' => $comment->getTramitacionId()
+            'tramitacion_id' => $comment->getTramitacionId(),
+            'comentarista_id' => $comment->getComentaristaId()    
         );
 
         
         $id = (int) $comment->getId();
         
         if ($id == 0) {
+            $data['created'] = date("Y-m-d H:i:s");
             if (!$this->insert($data)) { return false; }
             return $this->getLastInsertValue();
         }

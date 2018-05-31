@@ -15,7 +15,8 @@ use Zend\Db\Sql\Select;
 class Parada extends AbstractTableGateway {
 
     protected $table = 'paradas';
-
+    protected $acumulado;
+    
     public function __construct(Adapter $adapter) {
         $this->adapter = $adapter;
     }
@@ -74,12 +75,14 @@ class Parada extends AbstractTableGateway {
             'days' => $parada->getDays(),
             'hours' => $parada->getHours(),
             'minutes' => $parada->getMinutes(),
-            'seconds' => $parada->getSeconds()
+            'seconds' => $parada->getSeconds(),
+            'total_s' => $parada->getTotals()
         );
         
         $otherdata = array(
-          'tramitacion_id' => $parada->getTramitacionId(),
-           'active' => 1 
+            'tramitacion_id' => $parada->getTramitacionId(),
+            'total_s' => $this->getAcumulado(),
+            'active' => 1 
         );
         
         $id = (int) $parada->getId();
@@ -106,5 +109,13 @@ class Parada extends AbstractTableGateway {
         
     }
     
+    public function getAcumulado() {
+        return $this->acumulado;
+    }
+
+    public function setAcumulado($acumulado) {
+        $this->acumulado = $acumulado;
+        return $this;
+    }
     
 }

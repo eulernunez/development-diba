@@ -58,7 +58,7 @@ class SupplyTracingService {
                 p.id AS peticionId, p.peticion,
                 tr.id AS tramitadorId, tramitador,
                 e.id AS estadoId, e.estados, e.visible,
-                pr.id AS paradaId, pr.inicio AS inicioParada, pr.active AS situacionParada, pr.motivo
+                pr.id AS paradaId, pr.inicio AS inicioParada, pr.active AS situacionParada, pr.motivo, pr.total_s
                     FROM tramitaciones AS t
                             LEFT JOIN sedes AS s ON t.sede_id = s.id
                             LEFT JOIN lotes AS l ON t.lote_id = l.id
@@ -106,9 +106,9 @@ class SupplyTracingService {
         $datos['parada'] = $parada;
         
         $statement =
-            "SELECT cm.*
-                    FROM comentarios AS cm
-                            WHERE cm.tramitacion_id = '" . $id ."'";
+            "SELECT cm.*, tr.*
+                    FROM comentarios AS cm LEFT JOIN tramitadores AS tr ON cm.comentarista_id = tr.id 
+                            WHERE cm.tramitacion_id = '" . $id ."' ORDER BY cm.created DESC";
         $adapter3 = $this->adapter->query($statement);
         
         $comentarios = array();
@@ -125,6 +125,23 @@ class SupplyTracingService {
 
     }
 
+    public function getComentarista($id) {
+        
+        $statement =
+            "SELECT t.tramitador
+                    FROM tramitadores AS t  
+                            WHERE t.id = '" . $id ."'";
+        $adapter = $this->adapter->query($statement);
+        
+        $comentarista = array();
+        foreach ($adapter->execute() as $item) {
+            
+            $comentarista[] = $item;
+        }
+        
+        return $comentarista['0']['tramitador'];
+        
+    }
 
     public function formattingDate($fecha) {
 
@@ -170,6 +187,8 @@ class SupplyTracingService {
         $h = (int)$this->posts['h'];
         $m = (int)$this->posts['m'];
         $s = (int)$this->posts['s'];
+        $totals = (int)$this->posts['totals'];
+        $acumulado = (int)$this->posts['tsacumulado'];
         
         $parada->setId($id);
         $parada->setFin($fin);
@@ -177,9 +196,11 @@ class SupplyTracingService {
         $parada->setHours($h);
         $parada->setMinutes($m);
         $parada->setSeconds($s);
+        $parada->setTotals($totals);
         $parada->setTramitacionId($tramiteId);
         
         $handler = new \Provision\Model\Parada($this->adapter);
+        $handler->setAcumulado($acumulado);
         $result = $handler->restartWatch($parada);
         
         return true; 
@@ -231,7 +252,10 @@ class SupplyTracingService {
         $supply = new \Provision\Model\Entity\Supply();
         $id = (int)$this->posts['supplyId'];
         $supply->setId($id);
-
+        
+        $supply->setLinea($this->posts['linea']);
+        $supply->setMidas($this->posts['midas']);
+        $supply->setSede($this->posts['sede']);
         $supply->setOdinvoz($this->posts['odinvoz']);
         $supply->setBj($this->posts['bj']);
         $supply->setOdindatos($this->posts['odindatos']);
@@ -252,11 +276,13 @@ class SupplyTracingService {
 
         $comment = new \Provision\Model\Entity\Comentario();
         $comentario = (string)$this->posts['finishComment'];
+        $comentaristaId = (int)$this->posts['comentarista'];
         $supplyId = (int)$this->posts['id'];
         $comment->setAsunto('Finalizado');
         $comment->setComment($comentario);
         $comment->setTramitacionId($supplyId);
-        
+        $comment->setComentaristaId($comentaristaId);
+
         $handler = new \Provision\Model\Comentario($this->adapter);
         $handler->saveComentario($comment);
         
@@ -274,11 +300,12 @@ class SupplyTracingService {
 
         $comment = new \Provision\Model\Entity\Comentario();
         $comentario = (string)$this->posts['removeComment'];
+        $comentaristaId = (int)$this->posts['comentarista'];
         $supplyId = (int)$this->posts['id'];
         $comment->setAsunto('Anulado');
         $comment->setComment($comentario);
         $comment->setTramitacionId($supplyId);
-        
+        $comment->setComentaristaId($comentaristaId);
         $handler = new \Provision\Model\Comentario($this->adapter);
         $handler->saveComentario($comment);
         
@@ -296,11 +323,12 @@ class SupplyTracingService {
 
         $comment = new \Provision\Model\Entity\Comentario();
         $comentario = (string)$this->posts['deleteComment'];
+        $comentaristaId = (int)$this->posts['comentarista'];
         $supplyId = (int)$this->posts['id'];
         $comment->setAsunto('Eliminado');
         $comment->setComment($comentario);
         $comment->setTramitacionId($supplyId);
-        
+        $comment->setComentaristaId($comentaristaId);
         $handler = new \Provision\Model\Comentario($this->adapter);
         $handler->saveComentario($comment);
         
@@ -318,10 +346,12 @@ class SupplyTracingService {
         
         $comment = new \Provision\Model\Entity\Comentario();
         $comentario = (string)$this->posts['addComment'];
+        $comentaristaId = (int)$this->posts['comentarista'];
         $supplyId = (int)$this->posts['id'];
         $comment->setAsunto('Comentario');
         $comment->setComment($comentario);
         $comment->setTramitacionId($supplyId);
+        $comment->setComentaristaId($comentaristaId);
         
         $handler = new \Provision\Model\Comentario($this->adapter);
         $handler->saveComentario($comment);
@@ -330,6 +360,27 @@ class SupplyTracingService {
 
     }
     
-    
+    public function reopenSupply() {
+        
+        $comment = new \Provision\Model\Entity\Comentario();
+        $comentario = (string)$this->posts['reopenComment'];
+        $comentaristaId = (int)$this->posts['comentarista'];
+        $supplyId = (int)$this->posts['id'];
+        $comment->setAsunto('Reabierto');
+        $comment->setComment($comentario);
+        $comment->setTramitacionId($supplyId);
+        $comment->setComentaristaId($comentaristaId);
+        $handler = new \Provision\Model\Comentario($this->adapter);
+        $handler->saveComentario($comment);
+        
+        $supply = new \Provision\Model\Entity\Supply();
+        $supply->setId($supplyId);
+        
+        $handler2 = new \Provision\Model\Supply($this->adapter);
+        $result = $handler2->reopenSupply($supply);
+        
+        return $result;
+
+    }
     
 }

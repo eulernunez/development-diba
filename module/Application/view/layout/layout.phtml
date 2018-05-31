@@ -27,9 +27,14 @@
                 ->appendStylesheet($this->basePath('assets/plugins/bootstrap/css/bootstrap.css'))
                 ->appendStylesheet($this->basePath('assets/css/main.css'))
                 ->appendStylesheet($this->basePath('assets/css/MoneAdmin.css'))
-                ->appendStylesheet($this->basePath('assets/plugins/Font-Awesome/css/font-awesome.css'))?>
+                ->appendStylesheet($this->basePath('assets/plugins/Font-Awesome/css/font-awesome.css'))
+            
+                ->appendStylesheet($this->basePath('assets/revolution/revolution/css/layers.css'))
+                ->appendStylesheet($this->basePath('assets/revolution/revolution/css/settings.css'))
+                ->appendStylesheet($this->basePath('assets/revolution/revolution/css/navigation.css'))
+                ->appendStylesheet($this->basePath('assets/revolution/css/style.css'));
+            ?>
 
-    
     
     <!--END GLOBAL STYLES -->
 
@@ -53,6 +58,20 @@
             ->appendFile($this->basePath('assets/plugins/dataTables/dataTables.bootstrap.js'))
        #     ->appendFile($this->basePath('js/bootstrap-table/bootstrap-table.js'))                  # Tabla Bootstrap 
        #     ->appendFile($this->basePath('js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js'))
+            ->appendFile($this->basePath('assets/revolution/js/main.js'))                           # Revolution
+            ->appendFile($this->basePath('assets/revolution/revolution/js/jquery.themepunch.tools.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/jquery.themepunch.revolution.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.actions.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.carousel.min.js'))
+            
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.kenburn.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.layeranimation.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.migration.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.navigation.min.js'))
+            
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.parallax.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.slideanims.min.js'))
+            ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.video.min.js'))
             ; ?>
     
     
@@ -111,14 +130,14 @@
 
                         <ul class="dropdown-menu dropdown-user">
                             <li>
-                                <a href="<?php echo $this->url('application') ?>"><i class="icon-user"></i> User Profile </a>
+                                <a href="<?php echo $this->url('application') ?>"><i class="icon-user"></i> Perfil de usuario </a>
                             </li>
                             <li>
-                                <a href="<?php echo $this->url('application') ?>"><i class="icon-gear"></i> Settings </a>
+                                <a href="<?php echo $this->url('application') ?>"><i class="icon-gear"></i> Configuración </a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="<?= $this->url('logout') ?>"><i class="icon-signout"></i> Logout </a>
+                                <a href="<?= $this->url('logout') ?>"><i class="icon-signout"></i> Salir </a>
                             </li>
                         </ul>
 
@@ -233,10 +252,10 @@
                                     <a href="<?php echo $this->url('create') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Alta</span> </a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $this->url('open-supply-tracing') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Abiertas</span> </a>
+                                    <a href="<?php echo $this->url('open-supply-tracing') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Abiertos</span> </a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $this->url('close-supply-tracing') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Cerradas</span> </a>
+                                    <a href="<?php echo $this->url('close-supply-tracing') ?>"><i class="icon-angle-right"></i> <span style="font-size: 11px;">Cerrados</span> </a>
                                 </li>
                             </ul>
                         </li>

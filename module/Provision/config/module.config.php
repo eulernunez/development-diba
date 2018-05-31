@@ -143,7 +143,16 @@ return array(
                     ),
                 ),
             ),
-            
+            'supply-reopen' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/supply-reopen',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'supply-reopen',
+                    ),
+                ),
+            ),
         ),
     ),
     'view_manager' => array (

@@ -70,6 +70,17 @@
     {
         font-size: 10px;
     }
+    
+    .table-hover tbody tr:hover td {
+        background: #FFCCCC;
+        
+    }
+    .table-hover tbody tr:hover td span {
+        
+        color: black;
+    }
+    
+    
 </style>                
 
 <style type="text/css" style="display:none">
@@ -353,6 +364,53 @@
                         $("#minuteprocess").val(mStop);
                         $("#secondprocess").val(sStop);
                         
+                        // ADD Total segunds
+                        var totalAcumulado;
+                        if(finish) {
+                        totalAcumulado = parseInt(<?= $this->information['tramite']['0']['total_s'] ?>);
+                        } else {
+                            totalAcumulado = parseInt(secondsStop) + parseInt(<?= $this->information['tramite']['0']['total_s'] ?>);
+                        }
+                        $("#totalsegunds").val(secondsStop);
+                        $("#totalsegundsacumulado").val(totalAcumulado);
+                        
+                        
+                        //4th Acumulado Stop process
+                     
+			var minutesAcumulado = Math.floor(totalAcumulado/60);
+			var hoursAcumulado = Math.floor(minutesAcumulado/60);
+			var daysAcumulado = Math.floor(hoursAcumulado/24);
+			var hAcumulado = hoursAcumulado-(daysAcumulado*24);
+			var mAcumulado = minutesAcumulado-(hoursAcumulado*60);
+			var sAcumulado = totalAcumulado-(minutesAcumulado*60);
+			var dAcumulado = daysAcumulado;
+                        
+                                
+                        $("#daysacumulado").text(dAcumulado);
+                        $("#hoursacumulado").text(hAcumulado);
+                        $("#minutesacumulado").text(mAcumulado);
+                        $("#secondsacumulado").text(sAcumulado);
+                        
+                        
+                        // 5th Real Time in process
+                        var totalReal = parseInt(secondsAll) - parseInt(totalAcumulado);
+
+			var minutesReal = Math.floor(totalReal/60);
+			var hoursReal = Math.floor(minutesReal/60);
+			var daysReal = Math.floor(hoursReal/24);
+			var hReal = hoursReal-(daysReal*24);
+			var mReal = minutesReal-(hoursReal*60);
+			var sReal = totalReal-(minutesReal*60);
+			var dReal = daysReal;
+                        
+                                
+                        $("#daysreal").text(dReal);
+                        $("#hoursreal").text(hReal);
+                        $("#minutereal").text(mReal);
+                        $("#secondsreal").text(sReal);
+
+                        
+                        
 		},1000);
 	}
 	
@@ -457,6 +515,11 @@ $(document).ready(function(e){
             //var id = $(e.relatedTarget).data().id;
         })
 
+        $('#supplyReopen').on('show.bs.modal',function(e){
+            //var id = $(e.relatedTarget).data().id;
+        })
+
+
         <?php if($this->information['tramite']['0']['visible'] == 2) : ?>
             $('.supply-submit').addClass('disabled');
             $('.supply-finish').addClass('disabled');
@@ -485,7 +548,8 @@ function watchStopping() {
         cache: false,
         success: function (html) {
 //                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
-             $("#watch-stopping").html(html);
+            location.href = "<?= $this->url('supply'); ?>"  + "/" + id;
+//             $("#watch-stopping").html(html);
         },
         error: function (xhr, status) {
             html = "<div class='alert alert-danger'>Error!</div>"
@@ -506,8 +570,9 @@ function restartWatch() {
     var h = $('#hourprocess').val();
     var m = $('#minuteprocess').val();
     var s = $('#secondprocess').val();
-    
-    var data = {id: id, parada: parada, fin: fin, d: d, h: h, m: m, s: s};
+    var totals = $('#totalsegunds').val();
+    var tsacumulado = $('#totalsegundsacumulado').val();
+    var data = {id: id, parada: parada, fin: fin, d: d, h: h, m: m, s: s, totals: totals, tsacumulado: tsacumulado};
     
     $.ajax({
         type: "POST",
@@ -516,7 +581,8 @@ function restartWatch() {
         cache: false,
         success: function (html) {
 //                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
-             $("#watch-stopping").html(html);
+                location.href = "<?= $this->url('supply'); ?>"  + "/" + id;
+//             $("#watch-stopping").html(html);
         },
         error: function (xhr, status) {
             html = "<div class='alert alert-danger'>Error!</div>"
@@ -534,8 +600,8 @@ function supplyFinish() {
     var url = '<?= $this->url('supply-finish'); ?>';
     var id = '<?= $this->information['tramite']['0']['id']; ?>';
     var finishComment = $('#finish-comment').val();
-    
-    var data = {id: id, finishComment: finishComment};
+    var comentarista = $('#comentaristaf').val();
+    var data = {id: id, finishComment: finishComment, comentarista:comentarista};
     
     $.ajax({
         type: "POST",
@@ -544,13 +610,15 @@ function supplyFinish() {
         cache: false,
         success: function (html) {
 //                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
-             $("#ajax-comments").html(html);
-             $('.supply-submit').addClass('disabled');
-             $('.supply-finish').addClass('disabled');
-             $('.supply-remove').addClass('disabled');
-             $('.supply-delete').addClass('disabled');
-             $('.comments').addClass('disabled');
-             $('#favorites').addClass('disabled');
+                location.href = "<?= $this->url('supply'); ?>"  + "/" + id + "/2";
+                
+//             $("#ajax-comments").html(html);
+//             $('.supply-submit').addClass('disabled');
+//             $('.supply-finish').addClass('disabled');
+//             $('.supply-remove').addClass('disabled');
+//             $('.supply-delete').addClass('disabled');
+//             $('.comments').addClass('disabled');
+//             $('#favorites').addClass('disabled');
              
         },
         error: function (xhr, status) {
@@ -567,8 +635,8 @@ function supplyRemove() {
     var url = '<?= $this->url('supply-remove'); ?>';
     var id = '<?= $this->information['tramite']['0']['id']; ?>';
     var removeComment = $('#remove-comment').val();
-    
-    var data = {id: id, removeComment: removeComment};
+    var comentarista = $('#comentaristaa').val();
+    var data = {id: id, removeComment: removeComment, comentarista:comentarista };
     
     $.ajax({
         type: "POST",
@@ -577,13 +645,14 @@ function supplyRemove() {
         cache: false,
         success: function (html) {
 //                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
-             $("#ajax-comments").html(html);
-             $('.supply-submit').addClass('disabled');
-             $('.supply-finish').addClass('disabled');
-             $('.supply-remove').addClass('disabled');
-             $('.supply-delete').addClass('disabled');
-             $('.comments').addClass('disabled');
-             $('#favorites').addClass('disabled');
+                  location.href = "<?= $this->url('supply'); ?>"  + "/" + id + "/2";  
+//             $("#ajax-comments").html(html);
+//             $('.supply-submit').addClass('disabled');
+//             $('.supply-finish').addClass('disabled');
+//             $('.supply-remove').addClass('disabled');
+//             $('.supply-delete').addClass('disabled');
+//             $('.comments').addClass('disabled');
+//             $('#favorites').addClass('disabled');
              
         },
         error: function (xhr, status) {
@@ -600,8 +669,8 @@ function supplyDelete() {
     var url = '<?= $this->url('supply-delete'); ?>';
     var id = '<?= $this->information['tramite']['0']['id']; ?>';
     var deleteComment = $('#delete-comment').val();
-    
-    var data = {id: id, deleteComment: deleteComment};
+    var comentarista = $('#comentaristad').val();
+    var data = {id: id, deleteComment: deleteComment, comentarista:comentarista};
     
     $.ajax({
         type: "POST",
@@ -634,8 +703,9 @@ function addComment() {
     var url = '<?= $this->url('add-comment'); ?>';
     var id = '<?= $this->information['tramite']['0']['id']; ?>';
     var addComment = $('#add-comment').val();
+    var comentarista = $('#comentarista').val();
     
-    var data = {id: id, addComment: addComment};
+    var data = {id: id, addComment: addComment, comentarista: comentarista};
     
     $.ajax({
         type: "POST",
@@ -644,7 +714,8 @@ function addComment() {
         cache: false,
         success: function (html) {
 //                document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
-             $("#ajax-comments").html(html);
+            location.href = "<?= $this->url('supply'); ?>"  + "/" + id;
+//        $("#ajax-comments").html(html);
              
         },
         error: function (xhr, status) {
@@ -655,7 +726,34 @@ function addComment() {
 
 }
 
+function supplyReopen () {
 
+    $('#supplyReopen').modal('hide');
+    var url = '<?= $this->url('supply-reopen'); ?>';
+    var id = '<?= $this->information['tramite']['0']['id']; ?>';
+    var reopenComment = $('#reopen-comment').val();
+    var comentarista = $('#comentaristar').val();
+    var data = {id: id, reopenComment: reopenComment, comentarista:comentarista};
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+//         document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/';
+           location.href = "<?= $this->url('supply'); ?>"  + "/" + id;
+//         $("#ajax-comments").html(html);
+             
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#result").html(html);
+        }
+    });
+
+
+}
 
 
 
@@ -761,7 +859,7 @@ $(document).ready(function (e){
                                 <label for="linea">Adm/Tel/Ext</label>
                                 <?php
                                     $form->get('linea')->setValue($information['tramite']['0']['linea']);
-                                    $form->get('linea')->setAttribute('readonly','readonly');
+                                    //$form->get('linea')->setAttribute('readonly','readonly');
                                 ?>
                                 <?= $this->formInput($form->get('linea')); ?>
                             </div>
@@ -770,7 +868,7 @@ $(document).ready(function (e){
                                 <label for="midas">Midas</label>
                                 <?php
                                     $form->get('midas')->setValue($information['tramite']['0']['midas']);
-                                    $form->get('midas')->setAttribute('readonly','true');
+                                    //$form->get('midas')->setAttribute('readonly','true');
                                 ?>
                                 <?= $this->formInput($form->get('midas')); ?>
                             </div>
@@ -779,7 +877,7 @@ $(document).ready(function (e){
                                 <label for="sede">Sede</label>
                                 <?php
                                     $form->get('sede')->setValue($this->information['tramite']['0']['sedeId']);
-                                    $form->get('sede')->setAttribute('disabled','true');
+                                    //$form->get('sede')->setAttribute('disabled','true');
                                 ?>
                                 <?= $this->formSelect($form->get('sede')); ?>                                
                             </div>
@@ -885,7 +983,8 @@ $(document).ready(function (e){
                             <label for="descripcion">Descripción</label>
                              <?php 
                                 $form->get('descripcion')->setValue($this->information['tramite']['0']['descripcion']);
-                                #$form->get('observacion')->setAttribute('rows', 1);  
+                                #$form->get('observacion')->setAttribute('rows', 1);
+                                $form->get('descripcion')->setAttribute('disabled','true');
                             ?>
                             <?= $this->formTextarea($form->get('descripcion')); ?>
                         </div>
@@ -910,6 +1009,16 @@ $(document).ready(function (e){
                             <button class="btn btn-primary supply-remove" title="Anular" type="button" data-toggle="modal" data-target="#supplyRemove"><span class="glyphicon glyphicon-remove"></span></button>
                             <button class="btn btn-primary supply-delete" title="Eliminar el trámite" type="button" data-toggle="modal" data-target="#supplyDelete"><span class="glyphicon glyphicon-trash"></span></button>
                             <button class="btn btn-primary comments" title="Añadir comentarios" type="button" data-toggle="modal" data-target="#comments"><span class="glyphicon glyphicon-comment"></span></button>
+                            <?php if($this->information['tramite']['0']['visible'] == 2) : ?>
+                            <button class="btn btn-primary supply-reopen" title="Re-abrir" type="button" data-toggle="modal" data-target="#supplyReopen"><span class="glyphicon glyphicon-folder-open"></span></button>
+                            <a class="btn btn-primary btn-primary retornar-bandeja" href="<?= $this->url('close-supply-tracing'); ?>" role="button" title="Retornar a la bandeja de trámites cerrados">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                            <?php else : ?>
+                            <a class="btn btn-primary btn-primary retornar-bandeja" href="<?= $this->url('open-supply-tracing'); ?>" role="button" title="Retornar a la bandeja de trámites abiertos">
+                                <i class="glyphicon glyphicon-arrow-left"></i>
+                            </a>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <input type="hidden" id="supplyId" name="supplyId" value="<?= $this->information['tramite']['0']['id'] ?>">
@@ -921,7 +1030,7 @@ $(document).ready(function (e){
                         <div style="height: 20px;">
                         </div>
                         <fieldset class="col-md-12">
-                            <legend><span class="glyphicon glyphicon-comment"></span>&nbsp;<?= $item['asunto']; ?> </legend>
+                            <legend><span class="glyphicon glyphicon-comment"></span><span><?= ' ' . $item['tramitador'];?></span><span style='float: right;'>&nbsp;<?= $item['created'];?><span></legend>
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <?= $item['comentario']; ?>
@@ -1007,10 +1116,28 @@ $(document).ready(function (e){
                             <td><?= $item['seconds']; ?></td>
                             <td><?= $item['motivo']; ?></td>
                         </tr>
-                    <?php endif; ?>    
+                    <?php endif; ?>
                     <?php $contador++;
                     endforeach;
                     ?>
+                    <?php if((int)$this->information['tramite']['0']['total_s']>0 || isset($this->information['tramite']['0']['inicioParadaSplit'])) : ?>
+                    <tr style="background-color: #3276b1;">
+                        <td colspan="4" style="text-align: center; color: white; font-weight: bold;"><span>TOTAL TIEMPO PARADO</span></td>
+                        <td style="color: white; font-weight: bold;"><span id='daysacumulado'></span></td>
+                        <td style="color: white; font-weight: bold;"><span id='hoursacumulado'></span></td>
+                        <td style="color: white; font-weight: bold;"><span id='minutesacumulado'></span></td>
+                        <td style="color: white; font-weight: bold;"><span id='secondsacumulado'></span></td>
+                        <td></td>
+                    </tr>
+                    <?php endif; ?>
+                    <tr style="background-color: green;">
+                        <td colspan="4" style="text-align: center; color: white; font-weight: bold;"><span>TIEMPO REAL</span></td>
+                        <td style="color: white; font-weight: bold;"><span id='daysreal'></span></td>
+                        <td style="color: white; font-weight: bold;"><span id='hoursreal'></span></td>
+                        <td style="color: white; font-weight: bold;"><span id='minutereal'></span></td>
+                        <td style="color: white; font-weight: bold;"><span id='secondsreal'></span></td>
+                        <td></td>
+                    </tr>
                 </tbody>     
             </table>
         </div>
@@ -1022,6 +1149,8 @@ $(document).ready(function (e){
     <input type="hidden" id="minuteprocess" name="minuteprocess" value="">
     <input type="hidden" id="secondprocess" name="secondprocess" value="">
     <input type="hidden" id="dateprocess" name="dateprocess" value="">
+    <input type="hidden" id="totalsegunds" name="totalsegunds" value="">
+    <input type="hidden" id="totalsegundsacumulado" name="totalsegundsacumulado" value="">
     
     <div class="clearfix"></div>
 </div>
@@ -1079,8 +1208,14 @@ $(document).ready(function (e){
                 <h4 class="modal-title" id="myModalLabel">Comentario</h4>
             </div>
             <div class="modal-body">
-<!--                <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de reanudar el reloj?</p>-->
-                <textarea id="add-comment" name="add-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+<!--            <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de reanudar el reloj?</p>-->
+                <div class="form-group">
+                    <label for="tramitador">Tramitador</label>
+                    <?= $this->formSelect($form->get('comentarista')); ?>
+                </div>
+                <div class="form-group">
+                    <textarea id="add-comment" name="add-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
@@ -1101,7 +1236,13 @@ $(document).ready(function (e){
             </div>
             <div class="modal-body">
                 <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de eliminar el trámite?</p>
-                <textarea id="delete-comment" name="delete-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                <div class="form-group">
+                    <label for="tramitadorf">Tramitador</label>
+                    <?= $this->formSelect($form->get('comentaristad')); ?>
+                </div>
+                <div class="form-group">
+                    <textarea id="delete-comment" name="delete-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                </div>    
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
@@ -1121,7 +1262,13 @@ $(document).ready(function (e){
             </div>
             <div class="modal-body">
                 <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de anular el trámite?</p>
-                <textarea id="remove-comment" name="remove-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                <div class="form-group">
+                    <label for="tramitadorf">Tramitador</label>
+                    <?= $this->formSelect($form->get('comentaristaa')); ?>
+                </div>
+                <div class="form-group">
+                    <textarea id="remove-comment" name="remove-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
@@ -1140,12 +1287,44 @@ $(document).ready(function (e){
                 <h4 class="modal-title" id="myModalLabel">Finalizar</h4>
             </div>
             <div class="modal-body">
-                <p style="font-weight: bold; margin-top: 20px;">Va a proceder a finalizar el trámite.</p>
-                <textarea id="finish-comment" name="finish-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                <p style="font-weight: bold; margin-top: 20px;">¿Esta seguro de finalizar el trámite?.</p>
+                <div class="form-group">
+                    <label for="tramitadorf">Tramitador</label>
+                    <?= $this->formSelect($form->get('comentaristaf')); ?>
+                </div>
+                <div class="form-group">
+                    <textarea id="finish-comment" name="finish-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
                 <button type="button" class="btn btn-danger" style="float: left;" onclick="supplyFinish();" >Finalizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Supply Reopen   -->
+<div class="modal fade" id="supplyReopen" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"> Reabrir </h4>
+            </div>
+            <div class="modal-body">
+                <p style="font-weight: bold; margin-top: 20px;">¿Está seguro de reabrir el trámite?.</p>
+                <div class="form-group">
+                    <label for="tramitadorr">Tramitador</label>
+                    <?= $this->formSelect($form->get('comentaristar')); ?>
+                </div>
+                <div class="form-group">
+                    <textarea id="reopen-comment" name="finish-comment" rows="3" style="width: 100%;" placeholder="Ingrese el comentario ..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;">Cancelar</button>
+                <button type="button" class="btn btn-danger" style="float: left;" onclick="supplyReopen();" > Reabrir </button>
             </div>
         </div>
     </div>

@@ -20,11 +20,29 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+    <style>
+        body {
+  /*background-image: url("'/assets/revolution/images/slider/slider-1.jpg'; ?>");
+  background-repeat: no-repeat;*/
+  
+background: url("<?= $this->basePath(). '/assets/revolution/images/slider/slider-1.jpg'; ?>") no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;  
+  
+  
+}
+        
+        
+    </style>
+    
+    
 </head>
     <!-- END HEAD -->
 
     <!-- BEGIN BODY -->
-<body >
+<body>
 
 <?php
 
@@ -126,15 +144,15 @@ $errorMessage = $this->flashMessenger()->getMessages();
 
                 <?php if(isset($errorMessage) && count($errorMessage)) :
                     $errorMessage = $errorMessage[0]; ?>
-                    <div class="server-error padding-bottom_30">
-                        <ul>
-                            <?php if(isset($errorMessage)) {?>
-                                <?php foreach ($errorMessage as $type => $msg) : ?>
-                                    <li><span class="<?php echo $type; ?>"><?php echo $msg; ?></span></li>
-                                <?php endforeach; ?>
-                            <?php }?>
-                        </ul>
-                    </div>
+                <div class="server-error padding-bottom_30" style="font-weight: bold; color: white;">
+                    <ul style='list-style: none;'>
+                        <?php if(isset($errorMessage)) {?>
+                            <?php foreach ($errorMessage as $type => $msg) : ?>
+                                <li><span class="<?php echo $type; ?>"><?php echo $msg; ?></span></li>
+                            <?php endforeach; ?>
+                        <?php }?>
+                    </ul>
+                </div>
                 <?php endif; ?>                
                 
                 <?php echo $this->formElement ( $form->get ( 'submit' ) )?>
@@ -164,11 +182,13 @@ $errorMessage = $this->flashMessenger()->getMessages();
 
     </div>
     <div class="text-center">
+        <!--
         <ul class="list-inline">
             <li><a class="text-muted" href="#login" data-toggle="tab">Login</a></li>
             <li><a class="text-muted" href="#forgot" data-toggle="tab">Forgot Password</a></li>
             <li><a class="text-muted" href="#signup" data-toggle="tab">Signup</a></li>
         </ul>
+        -->
     </div>
 
 </div>

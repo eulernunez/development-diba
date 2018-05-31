@@ -213,21 +213,26 @@ class SupplyTracingController extends AbstractActionController
     
     public function supplyDeleteAction()
     {
-        
+
         $posts = (array)$this->request->getPost();
         $comment = (string)$posts['deleteComment'];
-        
+        $comentaristaId = (int)$posts['comentarista'];
+
         $this->supplyTracingService->setPostParams($posts);
         $this->supplyTracingService->deleteSupply();
+        $comentarista = $this->supplyTracingService->getComentarista($comentaristaId);
         
+        $created = date("Y-m-d H:i:s");
         $viewmodel = new ViewModel(
-                        array('comment' => $comment));
+                        array('comment' => $comment,
+                              'comentarista' => $comentarista,
+                              'created' => $created));
         $viewmodel->setTerminal(true);
-        
+
         return $viewmodel;
-        
-    }        
-    
+   
+    }
+
     public function addCommentAction()
     {
         
@@ -245,4 +250,21 @@ class SupplyTracingController extends AbstractActionController
         
     }        
     
+    public function supplyReopenAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $comment = (string)$posts['reopenComment'];
+
+        $this->supplyTracingService->setPostParams($posts);
+        $this->supplyTracingService->reopenSupply();
+
+        $viewmodel = new ViewModel(
+                        array('comment' => $comment));
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+        
+    }
+
 }

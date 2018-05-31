@@ -89,7 +89,7 @@ class LoginForm extends Form
             'name' => 'submit',
             'attributes' => array(
                 'type' => 'submit',
-                'value' => 'Sign in',
+                'value' => 'Acceder',
                 'id' => 'submitbutton',
                 'class' => 'btn text-muted text-center btn-danger'
             )

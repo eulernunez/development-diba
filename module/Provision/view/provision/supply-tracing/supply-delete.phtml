@@ -7,7 +7,7 @@ $(function(){
 <div style="height: 20px;">
 </div>
 <fieldset class="col-md-12">
-    <legend><span class="glyphicon glyphicon-comment"></span>&nbsp;Eliminado</legend>
+    <legend><span class="glyphicon glyphicon-comment"></span><span><?= ' ' . $this->comentarista ;?></span><span style='float: right;'>&nbsp;<?= $this->created; ?><span></legend>
     <div class="panel panel-default">
         <div class="panel-body">
             <?= $this->comment; ?>
