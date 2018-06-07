@@ -32,7 +32,7 @@ class SupplyTracingController extends AbstractActionController
 
         $tramites = $this->supplyTracingService->getFormalities();
 
-        if(is_object($tramites)) { 
+        if(is_array($tramites)) { 
 
             $viewmodel = 
                     new ViewModel(
@@ -49,7 +49,7 @@ class SupplyTracingController extends AbstractActionController
         $visible = 2;
         $tramites = $this->supplyTracingService->getFormalities($visible);
         
-        if(is_object($tramites)) { 
+        if(is_array($tramites)) { 
 
             $viewmodel = 
                     new ViewModel(

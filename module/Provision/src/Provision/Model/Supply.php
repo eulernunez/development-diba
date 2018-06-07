@@ -32,6 +32,7 @@ class Supply extends AbstractTableGateway {
             'servicio_id' => $supply->getServicio(),
             'peticion_id' => $supply->getPeticion(),
             'solicitante' => $supply->getSolicitante(),
+            'asunto' => $supply->getAsunto(),
             'tramitador_id' => $supply->getTramitador(),
             'descripcion' => $supply->getDescripcion(),
             'midas' => $supply->getMidas(),

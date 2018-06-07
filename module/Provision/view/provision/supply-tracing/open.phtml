@@ -77,13 +77,53 @@
     {
         font-size: 10px;
     }
-    
-</style>                
 
-<script>
-//    $(function(){
+</style>
+
+<script type="text/javascript" style="display:none">
+<!--
+
+    $(function(){
 //        $("html, body").animate({ scrollTop: 300 });
-//    });
+//        $("#mask").css('display','none');
+
+        $("#search").keypress(function(e){
+            if(e.which == 13){
+                e.preventDefault();
+                supplySearcher();
+                return false;
+            }
+        });
+
+
+
+
+    });
+
+    function supplySearcher() {
+        
+        var url = '<?= $this->url('process-supply-search'); ?>';
+        
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: $('#supplySearcherForm').serialize(),
+            cache: false,
+            beforeSend: function() {
+//                $("#mask").css('display','block');
+                $("#fill-supply-search").html("<img style='display: block; margin:auto;' src='<?= $this->basePath() . '/img/loading.gif' ;?>' />");
+            },
+            success: function (json) {
+                $("#fill-supply-search").html(json);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#box").html(html);
+            }
+        });
+    }
+
+//-->
 </script>
 
 
@@ -93,35 +133,38 @@
     <legend>Trámites abiertos</legend>
     <div class="panel panel-default">
         <div class="panel-body">
-    
-    
-    <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
-        <div id="toolbar">
-<!--            <div class="col-lg-6" style="padding-left: 0px;">
-                <div class="form-group input-group" >
-                    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar..."/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onclick="buscarSupply();">
-                            <i class="icon-search"></i>
-                        </button>
-                    </span>
+            <div id="fill-supply-search">
+                
+                <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
+                
+                <div id="toolbar">
+                    <div class="col-lg-6" style="padding-left: 0px;">
+                        <form id="supplySearcherForm">
+                            <div class="form-group input-group" >
+                                <input type="text" class="form-control" id="search" name="search" placeholder="Buscar ..."/>
+                                <input type="hidden" id="visible" name="visible" value="1" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" onclick="supplySearcher();">
+                                        <i class="icon-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>    
+                    </div>
+                    <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
+                                <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
+                            </button>
+                            <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCloseModal">
+                                <i class="glyphicon glyphicon-remove"></i>&nbsp;Eliminar
+                            </button>-->
+                    <!--        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCancelModal">
+                                <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
+                            </button>-->
+                    <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">
+                                <i class="glyphicon glyphicon-th-list"></i>&nbsp;Reporte BI
+                            </button>-->
                 </div>
-            </div>    -->
-        
-    <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
-            <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
-        </button>
-        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCloseModal">
-            <i class="glyphicon glyphicon-remove"></i>&nbsp;Eliminar
-        </button>-->
-<!--        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCancelModal">
-            <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
-        </button>-->
-    <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">
-            <i class="glyphicon glyphicon-th-list"></i>&nbsp;Reporte BI
-        </button>-->
-    </div>
- 
+    
     <table id="sedes"
            data-toggle="table"
            data-buttons-align="right"
@@ -164,21 +207,21 @@
             <?php foreach ($this->tramites as $item) : ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
                     <!--<td></td>-->
-                    <td class="noWrap"><?= $item['nif']; ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item['cliente'])); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item['servicio'])); ?></td>
-                    <!--<td class="noWrap"><?= ucwords(strtolower($item['lote'])); ?></td>-->
-                    <td class="noWrap"><?= ucwords(strtolower($item['solicitante'])); ?></td>
-                    <!--<td class="noWrap"><?= ucwords(strtolower($item['midas'])); ?></td>-->
-                    <td class="noWrap"><?= date("d-m-Y", strtotime($item['inicio'])); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item['linea'])); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item['peticion'])); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item['tramitador'])); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item['nombre'])); ?></td>
-                    <!--<td class="noWrap"><?= ucwords(strtolower($item['descripcion'])); ?></td>-->
-                    <td class="noWrap"><?= ucwords(strtolower($item['estados'])); ?></td>
+                    <td class="noWrap"><?= $item->nif; ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->cliente)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->servicio)); ?></td>
+                    <!--<td class="noWrap"><?= ucwords(strtolower($item->lote)); ?></td>-->
+                    <td class="noWrap"><?= ucwords(strtolower($item->solicitante)); ?></td>
+                    <!--<td class="noWrap"><?= ucwords(strtolower($item->midas)); ?></td>-->
+                    <td class="noWrap"><?= date("Y-m-d", strtotime($item->inicio)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->linea)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->peticion)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->tramitador)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->nombre)); ?></td>
+                    <!--<td class="noWrap"><?= ucwords(strtolower($item->descripcion)); ?></td>-->
+                    <td class="noWrap"><?= ucwords(strtolower($item->estados)); ?></td>
                     <td class="noWrap">
-                        <a class="update" href="<?php echo $this->url('supply') . '/' . $item['id']; ?>" title="Consultar">
+                        <a class="update" href="<?php echo $this->url('supply') . '/' . $item->id; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </td>
@@ -186,6 +229,7 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    </div>
     <div class="clearfix">&nbsp;</div>
 </div>
     </div>

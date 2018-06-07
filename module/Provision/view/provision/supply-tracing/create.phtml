@@ -203,6 +203,10 @@ $( "#inicio" ).datepicker({
                     </div>
                 </div>    
                 <div class="form-group">
+                    <label for="asunto">Asunto</label>
+                    <?= $this->formInput($form->get('asunto')); ?>
+                </div>
+                <div class="form-group">
                     <label for="sede">Sede</label>
                     <?= $this->formSelect($form->get('sede')); ?>
                 </div>
@@ -222,12 +226,12 @@ $( "#inicio" ).datepicker({
                     <label for="midas">Midas</label>
                     <?= $this->formInput($form->get('midas')); ?>
                 </div>
+            </div>
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="tramitador">Tramitador</label>
                     <?= $this->formSelect($form->get('tramitador')); ?>
                 </div>
-            </div>
-            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="lote">Lote</label>
                     <?= $this->formSelect($form->get('lote')); ?>                                
@@ -241,8 +245,6 @@ $( "#inicio" ).datepicker({
                     <?= $this->formTextarea($form->get('descripcion')); ?>
                 </div>
 
-                <div class="form-group">&nbsp;</div>
-                <div class="form-group">&nbsp;</div>
                 <div class="form-group">&nbsp;</div>
                 <div class="form-group">&nbsp;</div>
                 <div class="form-group">&nbsp;</div>

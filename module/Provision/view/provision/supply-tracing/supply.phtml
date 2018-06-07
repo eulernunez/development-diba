@@ -854,6 +854,24 @@ $(document).ready(function (e){
                                 ?>
                                 <?= $this->formInput($form->get('solicitante')); ?>
                             </div>
+
+                            <div class="form-group">
+                                <label for="asunto">Asunto</label>
+                                <?php
+                                    $form->get('asunto')->setValue($information['tramite']['0']['asunto']);
+                                    $form->get('asunto')->setAttribute('readonly','true');
+                                ?>
+                                <?= $this->formInput($form->get('asunto')); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sede">Sede</label>
+                                <?php
+                                    $form->get('sede')->setValue($this->information['tramite']['0']['sedeId']);
+                                    //$form->get('sede')->setAttribute('disabled','true');
+                                ?>
+                                <?= $this->formSelect($form->get('sede')); ?>                                
+                            </div>
                         
                             <div class="form-group">
                                 <label for="linea">Adm/Tel/Ext</label>
@@ -873,14 +891,6 @@ $(document).ready(function (e){
                                 <?= $this->formInput($form->get('midas')); ?>
                             </div>
                         
-                            <div class="form-group">
-                                <label for="sede">Sede</label>
-                                <?php
-                                    $form->get('sede')->setValue($this->information['tramite']['0']['sedeId']);
-                                    //$form->get('sede')->setAttribute('disabled','true');
-                                ?>
-                                <?= $this->formSelect($form->get('sede')); ?>                                
-                            </div>
 
                             <div class="form-group">
                                 <label for="lote">Lote</label>
@@ -891,6 +901,10 @@ $(document).ready(function (e){
                                 <?= $this->formSelect($form->get('lote')); ?>                                
                             </div>
 
+                    </div>    
+                    
+                    <div class="col-lg-4">
+                        
                             <div class="form-group">
                                 <label for="servicio">Servicio</label>
                                 <?php
@@ -899,10 +913,6 @@ $(document).ready(function (e){
                                 ?>
                                 <?= $this->formSelect($form->get('servicio')); ?>                                
                             </div>
-
-                    </div>    
-                    
-                    <div class="col-lg-4">
                         
                         <div class="form-group">
                             <label for="peticion">Tipo de Petición</label>
@@ -971,14 +981,16 @@ $(document).ready(function (e){
                             <?= $this->formInput($form->get('visord')); ?>
                         </div>
 
+                    </div>    
+
+                    <div class="col-lg-4">
+                        
                         <div class="form-group">
                             <label for="estado">Estado</label>
                             <?php $form->get('estado')->setValue($this->information['tramite']['0']['estadoId']) ?>
                             <?= $this->formSelect($form->get('estado')); ?>                        
                         </div>
-                    </div>    
-
-                    <div class="col-lg-4">
+                        
                         <div class="form-group">
                             <label for="descripcion">Descripción</label>
                              <?php 
@@ -988,9 +1000,6 @@ $(document).ready(function (e){
                             ?>
                             <?= $this->formTextarea($form->get('descripcion')); ?>
                         </div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
                         <div class="form-group">&nbsp;</div>
                         <div class="form-group">&nbsp;</div>
                         <div class="form-group">&nbsp;</div>

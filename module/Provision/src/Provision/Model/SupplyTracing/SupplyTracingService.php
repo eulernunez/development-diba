@@ -41,10 +41,40 @@ class SupplyTracingService {
 
         $adapter = $this->adapter->query($statement);
         $result = $adapter->execute();
-
-        return $result;
+        
+        return $this->convertedObjects($result);
 
     }
+    
+    public function convertedObjects($result)
+    {
+
+        $entities = array();
+
+        foreach ($result as $row) {
+            
+            $entity = new \stdClass;
+            $entity->id = $row['id'];
+            $entity->nif = $row['nif'];
+            $entity->cliente = $row['cliente'];
+            $entity->servicio = $row['servicio'];
+            $entity->solicitante = $row['solicitante'];
+            $entity->inicio = $row['inicio'];
+            $entity->linea = $row['linea'];
+            $entity->peticion = $row['peticion'];
+            $entity->tramitador = $row['tramitador'];
+            $entity->nombre = $row['nombre']; //Nombre sede
+            $entity->estados = $row['estados'];
+            $entity->asunto = $row['asunto'];
+            
+            $entities[$row['id']] = $entity;
+
+        }
+
+        return $entities;
+
+    }
+    
     
     public function getFormality($id, $visible = 1)
     {

@@ -20,7 +20,7 @@ class Supply extends Form
 
         $this->adapter =$dbAdapter;
         parent::__construct("Supply");
-        
+
         $this->add(array(
             'name' => 'solicitante',
             'type' => 'Zend\Form\Element\Text',
@@ -33,6 +33,26 @@ class Supply extends Form
                     'id' => 'solicitante',
                     'required'=>'required',
                     'placeholder' => 'Ingresa el nombre del solicitante',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'asunto',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Asunto',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'asunto',
+                    'required'=>'required',
+                    'placeholder' => 'Ingresa el asunto',
                     'class' => 'form-control input-sm'
                 ),
             'filters' => array(

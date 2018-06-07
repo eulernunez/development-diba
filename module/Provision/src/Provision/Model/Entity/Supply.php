@@ -16,6 +16,7 @@ class Supply {
     protected $sede;
     protected $servicio;
     protected $solicitante;
+    protected $asunto;
     protected $linea;
     protected $midas;
     protected $tramitador;
@@ -119,6 +120,15 @@ class Supply {
 
     public function setSolicitante($solicitante) {
         $this->solicitante = $solicitante;
+        return $this;
+    }
+    
+    public function getAsunto() {
+        return $this->asunto;
+    }
+
+    public function setAsunto($asunto) {
+        $this->asunto = $asunto;
         return $this;
     }
     

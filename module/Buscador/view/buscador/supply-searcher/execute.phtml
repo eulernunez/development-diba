@@ -5,81 +5,6 @@
         ->appendFile($this->basePath() . '/js/bootstrap-table/bootstrap-table.js.') 
         ->appendFile($this->basePath() . '/js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js.'); ?>
 
-<style>
-    .btn-pref .btn {
-        -webkit-border-radius:0 !important;
-    }
-    fieldset 
-    {
-        border: 1px solid #ddd !important;
-        margin: 0;
-        xmin-width: 0;
-        padding: 4px;       
-        position: relative;
-        border-radius:4px;
-        background-color:#f5f5f5;
-        padding-left:10px!important;
-    }	
-    legend
-    {
-        font-size:14px;
-        font-weight:bold;
-        margin-bottom: 0px; 
-        width: 35%; 
-        border: 1px solid #ddd;
-        border-radius: 4px; 
-        padding: 2px 2px 2px 4px; 
-        background-color: #ffffff;
-    }
-    .form-group
-    {
-        margin-bottom: 1px;
-    }
-
-/*    .form-control
-    {
-        height: 26px;
-        font-size: 9px;
-
-    }*/
-
-    .panel
-    {
-        margin-bottom: 2px;
-    }
-
-    .tab-content
-    {
-        padding: 0px;
-    }
-
-    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
-    {
-        padding: 4px;
-    }
-    
-    /* Custom */
-    .custom-fieldset
-    {
-        background-color:#ffffff;
-    }
-    .custom-legend
-    {
-        width: 60%;
-        font-size: 12px;
-        border: 0px solid #ddd;
-    }
-    .custom-label
-    {
-        font-size: 12px;
-    }
-    .custom-radio
-    {
-        font-size: 10px;
-    }
-
-</style>
-
 <script type="text/javascript" style="display:none">
 <!--
 
@@ -127,48 +52,38 @@
 </script>
 
 
-<div class="inner" style="min-height:0px;">
 
-<fieldset class="col-md-12">
-    <legend>Trámites cerrados</legend>
-    <div class="panel panel-default">
-        <div class="panel-body">
-    <div id="fill-supply-search">
-    
-    
-    
-    <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
 
-    <div id="toolbar">
-        <div class="col-lg-6" style="padding-left: 0px;">
-            <form id="supplySearcherForm">
-                <div class="form-group input-group" >
-                    <input type="text" class="form-control" id="search" name="search" placeholder="Buscar ..."/>
-                    <input type="hidden" id="visible" name="visible" value="2" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onclick="supplySearcher();">
-                            <i class="icon-search"></i>
-                        </button>
-                    </span>
-                </div>
-            </form>    
-        </div>        
-        
-        
-    <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
-            <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
-        </button>
-        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCloseModal">
-            <i class="glyphicon glyphicon-remove"></i>&nbsp;Eliminar
-        </button>-->
-<!--        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCancelModal">
-            <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
-        </button>-->
-    <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">
-            <i class="glyphicon glyphicon-th-list"></i>&nbsp;Reporte BI
-        </button>-->
+<div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
+
+<div id="toolbar">
+    <div class="col-lg-6" style="padding-left: 0px;">
+        <form id="supplySearcherForm">
+            <div class="form-group input-group" >
+                <input type="text" class="form-control" id="search" name="search" placeholder="Buscar ..." value="<?= $this->search; ?>"/>
+                <input type="hidden" id="visible" name="visible" value="<?= $this->visible; ?>" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="supplySearcher();">
+                        <i class="icon-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>    
     </div>
- 
+    <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
+                <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
+            </button>
+            <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCloseModal">
+                <i class="glyphicon glyphicon-remove"></i>&nbsp;Eliminar
+            </button>-->
+    <!--        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCancelModal">
+                <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
+            </button>-->
+    <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">
+                <i class="glyphicon glyphicon-th-list"></i>&nbsp;Reporte BI
+            </button>-->
+</div>
+
     <table id="sedes"
            data-toggle="table"
            data-buttons-align="right"
@@ -211,23 +126,38 @@
             <?php foreach ($this->tramites as $item) : ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
                     <!--<td></td>-->
-                    <td class="noWrap"><?= $item->nif; ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item->cliente)); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item->servicio)); ?></td>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $item->nif); ?></td>
+                    <?php $clienteName = ucwords(strtolower($item->cliente)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $clienteName); ?></td>
+                    <?php $servicioName = ucwords(strtolower($item->servicio)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $servicioName); ?></td>
                     <!--<td class="noWrap"><?= ucwords(strtolower($item->lote)); ?></td>-->
-                    <td class="noWrap"><?= ucwords(strtolower($item->solicitante)); ?></td>
+                    <?php $solicitante = ucwords(strtolower($item->solicitante)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $solicitante); ?></td>
                     <!--<td class="noWrap"><?= ucwords(strtolower($item->midas)); ?></td>-->
-                    <td class="noWrap"><?= date("d-m-Y", strtotime($item->inicio)); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item->linea)); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item->peticion)); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item->tramitador)); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item->nombre)); ?></td>
+                    <?php $inicio = date("Y-m-d", strtotime($item->inicio)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $inicio) ; ?></td>
+                    <?php $linea = ucwords(strtolower($item->linea)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $linea); ?></td>
+                    <?php $peticionName = ucwords(strtolower($item->peticion)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $peticionName); ?></td>
+                    <?php $tramitador = ucwords(strtolower($item->tramitador)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $tramitador); ?></td>
+                    <?php $sedeName = ucwords(strtolower($item->nombre)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $sedeName); ?></td>
                     <!--<td class="noWrap"><?= ucwords(strtolower($item->descripcion)); ?></td>-->
-                    <td class="noWrap"><?= ucwords(strtolower($item->estados)); ?></td>
+                    <?php $estadoName = ucwords(strtolower($item->estados)); ?>
+                    <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $estadoName); ?></td>
                     <td class="noWrap">
+                        <?php if('1' == $this->visible) : ?>
+                        <a class="update" href="<?php echo $this->url('supply') . '/' . $item->id; ?>" title="Consultar">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <?php elseif ('2' == $this->visible)  : ?>
                         <a class="update" href="<?php echo $this->url('supply') . '/' . $item->id . '/2'; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -236,6 +166,7 @@
     </div>
     <div class="clearfix">&nbsp;</div>
 </div>
-</div>
+    </div>
 </fieldset>
 </div>
+

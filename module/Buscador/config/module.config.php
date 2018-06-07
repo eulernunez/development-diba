@@ -31,7 +31,7 @@ return array(
 
                  return $ctr;
             },
-                    
+
             'Buscador\Controller\Filter' => function($serviceLocator) {
                 $ctr = new \Buscador\Controller\FilterController();
                 $ctr->setFilterService(
@@ -41,8 +41,16 @@ return array(
 
                  return $ctr;
             },
-                    
-                    
+
+            'Buscador\Controller\SupplySearcher' => function($serviceLocator) {
+                $ctr = new \Buscador\Controller\SupplySearcherController();
+                $ctr->setSupplySearchService(
+                        $serviceLocator->getServiceLocator()
+                        ->get('supplySearchService')
+                );
+                 return $ctr;
+            },
+                                        
                     
                     
                     
@@ -97,6 +105,17 @@ return array(
                 ),
             ),
 
+            'process-supply-search' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/process-supply-search',
+                    'defaults' => array(
+                        'controller' => 'Buscador\Controller\SupplySearcher',
+                        'action'     => 'execute',
+                    ),
+                ),
+            ),
+            
             'ajax-parameter' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -218,6 +237,11 @@ return array(
                 $filterService = new \Buscador\Model\Filter\FilterService();
                 $filterService->setAdapter($sm->get('Zend_Adapter'));
                 return $filterService;
+            },
+            'supplySearchService' => function ($sm) {
+                $supplySearchService = new \Buscador\Model\SupplySearcher\SupplySearchService();
+                $supplySearchService->setAdapter($sm->get('Zend_Adapter'));
+                return $supplySearchService;
             },
             'Zend_Adapter' => function($serviceLocator) {
                 return $serviceLocator->get('Zend\Db\Adapter\Adapter');        
