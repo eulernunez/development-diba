@@ -84,7 +84,7 @@ class SupplySearchService extends Service {
                 sr.id AS servicioId, sr.servicio,
                 p.id AS peticionId, p.peticion,
                 tr.id AS tramitadorId, tramitador,
-                e.id AS estadoId, e.estados, e.visible
+                e.id AS estadoId, e.estados, e.visible, IF(ISNULL(t.fin), TIMESTAMPDIFF(SECOND,t.inicio, NOW()), TIMESTAMPDIFF(SECOND,t.inicio, t.fin )) AS datetime, NOW() AS currentdate
                     FROM tramitaciones AS t
                         LEFT JOIN sedes AS s ON t.sede_id = s.id
                         LEFT JOIN poblaciones AS po ON s.poblacion_id = po.id
@@ -120,13 +120,15 @@ class SupplySearchService extends Service {
             $entity->servicio = $row['servicio'];
             $entity->solicitante = $row['solicitante'];
             $entity->inicio = $row['inicio'];
+            $entity->fin = $row['fin'];
             $entity->linea = $row['linea'];
             $entity->peticion = $row['peticion'];
             $entity->tramitador = $row['tramitador'];
             $entity->nombre = $row['nombre']; //Nombre sede
             $entity->estados = $row['estados'];
             $entity->asunto = $row['asunto'];
-            
+            $entity->datetime = $row['datetime'];
+            $entity->currentdate = $row['currentdate'];
             $entities[$row['id']] = $entity;
         }
 

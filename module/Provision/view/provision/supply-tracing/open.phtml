@@ -95,9 +95,23 @@
             }
         });
 
+        var $table = $('#supplies');
+        var $exportData = $('#export-data');
+        $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table', () => {
+            $exportData.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+            // save your data, here just save the current page
+            //selections = getIdSelections();
+            // push or splice the selections if you want to save all data selections
+            var data = JSON.stringify($table.bootstrapTable('getSelections'));
+            $('#data').val(data);
+        });
 
 
-
+      
+        
+        
     });
 
     function supplySearcher() {
@@ -121,6 +135,34 @@
                 $("#box").html(html);
             }
         });
+    }
+
+    function esconder() {
+        $('#exportDataModal').modal('hide');
+    }
+
+    function exportData() {
+
+        $('#exportDataModal').modal('hide');
+        var $table = $('#supplies');
+        var data = {data: JSON.stringify($table.bootstrapTable('getSelections'))};
+        var url = '<?= $this->url('export-data'); ?>';
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#fill-export-data").html(html);
+                //document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#result").html(html);
+            }
+        });
+
     }
 
 //-->
@@ -149,23 +191,26 @@
                                     </button>
                                 </span>
                             </div>
-                        </form>    
+                        </form>
                     </div>
-                    <!--    <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
+
+                    <div class="col-lg-6" style="padding-right: 0px;">
+                        <button id='export-data' type="button" class="btn btn-primary" title="Exportación de datos" style="width: 98px; float: right;" data-toggle="modal" data-target="#exportDataModal" disabled>
+                            <i class="glyphicon glyphicon-export"></i>
+                        </button>
+                    </div>
+<!--                        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
                                 <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
                             </button>
                             <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCloseModal">
                                 <i class="glyphicon glyphicon-remove"></i>&nbsp;Eliminar
-                            </button>-->
-                    <!--        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#bulkCancelModal">
-                                <i class="glyphicon glyphicon-export"></i>&nbsp;Exportar
                             </button>-->
                     <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bulkCloseModal">
                                 <i class="glyphicon glyphicon-th-list"></i>&nbsp;Reporte BI
                             </button>-->
                 </div>
     
-    <table id="sedes"
+    <table id="supplies"
            data-toggle="table"
            data-buttons-align="right"
            data-card-visible="true"
@@ -186,39 +231,64 @@
            class="bootstrap-table ticketList table-nowrap">
         <thead style="font-size: 10px;">
             <tr class="ui-state-active noselect">
-                <!--<th data-field="state" data-checkbox="true"></th>-->
+                <th data-field="state" data-checkbox="true"></th>
+                <th data-field="id" data-sortable="true" data-width="5%" class="hidden">ID</th>
                 <th data-field="cif" data-sortable="true" data-width="5%">NIF</th>
                 <th data-field="entitat" data-sortable="true" data-width="15%">ENTITAT</th>
                 <th data-field="servicio" data-sortable="true" data-width="12%">SERVICIO</th>
-                <!--<th data-field="lote" data-sortable="true" data-width="5%">LOTE</th>-->
                 <th data-field="solicitante" data-sortable="true" data-width="5%">SOLICITANTE</th>
-                <!--<th data-field="midas" data-sortable="true" data-width="5%">MIDAS</th>-->
                 <th data-field="inicio" data-sortable="true" data-width="5%">PETICIÓN</th>
+                <th data-field="datecreated" data-sortable="true" data-width="5%" class="hidden">DATECREATED</th>
+                <th data-field="fin" data-sortable="true" data-width="5%" class="hidden">DATEFINISH</th>
+                <th data-field="currentdate" data-sortable="true" data-width="5%" class="hidden">CURRENTDATE</th>
+                <th data-field="d" data-sortable="true" data-width="5%" class="hidden">DAYS</th>
+                <th data-field="h" data-sortable="true" data-width="5%" class="hidden">HOURS</th>
+                <th data-field="m" data-sortable="true" data-width="5%" class="hidden">MINUTES</th>
+                <th data-field="s" data-sortable="true" data-width="5%" class="hidden">SECONDS</th>
                 <th data-field="linea" data-sortable="true" data-width="5%">ADM/Tel/Ext</th>
                 <th data-field="peticion" data-sortable="true" data-width="5%">TIPO</th>
                 <th data-field="tramitador" data-sortable="true" data-width="5%">TRAMITADOR</th>
                 <th data-field="sede" data-sortable="true" data-width="15%">SEDE</th>
-                <!--<th data-field="descripcion" data-sortable="true" data-width="5%">DESCRIPCIÓN</th>-->
                 <th data-field="estado" data-sortable="true" data-width="5%">ESTADO</th>
                 <th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>
             </tr>
         </thead>
         <tbody style="font-size: 10px;">
+            <?php //$currentDate = new DateTime("now"); ?>
             <?php foreach ($this->tramites as $item) : ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
-                    <!--<td></td>-->
+                    <td></td>
+                    <td class="noWrap hidden"><?= $item->id; ?></td>
                     <td class="noWrap"><?= $item->nif; ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->cliente)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->servicio)); ?></td>
-                    <!--<td class="noWrap"><?= ucwords(strtolower($item->lote)); ?></td>-->
                     <td class="noWrap"><?= ucwords(strtolower($item->solicitante)); ?></td>
-                    <!--<td class="noWrap"><?= ucwords(strtolower($item->midas)); ?></td>-->
                     <td class="noWrap"><?= date("Y-m-d", strtotime($item->inicio)); ?></td>
+                    <td class="noWrap hidden"><?= $item->inicio; ?></td>
+                    <td class="noWrap hidden"><?= $item->fin; ?></td>
+                    <td class="noWrap hidden"><?= $item->currentdate; ?></td>
+                    <?php
+//                        $dateCreated = new DateTime($item->inicio);
+//                        $intervalo = $dateCreated->diff($currentDate);
+//                        $intervalo->format('%d %H %i %s');
+                            $seconds = (int)$item->datetime;
+                            $minutes = floor($seconds/60);
+                            $hours =  floor($minutes/60);  	
+                            $days = floor($hours/24);
+                            $h = $hours-($days*24);
+                            $m = $minutes-($hours*60);
+                            $s = $seconds-($minutes*60);
+                            $d = $days;
+                    ?>
+                    
+                    <td class="noWrap hidden"><?= $d; ?></td>
+                    <td class="noWrap hidden"><?= $h; ?></td>
+                    <td class="noWrap hidden"><?= $m; ?></td>
+                    <td class="noWrap hidden"><?= $s; ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->linea)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->peticion)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->tramitador)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->nombre)); ?></td>
-                    <!--<td class="noWrap"><?= ucwords(strtolower($item->descripcion)); ?></td>-->
                     <td class="noWrap"><?= ucwords(strtolower($item->estados)); ?></td>
                     <td class="noWrap">
                         <a class="update" href="<?php echo $this->url('supply') . '/' . $item->id; ?>" title="Consultar">
@@ -234,4 +304,27 @@
 </div>
     </div>
 </fieldset>
+<div id="fill-export-data">
+</div>    
+</div>
+
+<div class="modal fade" id="exportDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/export-data" method="post" onsubmit="esconder();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Exportación de datos </h4>
+                </div>
+                <div class="modal-body">
+                    Va a exportar los registros seleccionados.
+                    <input type="hidden" id="data" name="data" value="1" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Exportar </button>
+                </div>
+            </form>    
+        </div>
+    </div>
 </div>

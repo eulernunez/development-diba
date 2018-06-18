@@ -153,6 +153,17 @@ return array(
                     ),
                 ),
             ),
+            'export-data' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/export-data',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'export-data',
+                    ),
+                ),
+            ),
+            
         ),
     ),
     'view_manager' => array (

@@ -31,7 +31,7 @@ class SupplyTracingController extends AbstractActionController
     {
 
         $tramites = $this->supplyTracingService->getFormalities();
-
+        
         if(is_array($tramites)) { 
 
             $viewmodel = 
@@ -39,7 +39,7 @@ class SupplyTracingController extends AbstractActionController
                             array('tramites' => $tramites));
             return $viewmodel;
 
-         }
+        }
   
     }
 
@@ -68,8 +68,8 @@ class SupplyTracingController extends AbstractActionController
         $visible = (int)$this->params()->fromRoute('visible');
         if('0' == $visible ) {
             $visible = 1;
-        } 
-        
+        }
+
         $information = $this->supplyTracingService->getFormality($id, $visible);
         $form = new Supply($dbAdapter);
         //die('$information: <pre>' . print_r($information, true) . '</pre>');
@@ -80,9 +80,9 @@ class SupplyTracingController extends AbstractActionController
                           'form' => $form));
 
         return $viewmodel;
-    }        
+    }
 
-    
+
     public function watchStoppingAction()
     {
 
@@ -248,8 +248,8 @@ class SupplyTracingController extends AbstractActionController
         
         return $viewmodel;
         
-    }        
-    
+    }
+
     public function supplyReopenAction()
     {
 
@@ -264,7 +264,87 @@ class SupplyTracingController extends AbstractActionController
         $viewmodel->setTerminal(true);
 
         return $viewmodel;
-        
+
     }
+
+    public function exportDataAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $json = $posts['data'];
+        $data = json_decode($json);
+        
+        $header = array();
+        $header[] 
+            = array(
+                '0' => utf8_decode('CÓDIGO'),
+                '1' => 'NIF',
+                '2' => 'ENTIDAD',
+                '3' => 'SERVICIO',
+                '4' => 'SOLICITANTE',
+                '5' => 'FECHA SOLICITUD',
+                '6' => 'FECHA FIN',
+                '7' => utf8_decode('LÍNEA'),
+                '8' => utf8_decode('PETICIÓN'),
+                '9' => 'TRAMITADOR',
+                '10' => 'SEDE',
+                '11' => 'ESTADO',
+                '12' => 'FECHA ACTUAL',
+                '13' => 'DIAS',
+                '14' => 'HORAS',
+                '15' => 'MINUTOS',
+                '16' => 'SEGUNDOS'
+            ); 
+
+        $supplies = array();
+        
+        foreach ($data as $item) {
+            
+            $linea = strip_tags($item->linea);
+            $line = (empty($linea)) ? '': '> '. $linea;
+            $supplies[] 
+                = array(
+                    '0' => '# ' . $item->id,
+                    '1' => strip_tags($item->cif),
+                    '2' => utf8_decode(strip_tags($item->entitat)),
+                    '3' => utf8_decode(strip_tags($item->servicio)),
+                    '4' => utf8_decode(strip_tags($item->solicitante)),
+                    '5' => strip_tags($item->datecreated),
+                    '6' => strip_tags($item->fin),
+                    '7' => $line,
+                    '8' => utf8_decode(strip_tags($item->peticion)),
+                    '9' => utf8_decode(strip_tags($item->tramitador)),
+                    '10' => utf8_decode(strip_tags($item->sede)),
+                    '11' => utf8_decode(strip_tags($item->estado)),
+                    '12' => $item->currentdate,
+                    '13' => $item->d . 'D',
+                    '14' => $item->h . 'H' ,
+                    '15' => $item->m . 'm',
+                    '16' => $item->s . 's'
+                );
+
+        }
+
+        header('Content-Type: text/csv; charset=utf-8');                                      #CSV
+        header('Content-Disposition: attachment; filename=' . time() .  '-PROVISIONES.csv');  #CSV
+
+//        header('Content-Type: application/vnd.ms-excel; charset=utf-8');
+//        header('Content-Disposition: attachment; filename=' . time() .  '-PROVISIONES.xls');
+        
+        $output = fopen('php://output', 'w');
+
+        $excels = array_merge($header, $supplies);
+        
+        foreach($excels as $line) {
+            fputcsv($output, $line, ';');                                                     #CSV
+//            fputcsv($output, $line, "\t");
+        }
+
+        fclose($output);
+
+        exit();
+
+    }
+    
 
 }
