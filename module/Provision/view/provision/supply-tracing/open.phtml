@@ -311,7 +311,7 @@
 <div class="modal fade" id="exportDataModal" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="/export-data" method="post" onsubmit="esconder();">
+            <form action="<?= $this->url('export-data'); ?>" method="post" onsubmit="esconder();">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"> Exportación de datos </h4>
