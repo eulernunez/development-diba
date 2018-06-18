@@ -917,7 +917,7 @@ $(document).ready(function (e){
                         <div class="form-group">
                             <label for="peticion">Tipo de Petición</label>
                             <?php
-                                $form->get('peticion')->setValue($this->information['tramite']['0']['servicioId']);
+                                $form->get('peticion')->setValue($this->information['tramite']['0']['peticionId']);
                                 $form->get('peticion')->setAttribute('disabled','true');
                             ?>
                             <?= $this->formSelect($form->get('peticion')); ?>
