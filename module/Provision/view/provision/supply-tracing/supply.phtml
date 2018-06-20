@@ -859,7 +859,7 @@ $(document).ready(function (e){
                                 <label for="asunto">Asunto</label>
                                 <?php
                                     $form->get('asunto')->setValue($information['tramite']['0']['asunto']);
-                                    $form->get('asunto')->setAttribute('readonly','true');
+                                    //$form->get('asunto')->setAttribute('readonly','true');
                                 ?>
                                 <?= $this->formInput($form->get('asunto')); ?>
                             </div>
@@ -892,6 +892,8 @@ $(document).ready(function (e){
                             </div>
                         
 
+                    </div>    
+                    <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="lote">Lote</label>
                                 <?php
@@ -900,10 +902,6 @@ $(document).ready(function (e){
                                 ?>
                                 <?= $this->formSelect($form->get('lote')); ?>                                
                             </div>
-
-                    </div>    
-                    
-                    <div class="col-lg-4">
                         
                             <div class="form-group">
                                 <label for="servicio">Servicio</label>
@@ -913,15 +911,6 @@ $(document).ready(function (e){
                                 ?>
                                 <?= $this->formSelect($form->get('servicio')); ?>                                
                             </div>
-                        
-                        <div class="form-group">
-                            <label for="peticion">Tipo de Petición</label>
-                            <?php
-                                $form->get('peticion')->setValue($this->information['tramite']['0']['peticionId']);
-                                $form->get('peticion')->setAttribute('disabled','true');
-                            ?>
-                            <?= $this->formSelect($form->get('peticion')); ?>
-                        </div>
 
                         <div class="form-group">
                             <label for="tramitador">Tramitador</label>
@@ -931,6 +920,17 @@ $(document).ready(function (e){
                             ?>
                             <?= $this->formSelect($form->get('tramitador')); ?>
                         </div>
+
+                        
+                        <div class="form-group">
+                            <label for="peticion">Tipo de Petición</label>
+                            <?php
+                                $form->get('peticion')->setValue($this->information['tramite']['0']['peticionId']);
+                                //form->get('peticion')->setAttribute('disabled','true');
+                            ?>
+                            <?= $this->formSelect($form->get('peticion')); ?>
+                        </div>
+
                     
                         <div class="form-group">
                             <label for="odinvoz">Odin Voz</label>
@@ -965,6 +965,10 @@ $(document).ready(function (e){
 
                         </div>
                         
+                    </div>    
+
+                    <div class="col-lg-4">
+                        
                         <div class="form-group">
                             <label for="atlas">Atlas</label>
                             <?php
@@ -972,7 +976,7 @@ $(document).ready(function (e){
                             ?>
                             <?= $this->formInput($form->get('atlas')); ?>
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="visord">Visord</label>
                             <?php
@@ -980,10 +984,6 @@ $(document).ready(function (e){
                             ?>
                             <?= $this->formInput($form->get('visord')); ?>
                         </div>
-
-                    </div>    
-
-                    <div class="col-lg-4">
                         
                         <div class="form-group">
                             <label for="estado">Estado</label>
@@ -1005,14 +1005,7 @@ $(document).ready(function (e){
                         <div class="form-group">&nbsp;</div>
                         <div class="form-group">&nbsp;</div>
                         <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div class="form-group">&nbsp;</div>
-                        <div style="float:right;">
+                        <div style="float: right; padding-bottom: 4px;">
                             <button class="btn btn-primary supply-submit" title="Guardar cambios" type="submit"><span class="glyphicon glyphicon-edit"></span></button>
                             <button class="btn btn-primary supply-finish" title="Finalizar" type="button" data-toggle="modal" data-target="#supplyFinish"><span class="glyphicon glyphicon-ok"></span></button>
                             <button class="btn btn-primary supply-remove" title="Anular" type="button" data-toggle="modal" data-target="#supplyRemove"><span class="glyphicon glyphicon-remove"></span></button>

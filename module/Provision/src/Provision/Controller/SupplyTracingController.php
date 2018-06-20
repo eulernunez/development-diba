@@ -189,8 +189,8 @@ class SupplyTracingController extends AbstractActionController
         $viewmodel->setTerminal(true);
         
         return $viewmodel;
-        
-        
+
+
     }        
     
     public function supplyRemoveAction()
@@ -221,7 +221,7 @@ class SupplyTracingController extends AbstractActionController
         $this->supplyTracingService->setPostParams($posts);
         $this->supplyTracingService->deleteSupply();
         $comentarista = $this->supplyTracingService->getComentarista($comentaristaId);
-        
+
         $created = date("Y-m-d H:i:s");
         $viewmodel = new ViewModel(
                         array('comment' => $comment,
@@ -288,12 +288,13 @@ class SupplyTracingController extends AbstractActionController
                 '8' => utf8_decode('PETICIÓN'),
                 '9' => 'TRAMITADOR',
                 '10' => 'SEDE',
-                '11' => 'ESTADO',
-                '12' => 'FECHA ACTUAL',
-                '13' => 'DIAS',
-                '14' => 'HORAS',
-                '15' => 'MINUTOS',
-                '16' => 'SEGUNDOS'
+                '11' => 'ASUNTO',
+                '12' => 'ESTADO',
+                '13' => 'FECHA ACTUAL',
+                '14' => utf8_decode('DÍAS'),
+                '15' => 'HORAS',
+                '16' => 'MINUTOS',
+                '17' => 'SEGUNDOS'
             ); 
 
         $supplies = array();
@@ -315,15 +316,24 @@ class SupplyTracingController extends AbstractActionController
                     '8' => utf8_decode(strip_tags($item->peticion)),
                     '9' => utf8_decode(strip_tags($item->tramitador)),
                     '10' => utf8_decode(strip_tags($item->sede)),
-                    '11' => utf8_decode(strip_tags($item->estado)),
-                    '12' => $item->currentdate,
-                    '13' => $item->d . 'D',
-                    '14' => $item->h . 'H' ,
-                    '15' => $item->m . 'm',
-                    '16' => $item->s . 's'
+                    '11' => utf8_decode(strip_tags($item->asunto)),
+                    '12' => utf8_decode(strip_tags($item->estado)),
+                    '13' => $item->currentdate,
+                    '14' => $item->d . 'D',
+                    '15' => $item->h . 'H' ,
+                    '16' => $item->m . 'm',
+                    '17' => $item->s . 's'
                 );
 
-        }
+            }
+
+//        $file = 'attachment; filename=' . time() .  '-PROVISIONES.csv';
+//        $this->getResponse()->getHeaders()->addHeaders(
+//            array(
+//                'Content-Type' => 'text/csv',
+//                'charset' => 'utf-8',
+//                'Content-Disposition' => $file
+//        ));
 
         header('Content-Type: text/csv; charset=utf-8');                                      #CSV
         header('Content-Disposition: attachment; filename=' . time() .  '-PROVISIONES.csv');  #CSV
@@ -336,7 +346,7 @@ class SupplyTracingController extends AbstractActionController
         $excels = array_merge($header, $supplies);
         
         foreach($excels as $line) {
-            fputcsv($output, $line, ';');                                                     #CSV
+            fputcsv($output, $line, ';');                                                       #CSV
 //            fputcsv($output, $line, "\t");
         }
 

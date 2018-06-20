@@ -21,7 +21,7 @@ class Supply extends AbstractTableGateway {
     }
 
     public function saveSupply(Entity\Supply $supply) {
-        
+
         //if(!$this->validationSupply($supply)) { return false;}
         
         $data = array(  
@@ -61,6 +61,8 @@ class Supply extends AbstractTableGateway {
                 'linea' => $supply->getLinea(),
                 'midas' => $supply->getMidas(),
                 'sede_id' => $supply->getSede(),
+                'asunto' => $supply->getAsunto(),
+                'peticion_id' => $supply->getPeticion(),
             );
             
             //die('<pre>' . print_r($updateInfo, true) . '</pre>');

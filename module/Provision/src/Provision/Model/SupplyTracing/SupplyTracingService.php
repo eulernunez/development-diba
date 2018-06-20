@@ -296,6 +296,8 @@ class SupplyTracingService {
         $supply->setVisord($this->posts['visord']);
         $supply->setEstado($this->posts['estado']);
         $supply->setDescripcion($this->posts['descripcion']);
+        $supply->setAsunto($this->posts['asunto']);
+        $supply->setPeticion($this->posts['peticion']);
         
         $handler = new \Provision\Model\Supply($this->adapter);
         $tramitacionId = $handler->saveSupply($supply);
@@ -375,7 +377,7 @@ class SupplyTracingService {
     }
 
     public function addComment() {
-        
+
         $comment = new \Provision\Model\Entity\Comentario();
         $comentario = (string)$this->posts['addComment'];
         $comentaristaId = (int)$this->posts['comentarista'];
@@ -384,10 +386,10 @@ class SupplyTracingService {
         $comment->setComment($comentario);
         $comment->setTramitacionId($supplyId);
         $comment->setComentaristaId($comentaristaId);
-        
+
         $handler = new \Provision\Model\Comentario($this->adapter);
         $handler->saveComentario($comment);
-        
+
         return true;
 
     }

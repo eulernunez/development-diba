@@ -229,7 +229,7 @@
            data-undefined-text=""
            data-show-export="true"
            class="bootstrap-table ticketList table-nowrap">
-        <thead style="font-size: 10px;">
+        <thead style="font-size: 11px;">
             <tr class="ui-state-active noselect">
                 <th data-field="state" data-checkbox="true"></th>
                 <th data-field="id" data-sortable="true" data-width="5%" class="hidden">ID</th>
@@ -248,12 +248,13 @@
                 <th data-field="linea" data-sortable="true" data-width="5%">ADM/Tel/Ext</th>
                 <th data-field="peticion" data-sortable="true" data-width="5%">TIPO</th>
                 <th data-field="tramitador" data-sortable="true" data-width="5%">TRAMITADOR</th>
-                <th data-field="sede" data-sortable="true" data-width="15%">SEDE</th>
+                <th data-field="asunto" data-sortable="true" data-width="15%">ASUNTO</th>
+                <th data-field="sede" data-sortable="true" data-width="15%" class="hidden">SEDE</th>
                 <th data-field="estado" data-sortable="true" data-width="5%">ESTADO</th>
                 <th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>
             </tr>
         </thead>
-        <tbody style="font-size: 10px;">
+        <tbody style="font-size: 12px;">
             <?php //$currentDate = new DateTime("now"); ?>
             <?php foreach ($this->tramites as $item) : ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
@@ -288,7 +289,8 @@
                     <td class="noWrap"><?= ucwords(strtolower($item->linea)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->peticion)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->tramitador)); ?></td>
-                    <td class="noWrap"><?= ucwords(strtolower($item->nombre)); ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->asunto)); ?></td>
+                    <td class="noWrap hidden"><?= ucwords(strtolower($item->nombre)); ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->estados)); ?></td>
                     <td class="noWrap">
                         <a class="update" href="<?php echo $this->url('supply') . '/' . $item->id; ?>" title="Consultar">
