@@ -84,7 +84,10 @@ class SupplySearchService extends Service {
                 sr.id AS servicioId, sr.servicio,
                 p.id AS peticionId, p.peticion,
                 tr.id AS tramitadorId, tramitador,
-                e.id AS estadoId, e.estados, e.visible, IF(ISNULL(t.fin), TIMESTAMPDIFF(SECOND,t.inicio, NOW()), TIMESTAMPDIFF(SECOND,t.inicio, t.fin )) AS datetime, NOW() AS currentdate
+                e.id AS estadoId, e.estados, e.visible,
+                IF(ISNULL(t.fin), TIMESTAMPDIFF(SECOND,t.inicio, NOW()), TIMESTAMPDIFF(SECOND,t.inicio, t.fin )) AS datetime,
+                IF(ISNULL(par.inicio), par.total_s, TIMESTAMPDIFF(SECOND, par.inicio, NOW()) + par.total_s) AS stoptime,
+                NOW() AS currentdate
                     FROM tramitaciones AS t
                         LEFT JOIN sedes AS s ON t.sede_id = s.id
                         LEFT JOIN poblaciones AS po ON s.poblacion_id = po.id
@@ -96,10 +99,11 @@ class SupplySearchService extends Service {
                         LEFT JOIN tramitadores AS tr ON t.tramitador_id = tr.id
                         LEFT JOIN estado_tramites AS e ON t.estado_id = e.id
                         LEFT JOIN comentarios AS cm ON t.id = cm.tramitacion_id
+                        LEFT JOIN paradas AS par ON par.tramitacion_id = t.id
                         WHERE e.visible = '" . $visible . "' AND t.activo = '1'"
                         . $filter
                         . $order; 
-
+        //die('<pre>' . print_r($statement, true) . '</pre>');
         $adapter = $this->adapter->query($statement);
         $result = $adapter->execute();
 
@@ -129,6 +133,7 @@ class SupplySearchService extends Service {
             $entity->asunto = $row['asunto'];
             $entity->datetime = $row['datetime'];
             $entity->currentdate = $row['currentdate'];
+            $entity->stoptime = $row['stoptime'];
             $entities[$row['id']] = $entity;
         }
 

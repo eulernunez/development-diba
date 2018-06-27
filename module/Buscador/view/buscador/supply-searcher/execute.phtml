@@ -140,12 +140,21 @@
                 <th data-field="solicitante" data-sortable="true" data-width="5%">SOLICITANTE</th>
                 <th data-field="inicio" data-sortable="true" data-width="5%">PETICIÓN</th>
                 <th data-field="datecreated" data-sortable="true" data-width="5%" class="hidden">DATECREATED</th>
+                <th data-field="stoptime" data-sortable="true" data-width="5%" class="hidden">STOPTIME</th>
                 <th data-field="fin" data-sortable="true" data-width="5%" class="hidden">DATEFINISH</th>
                 <th data-field="currentdate" data-sortable="true" data-width="5%" class="hidden">CURRENTDATE</th>
                 <th data-field="d" data-sortable="true" data-width="5%" class="hidden">DAYS</th>
                 <th data-field="h" data-sortable="true" data-width="5%" class="hidden">HOURS</th>
                 <th data-field="m" data-sortable="true" data-width="5%" class="hidden">MINUTES</th>
                 <th data-field="s" data-sortable="true" data-width="5%" class="hidden">SECONDS</th>
+                <th data-field="dstop" data-sortable="true" data-width="5%" class="hidden">DAYSSTOP</th>
+                <th data-field="hstop" data-sortable="true" data-width="5%" class="hidden">HOURSSTOP</th>
+                <th data-field="mstop" data-sortable="true" data-width="5%" class="hidden">MINUTESSTOP</th>
+                <th data-field="sstop" data-sortable="true" data-width="5%" class="hidden">SECONDSSTOP</th>
+                <th data-field="dreal" data-sortable="true" data-width="5%" class="hidden">DAYSREAL</th>
+                <th data-field="hreal" data-sortable="true" data-width="5%" class="hidden">HOURSREAL</th>
+                <th data-field="mreal" data-sortable="true" data-width="5%" class="hidden">MINUTESREAL</th>
+                <th data-field="sreal" data-sortable="true" data-width="5%" class="hidden">SECONDSREAL</th>
                 <th data-field="linea" data-sortable="true" data-width="5%">ADM/Tel/Ext</th>
                 <th data-field="peticion" data-sortable="true" data-width="5%">TIPO</th>
                 <th data-field="tramitador" data-sortable="true" data-width="5%">TRAMITADOR</th>
@@ -174,6 +183,7 @@
                     <td class="noWrap hidden"><?= $item->inicio; ?></td>
                     <td class="noWrap hidden"><?= $item->fin; ?></td>
                     <td class="noWrap hidden"><?= $item->currentdate; ?></td>
+                    <td class="noWrap hidden"><?= $item->stoptime; ?></td>
                     <?php
                             $seconds = (int)$item->datetime;
                             $minutes = floor($seconds/60);
@@ -188,6 +198,36 @@
                     <td class="noWrap hidden"><?= $h; ?></td>
                     <td class="noWrap hidden"><?= $m; ?></td>
                     <td class="noWrap hidden"><?= $s; ?></td>
+                    <?php
+                            $secondsstop = (int)$item->stoptime;
+                            $minutesstop = floor($secondsstop/60);
+                            $hoursstop =  floor($minutesstop/60);  	
+                            $daysstop = floor($hoursstop/24);
+                            $hstop = $hoursstop-($daysstop*24);
+                            $mstop = $minutesstop-($hoursstop*60);
+                            $sstop = $secondsstop-($minutesstop*60);
+                            $dstop = $daysstop;
+                    ?>
+                    <td class="noWrap hidden"><?= $dstop; ?></td>
+                    <td class="noWrap hidden"><?= $hstop; ?></td>
+                    <td class="noWrap hidden"><?= $mstop; ?></td>
+                    <td class="noWrap hidden"><?= $sstop; ?></td>
+                    
+                    <?php
+                        $secondsreal = $seconds-$secondsstop;
+                        $minutesreal = floor($secondsreal/60);
+                        $hoursreal =  floor($minutesreal/60);  	
+                        $daysreal = floor($hoursreal/24);
+                        $hreal = $hoursreal-($daysreal*24);
+                        $mreal = $minutesreal-($hoursreal*60);
+                        $sreal = $secondsreal-($minutesreal*60);
+                        $dreal = $daysreal;
+                    ?>
+                    <td class="noWrap hidden"><?= $dreal; ?></td>
+                    <td class="noWrap hidden"><?= $hreal; ?></td>
+                    <td class="noWrap hidden"><?= $mreal; ?></td>
+                    <td class="noWrap hidden"><?= $sreal; ?></td>
+                    
                     <?php $linea = ucwords(strtolower($item->linea)); ?>
                     <td class="noWrap"><?= str_ireplace($this->search, '<span style="background-color:red;color:white;font-weight:bold;">' . $this->search . '</span>', $linea); ?></td>
                     <?php $peticionName = ucwords(strtolower($item->peticion)); ?>

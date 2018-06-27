@@ -271,58 +271,81 @@ class SupplyTracingController extends AbstractActionController
     {
 
         $posts = (array)$this->request->getPost();
-        $json = $posts['data'];
-        $data = json_decode($json);
         
+        if(!isset($posts['data'])) {
+            $this->supplyTracingService->setPostParams($posts);
+            $data = (array)$this->supplyTracingService->getSuppliesToReport();
+        } elseif (isset($posts['data'])) {
+            $json = $posts['data'];
+            $data = json_decode($json);
+        }
+        //die('<pre>' . print_r($data, true) . '</pre>');
+
         $header = array();
         $header[] 
             = array(
-                '0' => utf8_decode('CÓDIGO'),
-                '1' => 'NIF',
-                '2' => 'ENTIDAD',
-                '3' => 'SERVICIO',
-                '4' => 'SOLICITANTE',
-                '5' => 'FECHA SOLICITUD',
-                '6' => 'FECHA FIN',
-                '7' => utf8_decode('LÍNEA'),
-                '8' => utf8_decode('PETICIÓN'),
-                '9' => 'TRAMITADOR',
-                '10' => 'SEDE',
-                '11' => 'ASUNTO',
-                '12' => 'ESTADO',
-                '13' => 'FECHA ACTUAL',
-                '14' => utf8_decode('DÍAS'),
-                '15' => 'HORAS',
-                '16' => 'MINUTOS',
-                '17' => 'SEGUNDOS'
-            ); 
+                #'0' => utf8_decode('CÓDIGO'),
+                '0' => 'NIF',
+                '1' => 'ENTIDAD',
+                '2' => 'SERVICIO',
+                '3' => 'SOLICITANTE',
+                '4' => 'FECHA SOLICITUD',
+                '5' => 'FECHA FIN',
+                '6' => utf8_decode('LÍNEA'),
+                '7' => utf8_decode('PETICIÓN'),
+                #'9' => 'TRAMITADOR',
+                #'10' => 'SEDE',
+                '8' => 'ASUNTO',
+                '9' => 'ESTADO',
+                '10' => 'FECHA DE PROCESO',
+                '11' => 'D [Total]',
+                '12' => 'H [Total]',
+                '13' => ':m [Total]',
+                '14' => ':s [Total]',
+                '15' => 'D [Parado]',
+                '16' => 'H [Parado]',
+                '17' => ':m [Parado]',
+                '18' => ':s [Parado]',
+                '19' => 'D [Real]',
+                '20' => 'H [Real]',
+                '21' => ':m [Real]',
+                '22' => ':s [Real]'
+                ); 
 
         $supplies = array();
         
         foreach ($data as $item) {
-            
+
             $linea = strip_tags($item->linea);
             $line = (empty($linea)) ? '': '> '. $linea;
             $supplies[] 
                 = array(
-                    '0' => '# ' . $item->id,
-                    '1' => strip_tags($item->cif),
-                    '2' => utf8_decode(strip_tags($item->entitat)),
-                    '3' => utf8_decode(strip_tags($item->servicio)),
-                    '4' => utf8_decode(strip_tags($item->solicitante)),
-                    '5' => strip_tags($item->datecreated),
-                    '6' => strip_tags($item->fin),
-                    '7' => $line,
-                    '8' => utf8_decode(strip_tags($item->peticion)),
-                    '9' => utf8_decode(strip_tags($item->tramitador)),
-                    '10' => utf8_decode(strip_tags($item->sede)),
-                    '11' => utf8_decode(strip_tags($item->asunto)),
-                    '12' => utf8_decode(strip_tags($item->estado)),
-                    '13' => $item->currentdate,
-                    '14' => $item->d . 'D',
-                    '15' => $item->h . 'H' ,
-                    '16' => $item->m . 'm',
-                    '17' => $item->s . 's'
+                    #'0' => '# ' . $item->id,
+                    '0' => strip_tags($item->cif),
+                    '1' => utf8_decode(strip_tags($item->entitat)),
+                    '2' => utf8_decode(strip_tags($item->servicio)),
+                    '3' => utf8_decode(strip_tags($item->solicitante)),
+                    '4' => strip_tags($item->datecreated),
+                    '5' => strip_tags($item->fin),
+                    '6' => strval($linea), #$line,
+                    '7' => utf8_decode(strip_tags($item->peticion)),
+                    #'8' => utf8_decode(strip_tags($item->tramitador)),
+                    #'10' => utf8_decode(strip_tags($item->sede)),
+                    '8' => utf8_decode(strip_tags($item->asunto)),
+                    '9' => utf8_decode(strip_tags($item->estado)),
+                    '10' => $item->currentdate,
+                    '11' => $item->d . 'D',
+                    '12' => $item->h . 'H' ,
+                    '13' => $item->m . 'm',
+                    '14' => $item->s . 's',
+                    '15' => $item->dstop . 'D',
+                    '16' => $item->hstop . 'H' ,
+                    '17' => $item->mstop . 'm',
+                    '18' => $item->sstop . 's',
+                    '19' => $item->dreal . 'D',
+                    '20' => $item->hreal . 'H' ,
+                    '21' => $item->mreal . 'm',
+                    '22' => $item->sreal . 's'
                 );
 
             }
@@ -346,7 +369,7 @@ class SupplyTracingController extends AbstractActionController
         $excels = array_merge($header, $supplies);
         
         foreach($excels as $line) {
-            fputcsv($output, $line, ';');                                                       #CSV
+            fputcsv($output, $line, ';');                                                     #CSV
 //            fputcsv($output, $line, "\t");
         }
 
@@ -356,5 +379,20 @@ class SupplyTracingController extends AbstractActionController
 
     }
     
+
+    public function customExportAction() {
+
+        // On the supply service develop business logic
+        // END >> Create the report to export
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Supply($dbAdapter);
+        
+        
+        $viewmodel = new ViewModel(array(
+                                    'form' => $form ));
+        return  $viewmodel;        
+
+
+    }
 
 }

@@ -163,6 +163,16 @@ return array(
                     ),
                 ),
             ),
+            'custom-export' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/custom-export',
+                    'defaults' => array(
+                        'controller' => 'Provision\Controller\SupplyTracing',
+                        'action'     => 'custom-export',
+                    ),
+                ),
+            ),
             
         ),
     ),

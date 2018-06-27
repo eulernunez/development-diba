@@ -241,6 +241,43 @@ class Supply extends Form
         ));
 
         $this->add(array(
+            'name' => 'begin',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Desde',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'begin',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'name' => 'finish',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Hasta',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'finish',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        
+        $this->add(array(
              'type' => 'Zend\Form\Element\Select',
              'name' => 'cliente',
              'options' => array(
@@ -433,6 +470,22 @@ class Supply extends Form
         ));
 
         $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'state',
+             'options' => array(
+                    'label' => 'Estado',
+                    'value_options' => array('' => 'Seleccione una opción') +  $this->getAllOptionsForEstado(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'state',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));
+        
+        $this->add(array(
             'name' => 'descripcion',
             'type' => 'Zend\Form\Element\Textarea',
             'attributes'=>array(
@@ -527,4 +580,15 @@ class Supply extends Form
         return $select;
     }
 
+    public function getAllOptionsForEstado()
+    {
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query('SELECT id, estados FROM estado_tramites');
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['estados'];
+        }
+        return $select;
+    }
+    
 }

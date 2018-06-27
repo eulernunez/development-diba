@@ -1,0 +1,232 @@
+<?php echo $this->headLink()
+                ->appendStylesheet('http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.min.css')
+                ->appendStylesheet($this->basePath('assets/datepicker/css/jquery-ui.theme.min.css'))
+                ->appendStylesheet($this->basePath('assets/datepicker/css/custom.css'));?>
+
+
+
+<?php echo $this->headScript()
+        ->appendFile('http://code.jquery.com/ui/1.10.3/jquery-ui.js'); 
+?>
+
+
+
+
+
+
+<style>
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+
+    .form-group
+    {
+        margin-bottom: 1px;
+    }
+
+    .form-control
+    {
+        /*height: 26px;*/
+        font-size: 12px;
+
+    }
+
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+    
+    /* Custom */
+/*    .custom-fieldset
+    {
+        background-color:#ffffff;
+    }
+    .custom-legend
+    {
+        width: 60%;
+        font-size: 12px;
+        border: 0px solid #ddd;
+    }
+    .custom-label
+    {
+        font-size: 12px;
+    }
+    .custom-radio
+    {
+        font-size: 10px;
+    }*/
+    
+</style>                
+
+<script type="text/javascript" style="display:none">
+    <!--
+    $(document).ready(function(e){
+            /* This code is executed after the DOM has been completely loaded */
+
+
+$( ".datemodel" ).datepicker({
+              // Formato de la fecha
+              dateFormat: "dd/mm/yy",
+              // Primer dia de la semana - lunes
+              firstDay: 1,
+              // Días largo traducido
+              dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+              // Dias cortos traducido
+              dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+              // Nombres largos de los meses traducido
+              monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+              // Nombres cortos de los meses traducido 
+              monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+              // Al selecconar fecha, se escribe en el campo de texto
+              onSelect: function() { 
+                $('#inicio').val('<?= $this->dateTime; ?>');
+              }
+            });
+
+
+        
+
+
+
+
+
+
+
+    });
+    
+    
+    
+    
+    
+    
+    //-->
+</script>
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+    $firstName = $session->offsetGet('firstName');
+    $lastName = $session->offsetGet('lastName');
+?>
+
+<fieldset class="col-md-12">
+    <legend> Exportación de provisiones </legend>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form id="exportForm" action="<?= $this->url('export-data'); ?>" method="post" novalidate="novalidate">
+                
+                <div class="col-lg-4">
+
+                    <div class="col-lg-6">
+                        <label class="custom-label" for="begin"> Desde <span title="Para los trámites abiertos se toma como referencia la fecha de solicitud." style="cursor: pointer;" class="glyphicon glyphicon-question-sign"></span></label>
+                        <div class="input-group date">
+                            <input id="begin" name="begin" type="text" class="form-control datemodel" placeholder="Desde ..."/>
+                           <label for="begin" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <label class="custom-label" for="finish"> Hasta <span title="Para los trámites cerrados se toma como referencia la fecha de cierre." style="cursor: pointer;" class="glyphicon glyphicon-question-sign"></span></label>
+                        <div class="input-group date">
+                            <input id="finish" name="finish" type="text" class="form-control datemodel" placeholder="Hasta ..."/>
+                           <label for="finish" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
+                        </div>
+                    </div>
+                    
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="custom-label" for="cliente"> Cliente </label>
+                            <?= $this->formSelect($form->get('cliente')); ?>
+                        </div>
+                        <div class="form-group">
+                            <label class="custom-label" for="sede"> Sede </label>
+                            <?= $this->formSelect($form->get('sede')); ?>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+
+                    <div class="form-group">
+                        <label class="custom-label" for="servicio"> Servicio </label>
+                        <?= $this->formSelect($form->get('servicio')); ?>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="custom-label" for="peticion"> Tipo de trámite </label>
+                        <?= $this->formSelect($form->get('peticion')); ?>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-label" for="state"> Estado </label>
+                        <?= $this->formSelect($form->get('state')); ?>
+                    </div>
+                    
+                </div>                
+                <div class="col-lg-4">
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="custom-label" for="tramitador"> Tramitador </label>
+                            <?= $this->formSelect($form->get('tramitador')); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="custom-label" for="situacion"> Situación </label>
+                            <select class="form-control" id="situacion" name="sitacion">
+                                <option value="1" selected>Abiertas</option>
+                                <option value="2">Cerradas</option>
+                                <option value="3">Eliminadas</option>
+                            </select>                                 
+                        </div>
+
+                        <div style="float: right; margin-top: 18px;">
+                            <button type="submit" class="btn btn-primary" title="Exportación de datos"> <i class="glyphicon glyphicon-export"></i> </button>
+                            <a class="btn btn-primary" href="<?= $this->url('custom-export'); ?>" role="button" title="Refresh">
+                                <i class="glyphicon glyphicon-refresh"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</fieldset>
+<div id="fill-search">
+</div>
