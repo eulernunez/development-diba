@@ -11,9 +11,20 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Application\Form\Tramitador;
 
 class IndexController extends AbstractActionController
 {
+
+
+    protected $maintenanceService;
+    
+
+    public function setMaintenanceService($service) {
+        $this->maintenanceService = $service;
+        return $this;
+    }
+    
     public function indexAction()
     {
         return new ViewModel();
@@ -22,7 +33,36 @@ class IndexController extends AbstractActionController
     public function sandboxAction()
     {
         die('Testeando en un entorno ZF2');
-    }        
+    }
+
+    public function tableMaintenanceAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Tramitador($dbAdapter);
+
+        $viewmodel = new ViewModel(array(
+                                    'form' => $form
+                                    ));
+        return  $viewmodel;
+
+    }
     
-    
+    public function saveTablesAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        $this->maintenanceService->setPostParams($posts);
+        $this->maintenanceService->saveTableMaintenance();
+        
+        $viewmodel = new ViewModel(
+                array()
+                );
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
 }

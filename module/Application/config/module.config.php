@@ -22,6 +22,28 @@ return array(
                     ),
                 ),
             ),
+            'table-maintenance' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/table-maintenance',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'table-maintenance',
+                    ),
+                ),
+            ),
+            'save-tables' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-tables',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'save-tables',
+                    ),
+                ),
+            ),
+            
+            
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -61,6 +83,16 @@ return array(
         ),
         'factories' => array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
+            'maintenanceService' => function ($sm) {
+                $maintenanceService = new \Application\Model\Maintenance\MaintenanceService();
+                $maintenanceService->setAdapter($sm->get('Zend_Adapter'));
+                return $maintenanceService;
+            },            
+            'Zend_Adapter' => function($serviceLocator) {
+                return $serviceLocator->get('Zend\Db\Adapter\Adapter');        
+            },            
+            
+            
         ),
     ),
     'translator' => array(
@@ -75,9 +107,19 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => Controller\IndexController::class,
+#            'Application\Controller\Index' => Controller\IndexController::class,
             'Application\Controller\Inventory' => Controller\InventoryController::class
         ),
+        'factories' => array(
+            'Application\Controller\Index' => function($serviceLocator) {
+                $ctr = new \Application\Controller\IndexController();
+                $ctr->setMaintenanceService(
+                    $serviceLocator->getServiceLocator()
+                    ->get('maintenanceService')
+                );
+                 return $ctr;
+            },
+        )
     ),
     'view_manager' => array(
         'display_not_found_reason' => true,

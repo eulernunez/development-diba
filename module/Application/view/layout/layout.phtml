@@ -232,6 +232,18 @@
                 </li>
             <?php endif ?>    
             
+            <?php if('Administrador' == $userRole) : ?>    
+                <li class="panel">
+                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#admin-nav">
+                        <i class="icon-tasks"> </i> <span style="font-size: 12px;">Administración</span>
+	   
+                    </a>
+                    <ul class="collapse" id="admin-nav">
+                        <li class=""><a href="<?php echo $this->url('table-maintenance') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Tablas maestras</span> </a></li>
+                    </ul>
+                </li>
+            <?php endif ?>    
+                
             <?php if('Administrador' == $userRole || 'Ventas' == $userRole || 'Ingeniero' == $userRole || 'OperadorODP' == $userRole ) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#provisio-nav">
@@ -312,6 +324,8 @@
         
     </div>
 
+    <!-- ========== NOTIFICATION ========== -->
+    <div id="notification"></div>
      <!--END MAIN WRAPPER -->
 
    <!-- FOOTER -->
