@@ -12,6 +12,10 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Form\Tramitador;
+use Application\Form\Cliente;
+use Application\Form\Servicio;
+use Application\Form\Peticion;
+use Application\Form\Estado;
 
 class IndexController extends AbstractActionController
 {
@@ -37,17 +41,22 @@ class IndexController extends AbstractActionController
 
     public function tableMaintenanceAction()
     {
-
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $form = new Tramitador($dbAdapter);
-
-        $viewmodel = new ViewModel(array(
-                                    'form' => $form
-                                    ));
+        $cliente = new Cliente($dbAdapter);
+        $servicio = new Servicio($dbAdapter);
+        $peticion = new Peticion($dbAdapter);
+        $estado = new Estado($dbAdapter);
+        
+        $viewmodel = new ViewModel(
+                        array(  'form' => $form,
+                                'cliente' => $cliente,
+                                'servicio' => $servicio,
+                                'peticion' => $peticion,
+                                'estado' => $estado));
         return  $viewmodel;
-
     }
-    
+
     public function saveTablesAction()
     {
 

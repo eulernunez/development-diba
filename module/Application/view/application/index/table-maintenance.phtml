@@ -303,35 +303,69 @@
 
     $(document).ready(function(e){
         /* This code is executed after the DOM has been completely loaded */
-        $('select').selectpicker({
+        $('#table-id').selectpicker({
             style: 'btn-select',
             size: 'auto',
             container: 'body',
         });
 
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
-            $('select').selectpicker('mobile');
+            $('#table-id').selectpicker('mobile');
         }
 
         $("#table-id").change(function() {
 
             var formulario = this.value;
-            if('4' === formulario) {
+            $('#formName').val(formulario);
+            if('Tramitador' === formulario) {
                 $('#form-tramitador').css('display','block');
+                $('#form-cliente').css('display','none');
+                $('#form-servicio').css('display','none');
+                $('#form-peticion').css('display','none');
+                $('#form-estado').css('display','none');                
+            } else if('Cliente' === formulario) {
+                $('#form-tramitador').css('display','none');
+                $('#form-cliente').css('display','block');
+                $('#form-servicio').css('display','none');
+                $('#form-peticion').css('display','none');
+                $('#form-estado').css('display','none');                
+            } else if('Servicio' === formulario) {
+                $('#form-servicio').css('display','block');
+                $('#form-tramitador').css('display','none');
+                $('#form-cliente').css('display','none');
+                $('#form-peticion').css('display','none');
+                $('#form-estado').css('display','none');
+            } else if('Peticion' === formulario) {
+                $('#form-peticion').css('display','block');
+                $('#form-servicio').css('display','none');
+                $('#form-tramitador').css('display','none');
+                $('#form-cliente').css('display','none');
+                $('#form-estado').css('display','none');                
+            } else if('Estado' === formulario) {
+                $('#form-estado').css('display','block');
+                $('#form-peticion').css('display','none');
+                $('#form-servicio').css('display','none');
+                $('#form-tramitador').css('display','none');
+                $('#form-cliente').css('display','none');
             } else {
                 $('#form-tramitador').css('display','none');
+                $('#form-cliente').css('display','none');
+                $('#form-servicio').css('display','none');
+                $('#form-peticion').css('display','none');
+                $('#form-estado').css('display','none');
             }
 
         });
         
-        $("#save-form-master").on("click", function(e){
+        $("#save-formTramitador").on("click", function(e){
             e.preventDefault();
             
             var url = '<?= $this->url('save-tables'); ?>';
+            var formName = $('#formName').val();
             $.ajax({
                 type: "POST",
                 url: url,
-                data: $('#Tramitador').serialize(),
+                data: $('#'+formName).serialize(),
                 cache: false,
                 success: function (html) {
                     $("#result").html(html);
@@ -348,7 +382,7 @@
             //If success clear inputs
             $("#tramitador").val('');
             $("#backup").prop('checked',false);
-            $("#save-form-master").addClass('disabled');
+            $("#save-formTramitador").addClass('disabled');
 
             $("#notification").html(output);
             $(".notification").delay(8000).queue(function (next) {
@@ -359,10 +393,160 @@
                 $(this).addClass("scale-out");
             });
 
+        });
+        
+        $("#save-formCliente").on("click", function(e){
+            e.preventDefault();
+            
+            var url = '<?= $this->url('save-tables'); ?>';
+            var formName = $('#formName').val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#'+formName).serialize(),
+                cache: false,
+                success: function (html) {
+                    $("#result").html(html);
+
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#box").html(html);
+                }
+            });            
+            
+            //Response server message
+            var output = '<div class="notification success"><span class="notification-icon"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></span><span class="notification-text">' + 'Se ha guardado satisfactoriamente!' + '</span></div>';
+            //If success clear inputs
+            $("#cliente").val('');
+            $("#nif").val('');
+            $("#save-formCliente").addClass('disabled');
+
+            $("#notification").html(output);
+            $(".notification").delay(8000).queue(function (next) {
+                $(this).addClass("scale-out");
+                next();
+            });
+            $(".notification").on("click", function(){ 
+                $(this).addClass("scale-out");
+            });
 
         });
         
         
+        $("#save-formServicio").on("click", function(e){
+            e.preventDefault();
+            
+            var url = '<?= $this->url('save-tables'); ?>';
+            var formName = $('#formName').val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#'+formName).serialize(),
+                cache: false,
+                success: function (html) {
+                    $("#result").html(html);
+
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#box").html(html);
+                }
+            });            
+            
+            //Response server message
+            var output = '<div class="notification success"><span class="notification-icon"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></span><span class="notification-text">' + 'Se ha guardado satisfactoriamente!' + '</span></div>';
+            //If success clear inputs
+            $("#servicio").val('');
+            $("#save-formServicio").addClass('disabled');
+
+            $("#notification").html(output);
+            $(".notification").delay(8000).queue(function (next) {
+                $(this).addClass("scale-out");
+                next();
+            });
+            $(".notification").on("click", function(){ 
+                $(this).addClass("scale-out");
+            });
+
+        });
+        
+
+        $("#save-formPeticion").on("click", function(e){
+            e.preventDefault();
+            
+            var url = '<?= $this->url('save-tables'); ?>';
+            var formName = $('#formName').val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#'+formName).serialize(),
+                cache: false,
+                success: function (html) {
+                    $("#result").html(html);
+
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#box").html(html);
+                }
+            });            
+            
+            //Response server message
+            var output = '<div class="notification success"><span class="notification-icon"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></span><span class="notification-text">' + 'Se ha guardado satisfactoriamente!' + '</span></div>';
+            //If success clear inputs
+            $("#peticion").val('');
+            $("#save-formPeticion").addClass('disabled');
+
+            $("#notification").html(output);
+            $(".notification").delay(8000).queue(function (next) {
+                $(this).addClass("scale-out");
+                next();
+            });
+            $(".notification").on("click", function(){ 
+                $(this).addClass("scale-out");
+            });
+
+        });
+
+        $("#save-formEstado").on("click", function(e){
+            e.preventDefault();
+            
+            var url = '<?= $this->url('save-tables'); ?>';
+            var formName = $('#formName').val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#'+formName).serialize(),
+                cache: false,
+                success: function (html) {
+                    $("#result").html(html);
+
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#box").html(html);
+                }
+            });            
+            
+            //Response server message
+            var output = '<div class="notification success"><span class="notification-icon"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></span><span class="notification-text">' + 'Se ha guardado satisfactoriamente!' + '</span></div>';
+            //If success clear inputs
+            $("#estado").val('');
+            $("#visible").val('1');
+            $("#save-formEstado").addClass('disabled');
+
+            $("#notification").html(output);
+            $(".notification").delay(8000).queue(function (next) {
+                $(this).addClass("scale-out");
+                next();
+            });
+            $(".notification").on("click", function(){ 
+                $(this).addClass("scale-out");
+            });
+
+        });
+
     });
 
 </script>
@@ -389,11 +573,11 @@
                     <label>Tablas</label>
                     <div class="form_select">
                         <select id="table-id" name="table-id" class="form-control" title="Selecciona la tabla maestra" data-header="Selecciona la tabla maestra" data-live-search="true" data-size="5">
-                            <option value="1">Cliente</option>
-                            <option value="2">Estados de trámites</option>
-                            <option value="3">Tipos de trámites</option>
-                            <option value="4">Tramitadores</option>
-                            <option value="5">Servicios</option>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Estado">Estados de trámites</option>
+                            <option value="Peticion">Tipo de trámites</option>
+                            <option value="Tramitador">Tramitadores</option>
+                            <option value="Servicio">Servicios</option>
                         </select>
                     </div>
                 </div>
@@ -403,8 +587,9 @@
     </div>
 </fieldset>
 
-<?= $this->form()->openTag($form); ?>
+<input type="hidden" id="formName" name="formName" value="" />
 <fieldset id="form-tramitador" class="col-md-12" style="display: none;">
+    <?= $this->form()->openTag($form); ?>
     <legend>Alta de tramitadores</legend>
     <div class="panel panel-default">
         <div class="panel-body" data-toggle="validator">
@@ -423,7 +608,7 @@
                             <input type="checkbox" id="backup" value="1" name="backup" class="form-check-input">
                             ¿Es backup?
                         </label>
-                    </div>                        
+                    </div>
                 </div>
 
                 <input type="hidden" id="entity" name="entity" value="\Tramitador" />
@@ -432,7 +617,7 @@
                 <div class="form-group">&nbsp;</div>
 
                 <div style="float:right;">
-                    <button id="save-form-master" class="btn btn-primary" title="Guardar" type="submit"  ><span class="glyphicon glyphicon-saved"></span></button>
+                    <button id="save-formTramitador" class="btn btn-primary" title="Guardar" type="submit"  ><span class="glyphicon glyphicon-saved"></span></button>
                 </div>
                 
             </div>
@@ -445,6 +630,174 @@
         <div class="clearfix"></div>
         </div>
     </div>
+    <?= $this->form()->closeTag($form); ?>
 </fieldset>
-<?= $this->form()->closeTag($form); ?>
+<?php
+    $cliente = $this->cliente;
+    $cliente->setAttribute('data-toggle', 'validator');
+    $cliente->setAttribute('accept-charset', 'utf-8');
+    $cliente->prepare();
+?>
+<fieldset id="form-cliente" class="col-md-12" style="display: none;">
+    <?= $this->form()->openTag($cliente); ?>
+    <legend>Alta de clientes</legend>
+    <div class="panel panel-default">
+        <div class="panel-body" data-toggle="validator">
+            <div class="col-lg-6">
+                
+                <div class="form-group">
+                    <label for="cliente">Cliente</label>
+                    <?= $this->formInput($cliente->get('cliente')); ?>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nif">NIF</label>
+                    <?= $this->formInput($cliente->get('nif')); ?>
+                </div>
+
+                <input type="hidden" id="entity" name="entity" value="\Cliente" />
+                <input type="hidden" id="activo" name="activo" value="1" />
+
+                <div class="form-group">&nbsp;</div>
+
+                <div style="float:right;">
+                    <button id="save-formCliente" class="btn btn-primary" title="Guardar" type="submit"  ><span class="glyphicon glyphicon-saved"></span></button>
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+
+                <div class="form-group">&nbsp;</div>
+
+            </div>
+            
+        <div class="clearfix"></div>
+        </div>
+    </div>
+    <?= $this->form()->closeTag($cliente); ?>
+</fieldset>
+<?php
+    $servicio = $this->servicio;
+    $servicio->setAttribute('data-toggle', 'validator');
+    $servicio->setAttribute('accept-charset', 'utf-8');
+    $servicio->prepare();
+?>
+<fieldset id="form-servicio" class="col-md-12" style="display: none;">
+    <?= $this->form()->openTag($servicio); ?>
+    <legend>Alta de servicios</legend>
+    <div class="panel panel-default">
+        <div class="panel-body" data-toggle="validator">
+            <div class="col-lg-6">
+                
+                <div class="form-group">
+                    <label for="servicio">Servicio</label>
+                    <?= $this->formInput($servicio->get('servicio')); ?>
+                </div>
+                
+                <input type="hidden" id="entity" name="entity" value="\Servicio" />
+                <input type="hidden" id="activo" name="activo" value="1" />
+
+                <div class="form-group">&nbsp;</div>
+
+                <div style="float:right;">
+                    <button id="save-formServicio" class="btn btn-primary" title="Guardar" type="submit"  ><span class="glyphicon glyphicon-saved"></span></button>
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+
+                <div class="form-group">&nbsp;</div>
+
+            </div>
+            
+        <div class="clearfix"></div>
+        </div>
+    </div>
+    <?= $this->form()->closeTag($servicio); ?>
+</fieldset>
+<?php
+    $peticion = $this->peticion;
+    $peticion->setAttribute('data-toggle', 'validator');
+    $peticion->setAttribute('accept-charset', 'utf-8');
+    $peticion->prepare();
+?>
+<fieldset id="form-peticion" class="col-md-12" style="display: none;">
+    <?= $this->form()->openTag($peticion); ?>
+    <legend>Alta de tipo de trámites</legend>
+    <div class="panel panel-default">
+        <div class="panel-body" data-toggle="validator">
+            <div class="col-lg-6">
+                
+                <div class="form-group">
+                    <label for="peticion">Trámite</label>
+                    <?= $this->formInput($peticion->get('peticion')); ?>
+                </div>
+                
+                <input type="hidden" id="entity" name="entity" value="\Peticion" />
+                <input type="hidden" id="activo" name="activo" value="1" />
+
+                <div class="form-group">&nbsp;</div>
+
+                <div style="float:right;">
+                    <button id="save-formPeticion" class="btn btn-primary" title="Guardar" type="submit"  ><span class="glyphicon glyphicon-saved"></span></button>
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+
+                <div class="form-group">&nbsp;</div>
+
+            </div>
+            
+        <div class="clearfix"></div>
+        </div>
+    </div>
+    <?= $this->form()->closeTag($peticion); ?>
+</fieldset>
+<?php
+    $estado = $this->estado;
+    $estado->setAttribute('data-toggle', 'validator');
+    $estado->setAttribute('accept-charset', 'utf-8');
+    $estado->prepare();
+?>
+<fieldset id="form-estado" class="col-md-12" style="display: none;">
+    <?= $this->form()->openTag($estado); ?>
+    <legend>Alta de estados de un trámite</legend>
+    <div class="panel panel-default">
+        <div class="panel-body" data-toggle="validator">
+            <div class="col-lg-6">
+
+                <div class="form-group">
+                    <label for="estado">Estado</label>
+                    <?= $this->formInput($estado->get('estado')); ?>
+                </div>
+
+                <div class="form-group">&nbsp;</div>
+
+                <div class="form-group">
+                    <label for="visible">Contexto</label>
+                    <?= $this->formSelect($estado->get('visible')); ?>
+                </div>
+
+                <input type="hidden" id="entity" name="entity" value="\Estado" />
+                <input type="hidden" id="activo" name="activo" value="1" />
+
+                <div class="form-group">&nbsp;</div>
+
+                <div style="float:right;">
+                    <button id="save-formEstado" class="btn btn-primary" title="Guardar" type="submit"><span class="glyphicon glyphicon-saved"></span></button>
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+
+                <div class="form-group">&nbsp;</div>
+
+            </div>
+            
+        <div class="clearfix"></div>
+        </div>
+    </div>
+    <?= $this->form()->closeTag($estado); ?>
+</fieldset>
 <div id="result"></div>
