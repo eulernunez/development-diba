@@ -1,0 +1,163 @@
+<?php
+//echo $this->headScript()
+//        ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js')
+//        ->appendFile('http://code.jquery.com/ui/1.10.3/jquery-ui.js'); 
+?>
+
+
+<style>
+
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>
+
+<script>
+
+function saveVozip() {
+
+    var url = '<?= $this->url('save-vozip'); ?>';
+    $.ajax({
+       type: "POST",
+       url: url,
+       data: $('#myForm').serialize(),
+       cache: false,
+       success: function (json) {
+                $("#save-vozip").html(json);
+//                $('.save-ipwan').addClass('disabled');
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#box").html(html);
+        }
+    });
+    
+    var output = '<div class="notification success"><span class="notification-icon"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></span><span class="notification-text">' + 'Se ha guardado satisfactoriamente!' + '</span></div>';
+    $("#notification").html(output);
+    $(".notification").delay(8000).queue(function (next) {
+        $(this).addClass("scale-out");
+        next();
+    });
+    $(".notification").on("click", function(){ 
+        $(this).addClass("scale-out");
+    });
+    
+    
+    
+
+}
+
+
+
+
+
+
+$(function(){
+    
+    $("html, body").animate({ scrollTop: 300 });
+    
+});
+
+</script>
+
+<script type="text/javascript" style="display:none">
+
+    $(document).ready(function(e){
+//        $.getScript('https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js');
+    
+    
+    });
+</script>
+
+<div id="vozip-fill">
+    
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <fieldset class="col-md-12">
+                    <legend>Voz IP</legend>
+                    <div class="panel panel-default">
+                        <div class="panel-body" data-toggle="validator">
+                            <div class="col-lg-6">
+                                <input type="hidden" id="vozipId" name="vozipId" value="<?= $this->information['vozips']['0']['id']; ?>">
+                                <div class="form-group">
+                                    <label class="control-label" for="vipextension">Nº de Extensión</label>
+                                    <?= $this->formInput($form->get('vipextension')); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="viptipo">Tipo</label>
+                                    <?= $this->formSelect($form->get('viptipo')); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="vipmodelo">Modelo</label>
+                                    <?= $this->formSelect($form->get('vipmodelo')); ?>
+                                </div>
+
+                                <div class="form-check" style="margin-top: 14px;">
+                                    <label class="control-label" class="form-check-label">
+                                        <input id="vipddi" name="vipddi" type="checkbox" value="1" class="form-check-input" checked>
+                                        ¿DDI?
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-6">
+
+                                <div class="form-group">
+                                    <label class="control-label" for="vipgrupocaptura">Grupo de captura</label>
+                                    <?= $this->formInput($form->get('vipgrupocaptura')); ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="vipgruposalto">Grupo de salto</label>
+                                    <?= $this->formInput($form->get('vipgruposalto')); ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label" for="vipperfil">Perfil</label>
+                                    <?= $this->formSelect($form->get('vipperfil')); ?>
+                                </div>
+
+                                
+
+<!--                                <div style="float:right;">
+                                    <button class="btn btn-primary" title="Guardar" type="submit"><span class="glyphicon glyphicon-saved"></span></button>
+                                </div>                                -->
+                                <input type="hidden" id="vozipSedeId" name="vozipSedeId" value="<?= $this->sedeId; ?>">
+                                <div style="float:right; margin-top: 8px;">
+                                    <a class="btn btn-primary btn-sm" href="#" onclick="saveVozip();" role="button" title="Guardar equipo Voz IP">
+                                        <i class="glyphicon glyphicon-saved"></i>
+                                    </a>
+                                </div>                                
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </fieldset>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

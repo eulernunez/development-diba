@@ -80,6 +80,10 @@ return array(
  					$serviceLocator->getServiceLocator()
  					->get('apService')
  				);
+				$ctr->setVozipService(
+ 					$serviceLocator->getServiceLocator()
+ 					->get('vozipService')
+ 				);
                                 
 			 return $ctr;
  		},
@@ -516,6 +520,17 @@ return array(
                 ),
             ),
             
+            'add-vozip' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/add-vozip',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'add-vozip',
+                    ),
+                ),
+            ),
+            
             'add-component' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -549,6 +564,16 @@ return array(
                 ),
             ),
 
+            'save-vozip' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/save-vozip',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'save-vozip',
+                    ),
+                ),
+            ),
             
             'save-component' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
@@ -581,7 +606,16 @@ return array(
                     ),
                 ),
             ),
-
+            'vozip-fill' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/vozip-fill',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'vozip-fill',
+                    ),
+                ),
+            ),
             'delete-glan' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -603,8 +637,18 @@ return array(
                     ),
                 ),
             ),
-            
-            
+
+            'delete-vozip' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/delete-vozip',
+                    'defaults' => array(
+                        'controller' => 'Inventario\Controller\Process',
+                        'action'     => 'delete-vozip',
+                    ),
+                ),
+            ),
+
             'save-ipwan' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -980,6 +1024,9 @@ return array(
             },
             'apService' => function ($sm) {
                 return $sm->get('Inventario\Model\Ap');            
+            },
+            'vozipService' => function ($sm) {
+                return $sm->get('Inventario\Model\Vozip');
             },
             'iplanService' => function ($sm) {
                 return $sm->get('Inventario\Model\IpLan');            

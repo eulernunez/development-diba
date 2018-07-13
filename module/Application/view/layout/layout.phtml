@@ -5,7 +5,7 @@
 
  <!-- BEGIN HEAD -->
 <head>
-     <meta charset="UTF-8" />
+    <meta charset="UTF-8" />
     
     <?php echo $this->headTitle($this->translate('Admin Dashboard'))->setSeparator(' - ')->setAutoEscape(false) ?>
     
@@ -72,7 +72,9 @@
             ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.parallax.min.js'))
             ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.slideanims.min.js'))
             ->appendFile($this->basePath('assets/revolution/revolution/js/extensions/revolution.extension.video.min.js'))
-            ; ?>
+            
+                                                                                                                    # VALIDATOR
+            ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js'); ?>
     
     
 <!--    <script src="assets/plugins/jquery-2.0.3.min.js"></script>
@@ -117,7 +119,7 @@
                 <!-- LOGO SECTION -->
                 <header class="navbar-header">
 
-                    <a href="index.html" class="navbar-brand">
+                    <!--<a href="index.html" class="navbar-brand">-->
                     <!--<img src="img/logo.png" alt="" /></a>-->
                 </header>
                 <!-- END LOGO SECTION -->

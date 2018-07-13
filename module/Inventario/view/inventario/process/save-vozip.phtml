@@ -1,0 +1,260 @@
+<?php
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+?>
+
+<style>
+
+fieldset 
+{
+    border: 1px solid #ddd !important;
+    margin: 0;
+    xmin-width: 0;
+    padding: 10px;       
+    position: relative;
+    border-radius:4px;
+    background-color:#f5f5f5;
+    padding-left:10px!important;
+}
+	
+legend
+{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom: 0px; 
+    width: 35%; 
+    border: 1px solid #ddd;
+    border-radius: 4px; 
+    padding: 5px 5px 5px 10px; 
+    background-color: #ffffff;
+}
+                
+</style>
+
+<script>
+
+$(function() {
+
+    $('#grid-equipos tbody tr').click(function(){
+
+        $("#grid-equipos tbody tr").each(function () {
+            $(this).removeClass('success');
+        });
+        $(this).addClass('success');
+    });
+
+    $("#update-vozip").on("click", function(e){
+        e.preventDefault();
+        var output;
+        if($(".form-group").hasClass("has-error")){
+            output = '<div class="notification error"><span class="notification-icon"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i></span><span class="notification-text">' + 'Falta completar con los datos requeridos' + '</span></div>';
+        } else {
+                var url = '<?= $this->url('save-vozip'); ?>';
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                     data: $('#myForm').serialize(),
+                    cache: false,
+                    success: function (html) {
+                        $("#save-vozip").html(html);
+
+                    },
+                    error: function (xhr, status) {
+                        html = "<div class='alert alert-danger'>Error!</div>"
+                        $("#box").html(html);
+                    }
+                });
+            output = '<div class="notification success"><span class="notification-icon"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></span><span class="notification-text">' + 'Se ha guardado satisfactoriamente!' + '</span></div>';    
+        }
+
+        $("#notification").html(output);
+        $(".notification").delay(8000).queue(function (next) {
+            $(this).addClass("scale-out");
+            next();
+        });
+        $(".notification").on("click", function(){ 
+            $(this).addClass("scale-out");
+        });
+
+    });
+
+});
+
+
+function vozipFill(id) {
+    var sede = $('#sedeId').val();
+    var data = {sede: sede, id: id};
+    var url = '<?= $this->url('vozip-fill'); ?>';
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (html) {
+            //html = "<div class='alert alert-success'>" + html + "</div>";
+            $("#vozip-fill").html(html);
+//                $('.btn').hide();
+        },
+        error: function (xhr, status) {
+            html = "<div class='alert alert-danger'>Error!</div>"
+            $("#fill").html(html);
+        }
+    });
+
+}
+
+
+    $(function(){
+        $("html, body").animate({ scrollTop: 300 });
+    });
+
+</script>
+            
+<?php
+    $vozIpNumber = 0;
+    if(isset($this->information['vozipall'])) {
+        $vozIpNumber = count($this->information['vozipall']);
+    }
+?>
+<div style="float:left;">
+    <button type="button" class="btn btn-primary" title="Número de equipos Voz IP"><?= '# ' . $vozIpNumber; ?></button>
+</div>
+<div style="float:right;">
+    <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
+    <a class="btn btn-primary btn-sm" href="#" role="button" onclick="addVozip();" title="Agregar equipo VozIP">
+        <i class="glyphicon glyphicon-plus"></i>
+    </a>
+    <?php endIf; ?>
+</div>
+<div style="clear: both;"></div>
+
+
+<div class="panel panel-default" style="padding: 2px; overflow: scroll; height: 112px;">
+
+    <table id="grid-equipos" class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th>Nº Extensión</th>
+                <th>DDI</th>
+                <th>Tipo</th>
+                <th>Modelo</th>
+                <th>Grupo de captura</th>
+                <th>Grupo de salto</th>
+                <th>Perfil</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $row = 1; foreach($this->information['vozipall'] as $vozip) : ?>
+            <tr id="<?= $vozip['id'] ?>" class="fila-grid <?= (1==$row)?'success':'' ?>">
+                <td><?= $vozip['numero_extension']; ?></td>
+                <td><?= ($vozip['ddi']==0)?'No':'Si'; ?></td>
+                <td><?= $vozip['tipo']; ?></td>
+                <td><?= $vozip['modelo']; ?></td>
+                <td><?= $vozip['grupo_captura']; ?></td>
+                <td><?= $vozip['grupo_salto']; ?></td>
+                <td><?= $vozip['perfil']; ?></td>
+                <td>
+                <a class="btn btn-primary btn-xs" href="#" onclick="vozipFill('<?= $vozip['id'] ?>');" title="Consultar Voz IP">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                </a>
+                <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
+                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo Voz IP" data-toggle="modal" data-id="<?= $vozip['id']; ?>" data-target="#deleteApEquipo">
+                    <i class="glyphicon glyphicon-minus"></i>
+                </a>
+                <?php endIf; ?>
+            </td>
+        </tr>
+        <?php $row++; ?>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+</div>
+            <!-- -->
+            <div style="clear: both;"></div>
+            <div id="vozip-fill">
+                <?php if(isset($this->information['vozips']['0'])) : ?>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <fieldset class="col-md-12">
+                                <legend>Voz IP</legend>
+                                <div class="panel panel-default">
+                                    <div class="panel-body" data-toggle="validator">
+                                        <div class="col-lg-6">
+                                            <input type="hidden" id="vozipId" name="vozipId" value="<?= $this->information['vozips']['0']['id']; ?>">
+                                            <div class="form-group">
+                                                <label class="control-label" for="vipextension">Nº de Extensión</label>
+                                                <?php $form->get('vipextension')->setValue($this->information['vozips']['0']['numero_extension']); ?>
+                                                <?= $this->formInput($form->get('vipextension')); ?>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label" for="viptipo">Tipo</label>
+                                                <?php $form->get('viptipo')->setValue($this->information['vozips']['0']['tipoId']); ?>
+                                                <?= $this->formSelect($form->get('viptipo')); ?>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label" for="vipmodelo">Modelo</label>
+                                                <?php $form->get('vipmodelo')->setValue($this->information['vozips']['0']['modeloId']); ?>
+                                                <?= $this->formSelect($form->get('vipmodelo')); ?>
+                                            </div>
+
+<!--                                            <div class="form-group">&nbsp;</div>-->
+                                            <?php $isDdi = $this->information['vozips']['0']['ddi']; ?>
+                                            <div class="form-check" style="margin-top: 14px;">
+                                                <label class="control-label" class="form-check-label">
+                                                    <input id="vipddi" name="vipddi" type="checkbox" value="1" class="form-check-input" <?= ($isDdi)?'checked':''; ?>>
+                                                    ¿DDI?
+                                                </label>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="col-lg-6">
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="vipgrupocaptura">Grupo de captura</label>
+                                                <?php $form->get('vipgrupocaptura')->setValue($this->information['vozips']['0']['grupo_captura']); ?>
+                                                <?= $this->formInput($form->get('vipgrupocaptura')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="vipgruposalto">Grupo de salto</label>
+                                                <?php $form->get('vipgruposalto')->setValue($this->information['vozips']['0']['grupo_salto']); ?>
+                                                <?= $this->formInput($form->get('vipgruposalto')); ?>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label" for="vipperfil">Perfil</label>
+                                                <?php $form->get('vipperfil')->setValue($this->information['vozips']['0']['perfil']); ?>
+                                                <?= $this->formSelect($form->get('vipperfil')); ?>
+                                            </div>
+
+                                            
+
+<!--                                            <div style="float:right;">
+                                                <button class="btn btn-primary enabled" title="Guardar" type="submit"><span class="glyphicon glyphicon-edit"></span></button>
+                                                
+                                                onclick="updateVozip();" 
+
+                                            </div>-->
+                                            <div style="float:right; margin-top: 8px;">
+                                                <a id="update-vozip" class="btn btn-primary btn-sm update-vozip" href="#" role="button" title="Update Voz IP">
+                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                </a>
+                                            </div>    
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                    
+            <?php endif; ?>
+            </div>
+

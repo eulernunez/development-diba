@@ -36,6 +36,9 @@ class ProcessController extends AbstractActionController
     protected $glanService;
     protected $componentService;
     protected $apService;
+    
+    protected $vozipService;
+    
     protected $wizardService;
 
     public function indexAction()
@@ -98,6 +101,11 @@ class ProcessController extends AbstractActionController
     public function setApService($service)
     {
         $this->apService = $service;
+    }        
+    
+    public function setVozipService($service)
+    {
+        $this->vozipService = $service;
     }        
     
     public function setIpLanService($service)
@@ -1015,7 +1023,29 @@ class ProcessController extends AbstractActionController
 
     }        
 
-    
+    public function deleteVozipAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+
+        $vozipId = (int)$posts['id'];
+        $sedeId = (int)$posts['sedeId'];
+
+        $this->vozipService->deleteVozipEquipo($vozipId);
+        $information = $this->vozipService->getAllVozipsBySede($sedeId);
+
+        $viewmodel = new ViewModel(array(
+                        'form' => $form,
+                        'information' => $information,
+                        'sedeId' => $sedeId));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }        
     
     
     public function sedeFillAction()
@@ -1286,6 +1316,25 @@ class ProcessController extends AbstractActionController
 
     }
     
+    public function addVozipAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        $sedeId = (int)$posts['id'];
+
+        $viewmodel = new ViewModel(
+                array('form' => $form,
+                      'sedeId' => $sedeId
+                ));
+        
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+    
     public function addComponentAction()
     {
 
@@ -1466,6 +1515,41 @@ class ProcessController extends AbstractActionController
 
     }
     
+    public function saveVozipAction()
+    {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        
+        $posts = (array)$this->request->getPost();
+        
+        $sedeId = (int)$posts['sedeId'];
+        $vozipId = (int)$posts['vozipId'];
+        
+        $vozip = new \Inventario\Model\Entity\Vozip();
+        $vozip->setOptions($posts);
+        $vozip->setSedeId($sedeId);
+        if($vozipId>0) {
+            $vozip->setId($vozipId);
+        }
+        
+        $vozipId = $this->vozipService->saveVozip($vozip);
+        
+        
+        $information = $this->vozipService->getAllVozipsBySede($sedeId, $vozipId);
+        
+        $viewmodel = new ViewModel(
+                    array(
+                        'form' => $form,
+                        'information' => $information,
+                        'selected' => $vozipId));
+
+        $viewmodel->setTerminal(true);
+
+        return $viewmodel;
+
+    }
+
     
     
     
@@ -1940,6 +2024,20 @@ class ProcessController extends AbstractActionController
         return $viewmodel;
     }
     
+    public function vozipFillAction()
+    {
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Wizard($dbAdapter);
+        $posts = (array)$this->request->getPost();
+        //$sedeId = (int)$posts['sede'];
+        $vozipId = (int)$posts['id'];
+        $information = $this->vozipService->getVozipInfotById($vozipId);
+        $viewmodel = new ViewModel(
+                        array('form' => $form,
+                              'information' => $information));
+        $viewmodel->setTerminal(true);
+        return $viewmodel;
+    }
     
     
 

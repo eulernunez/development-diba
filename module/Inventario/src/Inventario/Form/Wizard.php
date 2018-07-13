@@ -2861,10 +2861,156 @@ class Wizard extends Form
         ));
 
 
+        // VOZ IP
+        $this->add(array(
+            'name' => 'vipextension',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Nº Extensión',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'vipextension',
+                    'required'=>'required',
+                    'aria-describedby' => 'vipextensionHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+        
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'viptipo',
+            'options' => array(
+                'label' => 'Tipo',
+                'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForVozIpTipos(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'viptipo',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));        
+        
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'vipmodelo',
+            'options' => array(
+                'label' => 'Tipo',
+                'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForVozIpModelos(),
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'vipmodelo',
+                    'required'=> true,
+                    'class' => 'form-control input-sm',
+                ),
+            'validators' => array('Int'),            
+        ));        
+        
+        $this->add(array(
+            'name' => 'vipgrupocaptura',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Grupo de captura',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'vipgrupocaptura',
+                    'required'=>'required',
+                    'aria-describedby' => 'vipgrupocapturaHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        $this->add(array(
+            'name' => 'vipgruposalto',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => 
+                array(
+                    'label' => 'Grupo de salto',
+                ),
+            'attributes' => 
+                array(
+                    'id' => 'vipgruposalto',
+//                    'required'=>'required',
+                    'aria-describedby' => 'vipgruposaltoHelp',
+                    'class' => 'form-control input-sm'
+                ),
+            'filters' => array(
+                 array('name' => 'Zend\Filter\StringTrim'),
+                 array('name' => 'Zend\Filter\StringToLower'),
+             )
+        ));
+
+        
+        $this->add(array(
+             'type' => 'Zend\Form\Element\Select',
+             'name' => 'vipperfil',
+             'options' => array(
+                    'label' => 'Perfil',
+                    'value_options' => array(
+                                        '' => 'Seleccione una opción',
+                                        '1' => '1',
+                                        '2' => '2',
+                                        '3' => '3',
+                                        '4' => '4',
+                                        '5' => '5',
+                                        '6' => '6',
+                                        '7' => '7',
+                                        '8' => '8',
+                                        '9' => '9')
+             ),
+            'attributes' => 
+                array(
+                    'id' => 'vipperfil',
+                    'required'=> true,
+//                    'value' => '1',
+                    'class' => 'form-control input-sm',
+                    'enable' => false
+                ),
+
+            'validators' => array('Int'),            
+        ));
+        
+        
     }
 
 
     // Other methods
+    public function getOptionsForVozIpModelos()
+    {
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query('SELECT id, modelo FROM vozip_modelos WHERE activo = 1');
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['modelo'];
+        }
+        return $select;
+    }
+
+    public function getOptionsForVozIpTipos()
+    {
+        $dbAdapter = $this->adapter;
+        $statement = $dbAdapter->query('SELECT id, tipo FROM vozip_tipos WHERE activo = 1');
+        $select = [];
+        foreach ($statement->execute() as $item) {
+            $select[$item['id']] = $item['tipo'];
+        }
+        return $select;        
+    }
+
     public function getOptionsForSwitchs()
     {
         $dbAdapter = $this->adapter;

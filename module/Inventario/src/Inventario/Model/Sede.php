@@ -926,8 +926,69 @@ class Sede extends AbstractTableGateway {
 
             $datos['aps'] = $aps;
 
-            //die('DATOS: <pre>' . print_r($datos, true) . '</pre>');
-        ///////////////////////////////// FIN AP
+            # Voz IP
+        $vozips = array();
+        $vozipIds = array();
+
+        ////////////// INICIO VOZ IP
+        $stm = 
+            "SELECT
+                vip.id,
+                vip.numero_extension,
+                vip.ddi,
+                vip.grupo_captura,
+                vip.grupo_salto,
+                vip.perfil,
+                t.id AS tipoId, t.tipo,
+                m.id AS modeloId, m.modelo
+                FROM vozips AS vip
+                    LEFT JOIN vozip_tipos AS t ON vip.tipo_vozip_id = t.id
+                    LEFT JOIN vozip_modelos AS m ON vip.modelo_vozip_id = m.id
+                    WHERE vip.sede_id = '"  .$sedeId . "' AND vip.activo = 1";
+
+        $adapter = $this->adapter->query($stm);
+
+        foreach ($adapter->execute() as $item) {
+            $vozips[] = $item;
+            $vozipIds[] = $item['id'];
+        }
+     
+        $datos['vozipall'] = $vozips;
+        $datos['vozipIds'] = $vozipIds;
+
+        unset($vozips);
+        $vozips = array();
+        
+        $vozIpId = -1;
+        if(isset($vozipIds['0'])) {
+            $vozIpId = $vozipIds['0'];
+        }
+
+        $stm = 
+            "SELECT
+                vip.id,
+                vip.numero_extension,
+                vip.ddi,
+                vip.grupo_captura,
+                vip.grupo_salto,
+                vip.perfil,
+                t.id AS tipoId, t.tipo,
+                m.id AS modeloId, m.modelo
+                FROM vozips AS vip
+                    LEFT JOIN vozip_tipos AS t ON vip.tipo_vozip_id = t.id
+                    LEFT JOIN vozip_modelos AS m ON vip.modelo_vozip_id = m.id
+                    WHERE vip.id = '" . $vozIpId . "' AND vip.activo = 1";
+
+        $adapter = $this->adapter->query($stm);
+        
+        foreach ($adapter->execute() as $item) {
+            $vozips[] = $item;
+        }
+
+        $datos['vozips'] = $vozips;
+        
+        //die('DATOS [ADD]: <pre>' . print_r($datos, true) . '</pre>');
+        ///////////////////////////////// FIN VOZ IP
         return $datos;
 
 //        
