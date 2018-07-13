@@ -1542,7 +1542,8 @@ class ProcessController extends AbstractActionController
                     array(
                         'form' => $form,
                         'information' => $information,
-                        'selected' => $vozipId));
+                        'selected' => $vozipId,
+                        'sedeId' => $sedeId));
 
         $viewmodel->setTerminal(true);
 

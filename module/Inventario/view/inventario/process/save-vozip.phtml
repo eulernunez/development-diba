@@ -110,7 +110,10 @@ function vozipFill(id) {
     });
 
 </script>
-            
+
+<input type="hidden" id="deleteVozipId" name="deleteVozipId" value="">
+<input type="hidden" id="deleteVozipSedeId" name="deleteVozipSedeId" value="<?= $this->sedeId ;?>">
+
 <?php
     $vozIpNumber = 0;
     if(isset($this->information['vozipall'])) {
@@ -160,7 +163,7 @@ function vozipFill(id) {
                     <i class="glyphicon glyphicon-eye-open"></i>
                 </a>
                 <?php if('Administrador' == $userRole || 'Operador' == $userRole || 'Ingeniero' == $userRole) : ?>
-                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo Voz IP" data-toggle="modal" data-id="<?= $vozip['id']; ?>" data-target="#deleteApEquipo">
+                <a class="btn btn-primary btn-xs" href="#" role="button" title="Eliminar equipo Voz IP" data-toggle="modal" data-id="<?= $vozip['id']; ?>" data-target="#deleteVozipEquipo">
                     <i class="glyphicon glyphicon-minus"></i>
                 </a>
                 <?php endIf; ?>
