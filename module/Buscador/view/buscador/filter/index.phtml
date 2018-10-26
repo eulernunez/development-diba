@@ -104,6 +104,14 @@
             }
         });
 
+        $("#vozip-query").keypress(function(e){
+            if(e.which == 13){
+                e.preventDefault();
+                filter();
+                return false;
+            }
+        });
+
         $("#provincia").change(function(){
 
             var provincia = $("#provincia option:selected").val();
@@ -388,15 +396,17 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 
                         Equipos no gestionados
                     </legend>
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="custom-label" for="propiedad-equipo">Propiedad Router</label>
+                            <label class="custom-label" for="propiedad-equipo">Router&nbsp;<span title="Propiedad del router" style="cursor: pointer;" class="glyphicon glyphicon-question-sign"></span></label>
                             <select class="form-control input-sm" id="propiedad-equipo" name="propiedad-equipo">
                                 <option value="9" selected>Todos</option>
                                 <option value="1">Teléfonica</option>
                                 <option value="2">Cliente</option>
                             </select>                                 
                         </div>
+                    </div>
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label class="custom-label" for="tipo-ip">Tipo IP</label>
                             <select class="form-control input-sm" id="tipo-ip" name="tipo-ip">
@@ -415,7 +425,7 @@
                 
             </div>
 
-                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 16px;"> 
+                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 4px;"> 
                 
                     <fieldset class="form-group custom-fieldset" style='background-color: #f5f5f5;'>
                     <legend class="custom-legend" title="Equipos Glans" style='background-color: #f5f5f5;'>
@@ -494,7 +504,7 @@
                     </div>                
                 </div>-->
                 
-                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 16px;"> 
+                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 4px;"> 
                 
                     <fieldset class="form-group custom-fieldset" style='background-color: #f5f5f5;'>
                         <legend class="custom-legend" title="Equipos Access Point" style='background-color: #f5f5f5;'>
@@ -509,6 +519,19 @@
                     </fieldset>
                 </div>
 
+                <div class="col-lg-3" style="background-color: #f5f5f5; margin-top: 4px;"> 
+                    <fieldset class="form-group custom-fieldset" style='background-color: #f5f5f5;'>
+                        <legend class="custom-legend" title="Equipos Voz IP" style='background-color: #f5f5f5;'>
+                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                            Voz IP
+                        </legend>
+                        <div class="col-lg-12">    
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="vozip-query" name="vozip-query" placeholder="Filtrar por esta coincidencia ..."/>
+                            </div>                
+                        </div>            
+                    </fieldset>
+                </div>
 
 
 

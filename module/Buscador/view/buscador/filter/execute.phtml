@@ -66,6 +66,8 @@
                 <th data-field="contacto" data-sortable="true" data-width="25%">NEMÓNICO GLAN</th>
                 <?php elseif ($this->apFilter) : ?>
                 <th data-field="contacto" data-sortable="true" data-width="25%">ID AP</th>
+                <?php elseif ($this->vozipFilter) : ?>
+                <th data-field="contacto" data-sortable="true" data-width="25%">Nº EXT</th>
                 <?php endif ; ?>
                 <!--<th data-field="fecha" data-sortable="true" data-width="10%">FECHA ALTA</th>-->
                 <th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>
@@ -83,6 +85,9 @@
                         <td class="noWrap"><?= strtolower($sede->nemonico); ?></td>
                     <?php elseif($this->apFilter) : ?>
                         <td class="noWrap"><?= strtolower($sede->idap); ?></td>
+                    <?php elseif($this->vozipFilter) : ?>
+                        <td class="noWrap"><?= strtolower($sede->numeroExtension); ?></td>
+                        
                     <?php endif ; ?>
                     <!--<td class="noWrap"><?= date("d-m-Y", strtotime($sede->fechaAlta)); ?></td>--> 
                     <td class="noWrap">
@@ -93,6 +98,10 @@
                             </a>
                         <?php elseif($this->apFilter && strlen($sede->idap)>1) : ?>
                             <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id . '/4/52/' . $sede->idap . '/' . $this->apQuery;?>" title="Consultar">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        <?php elseif($this->vozipFilter && strlen($sede->numeroExtension)>1) : ?>
+                            <a class="update" href="<?php echo $this->url('tabs') . '/' . $sede->id .'/5/61/'  . $sede->numeroExtension . '/' . $this->vozipQuery; ?>" title="Consultar">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a>
                         <?php elseif($this->wanFilter && $sede->isAdministrativo) : ?>

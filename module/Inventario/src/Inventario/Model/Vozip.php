@@ -80,6 +80,11 @@ class Vozip extends AbstractTableGateway {
 
             $index = 0;
             foreach($aux as $key => $value) {
+//                    foreach($value as $item) {
+//                        if(strtolower($this->value) == strtolower($item)) {
+//                            $index = $key;
+//                        }
+//                    }
                 if(!empty(array_search($vozipId, $value))){
                     $index = $key;
                 }

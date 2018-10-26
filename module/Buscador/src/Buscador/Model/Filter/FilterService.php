@@ -378,6 +378,24 @@ class FilterService extends Service {
                 . " OR s.direccion LIKE '%" . $wanQuery . "%')";
         }
 
+        #vozip-query
+        $filterVozip = false;
+        $vozipTable = "";
+        $filterVozipQuery = "";
+        $vozipQuery = (string)$this->params['vozip-query'];
+
+        if(!empty($vozipQuery)) {
+            $filterVozip = true;
+            $vozipTable = ", v.*";
+            $filterVozipQuery
+                = " AND (v.numero_extension LIKE '%" . $vozipQuery . "%'"
+                . " OR v.ddi LIKE '%" . $vozipQuery . "%'"
+                . " OR v.grupo_captura LIKE '%" . $vozipQuery . "%'"
+                . " OR v.grupo_salto LIKE '%" . $vozipQuery . "%'"
+                . " OR s.nombre LIKE '%" . $vozipQuery . "%'"
+                . " OR s.direccion LIKE '%" . $vozipQuery . "%')";
+        }
+
         #Client Scope Filter
         $clientScopeFilter = "";
         if('Cliente' == $this->userRole) {
@@ -385,13 +403,14 @@ class FilterService extends Service {
         }
         
         $statement =
-            "SELECT s.*, s.id AS sedeId, s.nombre AS sedeNombre" . $wanTable . $glanTable . $apTable
+            "SELECT s.*, s.id AS sedeId, s.nombre AS sedeNombre" . $wanTable . $glanTable . $apTable . $vozipTable
                 . " FROM sedes AS s"
                 . " LEFT JOIN circuitos AS c ON c.sede_id = s.id"
                 . " LEFT JOIN equipos AS e ON e.circuito_id = c.id"
                 . " LEFT JOIN equipos_no_gestionados AS eng ON eng.circuito_id = c.id"
                 . " LEFT JOIN glans AS g ON g.sede_id = s.id"
-                . " LEFT JOIN aps AS a ON a.sede_id = s.id  WHERE "
+                . " LEFT JOIN vozips AS v ON v.sede_id = s.id"
+                . " LEFT JOIN aps AS a ON a.sede_id = s.id WHERE "
                 . $filterProvincia 
                 . $clientScopeFilter
                 . $filterCliente 
@@ -414,12 +433,13 @@ class FilterService extends Service {
                 . $filterApEquipoEstado
                 . $filterGlanQuery
                 . $filterApQuery
-                . $filterWanQuery;
+                . $filterWanQuery
+                . $filterVozipQuery;
         
 //        echo('<pre><p class="alert alert-danger">' . print_r($statement, true) . '</p></pre>');
-
         
-        if(true == $filterWan && true == $filterGlan && true == $filterAp) {
+        
+        if(true == $filterWan && true == $filterGlan && true == $filterAp && true == $filterVozip) {
             return [];
         }
         
@@ -435,6 +455,18 @@ class FilterService extends Service {
             return [];
         }
         
+        if(true == $filterVozip && true == $filterGlan) {
+            return [];
+        }
+        
+        if(true == $filterVozip && true == $filterAp) {
+            return [];
+        }
+        
+        if(true == $filterVozip && true == $filterWan) {
+            return [];
+        }
+        
         $adapter = $this->adapter->query($statement);
         $result = $adapter->execute();
         
@@ -444,6 +476,8 @@ class FilterService extends Service {
             return $this->convertedApsObjects($result);
         } elseif(true == $filterWan) {
             return $this->convertedWansObjects($result);                        
+        } elseif(true == $filterVozip) {
+            return $this->convertedVozipsObjects($result);                        
         } else {
             return $this->convertedObjects($result);
         }
@@ -541,5 +575,22 @@ class FilterService extends Service {
         return $entities;
     }
     
-    
+    public function convertedVozipsObjects($result)
+    {
+        $entities = array();
+        foreach ($result as $row) {
+            $entity = new \stdClass;
+            $entity->id = $row['sedeId'];
+            $entity->nombre = $row['sedeNombre'];
+            $entity->idescat = $row['idescat'];
+            $entity->direccion = $row['direccion'];
+            $entity->fechaAlta = $row['fecha_alta'];
+            $entity->numeroExtension = $row['numero_extension'];
+            if(strlen($row['numero_extension'])>1) {
+                $entities[$row['numero_extension']] = $entity;
+            }
+        }
+        return $entities;
+    }
+
 }

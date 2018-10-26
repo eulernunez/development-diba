@@ -948,11 +948,42 @@ class Sede extends AbstractTableGateway {
 
         $adapter = $this->adapter->query($stm);
 
-        foreach ($adapter->execute() as $item) {
-            $vozips[] = $item;
-            $vozipIds[] = $item['id'];
+        /* SEARCHER [parameters:@]
+         * 61 - Numero extensión
+         * 62 - Grupo captura
+         * 63 - Grupo salto
+         */
+        if($this->tab == 5 && !empty($this->value)) {
+            if($this->item == 61 || $this->item == 62 || $this->item == 63) {
+                $aux = array();
+                foreach ($adapter->execute() as $item) {
+                    $aux[] = $item;
+                }
+                $index = 0;
+                foreach($aux as $key => $value) {
+                    foreach($value as $item) {
+                        if(strtolower($this->value) == strtolower($item)) {
+                            $index = $key;
+                        }
+                    }
+                }
+                $found = array_slice($aux, $index, 1);
+                unset($aux[$index]);
+                foreach($aux as $item) {
+                    $found[] = $item;
+                }
+                foreach ($found as $item) {
+                    $vozips[] = $item;
+                    $vozipIds[] = $item['id'];      
+                }
+            }
+        } else {
+            foreach ($adapter->execute() as $item) {
+                $vozips[] = $item;
+                $vozipIds[] = $item['id'];
+            }
         }
-     
+        
         $datos['vozipall'] = $vozips;
         $datos['vozipIds'] = $vozipIds;
 

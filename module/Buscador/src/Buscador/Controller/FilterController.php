@@ -59,6 +59,12 @@ class FilterController extends AbstractActionController
             $wanFilter = true;
         }
         
+        $vozipFilter = false;
+        $vozipQuery = (string)$params['vozip-query'];
+        if(!empty($vozipQuery)) {
+            $vozipFilter = true;
+        }
+
         if(is_array($sedes)) {
 
             $viewmodel = 
@@ -69,7 +75,9 @@ class FilterController extends AbstractActionController
                                   'apFilter' => $apFilter,
                                   'apQuery' => $apQuery,
                                   'wanFilter' => $wanFilter,
-                                  'wanQuery' => $wanQuery   
+                                  'wanQuery' => $wanQuery,
+                                  'vozipQuery' => $vozipQuery,
+                                  'vozipFilter' => $vozipFilter
                                 ));
             $viewmodel->setTerminal(true);
 
