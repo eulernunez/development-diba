@@ -1,0 +1,214 @@
+<?php
+    echo $this->headScript()->appendFile('https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js');
+?>
+<style>
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+    .form-group
+    {
+        margin-bottom: 1px;
+    }
+
+/*    .form-control
+    {
+        height: 26px;
+        font-size: 9px;
+
+    }*/
+
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+    
+    /* Custom */
+    .custom-fieldset
+    {
+        background-color:#ffffff;
+    }
+    .custom-legend
+    {
+        width: 60%;
+        font-size: 12px;
+        border: 0px solid #ddd;
+    }
+    .custom-label
+    {
+        font-size: 12px;
+    }
+    .custom-radio
+    {
+        font-size: 10px;
+    }
+</style>
+
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('save-invoice'));
+    $form->setAttribute('id', 'invoice');
+    $form->setAttribute('role', 'form');
+    $form->setAttribute('data-toggle', 'validator');
+    $form->setAttribute('accept-charset', 'utf-8');
+    #$form->setAttribute('novalidate', 'novalidate');
+    $form->prepare();
+?>
+
+<?= $this->form()->openTag($form); ?>
+<fieldset class="col-md-12">
+    <legend> Creación de factura </legend>
+    <div class="panel panel-default">
+        <div class="panel-body" data-toggle="validator">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="periodo">Período</label>
+                    <?php $form->get('periodo')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('periodo')); ?>                                
+                </div>
+                <div class="form-group">
+                    <label for="cif">LCIF</label>
+                    <?php $form->get('idLcifCliente')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('idLcifCliente')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="cif">CIF</label>
+                    <?php $form->get('idCifCliente')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('idCifCliente')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="entidad">Entidad</label>
+                    <?php $form->get('descNomEnt')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('descNomEnt')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="servicio">Servicio</label>
+                    <?php $form->get('descTipoServicio')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('descTipoServicio')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="multiconexion">ID Multiconexión</label>
+                    <?php $form->get('idMulticonexion')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('idMulticonexion')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Número comercial</label>
+                    <?php $form->get('idNumeroComercial')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('idNumeroComercial')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="codigo">Código concepto</label>
+                    <?php $form->get('idCodigoConcepto')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('idCodigoConcepto')); ?>
+                </div>
+            
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="id_concepto_facturable">ID concepto facturable</label>
+                    <?php $form->get('idConceptoFacturable')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('idConceptoFacturable')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="concepto_facturable">Concepto facturable</label>
+                    <?php $form->get('descConceptoFacturable')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('descConceptoFacturable')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="unidades">Unidades</label>
+                    <?= $this->formInput($form->get('unidades')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="inicio">Fecha inicio</label>
+                    <?php $form->get('inicioPeriodoFact')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('inicioPeriodoFact')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="fin">Fecha fin</label>
+                    <?php $form->get('finPeriodoFact')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('finPeriodoFact')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="importe_total_equipo">Importe total equipo</label>
+                    <?= $this->formInput($form->get('importeTotalEquipo')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="precio_mensual_lote3">Precio mensual lote3</label>
+                    <?= $this->formInput($form->get('precioMensualLote3')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="total_sin_iva">Total sin IVA</label>
+                    <?= $this->formInput($form->get('totalSinIva')); ?>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="id_cod_cli">ID código cliente</label>
+                    <?php $form->get('idCodCli')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('idCodCli')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="servicio_lote3">Servicio lote 3</label>
+                    <?php $form->get('descServicioLote3')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('descServicioLote3')); ?>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion_lote">Descripción del lote</label>
+                    <?php $form->get('descLote')->setAttribute('readonly',''); ?>
+                    <?= $this->formInput($form->get('descLote')); ?>
+                </div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group">&nbsp;</div>
+                
+                <div style="float:right;">
+                    <button class="btn btn-primary invoice-submit" title="Guardar" type="submit"><span class="glyphicon glyphicon-saved"></span></button>
+                </div>
+
+            </div>
+            
+        <div class="clearfix"></div>
+        </div>
+    </div>
+</fieldset>
+<?= $this->form()->closeTag($form); ?>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jQuery QiangTableTree Plugin Demo</title>
+
+
+
+<link href="assets/css/reset.css" rel="stylesheet">
+<link href="assets/QiangTableTree/jquery.qtt.min.css" rel="stylesheet">
+<link href="assets/QiangTableTree/skin/default.css" rel="stylesheet">
+<link href="assets/css/worldcupteam.css" rel="stylesheet">
+<style type="text/css">
+body { background-color:#fafafa; font-family:'Roboto';}
+ h1 { margin:150px auto 30px auto; text-align:center;}
+ 
+ .qiang-table-tree .treeHeaderBox, .qiang-table-tree .qttItem {
+	width: 99%;
+ }
+ 
+ 
+</style>
+</head>
+<body>
+<div id="qiang-table-tree" class="qiang-table-tree">
+	<!--start of QTTHeader-->
+	<div class="QTTHeader">
+		  <div class="treeHeaderBox">
+			  <span class="tLabel">&nbsp;</span>
+			  <ul class="tValue">
+			  </ul>
+		  </div>
+	</div>
+	<!--end of QTTHeader-->
+	<!--start of QTTContainer-->
+	<div class="QTTContainer">
+	</div>
+	<!--end of QTTContainer-->
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="assets/QiangTableTree/jquery.qtt.min.js"></script>
+<script>
+(function($) {
+  'use strict';
+  $(function() {
+	var treeData = {
+		name:'ENTIDADES',
+		value:{'isItem' : true , 'Pld':'[DETALLE CONCURSO]', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'LOTE3', 'GD':'RESTO', 'Pts':'TOTAL'},
+		children:[
+			{
+				name:'P0800003F - Entitat Muninipal Descentralizada de Valldoreix',
+				value:{'isTeam' : true , 'flag':'', 'Pld':3, 'W':2, 'D':1, 'L':0, 'GF':7, 'GA':'454,13', 'GD':'300,00', 'Pts':'754,13'},
+				children:[
+					{
+						name:'934614997 ',
+						value:{ 'isTeam' : true , 'flag':'', 'Pld':3, 'W':2, 'D':1, 'L':0, 'GF':7, 'GA':'44,13', 'GD':'0,00', 'Pts':'44,13'},
+						children:[
+								{
+									name:'Devolución ajuste cuota Agosto',
+									value:{'isItem' : true , 'Pld':'&nbsp;', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'5,10', 'GD':'0,00', 'Pts':'5,10'},
+									children:[]
+								},
+								{
+									name:'Fibra 600Mb Simétricos',
+									value:{'isItem' : true , 'Pld':'Conexión de fibra', 'W':2, 'D':2, 'L':2, 'GF':2, 'GA':'145,45', 'GD':'0,00', 'Pts':'145,45'},
+									children:[]
+								},
+								{
+									name:'Internet 100Mb/10Mb',
+									value:{'isItem' : true , 'Pld':'Internet Corporativo', 'W':3, 'D':3, 'L':3, 'GF':3, 'GA':'80,90', 'GD':'0,00', 'Pts':'80,90'},
+									children:[]
+								}
+						]
+					},
+					{
+						name:'935767021',
+						value:{ 'isTeam' : true , 'flag':'', 'Pld':3, 'W':2, 'D':1, 'L':0, 'GF':4, 'GA':'190,50', 'GD':'300,00', 'Pts':'190,50'},
+						children:[
+								{
+									name:'Canal Voz para acceso red móvil NETCOM OXO',
+									value:{'isItem' : true , 'Pld':'Voz IP', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'5,10', 'GD':'0,00', 'Pts':'5,10'},
+									children:[]
+								},
+								{
+									name:'Detalle metropolitano y provincial',
+									value:{'isItem' : true , 'Pld':'Entornos', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'15,10', 'GD':'0,00', 'Pts':'15,10'},
+									children:[]
+								},
+								{
+									name:'Est. base DECT alimentación remota para ext PVr NETCOM OXO',
+									value:{'isItem' : true , 'Pld':'Conectividad', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'0,00', 'GD':'300,00', 'Pts':'300,00'},
+									children:[]
+								}
+						
+						
+						
+						]
+					},
+					{
+						name:'935896662',
+						value:{ 'isTeam' : true , 'flag':'', 'Pld':3, 'W':1, 'D':0, 'L':2, 'GF':6, 'GA':'205,90', 'GD':'0,00', 'Pts':'205,90'},
+						children:[
+						
+								{
+									name:'Dirección IP estática',
+									value:{'isItem' : true , 'Pld':'Direccionamiento de la plataforma', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'5,10', 'GD':'0,00', 'Pts':'5,10'},
+									children:[]
+								},
+								{
+									name:'Fibra 300Mb Simétricos',
+									value:{'isItem' : true , 'Pld':'Internet Fibra Óptica', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'5,10', 'GD':'0,00', 'Pts':'5,10'},
+									children:[]
+								},
+								{
+									name:'Mantenimiento avanzado Fibra',
+									value:{'isItem' : true , 'Pld':'Mantenimiento y corrección', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'5,10', 'GD':'0,00', 'Pts':'5,10'},
+									children:[]
+								},
+								{
+									name:'Pack Premium Plus',
+									value:{'isItem' : true , 'Pld':'&nbsp;', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'5,10', 'GD':'0,00', 'Pts':'5,10'},
+									children:[]
+								}								
+						
+						]
+					},
+					{
+						name:'936852147',
+						value:{ 'isTeam' : true , 'flag':'', 'Pld':3, 'W':0, 'D':0, 'L':3, 'GF':1, 'GA':'80,50', 'GD':'0,00', 'Pts':'80,50'},
+						children:[
+								{
+									name:'Experimento 1',
+									value:{},
+									children:[]
+								},
+								{
+									name:'Experimento 2',
+									value:{},
+									children:[]
+								},
+								{
+									name:'Experimento 3',
+									value:{},
+									children:[]
+								}
+						
+						]
+					}					
+				]
+			},
+			{
+				name:'P0800015J - CC Berguedá',
+				value:{},
+				children:[
+					{
+						name:'Netherlands',
+						value:{ 'isTeam' : true , 'flag':'Flag_of_the_Netherlands.svg', 'Pld':3, 'W':3, 'D':0, 'L':0, 'GF':10, 'GA':3, 'GD':'7', 'Pts':90},
+						children:[]
+					},
+					{
+						name:'Chile',
+						value:{ 'isTeam' : true , 'flag':'Flag_of_Chile.svg', 'Pld':3, 'W':2, 'D':0, 'L':1, 'GF':5, 'GA':3, 'GD':'2', 'Pts':60},
+						children:[]
+					},
+					{
+						name:'Spain',
+						value:{ 'isTeam' : true , 'flag':'Flag_of_Spain.svg', 'Pld':3, 'W':1, 'D':0, 'L':2, 'GF':4, 'GA':7, 'GD':'3', 'Pts':30},
+						children:[]
+					},
+					{
+						name:'Australia',
+						value:{ 'isTeam' : true , 'flag':'Flag_of_Australia.svg', 'Pld':3, 'W':0, 'D':3, 'L':3, 'GF':3, 'GA':9, 'GD':'6', 'Pts':50},
+						children:[]
+					}					
+				]
+				
+			}
+			
+		]
+	}
+	
+	var QTT = window.QTT.qiangTableTree( {
+		TreeBox : $('#qiang-table-tree'),
+		createNodeIconHTML: function( nodeObj ){
+			return '';
+		}, 
+		createNodeNameHTML: function( nodeObj ){
+			var valueObj = nodeObj.value ;
+			//var flagName = '' ;
+			//if( valueObj.isTeam ){
+			//	flagName = '<img class="flag-img" src="assets/images/'+valueObj.flag+'.png" />' 
+			//}
+			//return flagName + nodeObj.name ;
+			return nodeObj.name ;
+		},		
+		createNodeBarHTML: function( nodeObj ){
+			return '' ;
+		},    
+		createNodeValueHTML: function( nodeObj ){
+			var valueHTML = '';
+			var valueObj = nodeObj.value ;
+			if( valueObj.isTeam ){
+				valueHTML =    '<li class="td-1">&nbsp;</li>'
+							 + '<li class="td-2">&nbsp;</li>' 
+							 + '<li class="td-3">&nbsp;</li>' 
+							 + '<li class="td-4">&nbsp;</li>' 
+							 + '<li class="td-5">&nbsp;</li>' 
+							 + '<li class="td-6">'+(valueObj.GA )+'</li>' 
+							 + '<li class="td-7">'+(valueObj.GD )+'</li>' 
+							 + '<li class="td-8">'+(valueObj.Pts )+'</li>' ;
+			}
+			else if(valueObj.isItem) {
+				valueHTML =    '<li class="td-1">'+(valueObj.Pld  )+'</li>'
+							 + '<li class="td-2">&nbsp;</li>' 
+							 + '<li class="td-3">&nbsp;</li>' 
+							 + '<li class="td-4">&nbsp;</li>' 
+							 + '<li class="td-5">&nbsp;</li>' 
+							 + '<li class="td-6">'+(valueObj.GA )+'</li>' 
+							 + '<li class="td-7">'+(valueObj.GD )+'</li>' 
+							 + '<li class="td-8">'+(valueObj.Pts )+'</li>' ;
+			}
+			else{
+				valueHTML =  '<li class="td-1">&nbsp;</li>'
+							 + '<li class="td-2">&nbsp;</li>'
+							 + '<li class="td-3">&nbsp;</li>'
+							 + '<li class="td-4">&nbsp;</li>'
+							 + '<li class="td-5">&nbsp;</li>'
+							 + '<li class="td-6">&nbsp;</li>'
+							 + '<li class="td-7">&nbsp;</li>'
+							 + '<li class="td-8">&nbsp;</li>'
+			}
+			
+			return valueHTML ;
+		}
+	});
+	QTT.updateTree( treeData );
+	QTT.shrinkAllNode( );
+	//QTT.expandAllNode( );
+	var leafNode = $('.qiang-table-tree .qttLeaf');
+	var flagNode = $('.qiang-table-tree .qttLeaf .t-text');
+	
+	window.treeNodePosition = [];
+	flagNode.each( function( index , domObj ){
+		window.treeNodePosition.push( {
+			x: $(domObj).offset().left + 20,
+			y: $(domObj).offset().top + 10 
+		} );
+	});
+	$( window ).resize( function(){
+		QTT.resizeFn();
+	});
+	
+	$('#search-input').keydown(function(e){
+		if( e.keyCode===13){
+			var keyword = $('#search-input').val();
+			if( keyword !== '' ){
+				var resultArray = QTT.findNode( keyword );
+				if( resultArray.length > 0  ){
+					QTT.highlightNode( resultArray );
+					QTT.expandToNode( resultArray );
+				}
+			}
+			return ;
+		}
+	});
+
+  });
+})(jQuery);
+</script>
+
+
+</body></html>

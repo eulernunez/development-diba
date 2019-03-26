@@ -1,0 +1,226 @@
+<?php echo $this->headLink()
+                ->appendStylesheet($this->basePath('css/uploadifive/uploadifive.css'));?>
+
+<?php echo $this->headScript()
+                ->appendFile($this->basePath('js/uploadifive/jquery.uploadifive.js')); ?>
+
+<style type="text/css">
+    
+    /* UPLOADIFIVE*/
+/*    body {
+        font: 13px Arial, Helvetica, Sans-serif;
+    }*/
+    .uploadifive-button {
+        float: left;
+        margin-right: 2px;
+        
+    }
+    
+    #queue {
+        border: 1px solid #E5E5E5;
+        height: 60px;
+        overflow: auto;
+        margin-bottom: 10px;
+        padding: 0 3px 3px;
+       
+    }
+    
+    /* FIELDSET*/
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+    .form-group
+    {
+        margin-bottom: 1px;
+    }
+
+/*    .form-control
+    {
+        height: 26px;
+        font-size: 9px;
+
+    }*/
+
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+    
+    /* Custom */
+    .custom-fieldset
+    {
+        background-color:#ffffff;
+    }
+    .custom-legend
+    {
+        width: 60%;
+        font-size: 12px;
+        border: 0px solid #ddd;
+    }
+    .custom-label
+    {
+        font-size: 12px;
+    }
+    .custom-radio
+    {
+        font-size: 10px;
+    }
+    
+    
+</style>
+
+
+<fieldset class="col-md-6">
+    <legend>Facturación</legend>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="control-label" for="periodo"> Período </label>
+                    <select class="form-control input-sm" id="periodo" name="periodo" required>
+                        <option value='0'>Elegir un período</option>
+                        <option value='201902'>201902</option>
+                        <option value='201901'>201901</option>
+                        <option value='201812'>201812</option>
+                        <option value='201811'>201811</option>
+                        <option value='201810'>201810</option>
+                        <option value='201809'>201809</option>
+                        <option value='201808'>201808</option>
+                        <option value='201807'>201807</option>
+                        <option value='201806'>201806</option>
+                        <option value='201805'>201805</option>
+                        <option value='201804'>201804</option>
+                        <option value='201803'>201803</option>
+                        <option value='201802'>201802</option>
+                        <option value='201801'>201801</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-lg-12">
+                <form>
+                    <div id="queue"></div>
+                    <input id="file_upload" name="file_upload" type="file" multiple="true">
+                    <button class="uploadifive-button" style="width: 120px; padding:8px 6px 3px;" type="button" onclick="$('#file_upload').uploadifive('upload');">
+                        <i class='icon-upload-alt'></i>
+                    </button>
+                    <button id='export-data' type="button" class="btn btn-primary" title="Descarga de factura" style="width: 98px; float: right;" data-toggle="modal" data-target="#exportDataModal" disabled>
+                        <i class="icon-download-alt"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+</fieldset>
+
+
+<script type="text/javascript">
+    <?php $timestamp = time();?>
+    $(function() {
+
+        var period;
+
+        $("#periodo").change(function(){
+            period = $("#periodo option:selected").val();
+            $("#intervalo").val(period);
+        });
+
+
+        $('#file_upload').uploadifive({
+            'auto'             : false,
+            'buttonText'       : '<i class="icon-file-alt"></i>',
+            'fileType'         : 'text/plain',
+            //  'checkScript'      : 'check-exists.php',
+//            'formData'         : {
+//                                    'timestamp' : '<?php #echo $timestamp;?>',
+//                                    'token'     : '<?php #echo md5('unique_salt' . $timestamp);?>',
+//                                    'limite'   :  $("#intervalo").val()
+//                                     },
+            'onUpload' : function(){
+                $('#file_upload').data('uploadifive').settings.formData = {
+                    'timestamp': '<?php echo $timestamp;?>',
+                    'token': '<?php echo md5('unique_salt' . $timestamp);?>',
+                    'limite': $('#intervalo').val(),
+                }},            
+            'queueID'          : 'queue',
+            'uploadScript'     : '<?= $this->url('processing-bills'); ?>',
+            'onUploadComplete' : function(file, data) { console.log(data); }
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    });
+    
+    function esconder() {
+        $('#exportDataModal').modal('hide');
+        $('#export-data').removeAttr('enabled');
+        $('#export-data').attr('disabled','disabled');
+    }
+
+    
+    
+</script>
+
+<div class="modal fade" id="exportDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= $this->url('invoice-download'); ?>" method="post" onsubmit="esconder();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Facturación </h4>
+                </div>
+                <div class="modal-body">
+                    Se va descargar la facturación procesada.
+                    <input type="hidden" id="intervalo" name="intervalo" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Descargar </button>
+                </div>
+            </form>    
+        </div>
+    </div>
+</div>

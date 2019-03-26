@@ -1,0 +1,256 @@
+<?php  echo $this->headLink()
+                ->appendStylesheet($this->basePath('tabletree/assets/css/reset.css'))
+                ->appendStylesheet($this->basePath('tabletree/assets/QiangTableTree/jquery.qtt.min.css'))
+                ->appendStylesheet($this->basePath('tabletree/assets/QiangTableTree/skin/default.css'))
+                ->appendStylesheet($this->basePath('tabletree/assets/css/worldcupteam.css'));?>
+
+<?php echo $this->headScript()
+                ->appendFile($this->basePath('tabletree/assets/QiangTableTree/jquery.qtt.min.js')); ?>
+
+
+
+<style type="text/css">
+    /* FIELDSET*/
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+    .form-group
+    {
+        margin-bottom: 1px;
+    }
+/*    .form-control
+    {
+        height: 26px;
+        font-size: 9px;
+    }*/
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+    
+    
+    /* QIANG TABLE TREE */
+    
+    .qiang-table-tree .QTTContainer {    
+        position: relative;
+        top: 0px;
+    }
+    
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.428571429;
+    }
+    
+</style>
+
+
+
+
+
+<fieldset class="col-md-12">
+    <legend> Presentación de Facturas [b]</legend>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            
+            <div id="qiang-table-tree" class="qiang-table-tree">
+                <!--start of QTTHeader-->
+                
+<!--                <div class="QTTHeader">
+                    <div class="treeHeaderBox">
+                        <span class="tLabel">&nbsp;</span>
+                        <ul class="tValue"></ul>
+                    </div>
+                </div>-->
+                
+                <!--end of QTTHeader-->
+                <!--start of QTTContainer-->
+                <div class="QTTContainer">
+                </div>
+                <!--end of QTTContainer-->
+            </div>            
+        
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+</fieldset>
+
+
+<script>
+(function($) {
+  'use strict';
+  $(function() {
+	var treeData = {
+		name:'ENTIDADES',
+		value:{'isHead' : true , 'Pld':'[DETALLE CONCURSO]', 'W':1, 'D':1, 'L':1, 'GF':1, 'GA':'LOTE3', 'GD':'RESTO', 'Pts':'TOTAL'},
+		children:[
+                        <?php foreach($this->totals as $item): ?>
+                        {
+                            name:'<?= $item["id_titular_serv"] . " - " . str_replace("'", "`", $item["desc_titular_serv_lote3"]); ?>',
+                            value:{'isTeam' : true , 'flag':'', 'Pld':3, 'W':2, 'D':1, 'L':0, 'GF':7, 'GA':'<?= $item["total_lote3"]; ?>', 'GD':'<?= $item["total_resto_servicios"]; ?>', 'Pts':'<?= $item["total_lote3"]+$item["total_resto_servicios"]; ?>'},
+                            children:[
+                        
+                            <?php foreach($this->subTotalsByPhone[$item["id_titular_serv"]] as $phone): ?>   
+                            {
+                                name:'<?= $phone["id_telefono"];?>',
+                                value:{ 'isTeam' : true , 'flag':'Flag_of_the_Netherlands.svg', 'Pld':3, 'W':3, 'D':0, 'L':0, 'GF':10, 'GA':'<?= $phone["total_lote3"]; ?>', 'GD':'<?= $phone["total_resto_servicios"]; ?>', 'Pts':'<?= $phone["total_lote3"]+$phone["total_resto_servicios"]; ?>'},
+                                children:[
+                                    <?php foreach($this->detailsGroupByPhone[$phone["id_telefono"]] as $detail): ?>
+                                    {
+                                        name:'<?= $detail["desc_servicio_estandard"];?>',
+                                        value:{'isItem' : true , 'Pld':'<?= empty($detail["desc_servicio_lote3"])?"-":$detail["desc_servicio_lote3"];?>', 'W':2, 'D':2, 'L':2, 'GF':2, 'GA':'<?= $detail["lote3"]; ?>', 'GD':'<?= $detail["resto_servicios"]; ?>', 'Pts':'<?= $detail["lote3"]+$detail["resto_servicios"]; ?>'},
+                                        children:[]
+                                    },
+                                    <?php endforeach; ?>        
+                            
+                                ]
+                            },
+                            <?php endforeach; ?>
+                            ]
+			},
+			<?php endforeach; ?>
+		]
+	}
+	
+	var QTT = window.QTT.qiangTableTree( {
+		TreeBox : $('#qiang-table-tree'),
+		createNodeIconHTML: function( nodeObj ){
+			return '';
+		}, 
+		createNodeNameHTML: function( nodeObj ){
+			var valueObj = nodeObj.value ;
+			//var flagName = '' ;
+			//if( valueObj.isTeam ){
+			//	flagName = '<img class="flag-img" src="assets/images/'+valueObj.flag+'.png" />' 
+			//}
+			//return flagName + nodeObj.name ;
+
+			var nameCustom = '' ;
+			if( valueObj.isHead ){
+                            nameCustom = '<span style="font-weight:bold;">'+nodeObj.name+'</span>' 
+			} else {
+                            nameCustom = nodeObj.name;
+                        }
+
+			//return flagName + nodeObj.name ;
+
+			return nameCustom;
+		},		
+		createNodeBarHTML: function( nodeObj ){
+			return '' ;
+		},    
+		createNodeValueHTML: function( nodeObj ){
+			var valueHTML = '';
+			var valueObj = nodeObj.value ;
+			if( valueObj.isTeam ){
+				valueHTML =    '<li class="td-1">&nbsp;</li>'
+							 + '<li class="td-2">&nbsp;</li>' 
+							 + '<li class="td-3">&nbsp;</li>' 
+							 + '<li class="td-4">&nbsp;</li>' 
+							 + '<li class="td-5">&nbsp;</li>' 
+							 + '<li class="td-6">'+(valueObj.GA )+'</li>' 
+							 + '<li class="td-7">'+(valueObj.GD )+'</li>' 
+							 + '<li class="td-8">'+(valueObj.Pts )+'</li>' ;
+			}
+			else if(valueObj.isItem) {
+				valueHTML =    '<li class="td-1">'+(valueObj.Pld  )+'</li>'
+							 + '<li class="td-2">&nbsp;</li>' 
+							 + '<li class="td-3">&nbsp;</li>' 
+							 + '<li class="td-4">&nbsp;</li>' 
+							 + '<li class="td-5">&nbsp;</li>' 
+							 + '<li class="td-6">'+(valueObj.GA )+'</li>' 
+							 + '<li class="td-7">'+(valueObj.GD )+'</li>' 
+							 + '<li class="td-8">'+(valueObj.Pts )+'</li>' ;
+			}
+                        else if(valueObj.isHead) {
+				valueHTML =    '<li class="td-1" style="font-weight:bold;">'+(valueObj.Pld  )+'</li>'
+							 + '<li class="td-2">&nbsp;</li>' 
+							 + '<li class="td-3">&nbsp;</li>' 
+							 + '<li class="td-4">&nbsp;</li>' 
+							 + '<li class="td-5">&nbsp;</li>' 
+							 + '<li class="td-6" style="font-weight:bold;">'+(valueObj.GA )+'</li>' 
+							 + '<li class="td-7" style="font-weight:bold;">'+(valueObj.GD )+'</li>' 
+							 + '<li class="td-8">'+(valueObj.Pts )+'</li>' ;
+			}
+                        
+			else{
+				valueHTML =  '<li class="td-1">&nbsp;</li>'
+							 + '<li class="td-2">&nbsp;</li>'
+							 + '<li class="td-3">&nbsp;</li>'
+							 + '<li class="td-4">&nbsp;</li>'
+							 + '<li class="td-5">&nbsp;</li>'
+							 + '<li class="td-6">&nbsp;</li>'
+							 + '<li class="td-7">&nbsp;</li>'
+							 + '<li class="td-8">&nbsp;</li>'
+			}
+			
+			return valueHTML ;
+		}
+	});
+	QTT.updateTree( treeData );
+	QTT.shrinkAllNode( );
+	//QTT.expandAllNode( );
+	var leafNode = $('.qiang-table-tree .qttLeaf');
+	var flagNode = $('.qiang-table-tree .qttLeaf .t-text');
+	
+	window.treeNodePosition = [];
+	flagNode.each( function( index , domObj ){
+		window.treeNodePosition.push( {
+			x: $(domObj).offset().left + 20,
+			y: $(domObj).offset().top + 10 
+		} );
+	});
+	$( window ).resize( function(){
+		QTT.resizeFn();
+	});
+	
+	$('#search-input').keydown(function(e){
+		if( e.keyCode===13){
+			var keyword = $('#search-input').val();
+			if( keyword !== '' ){
+				var resultArray = QTT.findNode( keyword );
+				if( resultArray.length > 0  ){
+					QTT.highlightNode( resultArray );
+					QTT.expandToNode( resultArray );
+				}
+			}
+			return ;
+		}
+	});
+
+  });
+})(jQuery);
+</script>

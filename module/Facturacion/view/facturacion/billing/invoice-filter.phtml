@@ -1,0 +1,148 @@
+<style>
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+
+    .form-group
+    {
+        margin-bottom: 2px;
+    }
+
+    .form-control
+    {
+        /*height: 26px;*/
+        font-size: 12px;
+
+    }
+
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+</style>
+
+<script type="text/javascript">
+    
+    $(document).ready(function (e){
+
+        $("#periodo").keypress(function(e){
+            if(e.which === 13){
+                e.preventDefault();
+                filter();
+                return false;
+            }
+        });    
+    
+    });
+    
+    function filter() {
+        
+        var url = '<?= $this->url('invoice-filter-result'); ?>';
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: $('#filterForm').serialize(),
+            cache: false,
+            beforeSend: function() {
+                $("#fill-filter").html("<img style='display: block; margin:auto;' src='<?= $this->basePath() . '/img/loading.gif' ;?>' />");
+            },
+            success: function (json) {
+                $("#fill-filter").html(json);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#fill-filter").html(html);
+            }
+        });
+
+    }
+
+</script>
+
+<fieldset class="col-md-12">    	
+    <legend>Filtrador</legend>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+        <div>
+            <form id="filterForm" method="get" onsubmit="return false;">
+            <div class="col-lg-6">    
+                
+                <div class="form-group input-group">
+                    <!--<input type="text" class="form-control" id="search" name="search" placeholder="Buscar..."/>-->
+                    
+<!--                <div class="form-group">-->
+                    
+                    <!--<label class="control-label" for="periodo"> Período </label>-->
+                    
+                    <select class="form-control" id="periodo" name="periodo" required>
+                        <option value='0'>Elegir un período</option>
+                        <option value='201902'>201902</option>
+                        <option value='201901'>201901</option>
+                        <option value='201812'>201812</option>
+                        <option value='201811'>201811</option>
+                        <option value='201810'>201810</option>
+                        <option value='201809'>201809</option>
+                        <option value='201808'>201808</option>
+                        <option value='201807'>201807</option>
+                        <option value='201806'>201806</option>
+                        <option value='201805'>201805</option>
+                        <option value='201804'>201804</option>
+                        <option value='201803'>201803</option>
+                        <option value='201802'>201802</option>
+                        <option value='201801'>201801</option>
+                    </select>
+                <!--</div>-->
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" onclick="filter();">
+                            <i class="icon-search"></i>
+                        </button>
+                    </span>
+                </div>
+                
+            </div>
+            
+            </form>
+        </div>
+        </div>
+    </div>
+    
+</fieldset>
+
+<div id="fill-filter">
+</div>

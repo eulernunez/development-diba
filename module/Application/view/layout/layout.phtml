@@ -183,22 +183,6 @@
                 </li>
                 
 
-            <?php if(false) : ?>    
-                <li class="panel">
-                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
-                        <i class="icon-tasks"> </i> <span style="font-size: 12px;">Administración</span>
-	   
-                    </a>
-                    <ul class="collapse" id="component-nav">
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Generar Factura Pre</span> </a></li>
-                         <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Carregar Factura Pro</span> </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Esborrar Periode Facturació</span> </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Sumatoris per Lot</span> </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Direcció d'Entitats</span> </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Llistat d'Usuaris Lot3</span> </a></li>
-                    </ul>
-                </li>
-            <?php endif ?>    
 
             <?php if(false) : ?>    
                 <li class="panel">
@@ -238,7 +222,7 @@
             <?php if('Administrador' == $userRole) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#admin-nav">
-                        <i class="icon-tasks"> </i> <span style="font-size: 12px;">Administración</span>
+                        <i class="icon-lock"> </i> <span style="font-size: 12px;">Administración</span>
 	   
                     </a>
                     <ul class="collapse" id="admin-nav">
@@ -246,11 +230,29 @@
                     </ul>
                 </li>
             <?php endif ?>    
+            
+            <?php if('Administrador' == $userRole) : ?>    
+                <li class="panel">
+                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#billing-nav">
+                        <i class="icon-credit-card"> </i> <span style="font-size: 12px;">Facturación</span>
+	   
+                    </a>
+                    <ul class="collapse" id="billing-nav">
+                        <li class=""><a href="<?php echo $this->url('billing-load') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Carga del documento</span> </a></li>
+                        <li class=""><a href="<?php echo $this->url('list-invoices') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Gestión de facturas</span> </a></li>
+                        <li class=""><a href="<?php echo $this->url('invoice-filter') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Filtro de facturas</span> </a></li>
+<!--                        <li class=""><a href="<?php # echo $this->url('invoices-browser') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> Facturas </span> </a></li>
+                        <li class=""><a href="<?php # echo $this->url('invoices-tabletree') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> Facturas </span> </a></li>-->
+<!--                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Direcció d'Entitats</span> </a></li>
+                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Llistat d'Usuaris Lot3</span> </a></li>-->
+                    </ul>
+                </li>
+            <?php endif ?>    
                 
             <?php if('Administrador' == $userRole || 'Ventas' == $userRole || 'Ingeniero' == $userRole || 'OperadorODP' == $userRole ) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#provisio-nav">
-                        <i class=" icon-sitemap"></i> <span style="font-size: 12px;">Provisión</span>
+                        <i class="icon-suitcase"></i> <span style="font-size: 12px;">Provisión</span>
                     </a>
                     <ul class="collapse" id="provisio-nav">
                         <li>

@@ -14,7 +14,7 @@ return array(
         'Inventario',
         'Buscador',
         'Provision',
-        
+        'Facturacion'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
