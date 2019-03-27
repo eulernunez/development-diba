@@ -17,18 +17,7 @@ class BillingController extends AbstractActionController
     protected $processingBillService;
     protected $periodo;
     
-    public function __construct() {
-        parent::self;
-        
-        }
-    
-    public function setProcessingBillService($service) {
-        $this->processingBillService = $service;
-        return $this;
-    }
-
-    public function loadAction()
-    {
+    public function init() {
         
         $session = new Container('User');
         $userRole = $session->offsetGet('userRole');
@@ -43,6 +32,16 @@ class BillingController extends AbstractActionController
                                                             'controller'=> 'User',
                                                             'action' => 'logout'));
         }
+
+    }
+    
+    public function setProcessingBillService($service) {
+        $this->processingBillService = $service;
+        return $this;
+    }
+
+    public function loadAction()
+    {
         
         //die('Hi!, 3ur3ka');
         return [];
