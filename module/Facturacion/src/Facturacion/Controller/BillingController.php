@@ -24,6 +24,16 @@ class BillingController extends AbstractActionController
 
     public function loadAction()
     {
+        
+        $session = new Container('User');
+        $userRole = $session->offsetGet('userRole');
+        $nif = $session->offsetGet('firstName');
+        $result = array(
+            'Role' => $userRole,
+            'Nif' => $nif);
+
+        die('<pre>' . print_r($result,true) . '</pre>');
+
         //die('Hi!, 3ur3ka');
         return [];
     }
