@@ -17,7 +17,7 @@ class BillingController extends AbstractActionController
     protected $processingBillService;
     protected $periodo;
     
-    public function init() {
+    public function __construct() {
         
         $session = new Container('User');
         $userRole = $session->offsetGet('userRole');
