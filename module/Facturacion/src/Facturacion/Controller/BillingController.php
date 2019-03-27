@@ -32,7 +32,14 @@ class BillingController extends AbstractActionController
             'Role' => $userRole,
             'Nif' => $nif);
 
-        die('<pre>' . print_r($result,true) . '</pre>');
+        //die('<pre>' . print_r($result,true) . '</pre>');
+        
+        if(empty($result['Role'])&&empty($result['Nif'])) {
+            
+            return $this->redirect()->toRoute('users',array(
+                                                            'controller'=> 'User',
+                                                            'action' => 'logout'));
+        }
 
         //die('Hi!, 3ur3ka');
         return [];
