@@ -22,9 +22,25 @@ class Module
         //die('<pre>' . print_r($result,true) . '</pre>');
         if(empty($result['Role'])&&empty($result['Nif'])) {
             
-            return $this->redirect()->toRoute('users',array(
-                                                            'controller'=> 'User',
-                                                            'action' => 'logout'));
+//            return $this->redirect()->toRoute('users',array(
+//                                                            'controller'=> 'User',
+//                                                            'action' => 'logout'));
+            
+            $router = $e->getRouter();
+            $url = $router->assemble(array(), array(
+                'name' => 'users'
+            ));
+            
+            $response = $e->getResponse();
+            $response->getHeaders()
+                ->addHeaderLine('Location', $url);
+            $response->setStatusCode(302);
+            
+            $response->sendHeaders();
+            
+            return $response;
+            
+            
         }
         
     }
