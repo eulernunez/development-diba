@@ -17,6 +17,11 @@ class BillingController extends AbstractActionController
     protected $processingBillService;
     protected $periodo;
     
+    public function __construct() {
+        parent::__construct();
+        
+        }
+    
     public function setProcessingBillService($service) {
         $this->processingBillService = $service;
         return $this;
