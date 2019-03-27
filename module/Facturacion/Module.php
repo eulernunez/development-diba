@@ -6,18 +6,28 @@
  */
 
 namespace Facturacion;
+use Zend\Session\Container;
 
 class Module
 {
 
-//    public function onBootstrap($e)
-//    {
-//        $app = $e->getApplication();
-//        #$em = $app->getEventManager();
-//        $sm = $app->getServiceManager();
-//        $config = $sm->get('Config');
-//        die('PROVISION : <pre>' . print_r($config, true) . '</pre>');
-//    }
+    public function onBootstrap($e)
+    {
+        $session = new Container('User');
+        $userRole = $session->offsetGet('userRole');
+        $nif = $session->offsetGet('firstName');
+        $result = array(
+            'Role' => $userRole,
+            'Nif' => $nif);
+        //die('<pre>' . print_r($result,true) . '</pre>');
+        if(empty($result['Role'])&&empty($result['Nif'])) {
+            
+            return $this->redirect()->toRoute('users',array(
+                                                            'controller'=> 'User',
+                                                            'action' => 'logout'));
+        }
+        
+    }
     
     
     public function getConfig()
