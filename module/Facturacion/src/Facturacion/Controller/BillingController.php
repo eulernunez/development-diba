@@ -18,7 +18,7 @@ class BillingController extends AbstractActionController
     protected $periodo;
     
     public function __construct() {
-        parent::__construct();
+        parent::self;
         
         }
     
