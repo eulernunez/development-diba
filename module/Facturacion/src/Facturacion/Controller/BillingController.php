@@ -33,22 +33,13 @@ class BillingController extends AbstractActionController
     }
 
     public function preDispatch () {
-
         # HACK TO RESOLVE PROBLEM
         $session = new Container('User');
-        $userRole = $session->offsetGet('userRole');
-        $nif = $session->offsetGet('firstName');
-        $result = array(
-            'Role' => $userRole,
-            'Nif' => $nif);
-
-        if(empty($result['Role'])&&empty($result['Nif'])) {
+        if(empty($session->offsetGet('userRole'))&&empty($session->offsetGet('firstName'))) {
             return $this->redirect()->toRoute('users',
-                    array(
-                        'controller'=> 'User',
-                        'action' => 'logout'));
+                array('controller'=> 'User',
+                      'action' => 'logout'));
         }
-
     }
 
     public function loadAction()
