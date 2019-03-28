@@ -23,8 +23,16 @@ class BillingController extends AbstractActionController
         return $this;
     }
 
-    public function loadAction()
-    {
+    protected function attachDefaultListeners() {
+
+        parent::attachDefaultListeners();
+        $events = $this->getEventManager();
+        $events->attach('dispatch', array($this, 'preDispatch'), 50);
+        //$events->attach('dispatch', array($this, 'postDispatch'), -100);
+
+    }
+
+    public function preDispatch () {
 
         # HACK TO RESOLVE PROBLEM
         $session = new Container('User');
@@ -40,7 +48,12 @@ class BillingController extends AbstractActionController
                         'controller'=> 'User',
                         'action' => 'logout'));
         }
-        
+
+    }
+
+    public function loadAction()
+    {
+
         //die('Hi!, 3ur3ka');
         return [];
 
