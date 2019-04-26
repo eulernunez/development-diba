@@ -7,16 +7,23 @@
 
 namespace Facturacion\Service;
 use Facturacion\Service\XLSXWriter;
+use Buscador\Model\Service;
 
-class ProcessingBill {
+class ProcessingBill extends Service {
 
     protected $adapter;
     protected $filePath;
     protected $time;
     protected $periodo;
+    protected $clientScopeFilter;
 
     public function __construct() {
+        parent::__construct();
         $this->time = time();
+        $this->clientScopeFilter = "";
+        if('Cliente' == $this->userRole) {
+            $this->clientScopeFilter = " AND id_cif_cliente ='" . $this->nif . "'";
+        }
     }
 
     public function setAdapter($adapter) {
@@ -673,7 +680,7 @@ class ProcessingBill {
                                     THEN f_total_sin_iva ELSE 0 
                     END total_resto_servicios  
 		FROM billing
-		WHERE estado=2 AND DATE_FORMAT(id_fecha_fact,'%Y%m')= '". $this->periodo . "'
+		WHERE estado=2" . $this->clientScopeFilter . " AND DATE_FORMAT(id_fecha_fact,'%Y%m')= '". $this->periodo . "'
                 ) b
             GROUP BY
 		id_titular_serv,
@@ -713,7 +720,7 @@ class ProcessingBill {
                             THEN f_total_sin_iva ELSE 0 
                         END total_resto_servicios  
                     FROM billing
-                    WHERE estado=2 AND DATE_FORMAT(id_fecha_fact,'%Y%m')= '". $this->periodo . "'
+                    WHERE estado=2" . $this->clientScopeFilter . " AND DATE_FORMAT(id_fecha_fact,'%Y%m')= '". $this->periodo . "'
                     ) b
                 GROUP BY
                     id_titular_serv,
@@ -740,7 +747,7 @@ class ProcessingBill {
                 case when desc_lote = 'LOTE3' then f_total_sin_iva else 0 end lote3, 
                 case when desc_lote = 'RESTO SERVICIOS' then f_total_sin_iva else 0 end resto_servicios  
             FROM billing 
-            WHERE estado=2 AND DATE_FORMAT(id_fecha_fact,'%Y%m') = '". $this->periodo . "'
+            WHERE estado=2" . $this->clientScopeFilter . " AND DATE_FORMAT(id_fecha_fact,'%Y%m') = '". $this->periodo . "'
             ORDER BY id_numero_comercial";
 
         $adapter = $this->adapter->query($statement);

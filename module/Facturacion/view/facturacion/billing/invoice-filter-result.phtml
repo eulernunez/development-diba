@@ -130,7 +130,7 @@
                                     <?php foreach($this->detailsGroupByPhone[$phone["id_telefono"]] as $detail): ?>
                                     {
                                         name:'<?= $detail["desc_servicio_estandard"];?>',
-                                        value:{'isItem' : true , 'Pld':'<?= empty($detail["desc_servicio_lote3"])?"-":$detail["desc_servicio_lote3"];?>', 'W':2, 'D':2, 'L':2, 'GF':2, 'GA':'<?= $detail["lote3"]; ?>', 'GD':'<?= $detail["resto_servicios"]; ?>', 'Pts':'<?= $detail["lote3"]+$detail["resto_servicios"]; ?>'},
+                                        value:{'isItem' : true , 'Pld':'<?= empty($detail["desc_servicio_lote3"])?"-":$detail["desc_servicio_lote3"];?>', 'W':2, 'D':2, 'L':2, 'GF':2, 'GA':'<?= trim($detail["lote3"]); ?>', 'GD':'<?= trim($detail["resto_servicios"]); ?>', 'Pts':'<?= $detail["lote3"]+$detail["resto_servicios"]; ?>'},
                                         children:[]
                                     },
                                     <?php endforeach; ?>        
