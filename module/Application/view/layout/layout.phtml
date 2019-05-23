@@ -243,10 +243,10 @@
                         <li class=""><a href="<?php echo $this->url('list-invoices') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Gestión de facturas</span> </a></li>
                         <?php endif ?>    
                         <li class=""><a href="<?php echo $this->url('invoice-filter') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Filtro de facturas</span> </a></li>
-<!--                        <li class=""><a href="<?php # echo $this->url('invoices-browser') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> Facturas </span> </a></li>
-                        <li class=""><a href="<?php # echo $this->url('invoices-tabletree') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;"> Facturas </span> </a></li>-->
-<!--                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Direcció d'Entitats</span> </a></li>
-                        <li class=""><a href="<?php echo $this->url('application') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Llistat d'Usuaris Lot3</span> </a></li>-->
+                        <?php if('Administrador' == $userRole) : ?>    
+                        <li class=""><a href="<?php echo $this->url('ui-summation') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Sumatoria</span> </a></li>
+                        <?php endif ?>    
+                        
                     </ul>
                 </li>
             <?php endif ?>    

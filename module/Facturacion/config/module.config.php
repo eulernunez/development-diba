@@ -172,7 +172,27 @@ return array(
                     ),
                 ),
             ),
-            
+            'ui-summation' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/ui-summation',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'ui-summation',
+                    ),
+                ),
+            ),
+            'lot-summation' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/lot-summation',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'lot-summation',
+                    ),
+                ),
+            ),
+
             
         ),
     ),

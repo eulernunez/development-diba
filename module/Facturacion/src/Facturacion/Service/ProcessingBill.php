@@ -16,9 +16,11 @@ class ProcessingBill extends Service {
     protected $time;
     protected $periodo;
     protected $clientScopeFilter;
+    protected $objPHPExcel;
 
     public function __construct() {
         parent::__construct();
+        $this->objPHPExcel = new \PHPExcel();
         $this->time = time();
         $this->clientScopeFilter = "";
         if('Cliente' == $this->userRole) {
@@ -834,4 +836,135 @@ class ProcessingBill extends Service {
     
     
     
+    public function constructHeader() {
+
+        $header = array(
+            'CIF',
+            'Razón Social',
+            'Clave de cobro',
+            'Contacto',
+            'Domicilio',
+            'Localidad',
+            'Distrito Postal',
+            'SumaDeTOTAL SIN IVA',
+            'LOTE',
+            'CIF CLIENTE',
+            'NOM ENS'
+        );
+
+        $row = 1;
+        $col = 'A';	
+        foreach($header as $item) {		
+            $this->objPHPExcel->getActiveSheet()
+                    ->getStyle($col.$row,$item)
+                    ->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()
+                    ->getStyle($col.$row,$item)->getFill()
+                    ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
+            $this->objPHPExcel->getActiveSheet()
+                    ->getStyle($col.$row,$item)->getFill()
+                    ->getStartColor()->setARGB('E3E3E3');
+            $this->objPHPExcel->getActiveSheet()
+                    ->setCellValue($col.$row,$item);
+            $col++;
+        }
+        
+        return $this->objPHPExcel;
+    }
+    
+    public function getSumatoriItems($periodo, $filter) {
+        
+                $query = "
+            SELECT
+                a.id_cif,
+                a.desc_razon_social, 
+                a.desc_clave_cobro,
+                a.desc_contacto, 
+                a.desc_domicilio,
+                a.desc_localidad, 
+                a.desc_distrito_postal,
+		replace(round(sum(b.f_total_sin_iva),2),'.',',') f_total_sin_iva,
+		b.desc_lote,
+		b.id_cif_cliente,
+		b.desc_nom_ent
+                FROM 
+                    billing AS b LEFT JOIN address AS a ON b.id_cif_cliente = a.id_cif 
+                WHERE b.id_fecha_fact = '" . $periodo . "'
+                GROUP BY
+                    a.id_cif,
+                    a.desc_razon_social, 
+                    a.desc_clave_cobro,
+                    a.desc_clave_cobro,
+                    a.desc_contacto, 
+                    a.desc_domicilio,
+                    a.desc_localidad, 
+                    a.desc_distrito_postal,
+                    b.desc_lote,
+                    b.id_cif_cliente, 
+                    b.desc_nom_ent
+                HAVING (b.desc_lote='" . $filter . "')";
+        
+        $adapter = $this->adapter->query($query);
+        
+        $row = 2;
+        foreach ($adapter->execute() as $item) {
+            $col = 'A';
+            foreach ($item as $value) {
+		$this->objPHPExcel->getActiveSheet()
+                            ->setCellValueExplicit($col.$row,$value, \PHPExcel_Cell_DataType::TYPE_STRING);
+		$col++;
+            }
+            $row++;
+        }
+
+        return $this->objPHPExcel;
+
+    }
+
+
+    /*  Exportation excel file 
+     *  $objPHPExcel = new \PHPExcel();
+     * 
+     * 
+     */
+    public function sumatoriaLotes($periodo) {
+
+        $this->objPHPExcel->getSecurity()->setLockWindows(false)
+                    ->setLockStructure(false);
+
+        $this->objPHPExcel = $this->constructHeader();
+        $this->objPHPExcel->setActiveSheetIndex(0);
+        $this->objPHPExcel->getActiveSheet()->setTitle('LOTE3');
+        $this->objPHPExcel = $this->getSumatoriItems($periodo, 'LOTE3');
+
+        $this->objPHPExcel->createSheet(1); 
+        $this->objPHPExcel->setActiveSheetIndex(1);
+        $this->objPHPExcel->getActiveSheet()->setTitle('RESTO SERVICIO');
+        $this->objPHPExcel = $this->constructHeader();
+        $this->objPHPExcel = $this->getSumatoriItems($periodo, 'RESTO SERVICIOS');
+        
+        $this->objPHPExcel->setActiveSheetIndex(0);
+        
+        $filename = 'SumatorisPerLot_' . $periodo . '.xlsx';
+        
+        header("Content-Type: text/html;charset=utf-8");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-disposition: attachment; filename=$filename");
+        header('Cache-Control: max-age=0');
+
+        try {
+            
+            $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output'); 
+
+        } catch (Exception $e) {
+
+            echo 'Excepción capturada: ' .  $e->getMessage();
+
+        }
+
+        exit;
+
+    }
+
 }

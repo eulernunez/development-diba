@@ -189,6 +189,7 @@ class BillingController extends AbstractActionController
 
     }
 
+    /* Download initial document FACT-CHECK*/
     public function invoiceDownloadAction()
     {
 
@@ -405,6 +406,32 @@ class BillingController extends AbstractActionController
 
         return $viewmodel;
 
+    }
+    
+    public function uiSummationAction() {
+        
+        $viewmodel = 
+            new ViewModel(
+                    array());
+
+        return $viewmodel;
+
+    }
+    
+    public function lotSummationAction() {
+        
+        $posts = (array)$this->request->getPost();
+        
+        if(empty($posts['periodo'])) {
+            die('DEAD');
+            
+        } else {
+            $periodo = (string)$posts['periodo'] . '28';
+            $handler = 
+                $this->processingBillService->sumatoriaLotes($periodo);
+            
+        }
+        
     }
     
 }

@@ -1,4 +1,6 @@
 <?php
+// Libreria externa PHPExcel
+require_once('../vendor/External/PHPExcel/Classes/PHPExcel.php');
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
