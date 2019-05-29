@@ -100,7 +100,8 @@
         <div class="panel-body">
 
         <div>
-            <form id="filterForm" method="get" onsubmit="return false;">
+            <!--<form id="filterForm" method="get" onsubmit="return false;">-->
+            <form id="filterForm" method="get">
             <div class="col-lg-6">    
                 
                 <div class="form-group input-group">
@@ -163,8 +164,19 @@
                     </select>
                 <!--</div>-->
                     <span class="input-group-btn">
+                        &nbsp;
+                    </span>
+                    <span class="input-group-btn">
                         <button class="btn btn-default" type="button" onclick="filter();">
                             <i class="icon-search"></i>
+                        </button>
+                    </span>
+                    <span class="input-group-btn">
+                        &nbsp;
+                    </span>
+                    <span class="input-group-btn">
+                        <button id="download-summation" title="Descarga" type="submit" class="btn btn-danger disabled" style="float: left;">
+                            <i class="icon-download-alt"></i>
                         </button>
                     </span>
                 </div>
