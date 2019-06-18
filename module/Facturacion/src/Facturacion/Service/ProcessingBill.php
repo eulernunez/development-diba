@@ -493,7 +493,7 @@ class ProcessingBill extends Service {
         
 
         // OTHER OPTION
-         $this->periodo = $periodo . '28';
+        $this->periodo = $periodo . '28';
         
         $header = array(
             'ID'=>'0',
@@ -522,7 +522,6 @@ class ProcessingBill extends Service {
         header('Content-Transfer-Encoding: binary');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        
         $statement = 
             "SELECT
                 id,
@@ -544,8 +543,8 @@ class ProcessingBill extends Service {
                 desc_servicio_lote3,
                 desc_lote,
                 f_total_sin_iva
-            FROM billing WHERE estado=1 AND '" . $this->periodo ."'";
-
+            FROM billing WHERE estado=1 AND id_fecha_fact = '" . $this->periodo ."'";
+        
         $adapter = $this->adapter->query($statement);
         
         $writer = new XLSXWriter();

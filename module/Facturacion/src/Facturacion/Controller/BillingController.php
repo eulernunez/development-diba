@@ -189,7 +189,9 @@ class BillingController extends AbstractActionController
 
     }
 
-    /* Download initial document FACT-CHECK*/
+    /* 
+     * Download initial document FACT-CHECK
+     */
     public function invoiceDownloadAction()
     {
 
