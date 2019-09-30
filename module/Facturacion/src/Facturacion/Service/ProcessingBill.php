@@ -196,7 +196,7 @@ class ProcessingBill extends Service {
         return $this;
         
     }
-    
+//round(((f_unidades * bb.f_precio_diario * aa.f_dias_fact)+(f_unidades*bb.f_precio_mensual*aa.f_meses_fact)),2)    
     public function billingLote3() {
         
 	$statement = 
@@ -224,9 +224,9 @@ class ProcessingBill extends Service {
                     CASE
                         WHEN (aa.f_importe_total < 0)
                             THEN
-                                -1 * (round(((f_unidades*bb.f_precio_diario*aa.f_dias_fact)+(f_unidades*bb.f_precio_mensual*aa.f_meses_fact)),2))
+                                -1 * (round(((f_unidades * (bb.f_precio_mensual/DAY(LAST_DAY(aa.f_inicio_periodo))) * aa.f_dias_fact)+(f_unidades*bb.f_precio_mensual*aa.f_meses_fact)),2))
                             ELSE
-                                round(((f_unidades*bb.f_precio_diario*aa.f_dias_fact)+(f_unidades*bb.f_precio_mensual*aa.f_meses_fact)),2)
+                                round(((f_unidades * (bb.f_precio_mensual/DAY(LAST_DAY(aa.f_inicio_periodo))) * aa.f_dias_fact)+(f_unidades*bb.f_precio_mensual*aa.f_meses_fact)),2)
                     END total,
                     aa.time,
                     aa.estado
