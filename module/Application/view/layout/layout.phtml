@@ -231,7 +231,7 @@
                 </li>
             <?php endif ?>    
             
-            <?php if('Administrador' == $userRole || 'Cliente' == $userRole ) : ?>    
+            <?php if('Administrador' == $userRole || 'Cliente' == $userRole  || 'Facturacion' == $userRole ) : ?>    
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#billing-nav">
                         <i class="icon-credit-card"> </i> <span style="font-size: 12px;">Facturación</span>
@@ -243,7 +243,7 @@
                         <li class=""><a href="<?php echo $this->url('list-invoices') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Gestión de facturas</span> </a></li>
                         <?php endif ?>    
                         <li class=""><a href="<?php echo $this->url('invoice-filter') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Filtro de facturas</span> </a></li>
-                        <?php if('Administrador' == $userRole) : ?>    
+                        <?php if('Administrador' == $userRole|| 'Facturacion' == $userRole) : ?>    
                         <li class=""><a href="<?php echo $this->url('ui-summation') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Sumatoria</span> </a></li>
                         <?php endif ?>    
                         
