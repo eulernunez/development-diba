@@ -436,4 +436,45 @@ class BillingController extends AbstractActionController
         
     }
     
+    public function invoiceComparisonAction() {
+
+        $viewmodel = 
+            new ViewModel(
+                    array());
+
+        return $viewmodel;
+
+    }
+    
+    public function comparisonBetweenInmediatePeriodsAction() {
+        
+        $params = $this->getRequest()->getQuery()->toArray();
+        
+        $percent = (int)$params['percent'];
+        $periodo = (string)$params['periodo'];
+        
+        $records = array();
+        
+        if($periodo != '0'){
+            $records = $this->processingBillService->comparisonProcess($percent, $periodo);
+        }
+
+        //die('TABLE: <pre>' . print_r($records['result'], true) . '</pre>');
+        if(is_array($records['result'])) {
+
+            $viewmodel = 
+                    new ViewModel(
+                            array(
+                                'records' => $records['result'],
+                                'periodo' => $periodo,
+                                'periodocontiguo' => $records['periodoContiguo'],
+                                ));
+            $viewmodel->setTerminal(true);
+
+            return $viewmodel;
+
+        }
+
+    }
+    
 }

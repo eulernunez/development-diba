@@ -192,8 +192,28 @@ return array(
                     ),
                 ),
             ),
-
+            'invoice-comparison' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/invoice-comparison',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'invoice-comparison',
+                    ),
+                ),
+            ),
+            'invoice-comparison-result' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/invoice-comparison-result',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'comparison-between-inmediate-periods',
+                    ),
+                ),
+            ),
             
+
         ),
     ),
     'view_manager' => array (

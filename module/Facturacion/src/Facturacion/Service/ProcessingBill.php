@@ -686,7 +686,7 @@ class ProcessingBill extends Service {
             GROUP BY
 		id_titular_serv,
 		desc_titular_serv_lote3";
-
+        
         $adapter = $this->adapter->query($statement);
         $result = $adapter->execute();
 
@@ -963,6 +963,92 @@ class ProcessingBill extends Service {
         }
 
         exit;
+
+    }
+
+    /*
+     * @Eureka
+     */
+    public function comparisonProcess($percent, $periodo) {
+        
+        $information = array();
+        
+        $percent = (float)$percent;
+        $month = (int)substr($periodo, 4, 2);
+        $year = (int)substr($periodo, 0, 4);
+    
+        if($month > 1) {
+           $contiguosMonth =  $month - 1;
+           if($contiguosMonth < 10) {
+               $contiguosMonth = '0' . (string)$contiguosMonth;
+           }
+           $contiguosYear = $year;
+        } else if($month == 1) {
+            $contiguosMonth = 12;
+            $contiguosYear = $year - 1;
+        }
+        
+        $contiguosPeriodo = (string)$contiguosYear . '' . (string)$contiguosMonth;
+
+        $information['periodoContiguo'] = $contiguosPeriodo;
+        
+        $contiguosRecords = $this->getTotalByEntities($contiguosPeriodo);
+        $records = $this->getTotalByEntities($periodo);
+        
+        $contiguos = array();
+        $current = array();
+        $result = array();
+        
+        foreach ($contiguosRecords as $item) {
+            $item['periodo'] = $contiguosPeriodo;
+            $contiguos[$item['id_titular_serv']] = $item;
+        }
+        
+        foreach ($records as $item) {
+            $item['periodo'] = $periodo;
+            $current[$item['id_titular_serv']] = $item;
+        }
+
+        $total = 0.00;
+        $contiguosTotal = 0.00;
+        $margen = 0.00;
+
+        foreach ($current as $item) {
+            
+            if(isset($contiguos[$item['id_titular_serv']])) {
+
+                $key = $contiguos[$item['id_titular_serv']];
+                $item['id_continuo'] = $key['id'];
+                $item['periodo_continuo'] = $key['periodo'];
+                $item['total_lote3_continuo'] = $key['total_lote3'];
+                $item['total_resto_servicios_continuo'] = $key['total_resto_servicios'];
+                
+                $total = (float)$item['total_lote3'] + (float)$item['total_resto_servicios'];
+                $contiguosTotal = (float)$item['total_lote3_continuo'] + (float)$item['total_resto_servicios_continuo'];
+                
+                $item['total'] = $total;
+                $item['total_continuo'] = $contiguosTotal;
+                $item['percent'] = $percent;
+                
+                if($contiguosTotal > $total) {
+                    
+                    $margen = (float)(($contiguosTotal - $total)*100/$total);
+                    $item['margen'] = $margen;
+                    // Set key = $item['id_titular_serv']  
+                    if($margen >= $percent) {
+                        $result[$item['id_titular_serv']] = $item;
+                    }
+
+                }
+
+            }
+
+            
+        }
+
+        $information['result'] = $result;
+
+        return $information;
 
     }
 

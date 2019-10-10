@@ -246,6 +246,9 @@
                         <?php if('Administrador' == $userRole|| 'Facturacion' == $userRole) : ?>    
                         <li class=""><a href="<?php echo $this->url('ui-summation') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Sumatoria</span> </a></li>
                         <?php endif ?>    
+                        <?php if('Administrador' == $userRole) : ?>    
+                        <li class=""><a href="<?php echo $this->url('invoice-comparison') ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Comparación</span> </a></li>
+                        <?php endif ?>    
                         
                     </ul>
                 </li>
