@@ -87,28 +87,28 @@
     
     
     });
-    
-    function summationDownload() {
-        
-        var url = '<?= $this->url('lot-summation'); ?>';
-        $.ajax({
-            type: "GET",
-            url: url,
-            data: $('#filterForm').serialize(),
-            cache: false,
-            beforeSend: function() {
-                $("#fill-filter").html("<img style='display: block; margin:auto;' src='<?= $this->basePath() . '/img/loading.gif' ;?>' />");
-            },
-            success: function (json) {
-                $("#fill-filter").html(json);
-            },
-            error: function (xhr, status) {
-                html = "<div class='alert alert-danger'>Error!</div>"
-                $("#fill-filter").html(html);
-            }
-        });
-
-    }
+// Obsoleted [NOW RIGHT POST]    
+//    function summationDownload() {
+//        
+//        var url = '<?= $this->url('lot-summation'); ?>';
+//        $.ajax({
+//            type: "GET",
+//            url: url,
+//            data: $('#filterForm').serialize(),
+//            cache: false,
+//            beforeSend: function() {
+//                $("#fill-filter").html("<img style='display: block; margin:auto;' src='<?= $this->basePath() . '/img/loading.gif' ;?>' />");
+//            },
+//            success: function (json) {
+//                $("#fill-filter").html(json);
+//            },
+//            error: function (xhr, status) {
+//                html = "<div class='alert alert-danger'>Error!</div>"
+//                $("#fill-filter").html(html);
+//            }
+//        });
+//
+//    }
 
 </script>
 

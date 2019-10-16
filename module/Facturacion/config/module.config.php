@@ -192,6 +192,16 @@ return array(
                     ),
                 ),
             ),
+            'invoice-filter-export' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/invoice-filter-export',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'invoice-filter-export',
+                    ),
+                ),
+            ),            
             'invoice-comparison' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(

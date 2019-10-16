@@ -436,6 +436,76 @@ class BillingController extends AbstractActionController
         
     }
     
+    public function invoiceFilterExportAction() {
+        
+        $posts = (array)$this->request->getPost();
+        
+        if(empty($posts['periodo'])) {
+            die('DEAD');
+        } else {
+            
+            $periodo = (string)$posts['periodo'];
+
+            $totals = $this->processingBillService->getTotalByEntities($periodo);
+            $subTotals = $this->processingBillService->getSubTotalByPhone();
+            $details = $this->processingBillService->getDetails();
+
+            $subTotalsByPhone = array();
+            foreach ($subTotals as $item) {
+                $subTotalsByPhone[$item['id_titular_serv']][] = $item;
+            }
+
+            $detailsGroupByPhone = array();
+            foreach ($details as $item) {
+                $detailsGroupByPhone[$item['id_telefono']][] = $item;
+            }            
+
+            $result = array();
+            $element = array();
+            $subElement = array();
+            $thirdElement = array();
+
+            foreach($totals as $item){
+                $element['ENTIDAD'] = $item['id_titular_serv'] . ' - ' . $item['desc_titular_serv_lote3'];
+                $element['LINEA'] = '';
+                $element['DETALLE_ESTANDAR'] = '';
+                $element['DETALLE_LOTE3'] = '';
+                $element['LOTE3'] = $item['total_lote3'];
+                $element['RESTO'] = $item['total_resto_servicios'];
+                $element['TOTAL'] = (float)$item['total_lote3'] + (float)$item['total_resto_servicios'];
+                $result[] = $element;
+                unset($element);
+                foreach($subTotalsByPhone[$item["id_titular_serv"]] as $phone){
+                    $subElement['ENTIDAD'] = '';
+                    $subElement['LINEA'] = $phone['id_telefono'];
+                    $subElement['DETALLE_ESTANDAR'] = '';
+                    $subElement['DETALLE_LOTE3'] = '';
+                    $subElement['LOTE3'] = $phone['total_lote3'];
+                    $subElement['RESTO'] = $phone['total_resto_servicios'];
+                    $subElement['TOTAL'] = (float)$phone['total_lote3'] + (float)$phone['total_resto_servicios'];
+                    $result[] = $subElement;
+                    unset($subElement);
+                    foreach($detailsGroupByPhone[$phone["id_telefono"]] as $detail) {
+                        $thirdElement['ENTIDAD'] = '';
+                        $thirdElement['LINEA'] = '';
+                        $thirdElement['DETALLE_ESTANDAR'] = $detail['desc_servicio_estandard'];
+                        $thirdElement['DETALLE_LOTE3'] = $detail['desc_servicio_lote3'];
+                        $thirdElement['LOTE3'] = $detail['lote3'];
+                        $thirdElement['RESTO'] = $detail['resto_servicios'];
+                        $thirdElement['TOTAL'] = (float)$detail['lote3'] + (float)$detail['resto_servicios'];
+                        $result[] = $thirdElement;
+                        unset($thirdElement);
+                    }
+                }
+            }
+        
+            $handler = 
+            $this->processingBillService->invoiceExport($periodo, $result);
+            
+        }
+        
+    }
+    
     public function invoiceComparisonAction() {
 
         $viewmodel = 

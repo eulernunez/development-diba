@@ -65,7 +65,24 @@
                 filter();
                 return false;
             }
-        });    
+        });
+        
+        $("#periodo").change(function(){
+
+            var periodoSelected = $("#periodo option:selected").val();
+            if(periodoSelected !== '0') {
+                $("#download-summation").removeClass("disabled").addClass("active");
+                $("#show-summation").removeClass("disabled").addClass("active");
+            } else {
+                $("#download-summation").removeClass("active").addClass("disabled");
+                $("#show-summation").removeClass("active").addClass("disabled");
+            }
+
+        });
+        
+        
+        
+        
     
     });
     
@@ -101,7 +118,7 @@
 
         <div>
             <!--<form id="filterForm" method="get" onsubmit="return false;">-->
-            <form id="filterForm" method="get">
+            <form id="filterForm" action="<?= $this->url('invoice-filter-export'); ?>" method="post">
             <div class="col-lg-6">    
                 
                 <div class="form-group input-group">
@@ -177,20 +194,20 @@
                         &nbsp;
                     </span>
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" onclick="filter();">
+                        <button id="show-summation" title="Vista" class="btn btn-default disabled" type="button" onclick="filter();">
                             <i class="icon-search"></i>
                         </button>
                     </span>
                     <span class="input-group-btn">
                         &nbsp;
                     </span>
-                <!-- NEXT TASK TO PRINT
+                
                     <span class="input-group-btn">
                         <button id="download-summation" title="Descarga" type="submit" class="btn btn-danger disabled" style="float: left;">
                             <i class="icon-download-alt"></i>
                         </button>
                     </span>
-                !-->
+                
                 </div>
                 
             </div>

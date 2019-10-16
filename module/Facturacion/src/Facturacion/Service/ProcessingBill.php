@@ -1052,4 +1052,104 @@ class ProcessingBill extends Service {
 
     }
 
+    public function invoiceExport($periodo, $result) {
+
+        $this->objPHPExcel->getSecurity()->setLockWindows(false)
+                ->setLockStructure(false);
+
+        $this->objPHPExcel = $this->constructInvoiceHeader();
+        $this->objPHPExcel->setActiveSheetIndex(0);
+        $this->objPHPExcel->getActiveSheet()->setTitle('FACTURA-' . $periodo);
+        $this->objPHPExcel = $this->getInvoiceItems($result);
+
+        $this->objPHPExcel->setActiveSheetIndex(0);
+        
+        $filename = 'Factura_' . $periodo . '.xlsx';
+
+        header("Content-Type: text/html;charset=utf-8");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-disposition: attachment; filename=$filename");
+        header('Cache-Control: max-age=0');
+
+        try {
+            
+            $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel2007');
+            $objWriter->save('php://output'); 
+
+        } catch (Exception $e) {
+
+            echo 'Excepción capturada: ' .  $e->getMessage();
+
+        }
+
+        exit;
+
+    }
+    
+
+        
+    public function constructInvoiceHeader() {
+
+        $header = array(
+            'ENTIDAD',
+            'LÍNEA',
+            'DETALLE TELEFONICA',
+            'DETALLE CONCURSO',
+            'LOTE3',
+            'RESTO',
+            'TOTAL'
+        );
+
+        $row = 1;
+        $col = 'A';	
+        foreach($header as $item) {		
+            $this->objPHPExcel->getActiveSheet()
+                    ->getStyle($col.$row,$item)
+                    ->getFont()->setBold(true);
+            $this->objPHPExcel->getActiveSheet()
+                    ->getStyle($col.$row,$item)->getFill()
+                    ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
+            $this->objPHPExcel->getActiveSheet()
+                    ->getStyle($col.$row,$item)->getFill()
+                    ->getStartColor()->setARGB('E3E3E3');
+            $this->objPHPExcel->getActiveSheet()
+                    ->setCellValue($col.$row,$item);
+            $col++;
+        }
+        
+        return $this->objPHPExcel;
+    }
+        
+    
+    public function getInvoiceItems($result) {
+        
+        
+        $row = 2;
+        foreach ($result as $item) {
+            $col = 'A';
+            foreach ($item as $value) {
+                if($col<'E'){
+		$this->objPHPExcel->getActiveSheet()
+                            ->setCellValueExplicit($col.$row,$value, \PHPExcel_Cell_DataType::TYPE_STRING);
+                } else {
+                    $this->objPHPExcel->getActiveSheet()
+                        ->setCellValueExplicit($col.$row,$value, \PHPExcel_Cell_DataType::TYPE_NUMERIC);
+                    if(empty($item['DETALLE_ESTANDAR'])){
+                        $this->objPHPExcel->getActiveSheet()
+                            ->getStyle($col.$row,$item)
+                            ->getFont()->setBold(true);
+                    }
+                }
+                $col++;
+            }
+            $row++;
+        }
+
+        return $this->objPHPExcel;
+
+    }
+
+    
+    
+    
 }
