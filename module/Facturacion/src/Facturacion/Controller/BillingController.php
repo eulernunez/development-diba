@@ -379,7 +379,11 @@ class BillingController extends AbstractActionController
     }
     
     public function invoiceFilterResultAction() {
-        
+
+        if(empty($periodo)) {
+            die('DEAD -  3ur3ka');
+        }
+
         $params = $this->getRequest()->getQuery()->toArray();
         $periodo = (string)$params['periodo'];
 
