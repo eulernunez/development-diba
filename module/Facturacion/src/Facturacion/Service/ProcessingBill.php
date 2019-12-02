@@ -17,6 +17,8 @@ class ProcessingBill extends Service {
     protected $periodo;
     protected $clientScopeFilter;
     protected $objPHPExcel;
+    
+    protected $posts;
 
     public function __construct() {
         parent::__construct();
@@ -1149,7 +1151,292 @@ class ProcessingBill extends Service {
 
     }
 
+
+    public function saveLote3Invoice() {
+
+        $invoiceLote3 = new \Facturacion\Model\Entity\InvoiceLote3();
+        $invoiceLote3->setOptions($this->posts);
+
+        $handler = new \Facturacion\Model\InvoiceLote3($this->adapter);
+        $invoiceId = $handler->saveLote3Invoice($invoiceLote3);
+
+        return $invoiceId;
+
+    }
+
+    public function getLote3Invoices() {
+
+        $statement =
+            "SELECT f.*,
+                o.id AS organismoId, o.organismo,
+                p.id AS plantaId, p.planta,
+                x.id AS xarxaId, x.xarxa,
+                c.id AS claveId, c.clave,
+                s.id AS oficinaId, s.nombre,
+                sr.id AS servicioId, sr.codigo_servicio, sr.servicio, sr.descripcion_detallada, sr.precio,
+                e.id AS estadoId, e.estado
+                    FROM factura_lote3 AS f
+                        LEFT JOIN organismos AS o ON f.organismo = o.id
+                        LEFT JOIN plantas AS p ON f.planta = p.id
+                        LEFT JOIN xarxas AS x ON f.xarxa = x.id
+                        LEFT JOIN clave_cobros AS c ON f.clave = c.id
+                        LEFT JOIN sedes AS s ON f.oficina = s.id
+                        LEFT JOIN servicios_lote3 AS sr ON f.servicio = sr.id
+                        LEFT JOIN estados_lote3 AS e ON f.estado = e.id
+                        WHERE f.estado = 1
+                        ORDER BY f.creacion DESC"; 
+        
+        $adapter = $this->adapter->query($statement);
+        $result = $adapter->execute();
+        
+        return $this->convertedInvoiceObjects($result);
+
+    }
+    
+    /*CHECK */
+    public function convertedInvoiceObjects($result)
+    {
+
+        $entities = array();
+
+        foreach ($result as $row) {
+            
+            $entity = new \stdClass;
+            $entity->id = $row['id'];
+            $entity->organismo = $row['organismo'];
+            $entity->planta = $row['planta'];
+            $entity->xarxa = $row['xarxa'];
+            $entity->clave = $row['clave'];
+            $entity->nombre = $row['nombre']; //Nombre sede
+            $entity->codigoservicio = $row['codigo_servicio'];
+            $entity->servicio = $row['servicio'];
+            $entity->descripciondetallada = $row['descripcion_detallada'];
+            $entity->precio = $row['precio'];
+            $entity->administrativo = $row['administrativo'];
+            $entity->linea = $row['linea'];
+            $entity->ip = $row['ip'];
+            
+            $entities[$row['id']] = $entity;
+        }
+        //die('<pre>' . print_r($entities, true) . '</pre>');                    
+        return $entities;
+
+    }
+
+    public function templateExport()
+    {
+
+        //die('$post in templateExport <pre>' . print_r($this->posts, true) . '</pre>');
+        //$templatePath = "C:\\xampp\htdocs\development\module\Facturacion\src\Facturacion\Template\\Template_XIC.xls";
+        //die('DIR: <pre>' . print_r(dirname(__DIR__), true) . '</pre>');
+
+        $centroCoste = (string)$this->posts['centrocostes'];
+        $periodo = (string)$this->posts['periodo'];
+        $templatePath = dirname(__DIR__) . "\Template\\Template_" . strtoupper($centroCoste) .  ".xls"; 
+        
+        $objReader = \PHPExcel_IOFactory::createReader('Excel5');
+        
+        $objPHPExcel = $objReader->load($templatePath);
+            
+                
+        //$objPHPExcel->getActiveSheet()->setCellValue('D1', \PHPExcel_Shared_Date::PHPToExcel(time()));
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', $periodo);
+
+        // Calculate SERVEI de connectivitat de dades: Accés a la VPN
+        $vpnAccessData = $this->getAllVpnAccessData($periodo, 4, 1); // XIC = 4
+
+        $baseRow = 17;
+        foreach($vpnAccessData as $r => $access) {
+            $row = $baseRow + $r;
+            $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$row, $access['servicio'])
+                                          ->setCellValue('D'.$row, $access['descripcion'])
+                                          ->setCellValue('E'.$row, $access['Unidad'])
+                                          ->setCellValue('F'.$row, $access['precio'])
+                                          ->setCellValue('G'.$row, $access['Total']);
+        }
+        $objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
+                
+        $vpnAccessData2 = $this->getAllVpnAccessData($periodo, 4, 2); // XIC = 4 Ampliado
+        $baseRow2 = $row + 2;
+        foreach($vpnAccessData2 as $r => $access2) {
+            $row = $baseRow2 + $r;
+            $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$row, $access2['servicio'])
+                                          ->setCellValue('D'.$row, $access2['descripcion'])
+                                          ->setCellValue('E'.$row, $access2['Unidad'])
+                                          ->setCellValue('F'.$row, $access2['precio'])
+                                          ->setCellValue('G'.$row, $access2['Total']);
+        }
+
+        $objPHPExcel->getActiveSheet()->removeRow($baseRow2-1,1);
+                
+
+        // Calculate AICC - XIC
+        $row = $row + 2;
+        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XIC'); // AICC-XIC
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion_detallada'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, 1);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
+            
+        // Calculate AICC
+        $row = $row + 3;
+        $parameters = $this->proportionalityCalculate($periodo, 10);   // AICC
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' .$row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' .$row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' .$row, $precio*0.20); // 20% de AICC to XIC
+            
+        // Calculate BACKBONE
+        $row = $row + 1;
+        $parameters = $this->proportionalityCalculate($periodo, 6); // Backbone
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.01); // 1% de Backbone to XIC
+                
+        // Calculate BACKBONE-R
+        $row = $row + 1;
+        $parameters = $this->proportionalityCalculate($periodo, 7); // Backbone - R
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.0643); // 6.43% de Backbone-R to XIC
+
+        // Calculate BACKBONE-SAN
+        $row = $row + 1;
+        $parameters = $this->proportionalityCalculate($periodo, 9); // Backbone -SAN
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.015); // 1.5% de Backbone-SAN to XIC
+                
+        // Calculate BACKBONE-S
+        $row = $row + 1;
+        $parameters = $this->proportionalityCalculate($periodo, 8); // Backbone - S
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.015); // 1.5% de Backbone-S to XIC
+
+        // Calculate OEC3
+        $row = $row + 1;
+        $parameters = $this->proportionalityCalculate($periodo, 11); // OEC3
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.04); // 4% de OEC3 to XIC
+                
+        // Calculate OEC3 ENS
+        $row = $row + 1;
+        $parameters = $this->proportionalityCalculate($periodo, 12); // OEC3 ENS
+        $codigo = $parameters['0']['servicio'];
+        $descripcion = $parameters['0']['descripcion'];
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.00); // 0% de OEC3 ENS to XIC
+                
+        try {
+                $filename = "FACTURA_" . strtoupper($centroCoste) . "_" . $periodo .  ".xls";
+                header("Content-Type: text/html;charset=utf-8");
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header("Content-disposition: attachment; filename=$filename");
+                header('Cache-Control: max-age=0');
+                
+                $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                $objWriter->save('php://output');
+        }   catch (Exception $e) {
+            echo 'Excepción capturada: ' .  $e->getMessage();
+        }
+
+        exit;
+
+    }
+
+    
+    /*
+     * Methods to calcuilate and fill XIC template
+     * 
+     */
+    
+    public function calculateAiccCoste($periodo, $centrocoste) { // AICC-XIC
+        
+        $statement =
+            "SELECT s.servicio, s.descripcion_detallada, SUM(s.precio) AS precio 
+            FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
+            WHERE s.servicio = '" . $centrocoste . "' AND f.periodo = '" . $periodo . "' GROUP BY f.xarxa";
+        
+        $adapter = $this->adapter->query($statement);
+        $objResult = $adapter->execute();
+        
+        $result = array();
+        foreach ($objResult as $item) {
+            $result[] = $item;  
+        }
+        
+        return $result;
+        
+    }
     
     
+    public function proportionalityCalculate($periodo, $xarxa) {
+        
+        $statement =
+            "SELECT s.servicio, s.descripcion, SUM(s.precio) AS precio  
+            FROM factura_lote3 AS f 
+            INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
+            WHERE f.xarxa = " . $xarxa . " AND f.periodo = '" . $periodo . "' GROUP BY f.xarxa";
+        
+        $adapter = $this->adapter->query($statement);
+        $objResult = $adapter->execute();
+        
+        $result = array();
+        foreach ($objResult as $item) {
+            $result[] = $item;  
+        }
+        
+        return $result;
+        
+    }
     
+    
+    public function getAllVpnAccessData($periodo, $centrocoste, $ampliado)
+    {
+        
+        $statement =
+            "SELECT s.codigo_servicio, s.servicio, s.descripcion, COUNT(s.servicio) AS Unidad, s.precio,
+                SUM(s.precio) AS Total, s.estado AS Flag 
+                FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id
+                WHERE f.xarxa = '" . $centrocoste . "' AND f.periodo = '" . $periodo . "' AND s.estado = '" . $ampliado . "'  GROUP BY s.servicio ORDER BY s.servicio ASC";
+        
+        $adapter = $this->adapter->query($statement);
+        $objResult = $adapter->execute();
+        
+        $result = array();
+        foreach ($objResult as $item) {
+            $result[] = $item;  
+        }
+        
+        return $result;
+        
+        
+    }
 }

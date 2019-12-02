@@ -222,8 +222,58 @@ return array(
                     ),
                 ),
             ),
-            
+            'lote3-invoice-sign-up' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/lote3-invoice-sign-up',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'lote3-sign-up',
+                    ),
+                ),
+            ),
+            'lote3-billing-save' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/lote3-billing-save',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'lote3-billing-save',
+                    ),
+                ),
+            ),
+            'lote3-invoice-list' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/lote3-invoice-list',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'lote3-invoice-list',
+                    ),
+                ),
+            ),
+            'export-template-ui' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/export-template-ui',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'export-template-ui',
+                    ),
+                ),
+            ),
+            'template-export' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/template-export',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'template-export',
+                    ),
+                ),
+            ),
 
+            
         ),
     ),
     'view_manager' => array (

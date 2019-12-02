@@ -9,6 +9,8 @@ namespace Facturacion\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Facturacion\Form\Invoice;
+use Facturacion\Form\InvoiceLote3;
+
 # HACK TO RESOLVE PROBLEM
 use Zend\Session\Container;
 
@@ -380,13 +382,13 @@ class BillingController extends AbstractActionController
     
     public function invoiceFilterResultAction() {
 
-        if(empty($periodo)) {
-            die('DEAD -  3ur3ka');
-        }
-
         $params = $this->getRequest()->getQuery()->toArray();
         $periodo = (string)$params['periodo'];
 
+        if(empty($periodo)) {
+            die('DEAD -  3ur3ka');
+        }
+        
         $totals = $this->processingBillService->getTotalByEntities($periodo);
         $subTotals = $this->processingBillService->getSubTotalByPhone();
         $details = $this->processingBillService->getDetails();
@@ -551,4 +553,73 @@ class BillingController extends AbstractActionController
 
     }
     
+    public function lote3SignUpAction() {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new InvoiceLote3($dbAdapter);
+
+        $date = new \DateTime();
+
+        $dateTime = $date->format('d/m/Y H:i:s');
+
+        $viewmodel = new ViewModel(array(
+                                    'form' => $form,
+                                    'dateTime' => $dateTime));
+        return  $viewmodel;
+
+    }
+    
+    public function lote3BillingSaveAction()
+    {
+
+        $posts = (array)$this->request->getPost();
+        
+        $this->processingBillService->setPostParams($posts);
+        $invoiceId = $this->processingBillService->saveLote3Invoice();
+
+        //It's good
+        $this->redirect()->toRoute('lote3-invoice-list');
+
+    }
+
+    public function lote3InvoiceListAction()
+    {
+
+        $lote3Invoices = $this->processingBillService->getLote3Invoices();
+
+        if(is_array($lote3Invoices)) { 
+
+            $viewmodel = 
+                    new ViewModel(
+                            array('lote3Invoices' => $lote3Invoices));
+            return $viewmodel;
+
+        }
+  
+  
+    }
+    
+    public function exportTemplateUiAction() {
+
+        $viewmodel = 
+            new ViewModel(
+                    array());
+
+        return $viewmodel;
+
+    }
+    
+    
+    
+    
+    public function templateExportAction()
+    {
+        
+        $posts = (array)$this->request->getPost();
+        
+        $this->processingBillService->setPostParams($posts)->templateExport();
+        
+        
+    }
+
 }
