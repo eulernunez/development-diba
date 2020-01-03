@@ -385,8 +385,11 @@ class BillingController extends AbstractActionController
         $params = $this->getRequest()->getQuery()->toArray();
         $periodo = (string)$params['periodo'];
 
+
         if(empty($periodo)) {
+            
             die('DEAD -  3ur3ka');
+
         }
         
         $totals = $this->processingBillService->getTotalByEntities($periodo);
