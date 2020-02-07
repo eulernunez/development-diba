@@ -17,6 +17,7 @@ class ProcessingBill extends Service {
     protected $periodo;
     protected $clientScopeFilter;
     protected $objPHPExcel;
+    protected $cc;
     
     protected $posts;
 
@@ -28,6 +29,13 @@ class ProcessingBill extends Service {
         if('Cliente' == $this->userRole) {
             $this->clientScopeFilter = " AND id_cif_cliente ='" . $this->nif . "'";
         }
+        
+        $this->cc['xb'] = 2;
+        $this->cc['xem'] = 3;
+        $this->cc['xic'] = 4;
+        $this->cc['xp'] = 5;
+        $this->cc['xorgt'] = 13;
+        
     }
 
     public function setAdapter($adapter) {
@@ -1238,15 +1246,19 @@ class ProcessingBill extends Service {
         
         $objPHPExcel = $objReader->load($templatePath);
             
-                
+        $cc = $this->cc[$centroCoste];
+        
         //$objPHPExcel->getActiveSheet()->setCellValue('D1', \PHPExcel_Shared_Date::PHPToExcel(time()));
         $objPHPExcel->getActiveSheet()->setCellValue('G1', $periodo);
 
-        // Calculate SERVEI de connectivitat de dades: Accés a la VPN
-        $vpnAccessData = $this->getAllVpnAccessData($periodo, 4, 1); // XIC = 4
-
-        $baseRow = 17;
-        foreach($vpnAccessData as $r => $access) {
+        $total = 0;
+        
+        // Calculate SERVEI Accés a Internet Independent: Accés a la ADSL = 2
+        $adsl = 2;    
+        $adslAccessData = $this->getServicesAccessData($adsl, $periodo, $cc, 1); // XIC = 4
+        
+        $baseRow = 12;
+        foreach($adslAccessData as $r => $access) {
             $row = $baseRow + $r;
             $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$row, $access['servicio'])
@@ -1254,12 +1266,14 @@ class ProcessingBill extends Service {
                                           ->setCellValue('E'.$row, $access['Unidad'])
                                           ->setCellValue('F'.$row, $access['precio'])
                                           ->setCellValue('G'.$row, $access['Total']);
+            $total = $total + $access['Total'];
         }
         $objPHPExcel->getActiveSheet()->removeRow($baseRow-1,1);
-                
-        $vpnAccessData2 = $this->getAllVpnAccessData($periodo, 4, 2); // XIC = 4 Ampliado
+        
+        $adslAccessData2 = $this->getServicesAccessData($adsl, $periodo, $cc, 2); // XIC = 4
+        
         $baseRow2 = $row + 2;
-        foreach($vpnAccessData2 as $r => $access2) {
+        foreach($adslAccessData2 as $r => $access2) {
             $row = $baseRow2 + $r;
             $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$row, $access2['servicio'])
@@ -1267,25 +1281,70 @@ class ProcessingBill extends Service {
                                           ->setCellValue('E'.$row, $access2['Unidad'])
                                           ->setCellValue('F'.$row, $access2['precio'])
                                           ->setCellValue('G'.$row, $access2['Total']);
+            $total = $total + $access2['Total'];
         }
 
         $objPHPExcel->getActiveSheet()->removeRow($baseRow2-1,1);
-                
 
-        // Calculate AICC - XIC
-        $row = $row + 2;
-        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XIC'); // AICC-XIC
-        $codigo = $parameters['0']['servicio'];
-        $descripcion = $parameters['0']['descripcion_detallada'];
-        $precio = $parameters['0']['precio'];
-        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, 1);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
-        $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
-            
+        
+        // Calculate SERVEI de connectivitat de dades: Accés a la VPN = 1
+        $vpn = 1;
+        $vpnAccessData = $this->getServicesAccessData($vpn, $periodo, $cc, 1); // XIC = 4
+        //$baseRow = 17;
+        $baseRow3 = $row + 3;
+        foreach($vpnAccessData as $r => $access) {
+            $row = $baseRow3 + $r;
+            $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$row, $access['servicio'])
+                                          ->setCellValue('D'.$row, $access['descripcion'])
+                                          ->setCellValue('E'.$row, $access['Unidad'])
+                                          ->setCellValue('F'.$row, $access['precio'])
+                                          ->setCellValue('G'.$row, $access['Total']);
+            $total = $total + $access['Total'];
+        }
+        $objPHPExcel->getActiveSheet()->removeRow($baseRow3-1,1);
+                
+        $vpnAccessData2 = $this->getServicesAccessData($vpn, $periodo, $cc, 2); // XIC = 4 Ampliado
+        $baseRow4 = $row + 2;
+        foreach($vpnAccessData2 as $r => $access2) {
+            $row = $baseRow4 + $r;
+            $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$row, $access2['servicio'])
+                                          ->setCellValue('D'.$row, $access2['descripcion'])
+                                          ->setCellValue('E'.$row, $access2['Unidad'])
+                                          ->setCellValue('F'.$row, $access2['precio'])
+                                          ->setCellValue('G'.$row, $access2['Total']);
+            $total = $total + $access2['Total'];
+        }
+
+        $objPHPExcel->getActiveSheet()->removeRow($baseRow4-1,1);
+
+
+        if($cc == 2 || $cc == 3 || $cc == 4) {
+            $row = $row + 2;
+            $parameters = $this->calculateAiccCoste($periodo, 'AICC-' . strtoupper($centroCoste)); // AICC-XIC/AICC-XEM/AICC-XB 
+            $codigo = $parameters['0']['servicio'];
+            $descripcion = $parameters['0']['descripcion_detallada'];
+            $precio = $parameters['0']['precio'];
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, 1);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
+            $total = $total + $precio;
+            $row = $row + 3;
+        } else {
+            $row = $row + 2;
+        }    
+        
+        // Calculate TOTALES
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', $total);
+        $objPHPExcel->getActiveSheet()->setCellValue('D5', $total*0.21);
+        $objPHPExcel->getActiveSheet()->setCellValue('E5', $total*1.21);
+        
+        // CALCULATE XIC
         // Calculate AICC
-        $row = $row + 3;
+        
         $parameters = $this->proportionalityCalculate($periodo, 10);   // AICC
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
@@ -1354,6 +1413,10 @@ class ProcessingBill extends Service {
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
         $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.00); // 0% de OEC3 ENS to XIC
                 
+        
+        
+        
+        
         try {
                 $filename = "FACTURA_" . strtoupper($centroCoste) . "_" . $periodo .  ".xls";
                 header("Content-Type: text/html;charset=utf-8");
@@ -1418,15 +1481,17 @@ class ProcessingBill extends Service {
     }
     
     
-    public function getAllVpnAccessData($periodo, $centrocoste, $ampliado)
+    public function getServicesAccessData($planta, $periodo, $centrocoste, $ampliado)
     {
         
         $statement =
             "SELECT s.codigo_servicio, s.servicio, s.descripcion, COUNT(s.servicio) AS Unidad, s.precio,
                 SUM(s.precio) AS Total, s.estado AS Flag 
                 FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id
-                WHERE f.xarxa = '" . $centrocoste . "' AND f.periodo = '" . $periodo . "' AND s.estado = '" 
+                WHERE f.planta = '" . $planta . "' AND  f.xarxa = '" . $centrocoste . "' AND f.periodo = '" . $periodo . "' AND s.estado = '" 
                 . $ampliado . "'  GROUP BY s.servicio ORDER BY s.servicio ASC";
+
+        //die('$statement: <pre>' . print_r($statement, true) . '</pre>');
         
         $adapter = $this->adapter->query($statement);
         $objResult = $adapter->execute();
