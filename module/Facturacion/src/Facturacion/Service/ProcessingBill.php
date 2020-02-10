@@ -18,6 +18,13 @@ class ProcessingBill extends Service {
     protected $clientScopeFilter;
     protected $objPHPExcel;
     protected $cc;
+    protected $aicc;
+    protected $backbone;
+    protected $backboneR;
+    protected $backboneSan;
+    protected $backboneS;
+    protected $oec3;
+    protected $oec3Ens;
     
     protected $posts;
 
@@ -35,6 +42,48 @@ class ProcessingBill extends Service {
         $this->cc['xic'] = 4;
         $this->cc['xp'] = 5;
         $this->cc['xorgt'] = 13;
+        
+        $this->aicc['xb'] = 0.4;
+        $this->aicc['xem'] = 0.4;
+        $this->aicc['xic'] = 0.2;
+        $this->aicc['xp'] = 0.0;
+        $this->aicc['xorgt'] = 0.0;
+        
+        $this->backbone['xb'] = 0.69;
+        $this->backbone['xem'] = 0.09;
+        $this->backbone['xic'] = 0.01;
+        $this->backbone['xp'] = 0.01;
+        $this->backbone['xorgt'] = 0.2;
+        
+        $this->backboneR['xb'] = 0.4926;
+        $this->backboneR['xem'] = 0.0432;
+        $this->backboneR['xic'] = 0.0643;
+        $this->backboneR['xp'] = 0.0143;
+        $this->backboneR['xorgt'] = 0.3856;
+     
+        $this->backboneSan['xb'] = 0.735;
+        $this->backboneSan['xem'] = 0.25;
+        $this->backboneSan['xic'] = 0.015;
+        $this->backboneSan['xp'] = 0.0;
+        $this->backboneSan['xorgt'] = 0.0;
+                
+        $this->backboneS['xb'] = 0.735;
+        $this->backboneS['xem'] = 0.25;
+        $this->backboneS['xic'] = 0.015;
+        $this->backboneS['xp'] = 0.0;
+        $this->backboneS['xorgt'] = 0.0;
+
+        $this->oec3['xb'] = 0.525;
+        $this->oec3['xem'] = 0.22;
+        $this->oec3['xic'] = 0.04;
+        $this->oec3['xp'] = 0.015;
+        $this->oec3['xorgt'] = 0.2;
+        
+        $this->oec3Ens['xb'] = 0.0;
+        $this->oec3Ens['xem'] = 1.0;
+        $this->oec3Ens['xic'] = 0.0;
+        $this->oec3Ens['xp'] = 0.0;
+        $this->oec3Ens['xorgt'] = 0.0;
         
     }
 
@@ -1337,85 +1386,97 @@ class ProcessingBill extends Service {
             $row = $row + 2;
         }    
         
-        // Calculate TOTALES
-        $objPHPExcel->getActiveSheet()->setCellValue('C5', $total);
-        $objPHPExcel->getActiveSheet()->setCellValue('D5', $total*0.21);
-        $objPHPExcel->getActiveSheet()->setCellValue('E5', $total*1.21);
         
-        // CALCULATE XIC
         // Calculate AICC
-        
+        $aicc = $this->aicc[$centroCoste];
         $parameters = $this->proportionalityCalculate($periodo, 10);   // AICC
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
-        $objPHPExcel->getActiveSheet()->setCellValue('C' .$row, $codigo);
-        $objPHPExcel->getActiveSheet()->setCellValue('D' .$row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' .$row, $precio*0.20); // 20% de AICC to XIC
-            
+        
+        if($aicc > 0) {
+            $objPHPExcel->getActiveSheet()->setCellValue('C' .$row, $codigo);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' .$row, $descripcion);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' .$row, $precio * $aicc); // 20% AICC to XIC, 40% AICC to XEM, 40% AICC to XB
+            $total = $total + $precio * $aicc;
+            $row = $row + 1;
+        }
+        
         // Calculate BACKBONE
-        $row = $row + 1;
+        $backbone = $this->backbone[$centroCoste];
         $parameters = $this->proportionalityCalculate($periodo, 6); // Backbone
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.01); // 1% de Backbone to XIC
-                
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backbone); // See top
+        $total = $total + $precio * $backbone;
+        
         // Calculate BACKBONE-R
         $row = $row + 1;
+        $backboneR = $this->backboneR[$centroCoste];
         $parameters = $this->proportionalityCalculate($periodo, 7); // Backbone - R
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.0643); // 6.43% de Backbone-R to XIC
-
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backboneR); // See top
+        $total = $total + $precio * $backboneR;
+        
         // Calculate BACKBONE-SAN
         $row = $row + 1;
+        $backboneSan = $this->backboneSan[$centroCoste];
         $parameters = $this->proportionalityCalculate($periodo, 9); // Backbone -SAN
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.015); // 1.5% de Backbone-SAN to XIC
-                
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backboneSan); // See top
+        $total = $total + $precio * $backboneSan;
+
         // Calculate BACKBONE-S
         $row = $row + 1;
+        $backboneS = $this->backboneS[$centroCoste];
         $parameters = $this->proportionalityCalculate($periodo, 8); // Backbone - S
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.015); // 1.5% de Backbone-S to XIC
-
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backboneS); // See top
+        $total = $total + $precio * $backboneS;
+        
         // Calculate OEC3
         $row = $row + 1;
+        $oec3 = $this->oec3[$centroCoste];
         $parameters = $this->proportionalityCalculate($periodo, 11); // OEC3
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.04); // 4% de OEC3 to XIC
-                
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $oec3); // See top
+        $total = $total + $precio * $oec3;
+        
         // Calculate OEC3 ENS
         $row = $row + 1;
+        $oec3Ens = $this->oec3Ens[$centroCoste];
         $parameters = $this->proportionalityCalculate($periodo, 12); // OEC3 ENS
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio*0.00); // 0% de OEC3 ENS to XIC
-                
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $oec3Ens); // See top
+        $total = $total + $precio * $oec3Ens;        
         
-        
-        
+        // Calculate TOTALES
+        $objPHPExcel->getActiveSheet()->setCellValue('C5', $total);
+        $objPHPExcel->getActiveSheet()->setCellValue('D5', $total * 0.21);
+        $objPHPExcel->getActiveSheet()->setCellValue('E5', $total * 1.21);
         
         try {
                 $filename = "FACTURA_" . strtoupper($centroCoste) . "_" . $periodo .  ".xls";
@@ -1436,7 +1497,7 @@ class ProcessingBill extends Service {
 
     
     /*
-     * Methods to calcuilate and fill XIC template
+     * Methods to calcuilate and fill template
      * 
      */
     
