@@ -262,6 +262,16 @@ return array(
                     ),
                 ),
             ),
+            'export-global-ui' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/export-global-ui',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'export-global-ui',
+                    ),
+                ),
+            ),
             'template-export' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
@@ -272,8 +282,18 @@ return array(
                     ),
                 ),
             ),
+            'global-template-export' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/global-template-export',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'global-template-export',
+                    ),
+                ),
+            ),
 
-            
+
         ),
     ),
     'view_manager' => array (

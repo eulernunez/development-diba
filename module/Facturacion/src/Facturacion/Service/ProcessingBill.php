@@ -25,6 +25,7 @@ class ProcessingBill extends Service {
     protected $backboneS;
     protected $oec3;
     protected $oec3Ens;
+    protected $months;
     
     protected $posts;
 
@@ -84,6 +85,19 @@ class ProcessingBill extends Service {
         $this->oec3Ens['xic'] = 0.0;
         $this->oec3Ens['xp'] = 0.0;
         $this->oec3Ens['xorgt'] = 0.0;
+        
+        $this->months['01'] = 'gener';
+        $this->months['02'] = 'febrer';
+        $this->months['03'] = 'març';
+        $this->months['04'] = 'abril';
+        $this->months['05'] = 'maig';
+        $this->months['06'] = 'juny';
+        $this->months['07'] = 'juliol';
+        $this->months['08'] = 'agost';
+        $this->months['09'] = 'setembre';
+        $this->months['10'] = 'octubre';
+        $this->months['11'] = 'novembre';
+        $this->months['12'] = 'desembre';
         
     }
 
@@ -1240,7 +1254,7 @@ class ProcessingBill extends Service {
                         LEFT JOIN sedes AS s ON f.oficina = s.id
                         LEFT JOIN servicios_lote3 AS sr ON f.servicio = sr.id
                         LEFT JOIN estados_lote3 AS e ON f.estado = e.id
-                        WHERE f.estado = 1
+                        WHERE f.estado = 1 AND f.activo = 1
                         ORDER BY f.creacion DESC"; 
         
         $adapter = $this->adapter->query($statement);
@@ -1369,9 +1383,9 @@ class ProcessingBill extends Service {
         $objPHPExcel->getActiveSheet()->removeRow($baseRow4-1,1);
 
 
-        if($cc == 2 || $cc == 3 || $cc == 4) {
+        if($cc == 2 || $cc == 3 || $cc == 4 || $cc == 13 ) {
             $row = $row + 2;
-            $parameters = $this->calculateAiccCoste($periodo, 'AICC-' . strtoupper($centroCoste)); // AICC-XIC/AICC-XEM/AICC-XB 
+            $parameters = $this->calculateAiccCoste($periodo, 'AICC-' . strtoupper($centroCoste)); // AICC-XIC/AICC-XEM/AICC-XB/AICC-XORGT 
             $codigo = $parameters['0']['servicio'];
             $descripcion = $parameters['0']['descripcion_detallada'];
             $precio = $parameters['0']['precio'];
@@ -1381,7 +1395,40 @@ class ProcessingBill extends Service {
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
             $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
             $total = $total + $precio;
+            
+                // BEGIN: Formate special ti XORGT
+                if($cc == 13) {
+                    $row = $row + 1; 
+                    $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+                    $parameters = $this->calculateAiccCoste($periodo, 'ORGT-H'); // REVIEW
+                    $codigo = $parameters['0']['servicio'];
+                    $descripcion = $parameters['0']['descripcion_detallada'];
+                    $precio = $parameters['0']['precio'];
+                    $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, 1);
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
+                    $total = $total + $precio;
+                    
+                    $row = $row + 1; 
+                    $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+                    $parameters = $this->calculateAiccCoste($periodo, 'OTROS');
+                    $codigo = $parameters['0']['servicio'];
+                    $descripcion = $parameters['0']['descripcion_detallada'];
+                    $precio = $parameters['0']['precio'];
+                    $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, 1);
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
+                    $total = $total + $precio;
+                    
+                }
+                // END
+            
             $row = $row + 3;
+            
         } else {
             $row = $row + 2;
         }    
@@ -1566,4 +1613,251 @@ class ProcessingBill extends Service {
         
         
     }
+    
+    public function globalTemplateExport()
+    {
+
+        $periodo = (string)$this->posts['periodo'];
+        $templatePath = dirname(__DIR__) . "\Template\\Template_Global.xls"; 
+        $objReader = \PHPExcel_IOFactory::createReader('Excel5');
+        $objPHPExcel = $objReader->load($templatePath);
+            
+        //$objPHPExcel->getActiveSheet()->setCellValue('D1', \PHPExcel_Shared_Date::PHPToExcel(time()));
+        $month = $this->getMonths($periodo);
+        $msg = 'RESUM FACTURACIÓ DIPUTACIÓ BCN ' . $month . ' 2020';
+        $objPHPExcel->getActiveSheet()->setCellValue('B2', $msg);
+        //$objPHPExcel->getActiveSheet()->setCellValue('P1', $periodo);
+        
+        $vpn = 1;
+        $adsl = 2;
+        $xic = 4;
+        $vpnXic = $this->getSubTotalByCostCenter($vpn, $xic, $periodo);
+        $adslXic = $this->getSubTotalByCostCenter($adsl, $xic, $periodo);
+        $xem = 3;
+        $vpnXem = $this->getSubTotalByCostCenter($vpn, $xem, $periodo);
+        $adslXem = $this->getSubTotalByCostCenter($adsl, $xem, $periodo);
+        $xb = 2;
+        $vpnXb = $this->getSubTotalByCostCenter($vpn, $xb, $periodo);
+        $adslXb = $this->getSubTotalByCostCenter($adsl, $xb, $periodo);
+        $xp = 5;
+        $vpnXp = $this->getSubTotalByCostCenter($vpn, $xp, $periodo);
+        $adslXp = $this->getSubTotalByCostCenter($adsl, $xp, $periodo);
+                
+        $objPHPExcel->getActiveSheet()->setCellValue('E6', $vpnXic['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E7', $adslXic['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E8', $vpnXem['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E9', $adslXem['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E10', $vpnXb['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E11', $adslXb['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E12', $vpnXp['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E13', $adslXp['0']['SubTotal']);
+
+        // Backbone
+        $parameters = $this->proportionalityCalculate($periodo, 6); // Backbone
+        $precio = $parameters['0']['precio'];
+        $backboneXic = $this->backbone['xic'];
+        $backboneXem = $this->backbone['xem'];
+        $backboneXb = $this->backbone['xb'];
+        $backboneXp = $this->backbone['xp'];
+        $backboneXorgt = $this->backbone['xorgt'];
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('F6', $precio * $backboneXic);
+        $objPHPExcel->getActiveSheet()->setCellValue('F8', $precio * $backboneXem);
+        $objPHPExcel->getActiveSheet()->setCellValue('F10', $precio * $backboneXb);
+        $objPHPExcel->getActiveSheet()->setCellValue('F12', $precio * $backboneXp);
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('F18', $precio * $backboneXorgt);
+        
+        
+        // Backbone-R
+        $parameters = $this->proportionalityCalculate($periodo, 7); // Backbone - R
+        $precio = $parameters['0']['precio'];
+        $backboneRXic = $this->backboneR['xic'];
+        $backboneRXem = $this->backboneR['xem'];
+        $backboneRXb = $this->backboneR['xb'];
+        $backboneRXp = $this->backboneR['xp'];
+        $backboneRXorgt = $this->backboneR['xorgt'];
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('G6', $precio * $backboneRXic);
+        $objPHPExcel->getActiveSheet()->setCellValue('G8', $precio * $backboneRXem);
+        $objPHPExcel->getActiveSheet()->setCellValue('G10', $precio * $backboneRXb);
+        $objPHPExcel->getActiveSheet()->setCellValue('G12', $precio * $backboneRXp);
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('G18', $precio * $backboneRXorgt);
+        
+        // Backbone-San
+        $parameters = $this->proportionalityCalculate($periodo, 9); // Backbone - SAN
+        $precio = $parameters['0']['precio'];
+        $backboneSanXic = $this->backboneSan['xic'];
+        $backboneSanXem = $this->backboneSan['xem'];
+        $backboneSanXb = $this->backboneSan['xb'];
+        $backboneSanXp = $this->backboneSan['xp'];
+        $backboneSanXorgt = $this->backboneSan['xorgt'];
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('H6', $precio * $backboneSanXic);
+        $objPHPExcel->getActiveSheet()->setCellValue('H8', $precio * $backboneSanXem);
+        $objPHPExcel->getActiveSheet()->setCellValue('H10', $precio * $backboneSanXb);
+        $objPHPExcel->getActiveSheet()->setCellValue('H12', $precio * $backboneSanXp);
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('H18', $precio * $backboneSanXorgt);
+        
+        // Backbone-S
+        $parameters = $this->proportionalityCalculate($periodo, 8); // Backbone - S
+        $precio = $parameters['0']['precio'];
+        $backboneSXic = $this->backboneS['xic'];
+        $backboneSXem = $this->backboneS['xem'];
+        $backboneSXb = $this->backboneS['xb'];
+        $backboneSXp = $this->backboneS['xp'];
+        $backboneSXorgt = $this->backboneS['xorgt'];
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('I6', $precio * $backboneSXic);
+        $objPHPExcel->getActiveSheet()->setCellValue('I8', $precio * $backboneSXem);
+        $objPHPExcel->getActiveSheet()->setCellValue('I10', $precio * $backboneSXb);
+        $objPHPExcel->getActiveSheet()->setCellValue('I12', $precio * $backboneSXp);
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('I18', $precio * $backboneSXorgt);
+
+
+        // Fraction INET AICC-XIC, AICC-XEM, AICC-XB y AICC-XORGT
+        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XIC');
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('J6', $precio);
+        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM');
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('J8', $precio);
+        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XB');
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('J10', $precio);
+
+        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XORGT');
+        $precio = $parameters['0']['precio'];
+        $objPHPExcel->getActiveSheet()->setCellValue('J18', $precio);
+
+
+        // OEC3
+        $parameters = $this->proportionalityCalculate($periodo, 11); // OEC3
+        $precio = $parameters['0']['precio'];
+        $oec3Xic = $this->oec3['xic'];
+        $oec3Xem = $this->oec3['xem'];
+        $oec3Xb = $this->oec3['xb'];
+        $oec3Xp = $this->oec3['xp'];
+        $oec3Xorgt = $this->oec3['xorgt'];
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('K6', $precio * $oec3Xic);
+        $objPHPExcel->getActiveSheet()->setCellValue('K8', $precio * $oec3Xem);
+        $objPHPExcel->getActiveSheet()->setCellValue('K10', $precio * $oec3Xb);
+        $objPHPExcel->getActiveSheet()->setCellValue('K12', $precio * $oec3Xp);
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('K18', $precio * $oec3Xorgt);
+
+        // OEC3-ENS
+        $parameters = $this->proportionalityCalculate($periodo, 12); // OEC3-ENS
+        $precio = $parameters['0']['precio'];
+        $oec3EnsXic = $this->oec3Ens['xic'];
+        $oec3EnsXem = $this->oec3Ens['xem'];
+        $oec3EnsXb = $this->oec3Ens['xb'];
+        $oec3EnsXp = $this->oec3Ens['xp'];
+        $oec3EnsXorgt = $this->oec3Ens['xorgt'];
+
+        $objPHPExcel->getActiveSheet()->setCellValue('L6', $precio * $oec3EnsXic);
+        $objPHPExcel->getActiveSheet()->setCellValue('L8', $precio * $oec3EnsXem);
+        $objPHPExcel->getActiveSheet()->setCellValue('L10', $precio * $oec3EnsXb);
+        $objPHPExcel->getActiveSheet()->setCellValue('L12', $precio * $oec3EnsXp);
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('L18', $precio * $oec3EnsXorgt);
+
+        
+        // AICC
+        $parameters = $this->proportionalityCalculate($periodo, 10); // AICC
+        $precio = $parameters['0']['precio'];
+        $aiccXic = $this->aicc['xic'];
+        $aiccXem = $this->aicc['xem'];
+        $aiccXb = $this->aicc['xb'];
+        $aiccXp = $this->aicc['xp'];
+        $aiccXorgt = $this->aicc['xorgt'];
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('M6', $precio * $aiccXic);
+        $objPHPExcel->getActiveSheet()->setCellValue('M8', $precio * $aiccXem);
+        $objPHPExcel->getActiveSheet()->setCellValue('M10', $precio * $aiccXb);
+        $objPHPExcel->getActiveSheet()->setCellValue('M12', $precio * $aiccXp);
+        
+        $objPHPExcel->getActiveSheet()->setCellValue('M18', $precio * $aiccXorgt);
+
+        ////////////////////////////////////
+        //// XORGT
+        ////////////////////////////////////
+        
+        $vpnXorgt = $this->getSubTotalXorgtCostCenter(14, 1, $periodo);
+        $adslXorgt = $this->getSubTotalXorgtCostCenter(15, 2, $periodo);
+
+        $objPHPExcel->getActiveSheet()->setCellValue('E18', $vpnXorgt['0']['SubTotal']);
+        $objPHPExcel->getActiveSheet()->setCellValue('E19', $adslXorgt['0']['SubTotal']);
+        
+        
+        try {
+                $filename = "RESUMEN_GLOBAL_" . $periodo .  ".xls";
+                header("Content-Type: text/html;charset=utf-8");
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header("Content-disposition: attachment; filename=$filename");
+                header('Cache-Control: max-age=0');
+                
+                $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                $objWriter->save('php://output');
+        }   catch (Exception $e) {
+
+            echo 'Excepción capturada: ' .  $e->getMessage();
+
+        }
+
+        exit;
+
+    }
+
+
+    public function getSubTotalByCostCenter($planta, $xarxa, $periodo) {
+        
+        $statement = "SELECT f.xarxa AS CentroCosto,  SUM(s.precio) AS SubTotal 
+                        FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
+			WHERE f.xarxa = " . $xarxa . " AND f.planta = " . $planta . " AND f.periodo = '" . $periodo . "'";
+        
+        $adapter = $this->adapter->query($statement);
+        $objResult = $adapter->execute();
+        
+        $result = array();
+        foreach ($objResult as $item) {
+            $result[] = $item;  
+        }
+
+        return $result;
+
+    }
+    
+    
+        public function getSubTotalXorgtCostCenter($xarxa, $planta, $periodo) {
+        
+        $statement = "SELECT f.xarxa AS CentroCosto,  SUM(s.precio) AS SubTotal 
+                        FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
+			WHERE (f.xarxa = 13 OR f.xarxa = $xarxa ) AND f.planta = " . $planta . " AND f.periodo = '" . $periodo . "'";
+        
+        $adapter = $this->adapter->query($statement);
+        $objResult = $adapter->execute();
+        
+        $result = array();
+        foreach ($objResult as $item) {
+            $result[] = $item;  
+        }
+
+        return $result;
+
+    }
+
+    public function getMonths($periodo) {
+ 
+        $month = substr($periodo, 4, 2);
+        
+        return strtoupper($this->months[$month]);
+
+    }
+    
+    
 }

@@ -111,14 +111,14 @@
 </script>
 
 <fieldset class="col-md-12">
-    <legend>Resumen por Centro de Costos</legend>
+    <legend>Resumen Global</legend>
 
     <div class="panel panel-default">
         <div class="panel-body">
 
         <div>
             <!--<form id="filterForm" method="get" onsubmit="return false;">-->
-            <form id="filterForm" action="<?= $this->url('template-export'); ?>" method="post">
+            <form id="filterForm" action="<?= $this->url('global-template-export'); ?>" method="post">
             <div class="col-lg-6">    
                 
                 <div class="form-group input-group">
@@ -128,16 +128,6 @@
                     
                     <!--<label class="control-label" for="periodo"> Período </label>-->
                     
-                    <div class="form-group">
-                        <select class="form-control" id="centrocostes" name="centrocostes" required>
-                            <option disabled selected>Seleccione el Centro de Coste</option>
-                            <option value='xic'>XIC</option>
-                            <option value='xem'>XEM</option>
-                            <option value='xb'>XB</option>
-                            <option value='xp'>XP</option>
-                            <option value='xorgt'>XORGT</option>
-                        </select>
-                    </div>
                     <select class="form-control" id="periodo" name="periodo" required>
                         <option disabled selected>Seleccione el período</option>
                         <option value='202002'>202002</option>
@@ -148,7 +138,7 @@
                         &nbsp;
                     </span>
                     <span class="input-group-btn">
-                        <button id="download-summation" title="Descarga de la factura" type="submit" class="btn btn-danger disabled" style="margin-top: 37px;">
+                        <button id="download-summation" title="Descarga de la factura" type="submit" class="btn btn-danger disabled">
                             <i class="icon-download-alt"></i>
                         </button>
                     </span>

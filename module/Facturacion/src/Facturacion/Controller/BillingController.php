@@ -612,8 +612,15 @@ class BillingController extends AbstractActionController
 
     }
     
-    
-    
+    public function exportGlobalUiAction() {
+
+        $viewmodel = 
+            new ViewModel(
+                    array());
+
+        return $viewmodel;
+
+    }
     
     public function templateExportAction()
     {
@@ -624,5 +631,14 @@ class BillingController extends AbstractActionController
         
         
     }
-
+    
+    public function globalTemplateExportAction()
+    {
+        
+        $posts = (array)$this->request->getPost();
+        
+        $this->processingBillService->setPostParams($posts)->globalTemplateExport();
+        
+    }
+    
 }
