@@ -1,0 +1,270 @@
+<?php echo $this->headLink()
+                ->appendStylesheet('http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.min.css')
+                ->appendStylesheet($this->basePath('assets/datepicker/css/jquery-ui.theme.min.css'))
+                ->appendStylesheet($this->basePath('assets/datepicker/css/custom.css'));?>
+
+
+
+<?php echo $this->headScript()
+        ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js')
+        ->appendFile('http://code.jquery.com/ui/1.10.3/jquery-ui.js'); 
+?>
+
+<style>
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+    .form-group
+    {
+        margin-bottom: 1px;
+    }
+
+/*    .form-control
+    {
+        height: 26px;
+        font-size: 9px;
+
+    }*/
+
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+    
+    /* Custom */
+    .custom-fieldset
+    {
+        background-color:#ffffff;
+    }
+    .custom-legend
+    {
+        width: 60%;
+        font-size: 12px;
+        border: 0px solid #ddd;
+    }
+    .custom-label
+    {
+        font-size: 12px;
+    }
+    .custom-radio
+    {
+        font-size: 10px;
+    }
+</style>                
+
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('invoice-lote3-update'));
+    $form->setAttribute('id', 'invoice');
+    $form->setAttribute('role', 'form');
+    $form->setAttribute('data-toggle', 'validator');
+    $form->setAttribute('accept-charset', 'utf-8');
+    #$form->setAttribute('novalidate', 'novalidate');
+    $form->prepare();
+?>
+<?= $this->form()->openTag($form); ?>
+
+<fieldset class="col-md-12">
+    <legend>Alta de Facturas Lote 3</legend>
+    <div class="panel panel-default">
+        <div class="panel-body" data-toggle="validator">
+            <div class="col-lg-3">
+
+
+                <div class="form-group">
+                    <label for="organismo">Organismo</label>
+                    <?php
+                        $form->get('organismo')->setValue($information['factura']['0']['organismo']);
+                    ?>
+                    <?=   $this->formSelect($form->get('organismo')); ?>                                
+                </div>
+
+    
+            </div>
+            
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="planta">Planta</label>
+                    <?php
+                        $form->get('planta')->setValue($information['factura']['0']['planta']);
+                    ?>
+                     <?=  $this->formSelect($form->get('planta')); ?> 
+                </div>
+              
+               
+
+            </div>
+
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="xarxa">Xarxa</label>
+                    <?php
+                        $form->get('xarxa')->setValue($information['factura']['0']['xarxa']);
+                    ?>
+                     <?= $this->formSelect($form->get('xarxa')); ?> 
+                </div>
+               
+
+            </div>
+            
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="clave">Clave de Cobro</label>
+                    <?php
+                        $form->get('clave')->setValue($information['factura']['0']['clave']);
+                    ?>
+                    <?= $this->formSelect($form->get('clave')); ?> 
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="titular">Titular</label>
+                    <?=   $this->formSelect($form->get('titular')); ?>                                
+                </div>
+            </div>    
+            <div class="col-lg-3">
+                <div id="ajax-nif">
+                    <div class="form-group">
+                        <label for="nif">NIF</label>
+                        <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="">
+                    </div>
+                </div>    
+            </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3"></div>
+            
+            <div class="clearfix"></div>
+
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="oficina">Oficina</label>
+                    <?= $this->formSelect($form->get('oficina')); ?>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div id="ajax-direccion">
+                    <div class="form-group">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion" aria-describedby="direccionHelp" readonly="true" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+            </div>
+            <div class="col-lg-3">
+            </div>
+
+            <div class="clearfix"></div>
+            
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="titular">Código de Servicio</label>
+                    <?php
+                        $form->get('servicio')->setValue($information['factura']['0']['servicio']);
+                    ?>
+                    <?=   $this->formSelect($form->get('servicio')); ?>                                
+                </div>
+            </div>    
+            <div class="col-lg-3">
+                <div id="ajax-nif">
+                    <div class="form-group">
+                        <label for="nif">Descripción</label>
+                        <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="">
+                    </div>
+                </div>    
+            </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3"></div>
+            
+            <div class="clearfix"></div>
+            
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="administrativo">Administrativo</label>
+                    <?= $this->formInput($form->get('administrativo')); ?>
+                </div>                
+                
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="linea">Número Comercial</label>
+                    <?= $this->formInput($form->get('linea')); ?>
+                </div>                
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="ip">IP Fija</label>
+                    <?= $this->formInput($form->get('ip')); ?>
+                </div>                
+            </div>
+            <div class="col-lg-3"></div>
+            
+            <div class="clearfix"></div>
+            
+            <div class="col-lg-3">
+                <label for="fecha">Fecha Alta</label>
+                <div class="input-group date">
+                    <input id="creacion" name="creacion" type="text" class="form-control" value="<?= $this->dateTime; ?>" readonly="true"/>
+                   <label for="creacion" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="estado">Estado</label>
+                    <?php
+                        $form->get('estado')->setValue($information['factura']['0']['estado']);
+                    ?>
+                    <?=   $this->formSelect($form->get('estado')); ?>
+                </div>
+            </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3">
+                <div class="form-group" style="float:right; padding-top: 24px;">
+                    <label for="ip">&nbsp;</label>
+                    <button class="btn btn-primary" title="Guardar" type="submit"><span class="glyphicon glyphicon-saved"></span></button>
+                </div>                
+<!--                <div style="float:right; border: 1px solid blue;">
+                    <button class="btn btn-primary" title="Guardar" type="submit"><span class="glyphicon glyphicon-saved"></span></button>
+                </div>-->
+            </div>
+            
+        <div class="clearfix"></div>
+        </div>
+    </div>
+</fieldset>
+<?= $this->form()->closeTag($form); ?>

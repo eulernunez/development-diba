@@ -77,7 +77,13 @@
     {
         font-size: 10px;
     }
-
+/*    .btn-primary {
+        width: 110px;
+    }*/
+    .form-control {
+        width: 600px;
+    }
+    
 </style>
 
 <script type="text/javascript" style="display:none">
@@ -109,7 +115,7 @@
         });
 
 
-      
+      $('.form-control').attr('placeholder', 'Ingrese un criterio de búsqueda ...');
         
         
     });
@@ -186,7 +192,7 @@
                 <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
                 
                 <div id="toolbar">
-                    <div class="col-lg-6" style="padding-left: 0px;">
+<!--                    <div class="col-lg-6" style="padding-left: 0px;">
                         <form id="supplySearcherForm">
                             <div class="form-group input-group" >
                                 <input type="text" class="form-control" id="search" name="search" placeholder="Buscar ..."/>
@@ -198,19 +204,19 @@
                                 </span>
                             </div>
                         </form>
-                    </div>
+                    </div>-->
 
-                    <div class="col-lg-6" style="padding-right: 0px;">
+                    
                         <button id='validacion-data' type="button" class="btn btn-danger" title="Validación de la facturación" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#validacionDataModal">
                             <i class="glyphicon glyphicon-ok"></i>
                         </button>
                         <button id='export-data' type="button" class="btn btn-primary" title="Exportación de datos" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#exportDataModal" disabled>
                             <i class="glyphicon glyphicon-export"></i>
                         </button>
-                        <a class="btn btn-primary btn-primary" style="float: right;" href="<?= $this->url('invoice-create'); ?>" role="button" title="Crear factura">
+                        <a class="btn btn-primary btn-primary" style="float: right;" href="<?= $this->url('lote3-invoice-sign-up'); ?>" role="button" title="Crear factura">
                             <i class="glyphicon glyphicon-plus"></i>
                         </a>
-                    </div>
+                    
 <!--                        <button type="button" class="btn btn-primary" style="width: 110px;" data-toggle="modal" data-target="#exportModal">
                                 <i class="glyphicon glyphicon-hand-down"></i>&nbsp;Baja
                             </button>
@@ -231,7 +237,7 @@
            data-pagination="true"
            data-pagination-detail-h-align="right"
            data-pagination-h-align="left"
-           data-search="false"
+           data-search="true"
            data-search-align="right"
            data-show-refresh="false"
            data-show-toggle="false"
@@ -245,9 +251,9 @@
             <tr class="ui-state-active noselect">
                 <th data-field="state" data-checkbox="true"></th>
                 <th data-field="id" data-sortable="true" data-width="5%" class="hidden">ID</th>
-                <th data-field="periodo" data-sortable="true" data-width="25%">ORGANISMO</th>
-                <th data-field="entidades" data-sortable="true" data-width="25%">OFICINA</th>
-                
+                <th data-field="periodo" data-sortable="true" data-width="10%">ORGANISMO</th>
+                <th data-field="entidades" data-sortable="true" data-width="30%">OFICINA</th>
+                <th data-field="xarxa" data-sortable="true" data-width="10%">XARXA</th>
                 <th data-field="tipoServicio" data-sortable="true" data-width="6%">CÓDIGO</th>
                 <th data-field="telefono" data-sortable="true" data-width="6%">SERVICIO</th>
                 <th data-field="conceptoFacturable" data-sortable="true" data-width="25%">DESCRIPCIÓN</th>
@@ -260,7 +266,7 @@
                 <th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>
             </tr>
         </thead>
-        <tbody style="font-size: 12px;">
+        <tbody style="font-size: 10px;">
             <?php //$currentDate = new DateTime("now"); ?>
             <?php foreach ($this->lote3Invoices as $item) : ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
@@ -268,17 +274,17 @@
                     <td class="noWrap hidden"><?= $item->id; ?></td>
                     <td class="noWrap"><?= $item->organismo; ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($item->nombre)); ?></td>
-                    
+                    <td class="noWrap"><?= $item->xarxa; ?></td>
                     <td class="noWrap"><?= $item->codigoservicio; ?></td>
                     <td class="noWrap"><?= $item->servicio; ?></td>
                     <td class="noWrap"><?= $item->descripciondetallada; ?></td>
-                    <td class="noWrap"><?= $item->precio; ?></td>
-                    
+                    <td class="noWrap" align="right"><?= number_format($item->precio, 2, ',', '.'); ?></td>
+                     
 <!--                    <td class="noWrap"><?= $item->administrativo; ?></td>
                     <td class="noWrap"><?= $item->linea; ?></td>-->
                     
                     <td class="noWrap">
-                        <a class="update" href="<?php echo $this->url('invoice') . '/' . $item->id; ?>" title="Consultar">
+                        <a class="update" href="<?php echo $this->url('invoice-update') . '/' . $item->id; ?>" title="Consultar">
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </td>

@@ -640,5 +640,39 @@ class BillingController extends AbstractActionController
         $this->processingBillService->setPostParams($posts)->globalTemplateExport();
         
     }
+
+    public function invoiceUpdateAction() {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $id = (int)$this->params()->fromRoute('id');
+
+        $information = $this->processingBillService->getLote3Invoice($id);
+
+        //die('<pre>' . print_r($information, true) . '</pre>');
+        
+        $form = new InvoiceLote3($dbAdapter);
+
+        $viewmodel = 
+            new ViewModel(
+                    array('information' => $information,
+                          'form' => $form));
+
+        return $viewmodel;
+
+    }
+
+    public function invoiceLote3UpdateAction() {
+
+        die('DEAD::update()');
+        $posts = (array)$this->request->getPost();
+        $this->processingBillService->setPostParams($posts);
+        $invoiceId = $this->processingBillService->updateInvoice();
+
+        if($invoiceId) {
+            $this->redirect()->toRoute('list-invoices');
+        }
+
+    }
+
     
 }

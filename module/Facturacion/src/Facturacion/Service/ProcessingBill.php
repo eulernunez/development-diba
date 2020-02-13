@@ -728,6 +728,29 @@ class ProcessingBill extends Service {
 
     }
 
+    public function getLote3Invoice($id) {
+
+        $datos = array();
+        
+        $statement = 
+            "SELECT *
+            FROM factura_lote3 WHERE activo = 1 AND id='" . $id . "'";
+
+        $adapter = $this->adapter->query($statement);
+        
+        $invoice = array();
+        foreach ($adapter->execute() as $item) {
+            $invoice[] = $item;
+        }
+
+        $datos['factura'] = $invoice;
+
+        return $datos;
+
+    }
+    
+    
+    
     public function getTotalByEntities($periodo) {
         
          $this->periodo = $periodo;
@@ -1274,7 +1297,7 @@ class ProcessingBill extends Service {
             
             $entity = new \stdClass;
             $entity->id = $row['id'];
-            $entity->organismo = $row['organismo'];
+            $entity->organismo = ($row['organismoId']=='1')?'DIBA':'ORGT';
             $entity->planta = $row['planta'];
             $entity->xarxa = $row['xarxa'];
             $entity->clave = $row['clave'];

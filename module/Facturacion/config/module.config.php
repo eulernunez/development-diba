@@ -292,8 +292,29 @@ return array(
                     ),
                 ),
             ),
-
-
+            'invoice-update' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/invoice-update[/[:id]]',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'invoice-update',
+                    ),
+                ),
+            ),
+            'invoice-lote3-update' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/invoice-lote3-update',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'invoice-lote3-update',
+                    ),
+                ),
+            ),
+            
+            
+            
         ),
     ),
     'view_manager' => array (
