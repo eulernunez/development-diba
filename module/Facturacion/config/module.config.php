@@ -225,7 +225,7 @@ return array(
             'lote3-invoice-sign-up' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
-                    'route'    => '/lote3-invoice-sign-up',
+                    'route'    => '/lote3-invoice-sign-up[/:periodo]',
                     'defaults' => array(
                         'controller' => 'Facturacion\Controller\Billing',
                         'action'     => 'lote3-sign-up',

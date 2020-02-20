@@ -18,11 +18,13 @@ class InvoiceLote3 {
     protected $titular;
     protected $oficina;
     protected $servicio;
-
+    protected $estado;
+    
     protected $administrativo;
     protected $linea;
     protected $ip;
     protected $creacion;
+    protected $periodo;
 
     public function setOptions(array $options) {
         $methods = get_class_methods($this);
@@ -144,4 +146,22 @@ class InvoiceLote3 {
         return $this;
     }
 
+    public function getPeriodo() {
+        return $this->periodo;
+    }
+
+    public function setPeriodo($periodo) {
+        $this->periodo = $periodo;
+        return $this;
+    }
+
+    public function getEstado() {
+        return $this->estado;
+    }
+
+    public function setEstado($estado) {
+        $this->estado = $estado;
+        return $this;
+    }
+    
 }

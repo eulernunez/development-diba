@@ -97,7 +97,7 @@
 <?= $this->form()->openTag($form); ?>
 
 <fieldset class="col-md-12">
-    <legend>Alta de Facturas Lote 3</legend>
+    <legend> Edición de Factura Lote3 </legend>
     <div class="panel panel-default">
         <div class="panel-body" data-toggle="validator">
             <div class="col-lg-3">
@@ -107,6 +107,7 @@
                     <label for="organismo">Organismo</label>
                     <?php
                         $form->get('organismo')->setValue($information['factura']['0']['organismo']);
+                        $form->get('organismo')->setAttribute('disabled','true');
                     ?>
                     <?=   $this->formSelect($form->get('organismo')); ?>                                
                 </div>
@@ -119,6 +120,7 @@
                     <label for="planta">Planta</label>
                     <?php
                         $form->get('planta')->setValue($information['factura']['0']['planta']);
+                        $form->get('planta')->setAttribute('disabled','true');
                     ?>
                      <?=  $this->formSelect($form->get('planta')); ?> 
                 </div>
@@ -132,6 +134,7 @@
                     <label for="xarxa">Xarxa</label>
                     <?php
                         $form->get('xarxa')->setValue($information['factura']['0']['xarxa']);
+                        $form->get('xarxa')->setAttribute('disabled','true');
                     ?>
                      <?= $this->formSelect($form->get('xarxa')); ?> 
                 </div>
@@ -144,6 +147,7 @@
                     <label for="clave">Clave de Cobro</label>
                     <?php
                         $form->get('clave')->setValue($information['factura']['0']['clave']);
+                        $form->get('clave')->setAttribute('disabled','true');
                     ?>
                     <?= $this->formSelect($form->get('clave')); ?> 
                 </div>
@@ -154,7 +158,11 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="titular">Titular</label>
-                    <?=   $this->formSelect($form->get('titular')); ?>                                
+                    <?php
+                        $form->get('titular')->setValue($information['factura']['0']['titular']);
+                        $form->get('titular')->setAttribute('disabled','true');
+                    ?>
+                    <?=   $this->formSelect($form->get('titular')); ?>          
                 </div>
             </div>    
             <div class="col-lg-3">
@@ -173,6 +181,11 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="oficina">Oficina</label>
+                    <?php
+                        $form->get('oficina')->setValue($information['factura']['0']['oficina']);
+                        $form->get('oficina')->setAttribute('disabled','true');
+                    ?>
+
                     <?= $this->formSelect($form->get('oficina')); ?>
                 </div>
             </div>
@@ -196,6 +209,7 @@
                     <label for="titular">Código de Servicio</label>
                     <?php
                         $form->get('servicio')->setValue($information['factura']['0']['servicio']);
+                        $form->get('servicio')->setAttribute('disabled','true');
                     ?>
                     <?=   $this->formSelect($form->get('servicio')); ?>                                
                 </div>
@@ -204,7 +218,7 @@
                 <div id="ajax-nif">
                     <div class="form-group">
                         <label for="nif">Descripción</label>
-                        <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="">
+                        <input type="text" class="form-control" id="descripcion" name="descripcion" aria-describedby="descripcionHelp" readonly="true" value="">
                     </div>
                 </div>    
             </div>
@@ -216,6 +230,9 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="administrativo">Administrativo</label>
+                    <?php
+                        $form->get('administrativo')->setValue($information['factura']['0']['administrativo']);
+                    ?>
                     <?= $this->formInput($form->get('administrativo')); ?>
                 </div>                
                 
@@ -223,12 +240,18 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="linea">Número Comercial</label>
+                    <?php
+                        $form->get('linea')->setValue($information['factura']['0']['linea']);
+                    ?>
                     <?= $this->formInput($form->get('linea')); ?>
                 </div>                
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
                     <label for="ip">IP Fija</label>
+                    <?php
+                        $form->get('ip')->setValue($information['factura']['0']['ip']);
+                    ?>
                     <?= $this->formInput($form->get('ip')); ?>
                 </div>                
             </div>
@@ -237,13 +260,6 @@
             <div class="clearfix"></div>
             
             <div class="col-lg-3">
-                <label for="fecha">Fecha Alta</label>
-                <div class="input-group date">
-                    <input id="creacion" name="creacion" type="text" class="form-control" value="<?= $this->dateTime; ?>" readonly="true"/>
-                   <label for="creacion" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
-                </div>
-            </div>
-            <div class="col-lg-3">
                 <div class="form-group">
                     <label for="estado">Estado</label>
                     <?php
@@ -251,8 +267,26 @@
                     ?>
                     <?=   $this->formSelect($form->get('estado')); ?>
                 </div>
+                
+                
+<!--                <label for="fecha">Fecha Alta</label>
+                <div class="input-group date">
+                    <input id="creacion" name="creacion" type="text" class="form-control" value="<?= $this->dateTime; ?>" readonly="true"/>
+                   <label for="creacion" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
+                </div>-->
+            </div>
+            
+            <div class="col-lg-3">
+<!--                <div class="form-group">
+                    <label for="estado">Estado</label>
+                    <?php
+                        //$form->get('estado')->setValue($information['factura']['0']['estado']);
+                    ?>
+                    <?php   // $this->formSelect($form->get('estado')); ?>
+                </div>-->
             </div>
             <div class="col-lg-3"></div>
+            <input type="hidden" id="invoiceLote3Id" name="invoiceLote3Id" value="<?= $this->information['factura']['0']['id'] ?>">
             <div class="col-lg-3">
                 <div class="form-group" style="float:right; padding-top: 24px;">
                     <label for="ip">&nbsp;</label>

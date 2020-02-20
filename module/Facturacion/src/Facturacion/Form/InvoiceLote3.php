@@ -245,10 +245,10 @@ class InvoiceLote3 extends Form
     public function getOptionsForTitular()
     {
         $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, organismo FROM organismos');
+        $statement = $dbAdapter->query('SELECT id, titular FROM titulares');
         $select = [];
         foreach ($statement->execute() as $item) {
-            $select[$item['id']] = $item['organismo'];
+            $select[$item['id']] = $item['titular'];
         }
         return $select;        
     }
@@ -256,10 +256,10 @@ class InvoiceLote3 extends Form
     public function getOptionsForOficina()
     {
         $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, nombre FROM sedes');
+        $statement = $dbAdapter->query('SELECT id, oficina FROM sedes_lote3');
         $select = [];
         foreach ($statement->execute() as $item) {
-            $select[$item['id']] = $item['nombre'];
+            $select[$item['id']] = $item['oficina'];
         }
         return $select;        
     }

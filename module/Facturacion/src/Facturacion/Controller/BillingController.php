@@ -557,17 +557,19 @@ class BillingController extends AbstractActionController
     }
     
     public function lote3SignUpAction() {
-
+        
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $form = new InvoiceLote3($dbAdapter);
-
+        $periodo = (int)$this->params()->fromRoute('periodo');
+        
         $date = new \DateTime();
 
         $dateTime = $date->format('d/m/Y H:i:s');
 
         $viewmodel = new ViewModel(array(
                                     'form' => $form,
-                                    'dateTime' => $dateTime));
+                                    'dateTime' => $dateTime,
+                                    'periodo' => $periodo));
         return  $viewmodel;
 
     }
@@ -590,11 +592,14 @@ class BillingController extends AbstractActionController
 
         $lote3Invoices = $this->processingBillService->getLote3Invoices();
 
+        $periodo = array_shift($lote3Invoices);
+        
         if(is_array($lote3Invoices)) { 
 
             $viewmodel = 
                     new ViewModel(
-                            array('lote3Invoices' => $lote3Invoices));
+                            array('lote3Invoices' => $lote3Invoices,
+                                  'periodo' => $periodo));
             return $viewmodel;
 
         }
@@ -663,13 +668,14 @@ class BillingController extends AbstractActionController
 
     public function invoiceLote3UpdateAction() {
 
-        die('DEAD::update()');
+
         $posts = (array)$this->request->getPost();
+        
         $this->processingBillService->setPostParams($posts);
-        $invoiceId = $this->processingBillService->updateInvoice();
+        $invoiceId = $this->processingBillService->updateLote3Invoice();
 
         if($invoiceId) {
-            $this->redirect()->toRoute('list-invoices');
+            $this->redirect()->toRoute('lote3-invoice-list');
         }
 
     }

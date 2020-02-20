@@ -1258,6 +1258,24 @@ class ProcessingBill extends Service {
 
     }
 
+    public function updateLote3Invoice() {
+
+        $invoiceLote3 = new \Facturacion\Model\Entity\InvoiceLote3();
+
+        $id = (int)$this->posts['invoiceLote3Id'];
+        $invoiceLote3->setId($id);
+        $invoiceLote3->setOptions($this->posts);
+
+        $handler = new \Facturacion\Model\InvoiceLote3($this->adapter);
+        $invoiceId = $handler->saveLote3Invoice($invoiceLote3);
+        
+        return $invoiceId;
+
+    }
+    
+    
+    
+    
     public function getLote3Invoices() {
 
         $statement =
@@ -1266,7 +1284,7 @@ class ProcessingBill extends Service {
                 p.id AS plantaId, p.planta,
                 x.id AS xarxaId, x.xarxa,
                 c.id AS claveId, c.clave,
-                s.id AS oficinaId, s.nombre,
+                s.id AS oficinaId, s.oficina,
                 sr.id AS servicioId, sr.codigo_servicio, sr.servicio, sr.descripcion_detallada, sr.precio,
                 e.id AS estadoId, e.estado
                     FROM factura_lote3 AS f
@@ -1274,7 +1292,7 @@ class ProcessingBill extends Service {
                         LEFT JOIN plantas AS p ON f.planta = p.id
                         LEFT JOIN xarxas AS x ON f.xarxa = x.id
                         LEFT JOIN clave_cobros AS c ON f.clave = c.id
-                        LEFT JOIN sedes AS s ON f.oficina = s.id
+                        LEFT JOIN sedes_lote3 AS s ON f.oficina = s.id
                         LEFT JOIN servicios_lote3 AS sr ON f.servicio = sr.id
                         LEFT JOIN estados_lote3 AS e ON f.estado = e.id
                         WHERE f.estado = 1 AND f.activo = 1
@@ -1301,7 +1319,7 @@ class ProcessingBill extends Service {
             $entity->planta = $row['planta'];
             $entity->xarxa = $row['xarxa'];
             $entity->clave = $row['clave'];
-            $entity->nombre = $row['nombre']; //Nombre sede
+            $entity->nombre = $row['oficina']; //Nombre sede
             $entity->codigoservicio = $row['codigo_servicio'];
             $entity->servicio = $row['servicio'];
             $entity->descripciondetallada = $row['descripcion_detallada'];
@@ -1309,7 +1327,7 @@ class ProcessingBill extends Service {
             $entity->administrativo = $row['administrativo'];
             $entity->linea = $row['linea'];
             $entity->ip = $row['ip'];
-            
+            $entities['periodo'] = $row['periodo'];
             $entities[$row['id']] = $entity;
         }
         //die('<pre>' . print_r($entities, true) . '</pre>');                    
@@ -1611,7 +1629,7 @@ class ProcessingBill extends Service {
         
     }
     
-    
+    // REVIEW BUG f.estado = 1
     public function getServicesAccessData($planta, $periodo, $centrocoste, $ampliado)
     {
         
@@ -1619,7 +1637,7 @@ class ProcessingBill extends Service {
             "SELECT s.codigo_servicio, s.servicio, s.descripcion, COUNT(s.servicio) AS Unidad, s.precio,
                 SUM(s.precio) AS Total, s.estado AS Flag 
                 FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id
-                WHERE f.planta = '" . $planta . "' AND  f.xarxa = '" . $centrocoste . "' AND f.periodo = '" . $periodo . "' AND s.estado = '" 
+                WHERE f.estado = 1 AND f.planta = '" . $planta . "' AND  f.xarxa = '" . $centrocoste . "' AND f.periodo = '" . $periodo . "' AND s.estado = '" 
                 . $ampliado . "'  GROUP BY s.servicio ORDER BY s.servicio ASC";
 
         //die('$statement: <pre>' . print_r($statement, true) . '</pre>');
@@ -1836,12 +1854,12 @@ class ProcessingBill extends Service {
 
     }
 
-
+    // REVIEW BUG f.estado = 1
     public function getSubTotalByCostCenter($planta, $xarxa, $periodo) {
         
         $statement = "SELECT f.xarxa AS CentroCosto,  SUM(s.precio) AS SubTotal 
                         FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
-			WHERE f.xarxa = " . $xarxa . " AND f.planta = " . $planta . " AND f.periodo = '" . $periodo . "'";
+			WHERE f.estado = 1 AND f.xarxa = " . $xarxa . " AND f.planta = " . $planta . " AND f.periodo = '" . $periodo . "'";
         
         $adapter = $this->adapter->query($statement);
         $objResult = $adapter->execute();
