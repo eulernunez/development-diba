@@ -149,6 +149,8 @@
 
     function hideValidationModal() {
         $('#validacionDataModal').modal('hide');
+        $('#previewCentroCostoDataModal').modal('hide');
+        $('#previewGlobalDataModal').modal('hide');
     }
 
 
@@ -206,14 +208,19 @@
                         </form>
                     </div>-->
 
-                    
-<button id='validacion-data' type="button" class="btn btn-danger" title="Validación del período de facturación" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#validacionDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
+                        <button id='preview-global' type="button" class="btn btn-primary" title="Descarga del borrador de facturación global de la Diputación Barcelona" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#previewGlobalDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
+                            <i class="glyphicon glyphicon-list"></i>
+                        </button>
+                        <button id='preview-centrocosto' type="button" class="btn btn-primary" title="Descarga del borrador de facturación por Centro de Costos" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#previewCentroCostoDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
+                            <i class="glyphicon glyphicon-stats"></i>
+                        </button>
+                        <button id='validacion-data' type="button" class="btn btn-danger" title="Validación del período de facturación" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#validacionDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
                             <i class="glyphicon glyphicon-ok"></i>
                         </button>
 <!--                        <button id='export-data' type="button" class="btn btn-primary" title="Exportación de datos" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#exportDataModal" disabled>
                             <i class="glyphicon glyphicon-export"></i>
                         </button>-->
-                        <a class="btn btn-primary btn-primary" style="float: right;" href="<?= $this->url('lote3-invoice-sign-up') .'/'. $this->periodo; ?>" role="button" title="Crear factura">
+                        <a class="btn btn-primary btn-primary" style="float: right;" href="<?= $this->url('lote3-invoice-sign-up') .'/'. $this->periodo; ?>" role="button" title="Crear factura" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
                             <i class="glyphicon glyphicon-plus"></i>
                         </a>
                     
@@ -311,7 +318,7 @@
                     <h4 class="modal-title" id="myModalLabel"> Validación del proceso de facturación </h4>
                 </div>
                 <div class="modal-body">
-                    Se va a validar el período: <?=$this->periodo; ?> de facturación de Diputación Lote3 .
+                    Se va a validar el período: <?=$this->periodo; ?> de facturación de Diputación Lote3.
                     <input type="hidden" id="data" name="data" value="<?=$this->periodo; ?>" />
                 </div>
                 <div class="modal-footer">
@@ -319,6 +326,61 @@
                     <button type="submit" class="btn btn-danger" style="float: left;"> Validación </button>
                 </div>
             </form>    
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="previewCentroCostoDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= $this->url('template-export'); ?>" method="post" onsubmit="hideValidationModal();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Borrador del proceso de facturación </h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="form-group">
+                        <select class="form-control" style="width: 300px;" id="centrocostes" name="centrocostes" required>
+                            <option disabled selected>Seleccione el Centro de Coste</option>
+                            <option value='xic'>XIC</option>
+                            <option value='xem'>XEM</option>
+                            <option value='xb'>XB</option>
+                            <option value='xp'>XP</option>
+                            <option value='xorgt'>XORGT</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" id="periodo" name="periodo" value="<?=$this->periodo; ?>" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Descarga del borrador </button>
+                </div>
+            </form>
+            <br/>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="previewGlobalDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= $this->url('global-template-export'); ?>" method="post" onsubmit="hideValidationModal();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Borrador del proceso de facturación </h4>
+                </div>
+                <div class="modal-body">
+                    Se va a descargar el borrador global de facturación de Diputación Lote3 del período: <?=$this->periodo; ?>.
+                    <input type="hidden" id="periodo" name="periodo" value="<?=$this->periodo; ?>" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Descarga del borrador </button>
+                </div>
+            </form>
+            <br/>
         </div>
     </div>
 </div>
