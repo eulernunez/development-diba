@@ -1295,7 +1295,7 @@ class ProcessingBill extends Service {
                         LEFT JOIN sedes_lote3 AS s ON f.oficina = s.id
                         LEFT JOIN servicios_lote3 AS sr ON f.servicio = sr.id
                         LEFT JOIN estados_lote3 AS e ON f.estado = e.id
-                        WHERE f.estado = 1 AND f.activo = 1
+                        WHERE f.activo = 1
                         ORDER BY f.creacion DESC"; 
         
         $adapter = $this->adapter->query($statement);
@@ -1588,7 +1588,7 @@ class ProcessingBill extends Service {
      * Methods to calcuilate and fill template
      * 
      */
-    
+    // ASSUME AICC is fixed cost 
     public function calculateAiccCoste($periodo, $centrocoste) { // AICC-XIC
         
         $statement =
@@ -1608,7 +1608,7 @@ class ProcessingBill extends Service {
         
     }
     
-    
+    // ASSUME AICC is fixed cost
     public function proportionalityCalculate($periodo, $xarxa) {
         
         $statement =
@@ -1638,7 +1638,7 @@ class ProcessingBill extends Service {
                 SUM(s.precio) AS Total, s.estado AS Flag 
                 FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id
                 WHERE f.estado = 1 AND f.planta = '" . $planta . "' AND  f.xarxa = '" . $centrocoste . "' AND f.periodo = '" . $periodo . "' AND s.estado = '" 
-                . $ampliado . "'  GROUP BY s.servicio ORDER BY s.servicio ASC";
+                . $ampliado . "' GROUP BY s.servicio ORDER BY s.servicio ASC";
 
         //die('$statement: <pre>' . print_r($statement, true) . '</pre>');
         
@@ -1898,6 +1898,95 @@ class ProcessingBill extends Service {
         
         return strtoupper($this->months[$month]);
 
+    }
+    
+    
+    public function invoicePeriodExecute($newPeriodo) {
+
+        $auxMonth = (string)substr($newPeriodo, 4, 2);
+        $newMonth = (int)substr($newPeriodo, 4, 2);
+        $year = (int)substr($newPeriodo, 0, 4);
+        
+        $oldMonth = $newMonth - 1;
+        if($oldMonth < 10) {
+            $month = '0' . $oldMonth;
+        } else {
+            $month = $oldMonth;
+        }
+        $oldPeriodo = $year . $month;
+        $dateCreated = $year . '-' . $auxMonth . '-01 00:00:00';
+
+
+        $statement = 
+        "INSERT INTO `factura_lote3` 
+	(organismo, titular, planta, xarxa,
+         clave, oficina, servicio, administrativo,
+         linea, ip, estado, activo) 
+            SELECT organismo, titular, planta, xarxa,
+                   clave, oficina, servicio, administrativo,
+                   linea, ip, estado, activo FROM `factura_lote3` WHERE periodo = '" . $oldPeriodo . "' AND activo = 1";
+        
+        $adapter = $this->adapter->query($statement);
+        $result = $adapter->execute();
+
+
+        $statement = 
+        "UPDATE `factura_lote3` SET creacion = '" . $dateCreated . "', periodo = '" . $newPeriodo . "' WHERE ISNULL(creacion) AND ISNULL(periodo)";
+        $adapter2 = $this->adapter->query($statement);
+        $result2 = $adapter2->execute();
+
+        
+        $statement = 
+        "UPDATE `factura_lote3`  
+		SET activo = 0
+		WHERE periodo = '" . $oldPeriodo . "'";
+        $adapter3 = $this->adapter->query($statement);
+        $result3 = $adapter3->execute();
+        
+        if($result && $result2 && $result3) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    
+    public function Lote3InvoiceValidate($periodo) {
+
+        $statement = 
+            "INSERT INTO periodos (periodo) VALUES ('" . $periodo . "')";
+
+        $adapter = $this->adapter->query($statement);
+        $result = $adapter->execute();
+        
+        if($result) {
+            return true;
+        }
+        
+        return false;
+
+    }
+
+    public function checkPeriodo($periodo) {
+
+        $statement = 
+            "SELECT * FROM periodos WHERE periodo = '" . $periodo . "'";
+
+        $adapter = $this->adapter->query($statement);
+
+        $result = array();
+        foreach ($adapter->execute() as $item) {
+            $result[] = $item;  
+        }
+        
+        if(isset($result['0']['periodo'])) {
+            return true;
+        }
+        
+        return false;
+
+        
     }
     
     

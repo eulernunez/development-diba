@@ -109,6 +109,9 @@
 //    }
 
 </script>
+<?php
+ $form = $this->form;
+ ?>
 
 <fieldset class="col-md-12">
     <legend>Resumen por Centro de Costos</legend>
@@ -138,11 +141,12 @@
                             <option value='xorgt'>XORGT</option>
                         </select>
                     </div>
-                    <select class="form-control" id="periodo" name="periodo" required>
+                    <?=   $this->formSelect($form->get('periodo')); ?>                       
+<!--                    <select class="form-control" id="periodo" name="periodo" required>
                         <option disabled selected>Seleccione el período</option>
                         <option value='202002'>202002</option>
                         <option value='202001'>202001</option>
-                    </select>
+                    </select>-->
                 <!--</div>-->
                     <span class="input-group-btn">
                         &nbsp;

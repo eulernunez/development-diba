@@ -58,9 +58,9 @@ class InvoiceLote3 extends AbstractTableGateway {
                 'estado' => $invoiceLote3->getEstado()
                 );
             
-            if($invoiceLote3->getEstado() != 1) {
-                $updateInfo['activo'] = 0;
-            }
+//            if($invoiceLote3->getEstado() != 1) {
+//                $updateInfo['activo'] = 0;
+//            }
             
             if (!$this->update($updateInfo, array('id' => $id))) { 
                 return $id; 

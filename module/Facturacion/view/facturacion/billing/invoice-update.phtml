@@ -166,19 +166,19 @@
                 </div>
             </div>    
             <div class="col-lg-3">
-                <div id="ajax-nif">
+<!--                <div id="ajax-nif">
                     <div class="form-group">
                         <label for="nif">NIF</label>
                         <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="">
                     </div>
-                </div>    
+                </div>    -->
             </div>
             <div class="col-lg-3"></div>
             <div class="col-lg-3"></div>
             
             <div class="clearfix"></div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-6">
                 <div class="form-group">
                     <label for="oficina">Oficina</label>
                     <?php
@@ -189,24 +189,22 @@
                     <?= $this->formSelect($form->get('oficina')); ?>
                 </div>
             </div>
-            <div class="col-lg-3">
+<!--            <div class="col-lg-3">
                 <div id="ajax-direccion">
                     <div class="form-group">
                         <label for="direccion">Dirección</label>
                         <input type="text" class="form-control" id="direccion" name="direccion" aria-describedby="direccionHelp" readonly="true" value="">
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-            </div>
-            <div class="col-lg-3">
-            </div>
+            </div>-->
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3"></div>
 
             <div class="clearfix"></div>
             
-            <div class="col-lg-3">
+            <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="titular">Código de Servicio</label>
+                    <label for="titular"> Servicio </label>
                     <?php
                         $form->get('servicio')->setValue($information['factura']['0']['servicio']);
                         $form->get('servicio')->setAttribute('disabled','true');
@@ -214,14 +212,14 @@
                     <?=   $this->formSelect($form->get('servicio')); ?>                                
                 </div>
             </div>    
-            <div class="col-lg-3">
+<!--            <div class="col-lg-3">
                 <div id="ajax-nif">
                     <div class="form-group">
                         <label for="nif">Descripción</label>
                         <input type="text" class="form-control" id="descripcion" name="descripcion" aria-describedby="descripcionHelp" readonly="true" value="">
                     </div>
                 </div>    
-            </div>
+            </div>-->
             <div class="col-lg-3"></div>
             <div class="col-lg-3"></div>
             

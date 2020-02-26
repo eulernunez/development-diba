@@ -152,6 +152,16 @@ return array(
                     ),
                 ),
             ),
+            'lote3-invoice-validation' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/lote3-invoice-validation',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'lote3-invoice-validation',
+                    ),
+                ),
+            ),
             'invoice-filter' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
@@ -279,6 +289,26 @@ return array(
                     'defaults' => array(
                         'controller' => 'Facturacion\Controller\Billing',
                         'action'     => 'template-export',
+                    ),
+                ),
+            ),
+            'invoice-period-ui' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/invoice-period-ui',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'invoice-period-ui',
+                    ),
+                ),
+            ),
+            'invoice-period-getting' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/invoice-period-getting',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'invoice-period-getting',
                     ),
                 ),
             ),

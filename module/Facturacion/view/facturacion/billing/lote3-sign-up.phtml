@@ -1,13 +1,15 @@
 <?php echo $this->headLink()
                 ->appendStylesheet('http://code.jquery.com/ui/1.10.3/themes/flick/jquery-ui.min.css')
                 ->appendStylesheet($this->basePath('assets/datepicker/css/jquery-ui.theme.min.css'))
-                ->appendStylesheet($this->basePath('assets/datepicker/css/custom.css'));?>
+                ->appendStylesheet($this->basePath('assets/datepicker/css/custom.css'))
+                ->appendStylesheet($this->basePath('assets/select/css/bootstrap-select.min.css')) ;?>
 
 
 
 <?php echo $this->headScript()
         ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js')
-        ->appendFile('http://code.jquery.com/ui/1.10.3/jquery-ui.js'); 
+        ->appendFile('http://code.jquery.com/ui/1.10.3/jquery-ui.js')
+        ->appendFile($this->basePath('assets/select/js/bootstrap-select.min.js'));
 ?>
 
 
@@ -89,6 +91,25 @@
 <script type="text/javascript" style="display:none">
     <!--
     $(document).ready(function(e){
+
+        $('#oficina').selectpicker({
+            style: 'btn-select',
+            size: 'auto',
+            container: 'body',
+        });
+        
+        $('#servicio').selectpicker({
+            style: 'btn-select',
+            size: 'auto',
+            container: 'body',
+        });
+
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            $('#oficina').selectpicker('mobile');
+            $('#servicio').selectpicker('mobile');
+            
+        }
+        
             /* This code is executed after the DOM has been completely loaded */
             $(".btn-pref .btn").click(function () {
                 $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
@@ -228,53 +249,39 @@ $( "#inicio" ).datepicker({
                 </div>
             </div>    
             <div class="col-lg-3">
-                <div id="ajax-nif">
+<!--                <div id="ajax-nif">
                     <div class="form-group">
                         <label for="nif">NIF</label>
                         <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="">
                     </div>
-                </div>    
+                </div>    -->
             </div>
             <div class="col-lg-3"></div>
             <div class="col-lg-3"></div>
             
             <div class="clearfix"></div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="oficina">Oficina</label>
-                    <?= $this->formSelect($form->get('oficina')); ?>
+                    <label for="oficina"> Oficina </label>
+                    <div class="form_select">
+                        <?= $this->formSelect($form->get('oficina')); ?>
+                    </div>    
                 </div>
             </div>
-            <div class="col-lg-3">
-                <div id="ajax-direccion">
-                    <div class="form-group">
-                        <label for="direccion">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" name="direccion" aria-describedby="direccionHelp" readonly="true" value="">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-3"></div>
+
+            <div class="clearfix"></div>
+            
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="titular"> Servicio </label>
+                    <div class="form_select">
+                        <?=   $this->formSelect($form->get('servicio')); ?>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-            </div>
-            <div class="col-lg-3">
-            </div>
-
-            <div class="clearfix"></div>
-            
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label for="titular">Código de Servicio</label>
-                    <?=   $this->formSelect($form->get('servicio')); ?>                                
                 </div>
             </div>    
-            <div class="col-lg-3">
-                <div id="ajax-nif">
-                    <div class="form-group">
-                        <label for="nif">Descripción</label>
-                        <input type="text" class="form-control" id="nif" name="nif" aria-describedby="nifHelp" readonly="true" value="">
-                    </div>
-                </div>    
-            </div>
             <div class="col-lg-3"></div>
             <div class="col-lg-3"></div>
             

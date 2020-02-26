@@ -260,7 +260,7 @@
                     </a>
                     <ul class="collapse" id="billinglote3-nav">
                         <?php if('Administrador' == $userRole) : ?>
-<!--                        <li class=""><a href="<?= $this->url('lote3-invoice-sign-up'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Alta Factura</span> </a></li>-->
+                        <li class=""><a href="<?= $this->url('invoice-period-ui'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Generación período</span> </a></li>
                         <li class=""><a href="<?= $this->url('lote3-invoice-list'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Bandeja de Facturas</span> </a></li>
                         <?php endif ?>
                         <?php if('Administrador' == $userRole || 'Facturacion' == $userRole) : ?>

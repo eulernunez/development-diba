@@ -184,7 +184,7 @@
 <div class="inner" style="min-height:0px;">
 
 <fieldset class="col-md-12">
-    <legend> Facturas Lote3 </legend>
+    <legend> Facturas Lote3: <b><?= $this->periodo; ?></b></legend>
     <div class="panel panel-default">
         <div class="panel-body">
             <div id="fill-supply-search">
@@ -207,12 +207,12 @@
                     </div>-->
 
                     
-                        <button id='validacion-data' type="button" class="btn btn-danger" title="Validación de la facturación" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#validacionDataModal">
+<button id='validacion-data' type="button" class="btn btn-danger" title="Validación del período de facturación" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#validacionDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
                             <i class="glyphicon glyphicon-ok"></i>
                         </button>
-                        <button id='export-data' type="button" class="btn btn-primary" title="Exportación de datos" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#exportDataModal" disabled>
+<!--                        <button id='export-data' type="button" class="btn btn-primary" title="Exportación de datos" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#exportDataModal" disabled>
                             <i class="glyphicon glyphicon-export"></i>
-                        </button>
+                        </button>-->
                         <a class="btn btn-primary btn-primary" style="float: right;" href="<?= $this->url('lote3-invoice-sign-up') .'/'. $this->periodo; ?>" role="button" title="Crear factura">
                             <i class="glyphicon glyphicon-plus"></i>
                         </a>
@@ -299,4 +299,26 @@
 </fieldset>
 <div id="fill-export-data">
 </div>    
+</div>
+
+
+<div class="modal fade" id="validacionDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= $this->url('lote3-invoice-validation'); ?>" method="post" onsubmit="hideValidationModal();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Validación del proceso de facturación </h4>
+                </div>
+                <div class="modal-body">
+                    Se va a validar el período: <?=$this->periodo; ?> de facturación de Diputación Lote3 .
+                    <input type="hidden" id="data" name="data" value="<?=$this->periodo; ?>" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Validación </button>
+                </div>
+            </form>    
+        </div>
+    </div>
 </div>

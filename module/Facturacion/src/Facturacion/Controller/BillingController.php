@@ -10,6 +10,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Facturacion\Form\Invoice;
 use Facturacion\Form\InvoiceLote3;
+use Facturacion\Form\Auxiliar;
 
 # HACK TO RESOLVE PROBLEM
 use Zend\Session\Container;
@@ -576,9 +577,10 @@ class BillingController extends AbstractActionController
     
     public function lote3BillingSaveAction()
     {
-
+        
         $posts = (array)$this->request->getPost();
         
+        //die('SAVE POST: <pre>' . print_r($posts, true) . '</pre>');
         $this->processingBillService->setPostParams($posts);
         $invoiceId = $this->processingBillService->saveLote3Invoice();
 
@@ -594,12 +596,15 @@ class BillingController extends AbstractActionController
 
         $periodo = array_shift($lote3Invoices);
         
+        $isValilatedPeriod = $this->processingBillService->checkPeriodo($periodo);
+
         if(is_array($lote3Invoices)) { 
 
             $viewmodel = 
                     new ViewModel(
                             array('lote3Invoices' => $lote3Invoices,
-                                  'periodo' => $periodo));
+                                  'periodo' => $periodo,
+                                  'isValilatedPeriod' => $isValilatedPeriod));
             return $viewmodel;
 
         }
@@ -609,19 +614,25 @@ class BillingController extends AbstractActionController
     
     public function exportTemplateUiAction() {
 
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Auxiliar($dbAdapter);
+        
         $viewmodel = 
             new ViewModel(
-                    array());
+                    array('form' => $form));
 
         return $viewmodel;
 
     }
     
     public function exportGlobalUiAction() {
+        
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $form = new Auxiliar($dbAdapter);
 
         $viewmodel = 
             new ViewModel(
-                    array());
+                    array('form' => $form));
 
         return $viewmodel;
 
@@ -680,5 +691,45 @@ class BillingController extends AbstractActionController
 
     }
 
+    public function invoicePeriodUiAction() {
+
+        $viewmodel = 
+            new ViewModel(
+                    array());
+
+        return $viewmodel;
+
+    }
+    
+    public function invoicePeriodGettingAction() {
+        
+        $params = $this->getRequest()->getQuery()->toArray();
+        $periodo = (string)$params['periodo'];
+         
+        $result = $this->processingBillService->invoicePeriodExecute($periodo);
+
+        $viewmodel = 
+            new ViewModel(
+                    array());
+        
+         $viewmodel->setTerminal(true);
+
+            return $viewmodel;
+
+    }
+
+    public function lote3InvoiceValidationAction() {
+        
+        $posts = (array)$this->request->getPost();
+        
+        $result = $this->processingBillService->Lote3InvoiceValidate($posts['data']);
+        
+        //It's good
+        if($result) {
+            $this->redirect()->toRoute('export-global-ui');
+        }
+        
+        
+    }
     
 }

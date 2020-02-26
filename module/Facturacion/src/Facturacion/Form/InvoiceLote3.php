@@ -73,7 +73,7 @@ class InvoiceLote3 extends Form
              'name' => 'titular',
              'options' => array(
                     'label' => 'Titular',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForTitular(),
+                    'value_options' => array('0' => 'Seleccione una opción') +  $this->getOptionsForTitular(),
              ),
             'attributes' => 
                 array(
@@ -89,13 +89,16 @@ class InvoiceLote3 extends Form
              'name' => 'oficina',
              'options' => array(
                     'label' => 'Oficina',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForOficina(),
+                    'value_options' => array('0' => 'Seleccione una opción') + $this->getOptionsForOficina(),
              ),
             'attributes' => 
                 array(
                     'id' => 'oficina',
                     'required'=> true,
-                    'class' => 'form-control input-sm',
+                    'class' => 'form-control',
+                    'title' => 'Seleccione la Oficina',
+                    'data-header' => 'Seleccione la oficina',
+                    'data-live-search' => 'true'
                 ),
             'validators' => array('Int'),            
         ));
@@ -105,13 +108,16 @@ class InvoiceLote3 extends Form
              'name' => 'servicio',
              'options' => array(
                     'label' => 'Servicio',
-                    'value_options' => array('' => 'Seleccione una opción') +  $this->getOptionsForServicio(),
+                    'value_options' => $this->getOptionsForServicio()
              ),
             'attributes' => 
                 array(
                     'id' => 'servicio',
                     'required'=> true,
-                    'class' => 'form-control input-sm',
+                    'class' => 'form-control',
+                    'title' => 'Seleccione el Servicio',
+                    'data-header' => 'Seleccione el Servicio',
+                    'data-live-search' => 'true'
                 ),
             'validators' => array('Int'),            
         ));
@@ -256,10 +262,10 @@ class InvoiceLote3 extends Form
     public function getOptionsForOficina()
     {
         $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, oficina FROM sedes_lote3');
+        $statement = $dbAdapter->query("SELECT id, oficina AS dato FROM sedes_lote3");
         $select = [];
         foreach ($statement->execute() as $item) {
-            $select[$item['id']] = $item['oficina'];
+            $select[$item['id']] = $item['dato'];
         }
         return $select;        
     }
@@ -267,10 +273,11 @@ class InvoiceLote3 extends Form
     public function getOptionsForServicio()
     {
         $dbAdapter = $this->adapter;
-        $statement = $dbAdapter->query('SELECT id, codigo_servicio FROM servicios_lote3');
+        $statement = 
+            $dbAdapter->query("SELECT id, CONCAT(codigo_servicio,' ',servicio,' ',descripcion,' ',descripcion_detallada,'  €  ',precio) AS dato FROM servicios_lote3");
         $select = [];
         foreach ($statement->execute() as $item) {
-            $select[$item['id']] = $item['codigo_servicio'];
+            $select[$item['id']] = $item['dato'];
         }
         return $select;
     }
