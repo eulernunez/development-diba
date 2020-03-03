@@ -183,7 +183,7 @@
                     <label for="oficina">Oficina</label>
                     <?php
                         $form->get('oficina')->setValue($information['factura']['0']['oficina']);
-                        $form->get('oficina')->setAttribute('disabled','true');
+                        //$form->get('oficina')->setAttribute('disabled','true');
                     ?>
 
                     <?= $this->formSelect($form->get('oficina')); ?>
@@ -207,7 +207,7 @@
                     <label for="titular"> Servicio </label>
                     <?php
                         $form->get('servicio')->setValue($information['factura']['0']['servicio']);
-                        $form->get('servicio')->setAttribute('disabled','true');
+                        //$form->get('servicio')->setAttribute('disabled','true');
                     ?>
                     <?=   $this->formSelect($form->get('servicio')); ?>                                
                 </div>
