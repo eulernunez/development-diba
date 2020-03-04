@@ -298,14 +298,14 @@
 <div class="modal fade" id="exportDataModal" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="<?= $this->url('export-data'); ?>" method="post" onsubmit="esconder();">
+            <form action="<?= $this->url('invoice-download'); ?>" method="post" onsubmit="esconder();">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"> Exportación de datos </h4>
                 </div>
                 <div class="modal-body">
-                    Va a exportar los registros seleccionados.
-                    <input type="hidden" id="data" name="data" value="1" />
+                    Va a exportar las facturas.
+                    <input type="hidden" id="intervalo" name="intervalo" value="<?= $this->periodo; ?>" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>

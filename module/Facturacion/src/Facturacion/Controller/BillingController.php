@@ -221,14 +221,17 @@ class BillingController extends AbstractActionController
     public function listAction() {
         //getFormalities
         $facturas = $this->processingBillService->getInvoices();
+        $largePeriodo = array_shift($facturas);
+        $smallPeriodo = (int)substr($largePeriodo, 0, 6);
         
-        //die('<pre>' . print_r($facturas, true) . '</pre>');
-        
+        //die('<pre>' . print_r($smallPeriodo, true) . '</pre>');
+
         if(is_array($facturas)) { 
 
             $viewmodel = 
                     new ViewModel(
-                            array('facturas' => $facturas));
+                            array('facturas' => $facturas,
+                                  'periodo' => $smallPeriodo));
             return $viewmodel;
 
         }

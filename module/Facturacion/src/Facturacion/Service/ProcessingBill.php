@@ -611,7 +611,7 @@ class ProcessingBill extends Service {
                 f_unidades,
                 f_inicio_periodo_fact,
                 f_fin_periodo_fact,
-                f_precio_mensual_lote3,
+                f_importe_total_equipo,
                 id_cod_cli,
                 desc_servicio_lote3,
                 desc_lote,
@@ -625,8 +625,9 @@ class ProcessingBill extends Service {
         $writer->writeSheetHeader('ENTIDADES', $header);
         
         foreach ($adapter->execute() as $item) {
-
-            $item['f_precio_mensual_lote3'] = 1*$item['f_precio_mensual_lote3'];
+            //$importeTotal =(int)$item['f_importe_total_equipo'];
+            $totalSinIva  =(float)$item['f_total_sin_iva'];
+            $item['f_importe_total_equipo'] = ($item['desc_lote']=='LOTE3')?1*$totalSinIva:0;
             $item['f_total_sin_iva'] = 1*$item['f_total_sin_iva'];
             $writer->writeSheetRow('ENTIDADES', $item);
 
@@ -694,6 +695,7 @@ class ProcessingBill extends Service {
             $entity->fin = $row['f_fin_periodo_fact'];
             $entity->precioMensualLote3 = $row['f_precio_mensual_lote3'];
             $entity->totalSinIva = $row['f_total_sin_iva'];
+            $entities['periodo'] = $row['id_fecha_fact'];
             $entities[$row['id']] = $entity;
 
         }
