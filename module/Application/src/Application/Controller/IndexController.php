@@ -16,6 +16,7 @@ use Application\Form\Cliente;
 use Application\Form\Servicio;
 use Application\Form\Peticion;
 use Application\Form\Estado;
+use Application\Form\Sede;
 
 class IndexController extends AbstractActionController
 {
@@ -47,13 +48,15 @@ class IndexController extends AbstractActionController
         $servicio = new Servicio($dbAdapter);
         $peticion = new Peticion($dbAdapter);
         $estado = new Estado($dbAdapter);
+        $sede = new Sede($dbAdapter);
         
         $viewmodel = new ViewModel(
                         array(  'form' => $form,
                                 'cliente' => $cliente,
                                 'servicio' => $servicio,
                                 'peticion' => $peticion,
-                                'estado' => $estado));
+                                'estado' => $estado,
+                                'sede' => $sede));
         return  $viewmodel;
     }
 
@@ -61,6 +64,7 @@ class IndexController extends AbstractActionController
     {
 
         $posts = (array)$this->request->getPost();
+        
         $this->maintenanceService->setPostParams($posts);
         $this->maintenanceService->saveTableMaintenance();
         

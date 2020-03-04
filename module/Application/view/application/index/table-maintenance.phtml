@@ -322,19 +322,22 @@
                 $('#form-cliente').css('display','none');
                 $('#form-servicio').css('display','none');
                 $('#form-peticion').css('display','none');
-                $('#form-estado').css('display','none');                
+                $('#form-estado').css('display','none');
+                $('#form-sede').css('display','none');
             } else if('Cliente' === formulario) {
                 $('#form-tramitador').css('display','none');
                 $('#form-cliente').css('display','block');
                 $('#form-servicio').css('display','none');
                 $('#form-peticion').css('display','none');
-                $('#form-estado').css('display','none');                
+                $('#form-estado').css('display','none');
+                $('#form-sede').css('display','none');                
             } else if('Servicio' === formulario) {
                 $('#form-servicio').css('display','block');
                 $('#form-tramitador').css('display','none');
                 $('#form-cliente').css('display','none');
                 $('#form-peticion').css('display','none');
                 $('#form-estado').css('display','none');
+                $('#form-sede').css('display','none');
             } else if('Peticion' === formulario) {
                 $('#form-peticion').css('display','block');
                 $('#form-servicio').css('display','none');
@@ -347,12 +350,21 @@
                 $('#form-servicio').css('display','none');
                 $('#form-tramitador').css('display','none');
                 $('#form-cliente').css('display','none');
+                $('#form-sede').css('display','none');
+            } else if('Sede' === formulario) {
+                $('#form-sede').css('display','block');
+                $('#form-estado').css('display','none');
+                $('#form-peticion').css('display','none');
+                $('#form-servicio').css('display','none');
+                $('#form-tramitador').css('display','none');
+                $('#form-cliente').css('display','none');
             } else {
                 $('#form-tramitador').css('display','none');
                 $('#form-cliente').css('display','none');
                 $('#form-servicio').css('display','none');
                 $('#form-peticion').css('display','none');
                 $('#form-estado').css('display','none');
+                $('#form-sede').css('display','none');
             }
 
         });
@@ -547,6 +559,48 @@
 
         });
 
+        $("#save-formSede").on("click", function(e){
+            e.preventDefault();
+            
+            var url = '<?= $this->url('save-tables'); ?>';
+            var formName = $('#formName').val();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $('#'+formName).serialize(),
+                cache: false,
+                success: function (html) {
+                    $("#result").html(html);
+
+                },
+                error: function (xhr, status) {
+                    html = "<div class='alert alert-danger'>Error!</div>"
+                    $("#box").html(html);
+                }
+            });            
+            
+            //Response server message
+            var output = '<div class="notification success"><span class="notification-icon"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></span><span class="notification-text">' + 'Se ha guardado satisfactoriamente!' + '</span></div>';
+            //If success clear inputs
+            $("#oficina").val('');
+            $("#direccion").val('');
+            $("#save-formSede").addClass('disabled');
+
+            $("#notification").html(output);
+            $(".notification").delay(8000).queue(function (next) {
+                $(this).addClass("scale-out");
+                next();
+            });
+            $(".notification").on("click", function(){ 
+                $(this).addClass("scale-out");
+            });
+
+        });
+
+
+
+
+
     });
 
 </script>
@@ -578,6 +632,7 @@
                             <option value="Peticion">Tipo de trámites</option>
                             <option value="Tramitador">Tramitadores</option>
                             <option value="Servicio">Servicios</option>
+                            <option value="Sede">Sede</option>
                         </select>
                     </div>
                 </div>
@@ -800,4 +855,50 @@
     </div>
     <?= $this->form()->closeTag($estado); ?>
 </fieldset>
+
+<?php
+    $sede = $this->sede;
+    $sede->setAttribute('data-toggle', 'validator');
+    $sede->setAttribute('accept-charset', 'utf-8');
+    $sede->prepare();
+?>
+<fieldset id="form-sede" class="col-md-12" style="display: none;">
+    <?= $this->form()->openTag($sede); ?>
+    <legend>Alta de Sedes</legend>
+    <div class="panel panel-default">
+        <div class="panel-body" data-toggle="validator">
+            <div class="col-lg-6">
+                
+                <div class="form-group">
+                    <label for="oficina">Oficina</label>
+                    <?= $this->formInput($sede->get('oficina')); ?>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nif">Dirección</label>
+                    <?= $this->formInput($sede->get('direccion')); ?>
+                </div>
+
+                <input type="hidden" id="entity" name="entity" value="\Sede" />
+                <input type="hidden" id="estado" name="estado" value="1" />
+
+                <div class="form-group">&nbsp;</div>
+
+                <div style="float:right;">
+                    <button id="save-formSede" class="btn btn-primary" title="Guardar" type="submit"  ><span class="glyphicon glyphicon-saved"></span></button>
+                </div>
+                
+            </div>
+            <div class="col-lg-6">
+
+                <div class="form-group">&nbsp;</div>
+
+            </div>
+            
+        <div class="clearfix"></div>
+        </div>
+    </div>
+    <?= $this->form()->closeTag($sede); ?>
+</fieldset>
+
 <div id="result"></div>
