@@ -55,7 +55,9 @@ class InvoiceLote3 extends AbstractTableGateway {
                 'administrativo' => $invoiceLote3->getAdministrativo(),
                 'linea' => $invoiceLote3->getLinea(),
                 'ip' => $invoiceLote3->getIp(),
-                'estado' => $invoiceLote3->getEstado()
+                'estado' => $invoiceLote3->getEstado(),
+                'oficina' => $invoiceLote3->getOficina(),
+                'servicio' => $invoiceLote3->getServicio()                    
                 );
             
 //            if($invoiceLote3->getEstado() != 1) {
