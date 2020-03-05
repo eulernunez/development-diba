@@ -147,7 +147,7 @@
                     <label for="clave">Clave de Cobro</label>
                     <?php
                         $form->get('clave')->setValue($information['factura']['0']['clave']);
-                        $form->get('clave')->setAttribute('disabled','true');
+                        //$form->get('clave')->setAttribute('disabled','true');
                     ?>
                     <?= $this->formSelect($form->get('clave')); ?> 
                 </div>
