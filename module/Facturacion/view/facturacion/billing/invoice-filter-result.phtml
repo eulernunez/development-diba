@@ -119,18 +119,18 @@
                         <?php foreach($this->totals as $item): ?>
                         {
                             name:'<?= $item["id_titular_serv"] . " - " . str_replace("'", "`", $item["desc_titular_serv_lote3"]); ?>',
-                            value:{'isTeam' : true , 'flag':'', 'Pld':3, 'W':2, 'D':1, 'L':0, 'GF':7, 'GA':'<?= $item["total_lote3"]; ?>', 'GD':'<?= $item["total_resto_servicios"]; ?>', 'Pts':'<?= $item["total_lote3"]+$item["total_resto_servicios"]; ?>'},
+                            value:{'isTeam' : true , 'flag':'', 'Pld':3, 'W':2, 'D':1, 'L':0, 'GF':7, 'GA':'<?= number_format($item["total_lote3"], 2, ",", "."); ?>', 'GD':'<?= number_format($item["total_resto_servicios"], 2, ",", "."); ?>', 'Pts':'<?= number_format($item["total_lote3"]+$item["total_resto_servicios"], 2, ",", "."); ?>'},
                             children:[
                         
                             <?php foreach($this->subTotalsByPhone[$item["id_titular_serv"]] as $phone): ?>   
                             {
                                 name:'<?= $phone["id_telefono"];?>',
-                                value:{ 'isTeam' : true , 'flag':'Flag_of_the_Netherlands.svg', 'Pld':3, 'W':3, 'D':0, 'L':0, 'GF':10, 'GA':'<?= $phone["total_lote3"]; ?>', 'GD':'<?= $phone["total_resto_servicios"]; ?>', 'Pts':'<?= $phone["total_lote3"]+$phone["total_resto_servicios"]; ?>'},
+                                value:{ 'isTeam' : true , 'flag':'Flag_of_the_Netherlands.svg', 'Pld':3, 'W':3, 'D':0, 'L':0, 'GF':10, 'GA':'<?= number_format($phone["total_lote3"], 2, ",", "."); ?>', 'GD':'<?= number_format($phone["total_resto_servicios"], 2, ",", "."); ?>', 'Pts':'<?= number_format($phone["total_lote3"]+$phone["total_resto_servicios"], 2, ",", "."); ?>'},
                                 children:[
                                     <?php foreach($this->detailsGroupByPhone[$phone["id_telefono"]] as $detail): ?>
                                     {
                                         name:'<?= $detail["desc_servicio_estandard"];?>',
-                                        value:{'isItem' : true , 'Pld':'<?= empty($detail["desc_servicio_lote3"])?"-":$detail["desc_servicio_lote3"];?>', 'W':2, 'D':2, 'L':2, 'GF':2, 'GA':'<?= trim($detail["lote3"]); ?>', 'GD':'<?= trim($detail["resto_servicios"]); ?>', 'Pts':'<?= (double)(trim($detail["lote3"]))+(double)(trim($detail["resto_servicios"])); ?>'},
+                                        value:{'isItem' : true , 'Pld':'<?= empty($detail["desc_servicio_lote3"])?"-":$detail["desc_servicio_lote3"];?>', 'W':2, 'D':2, 'L':2, 'GF':2, 'GA':'<?= number_format(trim($detail["lote3"]), 2, ",", "."); ?>', 'GD':'<?= number_format(trim($detail["resto_servicios"]), 2, ",", "."); ?>', 'Pts':'<?= number_format((double)(trim($detail["lote3"]))+(double)(trim($detail["resto_servicios"])), 2, ",", "."); ?>'},
                                         children:[]
                                     },
                                     <?php endforeach; ?>        
