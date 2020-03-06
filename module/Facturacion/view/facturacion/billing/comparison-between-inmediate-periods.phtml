@@ -6,7 +6,15 @@
         ->appendFile($this->basePath() . '/js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js.'); ?>
 
 <style>
-
+    .color-current{
+        background: #CEE6DB;
+    }
+    .color-continuos{
+        background: #E7EED7;
+    }
+    .color-margen{
+        background: #BFC8F5;
+    }
 </style>
 
 <script>
@@ -54,16 +62,16 @@
         <tbody>
             <?php if(is_array($this->records)) : ?>
             <?php foreach ($this->records as $record) : ?>
+                    <?php $margen = (double)$record['margen']; ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
                     <td></td>
                     <td class="noWrap"><?= $record['id_titular_serv']; ?></td>
                     <td class="noWrap"><?= ucwords(strtolower($record['desc_titular_serv_lote3'])); ?></td>
-                    <td class="noWrap"><?= number_format($record['total_lote3'], 2, ",", "."); ?></td>
-                    <td class="noWrap"><?= number_format($record['total_resto_servicios'], 2, ",", "."); ?></td>
-                    <td class="noWrap"><?= number_format($record['total_lote3_continuo'], 2, ",", "."); ?></td>
-                    <td class="noWrap"><?= number_format($record['total_resto_servicios_continuo'], 2, ",", "."); ?></td>
-                    <?php $margen = (double)$record['margen']; ?>
-                    <td class="noWrap"><span style="color: <?= ($margen>0)?'blue;':'red;'; ?> font-weight: bold;"><?= number_format($record['margen'], 2, ",", "."); ?></span></td>
+                    <td class="noWrap color-current"><?= number_format($record['total_lote3'], 2, ",", "."); ?></td>
+                    <td class="noWrap color-current"><?= number_format($record['total_resto_servicios'], 2, ",", "."); ?></td>
+                    <td class="noWrap color-continuos"><?= number_format($record['total_lote3_continuo'], 2, ",", "."); ?></td>
+                    <td class="noWrap color-continuos"><?= number_format($record['total_resto_servicios_continuo'], 2, ",", "."); ?></td>
+                    <td class="noWrap color-margen"><span style="color: <?= ($margen>0)?'blue;':'red;'; ?> font-weight: bold;"><?= number_format($record['margen'], 2, ",", "."); ?></span></td>
                     <!--<td class="noWrap"></td>-->
                 </tr>
             <?php endforeach; ?>
