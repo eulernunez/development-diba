@@ -55,7 +55,7 @@
                 <th data-field="otros" data-sortable="true" data-width="12%" data-align="right">OTROS<?= ' ['. $this->periodo .']'; ?></th>
                 <th data-field="lote3contiguo" data-sortable="true" data-width="12%" data-align="right">LOTE 3<?= ' ['. $this->periodocontiguo .']'; ?></th>
                 <th data-field="otroscontiguo" data-sortable="true" data-width="12%" data-align="right">OTROS<?= ' ['. $this->periodocontiguo .']'; ?></th>
-                <th data-field="porcentaje" data-sortable="true" data-width="6%" data-align="right">%</th>
+                <th data-field="porcentaje" data-sortable="true" data-width="6%" data-align="right">€</th>
                 <!--<th data-field="operation" data-width="10%" data-align="center" data-valign="middle">ACCIONES</th>-->
             </tr>
         </thead>
@@ -63,6 +63,7 @@
             <?php if(is_array($this->records)) : ?>
             <?php foreach ($this->records as $record) : ?>
                     <?php $margen = (double)$record['margen']; ?>
+                    <?php $cantidad = (double)$record['cantidad']; ?>
                 <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
                     <td></td>
                     <td class="noWrap"><?= $record['id_titular_serv']; ?></td>
@@ -71,7 +72,7 @@
                     <td class="noWrap color-current"><?= number_format($record['total_resto_servicios'], 2, ",", "."); ?></td>
                     <td class="noWrap color-continuos"><?= number_format($record['total_lote3_continuo'], 2, ",", "."); ?></td>
                     <td class="noWrap color-continuos"><?= number_format($record['total_resto_servicios_continuo'], 2, ",", "."); ?></td>
-                    <td class="noWrap color-margen"><span style="color: <?= ($margen>0)?'blue;':'red;'; ?> font-weight: bold;"><?= number_format($record['margen'], 2, ",", "."); ?></span></td>
+                    <td class="noWrap color-margen"><span style="color: <?= ($cantidad>0)?'blue;':'red;'; ?> font-weight: bold;"><?= number_format($record['cantidad'], 2, ",", "."); ?></span></td>
                     <!--<td class="noWrap"></td>-->
                 </tr>
             <?php endforeach; ?>
