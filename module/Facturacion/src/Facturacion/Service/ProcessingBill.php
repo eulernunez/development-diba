@@ -1128,22 +1128,32 @@ class ProcessingBill extends Service {
                 $item['total_continuo'] = $contiguosTotal;
                 $item['percent'] = $percent;
                 
-                if( $total > $contiguosTotal) {
-                    
+                if( $total <> $contiguosTotal) {
                     $margen = (float)((($total * 100)/$contiguosTotal) - 100) ;
                     $item['margen'] = $margen;
                     // Set key = $item['id_titular_serv']  
-                    if($margen >= $percent) {
+                    // OLD
+                    //if($margen >= $percent) {
+                    //    $result[$item['id_titular_serv']] = $item;
+                    //}
+                    // NEW
+                    if(0 == $percent) {
                         $result[$item['id_titular_serv']] = $item;
+                    } elseif (1 == $percent) {
+                        if($margen > 0) {
+                            $result[$item['id_titular_serv']] = $item;
+                        }
+                    } elseif (-1 == $percent) {
+                        if($margen < 0) {
+                            $result[$item['id_titular_serv']] = $item;
+                        }
                     }
-
                 }
 
             }
-
             
         }
-
+        
         $information['result'] = $result;
 
         return $information;
