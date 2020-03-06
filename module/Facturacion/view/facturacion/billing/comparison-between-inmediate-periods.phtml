@@ -62,7 +62,8 @@
                     <td class="noWrap"><?= number_format($record['total_resto_servicios'], 2, ",", "."); ?></td>
                     <td class="noWrap"><?= number_format($record['total_lote3_continuo'], 2, ",", "."); ?></td>
                     <td class="noWrap"><?= number_format($record['total_resto_servicios_continuo'], 2, ",", "."); ?></td>
-                    <td class="noWrap"><?= number_format($record['margen'], 5, ",", "."); ?></td>
+                    <?php $margen = (double)$record['margen']; ?>
+                    <td class="noWrap"><span style="color: <?= ($margen>0)?'blue;':'red;'; ?> font-weight: bold;"><?= number_format($record['margen'], 2, ",", "."); ?></span></td>
                     <!--<td class="noWrap"></td>-->
                 </tr>
             <?php endforeach; ?>
