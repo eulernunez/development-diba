@@ -105,7 +105,7 @@
 ?>
      <!-- END HEAD -->
      <!-- BEGIN BODY -->
-<?php if(empty($session->offsetGet('userRole'))&&empty($session->offsetGet('firstName'))): ?>
+<?php if(!empty($session->offsetGet('userRole'))&&!empty($session->offsetGet('firstName'))): ?>
      
 <body class="padTop53 " >
 
