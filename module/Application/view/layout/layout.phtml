@@ -105,6 +105,8 @@
 ?>
      <!-- END HEAD -->
      <!-- BEGIN BODY -->
+<?php if(empty($session->offsetGet('userRole'))&&empty($session->offsetGet('firstName'))): ?>
+     
 <body class="padTop53 " >
 
      <!-- MAIN WRAPPER -->
@@ -363,5 +365,6 @@
     <!--END FOOTER -->
 
 </body>
+<?php endif; ?>
      <!-- END BODY -->
 </html>
