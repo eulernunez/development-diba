@@ -265,10 +265,10 @@
                         <li class=""><a href="<?= $this->url('invoice-period-ui'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Generación período</span> </a></li>
                         <li class=""><a href="<?= $this->url('lote3-invoice-list'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Bandeja de Facturas</span> </a></li>
                         <?php endif ?>
-                        <?php if('Administrador' == $userRole || 'Facturacion' == $userRole) : ?>
+                        <?php if('Administrador' == $userRole || 'Facturacion' == $userRole || 'Orgt' == $userRole) : ?>
                         <li class=""><a href="<?= $this->url('export-template-ui'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Centro de Costos</span> </a></li>
                         <?php endif ?>
-                        <?php if('Administrador' == $userRole || 'Facturacion' == $userRole || 'Orgt' == $userRole) : ?>
+                        <?php if('Administrador' == $userRole || 'Facturacion' == $userRole) : ?>
                         <li class=""><a href="<?= $this->url('export-global-ui'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Resumen Global</span> </a></li>
                         <?php endif ?>
                         
