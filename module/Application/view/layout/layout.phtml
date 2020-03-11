@@ -267,10 +267,11 @@
                         <?php endif ?>
                         <?php if('Administrador' == $userRole || 'Facturacion' == $userRole) : ?>
                         <li class=""><a href="<?= $this->url('export-template-ui'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Centro de Costos</span> </a></li>
+                        <?php endif ?>
                         <?php if('Administrador' == $userRole || 'Facturacion' == $userRole || 'Orgt' == $userRole) : ?>
                         <li class=""><a href="<?= $this->url('export-global-ui'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Resumen Global</span> </a></li>
                         <?php endif ?>
-                        <?php endif ?>
+                        
                     </ul>
                 </li>
             <?php endif ?>    
