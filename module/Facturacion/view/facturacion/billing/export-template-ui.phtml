@@ -110,7 +110,15 @@
 
 </script>
 <?php
- $form = $this->form;
+    use Zend\Session\Container;
+    $session = new Container('User');
+    $userRole = $session->offsetGet('userRole');
+    $firstName = $session->offsetGet('firstName');
+    $lastName = $session->offsetGet('lastName');
+    
+    
+
+    $form = $this->form;
  ?>
 
 <fieldset class="col-md-12">
@@ -134,11 +142,15 @@
                     <div class="form-group">
                         <select class="form-control" id="centrocostes" name="centrocostes" required>
                             <option disabled selected>Seleccione el Centro de Coste</option>
-                            <option value='xic'>XIC</option>
-                            <option value='xem'>XEM</option>
-                            <option value='xb'>XB</option>
-                            <option value='xp'>XP</option>
-                            <option value='xorgt'>XORGT</option>
+                            <?php if('Administrador' == $userRole || 'Facturacion' == $userRole) : ?>
+                                <option value='xic'>XIC</option>
+                                <option value='xem'>XEM</option>
+                                <option value='xb'>XB</option>
+                                <option value='xp'>XP</option>
+                                <option value='xorgt'>XORGT</option>
+                            <?php elseif('Orgt' == $userRole) : ?>
+                                <option value='xorgt'>XORGT</option>
+                            <?php endif ?>
                         </select>
                     </div>
                     <?=   $this->formSelect($form->get('periodo')); ?>                       
