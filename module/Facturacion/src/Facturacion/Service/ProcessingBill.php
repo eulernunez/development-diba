@@ -1892,7 +1892,7 @@ class ProcessingBill extends Service {
         
         $statement = "SELECT f.xarxa AS CentroCosto,  SUM(s.precio) AS SubTotal 
                         FROM factura_lote3 AS f INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
-			WHERE (f.xarxa = 13 OR f.xarxa = $xarxa ) AND f.planta = " . $planta . " AND f.periodo = '" . $periodo . "'";
+			WHERE (f.xarxa = 13 OR f.xarxa = $xarxa ) AND f.estado = 1 AND f.planta = " . $planta . " AND f.periodo = '" . $periodo . "'";
         
         $adapter = $this->adapter->query($statement);
         $objResult = $adapter->execute();
@@ -1901,7 +1901,7 @@ class ProcessingBill extends Service {
         foreach ($objResult as $item) {
             $result[] = $item;  
         }
-
+        
         return $result;
 
     }
