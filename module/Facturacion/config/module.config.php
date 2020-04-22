@@ -262,6 +262,16 @@ return array(
                     ),
                 ),
             ),
+            'plantas-list' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/plantas-list',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'plantas-list',
+                    ),
+                ),
+            ),            
             'export-template-ui' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
@@ -332,6 +342,17 @@ return array(
                     ),
                 ),
             ),
+            'planta-update' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/planta-update[/[:id]]',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'planta-update',
+                    ),
+                ),
+            ),
+            
             'invoice-lote3-update' => array(
                 'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
@@ -343,6 +364,16 @@ return array(
                 ),
             ),
             
+            'planta-update-confirm' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/planta-update-confirm',
+                    'defaults' => array(
+                        'controller' => 'Facturacion\Controller\Billing',
+                        'action'     => 'planta-update-confirm',
+                    ),
+                ),
+            ),
             
             
         ),

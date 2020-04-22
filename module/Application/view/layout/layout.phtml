@@ -275,6 +275,19 @@
                     </ul>
                 </li>
             <?php endif ?>    
+            
+            <?php if('Administrador' == $userRole || 'Facturacion' == $userRole || 'Orgt' == $userRole || 'CGP' == $userRole) : ?>    
+                <li class="panel">
+                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#planta-nav">
+                        <i class="icon-bar-chart"> </i> <span style="font-size: 12px;">Plantas Unificadas</span>
+                    </a>
+                    <ul class="collapse" id="planta-nav">
+                        <?php if('Administrador' == $userRole || 'Facturacion' == $userRole || 'Orgt' == $userRole  || 'CGP' == $userRole) : ?>
+                        <li class=""><a href="<?= $this->url('plantas-list'); ?>"><i class="icon-angle-right"></i> <span style="font-size: 12px;">Bandeja de Plantas</span> </a></li>
+                        <?php endif ?>
+                    </ul>
+                </li>
+            <?php endif ?>    
                 
             <?php if('Administrador' == $userRole || 'Ventas' == $userRole || 'Ingeniero' == $userRole || 'OperadorODP' == $userRole ) : ?>    
                 <li class="panel">

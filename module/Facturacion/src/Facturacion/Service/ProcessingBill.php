@@ -26,6 +26,7 @@ class ProcessingBill extends Service {
     protected $oec3;
     protected $oec3Ens;
     protected $months;
+    protected $orgetScopeFilter;
     
     protected $posts;
 
@@ -37,6 +38,12 @@ class ProcessingBill extends Service {
         if('Cliente' == $this->userRole) {
             $this->clientScopeFilter = " AND id_cif_cliente ='" . $this->nif . "'";
         }
+        
+        $this->orgtScopeFilter = "";
+        if('Orgt' == $this->userRole) {
+            $this->orgetScopeFilter = " AND p.cliente_id = 6 ";
+        }
+        
         
         $this->cc['xb'] = 2;
         $this->cc['xem'] = 3;
@@ -751,6 +758,26 @@ class ProcessingBill extends Service {
 
     }
     
+    public function getPlanta($id) {
+
+        $datos = array();
+        
+        $statement = 
+            "SELECT *
+            FROM pl_plantas WHERE activo = 1 AND id='" . $id . "'";
+
+        $adapter = $this->adapter->query($statement);
+        
+        $invoice = array();
+        foreach ($adapter->execute() as $item) {
+            $invoice[] = $item;
+        }
+
+        $datos['planta'] = $invoice;
+
+        return $datos;
+
+    }
     
     
     public function getTotalByEntities($periodo) {
@@ -1287,8 +1314,24 @@ class ProcessingBill extends Service {
 
     }
     
-    
-    
+    public function plantaUpdateConfirm() {
+
+        $planta = new \Facturacion\Model\Entity\Planta();
+
+        //echo('<pre>$this->posts' . print_r($this->posts, true) . '</pre>');
+        
+        $id = (int)$this->posts['plantaId'];
+        $planta->setId($id);
+        $planta->setOptions($this->posts);
+
+        //die('<pre>$planta::Entity' . print_r($planta, true) . '</pre>');
+        
+        $handler = new \Facturacion\Model\Planta($this->adapter);
+        $plantaId = $handler->savePlanta($planta);
+        
+        return $plantaId;
+
+    }
     
     public function getLote3Invoices() {
 
@@ -1318,6 +1361,64 @@ class ProcessingBill extends Service {
         return $this->convertedInvoiceObjects($result);
 
     }
+    
+    public function getPlantas() {
+
+        $statement =
+            "SELECT p.*,
+                c.id AS cifId, c.cif,
+                cl.id AS clienteId, cl.cliente,
+                x.id AS xarxaId, x.xarxa,
+                pb.id AS poblacionId, pb.poblacion,
+                s.id AS servicioId, s.servicio,
+                t.id AS tipoId, t.tipo,
+                e.id AS estadoId, e.estado
+                    FROM pl_plantas AS p
+                        LEFT JOIN pl_cifs AS c ON p.cif_id = c.id
+                        LEFT JOIN pl_clientes AS cl ON p.cliente_id = cl.id
+                        LEFT JOIN pl_xarxas AS x ON p.xarxa_id = x.id
+                        LEFT JOIN pl_poblaciones AS pb ON p.poblacion_id = pb.id
+                        LEFT JOIN pl_servicios AS s ON p.servicio_id = s.id
+                        LEFT JOIN pl_tipos AS t ON p.tipo_id = t.id
+                        LEFT JOIN pl_estados AS e ON p.estado_id = e.id
+                        WHERE p.activo = 1 " . $this->orgetScopeFilter . "
+                        ORDER BY p.creacion DESC"; 
+        
+        $adapter = $this->adapter->query($statement);
+        $result = $adapter->execute();
+        
+        return $this->convertedPlantasObjects($result);
+
+    }
+
+    public function convertedPlantasObjects($result)
+    {
+
+        $entities = array();
+
+        foreach ($result as $row) {
+            
+            $entity = new \stdClass;
+            $entity->id = $row['id'];
+            $entity->cif = $row['cif'];
+            $entity->cliente = $row['cliente'];
+            $entity->xarxa = $row['xarxa'];
+            $entity->sede = $row['sede'];
+            $entity->direccion = $row['direccion'];
+            $entity->poblacion = $row['poblacion'];
+            $entity->servicio = $row['servicio'];
+            $entity->tipo = $row['tipo'];
+            $entity->estado = $row['estado'];
+            $entity->creacion = $row['creacion'];
+            $entities[$row['id']] = $entity;
+        }
+        
+        //die('<pre>' . print_r($entities, true) . '</pre>');                    
+        
+        return $entities;
+
+    }
+    
     
     /*CHECK */
     public function convertedInvoiceObjects($result)

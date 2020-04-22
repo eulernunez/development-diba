@@ -1,0 +1,359 @@
+<?=  $this->headLink()
+        ->appendStylesheet($this->basePath() . '/css/bootstrap-table/bootstrap-table.min.css'); ?>
+
+<?php echo $this->headScript()
+        ->appendFile($this->basePath() . '/js/bootstrap-table/bootstrap-table.js.') 
+        ->appendFile($this->basePath() . '/js/bootstrap-table/locale/bootstrap-table-en-Sbt-US.min.js.'); ?>
+
+<style>
+    .btn-pref .btn {
+        -webkit-border-radius:0 !important;
+    }
+    fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 4px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }	
+    legend
+    {
+        font-size:14px;
+        font-weight:bold;
+        margin-bottom: 0px; 
+        width: 35%; 
+        border: 1px solid #ddd;
+        border-radius: 4px; 
+        padding: 2px 2px 2px 4px; 
+        background-color: #ffffff;
+    }
+    .form-group
+    {
+        margin-bottom: 1px;
+    }
+
+/*    .form-control
+    {
+        height: 26px;
+        font-size: 9px;
+
+    }*/
+
+    .panel
+    {
+        margin-bottom: 2px;
+    }
+
+    .tab-content
+    {
+        padding: 0px;
+    }
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
+    {
+        padding: 4px;
+    }
+    
+    /* Custom */
+    .custom-fieldset
+    {
+        background-color:#ffffff;
+    }
+    .custom-legend
+    {
+        width: 60%;
+        font-size: 12px;
+        border: 0px solid #ddd;
+    }
+    .custom-label
+    {
+        font-size: 12px;
+    }
+    .custom-radio
+    {
+        font-size: 10px;
+    }
+/*    .btn-primary {
+        width: 110px;
+    }*/
+    .form-control {
+        width: 600px;
+    }
+    
+</style>
+
+<script type="text/javascript" style="display:none">
+<!--
+
+    $(function(){
+//        $("html, body").animate({ scrollTop: 300 });
+//        $("#mask").css('display','none');
+
+        $("#search").keypress(function(e){
+            if(e.which == 13){
+                e.preventDefault();
+                supplySearcher();
+                return false;
+            }
+        });
+
+        var $table = $('#supplies');
+        var $exportData = $('#export-data');
+        $table.on('check.bs.table uncheck.bs.table ' +
+                    'check-all.bs.table uncheck-all.bs.table', () => {
+            $exportData.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+            // save your data, here just save the current page
+            //selections = getIdSelections();
+            // push or splice the selections if you want to save all data selections
+            var data = JSON.stringify($table.bootstrapTable('getSelections'));
+            $('#data').val(data);
+        });
+
+
+      $('.form-control').attr('placeholder', 'Ingrese un criterio de búsqueda ...');
+        
+        
+    });
+
+    function supplySearcher() {
+        
+        var url = '<?= $this->url('process-supply-search'); ?>';
+        
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: $('#supplySearcherForm').serialize(),
+            cache: false,
+            beforeSend: function() {
+//                $("#mask").css('display','block');
+                $("#fill-supply-search").html("<img style='display: block; margin:auto;' src='<?= $this->basePath() . '/img/loading.gif' ;?>' />");
+            },
+            success: function (json) {
+                $("#fill-supply-search").html(json);
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#box").html(html);
+            }
+        });
+    }
+
+    function esconder() {
+        $('#exportDataModal').modal('hide');
+    }
+
+    function hideValidationModal() {
+        $('#validacionDataModal').modal('hide');
+        $('#previewCentroCostoDataModal').modal('hide');
+        $('#previewGlobalDataModal').modal('hide');
+    }
+
+
+    function exportData2() {
+
+        $('#exportDataModal').modal('hide');
+        var $table = $('#supplies');
+        var data = {data: JSON.stringify($table.bootstrapTable('getSelections'))};
+        var url = '<?= $this->url('export-data'); ?>';
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            cache: false,
+            success: function (html) {
+                $("#fill-export-data").html(html);
+                //document.location.href = baseUrl + '/hr/salaryadvance-mng/download-csv/' ;
+            },
+            error: function (xhr, status) {
+                html = "<div class='alert alert-danger'>Error!</div>"
+                $("#result").html(html);
+            }
+        });
+
+    }
+
+//-->
+</script>
+
+
+
+<div class="inner" style="min-height:0px;">
+
+<fieldset class="col-md-12">
+    <legend> Planta Unificada: </legend>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="fill-supply-search">
+                
+                <div class="ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: 0.2em 0.6em;">&nbsp;</div>
+                
+                <div id="toolbar">
+<!--                        <button id='preview-global' type="button" class="btn btn-primary" title="Descarga del borrador de facturación global de la Diputación Barcelona" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#previewGlobalDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
+                            <i class="glyphicon glyphicon-list"></i>
+                        </button>
+                        <button id='preview-centrocosto' type="button" class="btn btn-primary" title="Descarga del borrador de facturación por Centro de Costos" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#previewCentroCostoDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
+                            <i class="glyphicon glyphicon-stats"></i>
+                        </button>
+                        <button id='validacion-data' type="button" class="btn btn-danger" title="Validación del período de facturación" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#validacionDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
+                            <i class="glyphicon glyphicon-ok"></i>
+                        </button>
+
+                        <a class="btn btn-primary btn-primary" style="float: right;" href="<?= $this->url('lote3-invoice-sign-up') .'/'. $this->periodo; ?>" role="button" title="Crear factura" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </a>-->
+                </div>
+    
+    <table id="supplies"
+           data-toggle="table"
+           data-buttons-align="right"
+           data-card-visible="true"
+           data-page-list="[10, 15, 30, 50, 100, All]"
+           data-page-size="10"
+           data-pagination="true"
+           data-pagination-detail-h-align="right"
+           data-pagination-h-align="left"
+           data-search="true"
+           data-search-align="left"
+           data-show-refresh="false"
+           data-show-toggle="false"
+           data-smart-display="true"
+           data-toolbar="#toolbar"
+           data-trim-on-search="true"
+           data-undefined-text=""
+           data-show-export="true"
+           class="bootstrap-table ticketList table-nowrap">
+        <thead style="font-size: 11px;">
+            <tr class="ui-state-active noselect">
+                <th data-field="state" data-checkbox="true"></th>
+                <th data-field="cif" data-sortable="true" data-width="4%">CIF</th>
+                <th data-field="sede" data-sortable="true" data-width="25%">SEDE</th>
+                <th data-field="direccion" data-sortable="true" data-width="25%">DIRECCIÓN</th>
+                <th data-field="poblacion" data-sortable="true" data-width="16%">POBLACIÓN</th>
+                <th data-field="cliente" data-sortable="true" data-width="2%">CLIENTE</th>
+                <th data-field="xarxa" data-sortable="true" data-width="8%">XARXA</th>
+                <th data-field="servicio" data-sortable="true" data-width="10%">SERVICIO</th>
+                <th data-field="tipo" data-sortable="true" data-width="4%">TIPO</th>
+                
+<!--                <th data-field="inicio" data-sortable="true" data-width="8%">ADMINISTRATIVO</th>
+                <th data-field="fin" data-sortable="true" data-width="8%">LÍNEA</th>-->
+                
+                <th data-field="operation" data-width="6%" data-align="center" data-valign="middle">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 10px;">
+            <?php //$currentDate = new DateTime("now"); ?>
+            <?php foreach ($this->plantas as $item) : ?>
+                <tr class="<?php echo $this->cycle(array('oddRowColor', 'evenRowColor'))->next(); ?> bootstrap-selectableRow greyText">
+                    <td></td>
+                    <td class="noWrap"><?= $item->cif; ?></td>
+                    <td class="noWrap"><?= $item->sede; ?></td>
+                    <td class="noWrap"><?= ucwords(strtolower($item->direccion)); ?></td>
+                    <td class="noWrap"><?= $item->poblacion; ?></td>
+                    <td class="noWrap"><?= $item->cliente; ?></td>
+                    <td class="noWrap"><?= $item->xarxa; ?></td>
+                    <td class="noWrap"><?= $item->servicio; ?></td>
+                    <td class="noWrap" align="right"><?= $item->tipo; ?></td>
+                     
+<!--                    <td class="noWrap"><?= $item->administrativo; ?></td>
+                    <td class="noWrap"><?= $item->linea; ?></td>-->
+                    
+                    <td class="noWrap">
+                        <a class="update" href="<?php echo $this->url('planta-update') . '/' . $item->id; ?>" title="Consultar">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    </div>
+    <div class="clearfix">&nbsp;</div>
+</div>
+    </div>
+</fieldset>
+<div id="fill-export-data">
+</div>    
+</div>
+
+
+<div class="modal fade" id="validacionDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= $this->url('lote3-invoice-validation'); ?>" method="post" onsubmit="hideValidationModal();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Validación del proceso de facturación </h4>
+                </div>
+                <div class="modal-body">
+                    Se va a validar el período: <?=$this->periodo; ?> de facturación de Diputación Lote3.
+                    <input type="hidden" id="data" name="data" value="<?=$this->periodo; ?>" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Validación </button>
+                </div>
+            </form>    
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="previewCentroCostoDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= $this->url('template-export'); ?>" method="post" onsubmit="hideValidationModal();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Borrador del proceso de facturación </h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="form-group">
+                        <select class="form-control" style="width: 300px;" id="centrocostes" name="centrocostes" required>
+                            <option disabled selected>Seleccione el Centro de Coste</option>
+                            <option value='xic'>XIC</option>
+                            <option value='xem'>XEM</option>
+                            <option value='xb'>XB</option>
+                            <option value='xp'>XP</option>
+                            <option value='xorgt'>XORGT</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" id="periodo" name="periodo" value="<?=$this->periodo; ?>" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Descarga del borrador </button>
+                </div>
+            </form>
+            <br/>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="previewGlobalDataModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="<?= $this->url('global-template-export'); ?>" method="post" onsubmit="hideValidationModal();">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> Borrador del proceso de facturación </h4>
+                </div>
+                <div class="modal-body">
+                    Se va a descargar el borrador global de facturación de Diputación Lote3 del período: <?=$this->periodo; ?>.
+                    <input type="hidden" id="periodo" name="periodo" value="<?=$this->periodo; ?>" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="float: left;"> Cancel </button>
+                    <button type="submit" class="btn btn-danger" style="float: left;"> Descarga del borrador </button>
+                </div>
+            </form>
+            <br/>
+        </div>
+    </div>
+</div>

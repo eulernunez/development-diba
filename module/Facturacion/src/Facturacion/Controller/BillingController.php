@@ -11,6 +11,7 @@ use Zend\View\Model\ViewModel;
 use Facturacion\Form\Invoice;
 use Facturacion\Form\InvoiceLote3;
 use Facturacion\Form\Auxiliar;
+use Facturacion\Form\Planta;
 
 # HACK TO RESOLVE PROBLEM
 use Zend\Session\Container;
@@ -615,6 +616,23 @@ class BillingController extends AbstractActionController
   
     }
     
+    public function plantasListAction()
+    {
+        
+        $plantas = $this->processingBillService->getPlantas();
+
+        if(is_array($plantas)) { 
+
+            $viewmodel = 
+                    new ViewModel(
+                            array('plantas' => $plantas));
+            return $viewmodel;
+
+        }
+  
+  
+    }
+    
     public function exportTemplateUiAction() {
 
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
@@ -680,6 +698,26 @@ class BillingController extends AbstractActionController
 
     }
 
+    public function plantaUpdateAction() {
+
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $id = (int)$this->params()->fromRoute('id');
+        
+        $information = $this->processingBillService->getPlanta($id);
+
+        $form = new Planta($dbAdapter);
+        
+        //die('<pre>' . print_r($form, true) . '</pre>');
+
+        $viewmodel = 
+            new ViewModel(
+                    array('information' => $information,
+                          'form' => $form));
+
+        return $viewmodel;
+
+    }
+    
     public function invoiceLote3UpdateAction() {
 
 
@@ -694,6 +732,18 @@ class BillingController extends AbstractActionController
 
     }
 
+    public function plantaUpdateConfirmAction() {
+
+        $posts = (array)$this->request->getPost();
+        $this->processingBillService->setPostParams($posts);
+        $plantaId = $this->processingBillService->plantaUpdateConfirm();
+
+        if($plantaId) {
+            $this->redirect()->toRoute('plantas-list');
+        }
+
+    }
+    
     public function invoicePeriodUiAction() {
 
         $viewmodel = 
