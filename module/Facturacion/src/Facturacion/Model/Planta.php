@@ -63,9 +63,29 @@ class Planta extends AbstractTableGateway {
                 'direccion_ip' => $planta->getDireccionip(),
                 'ip_lan' => $planta->getIplan(),
                 'observaciones' => $planta->getObservaciones(),
+                'peticion' => $planta->getPeticion(),
+                'migracion'=> $planta->getMigracion(),
+                'baja' => $planta->getBaja(),
+                'recogida' => (int)$planta->getRecogida(),
                 'estado_id' => $planta->getEstado(),
                 'activo' => (int)$planta->getActivo()
                 );
+            
+            
+            if(null != $planta->getPeticion()){
+                $updateInfo['estado_id'] = 2;
+            } else {
+               $updateInfo['estado_id'] = 1; 
+            }
+            if (null != $planta->getPeticion() && null != $planta->getBaja()) {
+                $updateInfo['estado_id'] = 3;
+            }
+             if (null == $planta->getPeticion() && null == $planta->getBaja()) {
+                $updateInfo['estado_id'] = 1;
+            }
+            if (null != $planta->getBaja()) {
+                $updateInfo['estado_id'] = 3;
+            }           
             
             if (!$this->update($updateInfo, array('id' => $id))) { 
                 return $id; 

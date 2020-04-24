@@ -360,7 +360,7 @@ class Planta extends Form
                 'id' => 'observaciones',
                 //'required'=>'required',
                 'class' => 'form-control input-sm',
-                'rows' => 6,
+                'rows' => 11,
                 'placeholder' => 'Ingresa información ...',
             ),
             'options' => array(

@@ -29,7 +29,12 @@ class Planta {
     protected $estado;
     protected $activo;
 
-
+    
+    protected $peticion;
+    protected $migracion;
+    protected $baja;    
+    protected $recogida;
+    
     public function setOptions(array $options) {
         $methods = get_class_methods($this);
         foreach ($options as $key => $value) {
@@ -176,5 +181,52 @@ class Planta {
         return $this;
     }
     
-    
-}
+    public function getPeticion() {
+        return $this->peticion;
+    }
+    public function setPeticion($peticion) {
+        if(empty($peticion)) {
+            $this->peticion = null;
+        }    
+        else {
+             $this->peticion = date("Y-m-d", strtotime(str_replace('/', '-', $peticion)));
+        }
+        return $this;
+    }
+
+    public function getMigracion() {
+        return $this->migracion;
+    }
+    public function setMigracion($migracion) {
+        if(empty($migracion)) {
+            $this->migracion = null;
+        }    
+        else {
+             $this->migracion = date("Y-m-d", strtotime(str_replace('/', '-', $migracion)));
+        }
+        return $this;
+    }
+   
+    public function getBaja() {
+        return $this->baja;
+    }
+    public function setBaja($baja) {
+        if(empty($baja)) {
+            $this->baja = null;
+        }    
+        else {
+             $this->baja = date("Y-m-d", strtotime(str_replace('/', '-', $baja)));
+        }
+        return $this;
+    }
+   
+
+    public function getRecogida() {
+        return $this->recogida;
+    }
+    public function setRecogida($recogida) {
+        $this->recogida = $recogida;
+        return $this;
+    }
+   
+    }

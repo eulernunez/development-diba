@@ -84,6 +84,109 @@
     }
 </style>                
 
+
+<script type="text/javascript" style="display:none">
+    <!--
+    $(document).ready(function(e){
+            /* This code is executed after the DOM has been completely loaded */
+           
+
+
+$( "#creacion" ).datepicker({
+              // Formato de la fecha
+              dateFormat: "dd/mm/yy",
+              // Primer dia de la semana - lunes
+              firstDay: 1,
+              // Días largo traducido
+              dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+              // Dias cortos traducido
+              dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+              // Nombres largos de los meses traducido
+              monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+              // Nombres cortos de los meses traducido 
+              monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+              // Al selecconar fecha, se escribe en el campo de texto
+              onSelect: function() { 
+//                $('#creacion').val('<?= $information['planta']['0']['creacion']; ?>');
+              }
+            });
+
+$( "#peticion" ).datepicker({
+              // Formato de la fecha
+              dateFormat: "dd/mm/yy",
+              // Primer dia de la semana - lunes
+              firstDay: 1,
+              // Días largo traducido
+              dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+              // Dias cortos traducido
+              dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+              // Nombres largos de los meses traducido
+              monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+              // Nombres cortos de los meses traducido 
+              monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+              // Al selecconar fecha, se escribe en el campo de texto
+              onSelect: function() { 
+                
+              }
+            });
+
+$( "#migracion" ).datepicker({
+              // Formato de la fecha
+              dateFormat: "dd/mm/yy",
+              // Primer dia de la semana - lunes
+              firstDay: 1,
+              // Días largo traducido
+              dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+              // Dias cortos traducido
+              dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+              // Nombres largos de los meses traducido
+              monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+              // Nombres cortos de los meses traducido 
+              monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+              // Al selecconar fecha, se escribe en el campo de texto
+              onSelect: function() { 
+//                $('#creacion').val('<?= $information['planta']['0']['creacion']; ?>');
+              }
+            });
+
+$( "#baja" ).datepicker({
+              // Formato de la fecha
+              dateFormat: "dd/mm/yy",
+              // Primer dia de la semana - lunes
+              firstDay: 1,
+              // Días largo traducido
+              dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+              // Dias cortos traducido
+              dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+              // Nombres largos de los meses traducido
+              monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+              // Nombres cortos de los meses traducido 
+              monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+              // Al selecconar fecha, se escribe en el campo de texto
+              onSelect: function() { 
+//                $('#baja').val('<?= $information['planta']['0']['creacion']; ?>');
+              }
+            });
+
+
+
+
+
+
+
+
+
+    });
+    
+ 
+
+
+    
+    //-->
+</script>
+
+
+
 <?php
 
     use Zend\Session\Container;
@@ -102,6 +205,7 @@
     #$form->setAttribute('novalidate', 'novalidate');
     $form->prepare();
 ?>
+<?php if(isset($this->information['planta']['0'])) : ?>
 <?= $this->form()->openTag($form); ?>
 
 <fieldset class="col-md-12">
@@ -124,7 +228,7 @@
             <div class="col-lg-3">
                 <label for="fecha">Fecha Alta</label>
                 <div class="input-group date">
-                    <input id="creacion" name="creacion" type="text" class="form-control" value="<?= $information['planta']['0']['creacion']; ?>" readonly="true"/>
+                    <input id="creacion" name="creacion" type="text" class="form-control" value="<?= date("d/m/Y", strtotime($information['planta']['0']['creacion'])); ?>" readonly="true"/>
                    <label for="creacion" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
                 </div>
             </div>
@@ -287,7 +391,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
-                    <label for="propiedad">propiedad</label>
+                    <label for="propiedad">Propiedad de Equipo</label>
                     <?php
                         $form->get('propiedad')->setValue($information['planta']['0']['propiedad']);
                     ?>
@@ -347,10 +451,43 @@
                     <label for="estado">Estado</label>
                     <?php
                         $form->get('estado')->setValue($information['planta']['0']['estado_id']);
+                        $form->get('estado')->setAttribute('disabled','true');
                     ?>
                     <?=   $this->formSelect($form->get('estado')); ?>          
                 </div>
-                <div class="form-group" style="padding-top: 68px;">
+                
+                <div class="form-group" style="padding-top: 30px;">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" id="recogida" name="recogida" class="form-check-input" <?= ($information['planta']['0']['recogida'])?'checked':''; ?> value="1">
+                            ¿Recogida de equipo?
+                        </label>
+                    </div>
+                </div>
+       
+
+            </div>
+            <div class="col-lg-3">
+                <label for="peticion">Fecha Petición de Baja</label>
+                <div class="input-group date">
+                    <input id="peticion" name="peticion" type="text" class="form-control" value="<?= empty($information['planta']['0']['peticion'])?'':date("d/m/Y", strtotime($information['planta']['0']['peticion'])); ?>"/>
+                   <label for="peticion" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
+                </div>
+                
+                <label for="migracion">Fecha Migración</label>
+                <div class="input-group date">
+                    <input id="migracion" name="migracion" type="text" class="form-control" value="<?= empty($information['planta']['0']['migracion'])?'':date("d/m/Y", strtotime($information['planta']['0']['migracion'])); ?>"/>
+                   <label for="migracion=" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
+                </div>
+
+                <label for="baja">Fecha Baja</label>
+                <div class="input-group date">
+                    <input id="baja" name="baja" type="text" class="form-control" value="<?= empty($information['planta']['0']['baja'])?'':date("d/m/Y", strtotime($information['planta']['0']['baja'])); ?>"/>
+                   <label for="baja" class="input-group-addon generic_btn"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></label>
+                </div>                
+                
+                <?php if('Administrador' == $userRole || 'CGP' == $userRole) : ?>
+                <div class="form-group" style="float:left; padding-top: 22px;">
                     <div class="form-check">
                         <label class="form-check-label">
                             <input type="checkbox" id="activo" name="activo" class="form-check-input" checked="true" value="1">
@@ -358,10 +495,7 @@
                         </label>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <?php if('Administrador' == $userRole || 'CGP' == $userRole) : ?>
-                <div class="form-group" style="float:right; padding-top: 116px;">
+                <div class="form-group" style="float:right; padding-top: 22px;">
                     <label for="ip">&nbsp;</label>
                     <button class="btn btn-primary" title="Actualizar" type="submit"><span class="glyphicon glyphicon-saved"></span></button>
                 </div>
@@ -374,3 +508,4 @@
 </fieldset>
  <input type="hidden" id="plantaId" name="plantaId" value="<?= $this->information['planta']['0']['id'] ?>">
 <?= $this->form()->closeTag($form); ?>
+<?php endif; ?>
