@@ -1540,7 +1540,10 @@ class ProcessingBill extends Service {
 
 
         if($cc == 2 || $cc == 3 || $cc == 4 || $cc == 13 ) {
-            $row = $row + 2;
+             $row = $row + 2;
+            
+            if($cc == 2 || $cc == 4 || $cc == 13 ) {
+                
             $parameters = $this->calculateAiccCoste($periodo, 'AICC-' . strtoupper($centroCoste)); // AICC-XIC/AICC-XEM/AICC-XB/AICC-XORGT 
             $codigo = $parameters['0']['servicio'];
             $descripcion = $parameters['0']['descripcion_detallada'];
@@ -1551,6 +1554,43 @@ class ProcessingBill extends Service {
             $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
             $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
             $total = $total + $precio;
+            
+            }
+            
+                // BEGIN: Formate special ti XEM
+                if($cc == 3) {
+                    $row = $row + 1; 
+                    $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+                    $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM'); // REVIEW
+                    $codigo = $parameters['0']['servicio'];
+                    $descripcion = $parameters['0']['descripcion_detallada'];
+                    $precio = $parameters['0']['precio'];
+                    $row = $row - 1; 
+                    $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, 1);
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
+                    $total = $total + $precio;
+                    
+                    $row = $row + 1; 
+                    $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
+                    $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
+                    $codigo = $parameters['0']['servicio'];
+                    $descripcion = $parameters['0']['descripcion_detallada'];
+                    $precio = $parameters['0']['precio'];
+                    $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E' . $row, 1);
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
+                    $total = $total + $precio;
+                    
+                    $objPHPExcel->getActiveSheet()->removeRow($row+1,1);
+                }
+                // END
+            
+            
             
                 // BEGIN: Formate special ti XORGT
                 if($cc == 13) {
@@ -1879,7 +1919,10 @@ class ProcessingBill extends Service {
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('J6', $precio);
         $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM');
-        $precio = $parameters['0']['precio'];
+        $precio1 = $parameters['0']['precio'];
+        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
+        $precio2 = $parameters['0']['precio'];
+        $precio = (double)$precio1 + (double)$precio2;
         $objPHPExcel->getActiveSheet()->setCellValue('J8', $precio);
         $parameters = $this->calculateAiccCoste($periodo, 'AICC-XB');
         $precio = $parameters['0']['precio'];
