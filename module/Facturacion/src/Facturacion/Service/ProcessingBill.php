@@ -1466,6 +1466,7 @@ class ProcessingBill extends Service {
         $objPHPExcel = $objReader->load($templatePath);
             
         $cc = $this->cc[$centroCoste];
+        $nMonth = (int)substr($periodo, 4, 2);
         
         //$objPHPExcel->getActiveSheet()->setCellValue('D1', \PHPExcel_Shared_Date::PHPToExcel(time()));
         $objPHPExcel->getActiveSheet()->setCellValue('G1', $periodo);
@@ -1573,6 +1574,7 @@ class ProcessingBill extends Service {
                     $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
                     $total = $total + $precio;
                     
+                    if($nMonth >= 6) {
                     $row = $row + 1; 
                     $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
                     $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
@@ -1585,7 +1587,7 @@ class ProcessingBill extends Service {
                     $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
                     $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
                     $total = $total + $precio;
-                    
+                    }
                     $objPHPExcel->getActiveSheet()->removeRow($row+1,1);
                 }
                 // END
@@ -1823,6 +1825,7 @@ class ProcessingBill extends Service {
         $msg = 'RESUM FACTURACIÓ DIPUTACIÓ BCN ' . $month . ' 2020';
         $objPHPExcel->getActiveSheet()->setCellValue('B2', $msg);
         //$objPHPExcel->getActiveSheet()->setCellValue('P1', $periodo);
+        $nMonth = (int)substr($periodo, 4, 2);
         
         $vpn = 1;
         $adsl = 2;
@@ -1918,12 +1921,17 @@ class ProcessingBill extends Service {
         $parameters = $this->calculateAiccCoste($periodo, 'AICC-XIC');
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('J6', $precio);
+        
         $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM');
         $precio1 = $parameters['0']['precio'];
-        $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
-        $precio2 = $parameters['0']['precio'];
+        $precio2 = 0;
+        if($nMonth>=6) {
+            $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
+            $precio2 = $parameters['0']['precio'];
+        }
         $precio = (double)$precio1 + (double)$precio2;
         $objPHPExcel->getActiveSheet()->setCellValue('J8', $precio);
+        
         $parameters = $this->calculateAiccCoste($periodo, 'AICC-XB');
         $precio = $parameters['0']['precio'];
         $objPHPExcel->getActiveSheet()->setCellValue('J10', $precio);
