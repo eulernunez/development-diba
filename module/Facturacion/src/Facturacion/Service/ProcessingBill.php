@@ -1689,6 +1689,10 @@ class ProcessingBill extends Service {
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
+        $estado = $parameters['0']['estado'];
+        if(3 == $estado) {
+            $precio = 0;
+        }
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
         $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backboneS); // See top
@@ -1769,7 +1773,7 @@ class ProcessingBill extends Service {
     public function proportionalityCalculate($periodo, $xarxa) {
         
         $statement =
-            "SELECT s.servicio, s.descripcion, SUM(s.precio) AS precio  
+            "SELECT s.servicio, s.descripcion, SUM(s.precio) AS precio, f.estado  
             FROM factura_lote3 AS f 
             INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
             WHERE f.xarxa = " . $xarxa . " AND f.periodo = '" . $periodo . "' GROUP BY f.xarxa";
@@ -1903,6 +1907,10 @@ class ProcessingBill extends Service {
         // Backbone-S
         $parameters = $this->proportionalityCalculate($periodo, 8); // Backbone - S
         $precio = $parameters['0']['precio'];
+        $estado = $parameters['0']['estado'];
+        if(3 == $estado) {
+            $precio = 0;
+        }
         $backboneSXic = $this->backboneS['xic'];
         $backboneSXem = $this->backboneS['xem'];
         $backboneSXb = $this->backboneS['xb'];
