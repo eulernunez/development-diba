@@ -1574,7 +1574,7 @@ class ProcessingBill extends Service {
                     $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
                     $total = $total + $precio;
                     
-                    if($nMonth >= 6) {
+                    if($nMonth >= 6 && $nMonth <= 9) {
                     $row = $row + 1; 
                     $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
                     $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
