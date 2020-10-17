@@ -1596,6 +1596,7 @@ class ProcessingBill extends Service {
             
                 // BEGIN: Formate special ti XORGT
                 if($cc == 13) {
+                    if($nMonth <= 9) {
                     $row = $row + 1; 
                     $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
                     $parameters = $this->calculateAiccCoste($periodo, 'ORGT-H'); // REVIEW
@@ -1608,7 +1609,7 @@ class ProcessingBill extends Service {
                     $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
                     $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
                     $total = $total + $precio;
-                    
+                    }
                     $row = $row + 1; 
                     $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
                     $parameters = $this->calculateAiccCoste($periodo, 'OTROS');
