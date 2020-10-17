@@ -1934,7 +1934,7 @@ class ProcessingBill extends Service {
         $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM');
         $precio1 = $parameters['0']['precio'];
         $precio2 = 0;
-        if($nMonth>=6) {
+        if($nMonth>=6 && $nMonth<=9) {
             $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
             $precio2 = $parameters['0']['precio'];
         }
