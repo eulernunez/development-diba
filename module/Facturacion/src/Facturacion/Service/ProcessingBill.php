@@ -1777,7 +1777,7 @@ class ProcessingBill extends Service {
             "SELECT s.servicio, s.descripcion, SUM(s.precio) AS precio, f.estado  
             FROM factura_lote3 AS f 
             INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
-            WHERE f.xarxa = " . $xarxa . " AND f.periodo = '" . $periodo . "' GROUP BY f.xarxa";
+            WHERE f.estado = '1' AND f.xarxa = " . $xarxa . " AND f.periodo = '" . $periodo . "' GROUP BY f.xarxa";
         
         $adapter = $this->adapter->query($statement);
         $objResult = $adapter->execute();
