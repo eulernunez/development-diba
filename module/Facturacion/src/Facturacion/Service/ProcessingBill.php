@@ -1674,7 +1674,7 @@ class ProcessingBill extends Service {
         // Calculate BACKBONE-SAN
         $row = $row + 1;
         $backboneSan = $this->backboneSan[$centroCoste];
-        $parameters = $this->proportionalityCalculate($periodo, 9); // Backbone -SAN
+        $parameters = $this->proportionalityCalculateSan($periodo, 9); // Backbone -SAN
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
         $precio = $parameters['0']['precio'];
@@ -1777,6 +1777,26 @@ class ProcessingBill extends Service {
             "SELECT s.servicio, s.descripcion, SUM(s.precio) AS precio, f.estado  
             FROM factura_lote3 AS f 
             INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
+            WHERE f.xarxa = " . $xarxa . " AND f.periodo = '" . $periodo . "' GROUP BY f.xarxa";
+        
+        $adapter = $this->adapter->query($statement);
+        $objResult = $adapter->execute();
+        
+        $result = array();
+        foreach ($objResult as $item) {
+            $result[] = $item;  
+        }
+        
+        return $result;
+        
+    }
+    
+    public function proportionalityCalculateSan($periodo, $xarxa) {
+        
+        $statement =
+            "SELECT s.servicio, s.descripcion, SUM(s.precio) AS precio, f.estado  
+            FROM factura_lote3 AS f 
+            INNER JOIN servicios_lote3 AS s ON f.servicio = s.id 
             WHERE f.estado = '1' AND f.xarxa = " . $xarxa . " AND f.periodo = '" . $periodo . "' GROUP BY f.xarxa";
         
         $adapter = $this->adapter->query($statement);
@@ -1790,6 +1810,9 @@ class ProcessingBill extends Service {
         return $result;
         
     }
+    
+    
+    
     
     // REVIEW BUG f.estado = 1
     public function getServicesAccessData($planta, $periodo, $centrocoste, $ampliado)
