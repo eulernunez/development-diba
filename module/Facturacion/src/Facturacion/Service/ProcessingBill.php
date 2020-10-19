@@ -1913,7 +1913,7 @@ class ProcessingBill extends Service {
         $objPHPExcel->getActiveSheet()->setCellValue('G18', $precio * $backboneRXorgt);
         
         // Backbone-San
-        $parameters = $this->proportionalityCalculate($periodo, 9); // Backbone - SAN
+        $parameters = $this->proportionalityCalculateSan($periodo, 9); // Backbone - SAN
         $precio = $parameters['0']['precio'];
         $backboneSanXic = $this->backboneSan['xic'];
         $backboneSanXem = $this->backboneSan['xem'];
