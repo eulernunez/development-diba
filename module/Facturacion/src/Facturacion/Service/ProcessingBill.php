@@ -68,6 +68,12 @@ class ProcessingBill extends Service {
         $this->backboneR['xic'] = 0.0643;
         $this->backboneR['xp'] = 0.0143;
         $this->backboneR['xorgt'] = 0.3856;
+        
+        $this->backboneRNew['xb'] = 0.49;
+        $this->backboneRNew['xem'] = 0.1;
+        $this->backboneRNew['xic'] = 0.0144;
+        $this->backboneRNew['xp'] = 0.01;
+        $this->backboneRNew['xorgt'] = 0.3856;
      
         $this->backboneSan['xb'] = 0.735;
         $this->backboneSan['xem'] = 0.25;
@@ -86,6 +92,12 @@ class ProcessingBill extends Service {
         $this->oec3['xic'] = 0.04;
         $this->oec3['xp'] = 0.015;
         $this->oec3['xorgt'] = 0.2;
+        
+        $this->oec3New['xb'] = 0.433;
+        $this->oec3New['xem'] = 0.345;
+        $this->oec3New['xic'] = 0.012;
+        $this->oec3New['xp'] = 0.01;
+        $this->oec3New['xorgt'] = 0.2;
         
         $this->oec3Ens['xb'] = 0.0;
         $this->oec3Ens['xem'] = 1.0;
@@ -1467,6 +1479,7 @@ class ProcessingBill extends Service {
             
         $cc = $this->cc[$centroCoste];
         $nMonth = (int)substr($periodo, 4, 2);
+        $nYear = (int)substr($periodo, 0, 4);
         
         //$objPHPExcel->getActiveSheet()->setCellValue('D1', \PHPExcel_Shared_Date::PHPToExcel(time()));
         $objPHPExcel->getActiveSheet()->setCellValue('G1', $periodo);
@@ -1574,7 +1587,7 @@ class ProcessingBill extends Service {
                     $objPHPExcel->getActiveSheet()->setCellValue('G' . $row, $precio);
                     $total = $total + $precio;
                     
-                    if($nMonth >= 6 && $nMonth <= 9) {
+                    if(($nYear == 2020) && ($nMonth >= 6 && $nMonth <= 9)) {
                     $row = $row + 1; 
                     $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
                     $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
@@ -1596,7 +1609,7 @@ class ProcessingBill extends Service {
             
                 // BEGIN: Formate special ti XORGT
                 if($cc == 13) {
-                    if($nMonth <= 9) {
+                    if($nMonth <= 9 && $nYear == 2020) {
                     $row = $row + 1; 
                     $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
                     $parameters = $this->calculateAiccCoste($periodo, 'ORGT-H'); // REVIEW
@@ -1661,7 +1674,11 @@ class ProcessingBill extends Service {
         
         // Calculate BACKBONE-R
         $row = $row + 1;
-        $backboneR = $this->backboneR[$centroCoste];
+        if($nMonth <= 11 && $nYear == 2020 ) {
+            $backboneR = $this->backboneR[$centroCoste];
+        } else {
+            $backboneR = $this->backboneRNew[$centroCoste];
+        }
         $parameters = $this->proportionalityCalculate($periodo, 7); // Backbone - R
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
@@ -1675,9 +1692,15 @@ class ProcessingBill extends Service {
         $row = $row + 1;
         $backboneSan = $this->backboneSan[$centroCoste];
         $parameters = $this->proportionalityCalculateSan($periodo, 9); // Backbone -SAN
-        $codigo = $parameters['0']['servicio'];
-        $descripcion = $parameters['0']['descripcion'];
-        $precio = $parameters['0']['precio'];
+        if(empty($parameters)) {
+            $codigo = 'BACKBONE-SAN';
+            $descripcion = 'Xarxa SAN';
+            $precio = 0.00;
+        }else {
+            $codigo = $parameters['0']['servicio'];
+            $descripcion = $parameters['0']['descripcion'];
+            $precio = $parameters['0']['precio'];
+        }
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
         $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backboneSan); // See top
@@ -1701,7 +1724,12 @@ class ProcessingBill extends Service {
         
         // Calculate OEC3
         $row = $row + 1;
-        $oec3 = $this->oec3[$centroCoste];
+        if($nMonth <= 11 && $nYear == 2020 ) {
+            $oec3 = $this->oec3[$centroCoste];
+        } else {
+            $oec3 = $this->oec3New[$centroCoste];
+        }
+        
         $parameters = $this->proportionalityCalculate($periodo, 11); // OEC3
         $codigo = $parameters['0']['servicio'];
         $descripcion = $parameters['0']['descripcion'];
@@ -1844,16 +1872,23 @@ class ProcessingBill extends Service {
     {
 
         $periodo = (string)$this->posts['periodo'];
-        $templatePath = dirname(__DIR__) . "\Template\\Template_Global.xls"; 
+        
+        $nYear = (int)substr($periodo, 0, 4);
+        $nMonth = (int)substr($periodo, 4, 2);
+        
+        if($nMonth <= 11 && $nYear == 2020 ) {
+            $templatePath = dirname(__DIR__) . "\Template\\Template_Global.xls"; 
+        } else {
+            $templatePath = dirname(__DIR__) . "\Template\\Template_Global_2.xls"; 
+        }
         $objReader = \PHPExcel_IOFactory::createReader('Excel5');
         $objPHPExcel = $objReader->load($templatePath);
             
         //$objPHPExcel->getActiveSheet()->setCellValue('D1', \PHPExcel_Shared_Date::PHPToExcel(time()));
         $month = $this->getMonths($periodo);
-        $msg = 'RESUM FACTURACIÓ DIPUTACIÓ BCN ' . $month . ' 2020';
+        $msg = 'RESUM FACTURACIÓ DIPUTACIÓ BCN ' . $month . ' ' . $nYear;
         $objPHPExcel->getActiveSheet()->setCellValue('B2', $msg);
         //$objPHPExcel->getActiveSheet()->setCellValue('P1', $periodo);
-        $nMonth = (int)substr($periodo, 4, 2);
         
         $vpn = 1;
         $adsl = 2;
@@ -1899,11 +1934,19 @@ class ProcessingBill extends Service {
         // Backbone-R
         $parameters = $this->proportionalityCalculate($periodo, 7); // Backbone - R
         $precio = $parameters['0']['precio'];
-        $backboneRXic = $this->backboneR['xic'];
-        $backboneRXem = $this->backboneR['xem'];
-        $backboneRXb = $this->backboneR['xb'];
-        $backboneRXp = $this->backboneR['xp'];
-        $backboneRXorgt = $this->backboneR['xorgt'];
+        if($nMonth <= 11 && $nYear == 2020 ) { 
+            $backboneRXic = $this->backboneR['xic'];
+            $backboneRXem = $this->backboneR['xem'];
+            $backboneRXb = $this->backboneR['xb'];
+            $backboneRXp = $this->backboneR['xp'];
+            $backboneRXorgt = $this->backboneR['xorgt'];
+        } else {
+            $backboneRXic = $this->backboneRNew['xic'];
+            $backboneRXem = $this->backboneRNew['xem'];
+            $backboneRXb = $this->backboneRNew['xb'];
+            $backboneRXp = $this->backboneRNew['xp'];
+            $backboneRXorgt = $this->backboneRNew['xorgt'];
+        }
         
         $objPHPExcel->getActiveSheet()->setCellValue('G6', $precio * $backboneRXic);
         $objPHPExcel->getActiveSheet()->setCellValue('G8', $precio * $backboneRXem);
@@ -1914,7 +1957,11 @@ class ProcessingBill extends Service {
         
         // Backbone-San
         $parameters = $this->proportionalityCalculateSan($periodo, 9); // Backbone - SAN
-        $precio = $parameters['0']['precio'];
+        if(empty($parameters)) {
+            $precio = 0.00;
+        } else {
+            $precio = $parameters['0']['precio'];
+        }
         $backboneSanXic = $this->backboneSan['xic'];
         $backboneSanXem = $this->backboneSan['xem'];
         $backboneSanXb = $this->backboneSan['xb'];
@@ -1957,7 +2004,8 @@ class ProcessingBill extends Service {
         $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM');
         $precio1 = $parameters['0']['precio'];
         $precio2 = 0;
-        if($nMonth>=6 && $nMonth<=9) {
+        
+        if(($nYear == 2020) && ($nMonth >= 6 && $nMonth <= 9)) {
             $parameters = $this->calculateAiccCoste($periodo, 'AICC-XEM.');
             $precio2 = $parameters['0']['precio'];
         }
@@ -1976,12 +2024,20 @@ class ProcessingBill extends Service {
         // OEC3
         $parameters = $this->proportionalityCalculate($periodo, 11); // OEC3
         $precio = $parameters['0']['precio'];
-        $oec3Xic = $this->oec3['xic'];
-        $oec3Xem = $this->oec3['xem'];
-        $oec3Xb = $this->oec3['xb'];
-        $oec3Xp = $this->oec3['xp'];
-        $oec3Xorgt = $this->oec3['xorgt'];
-        
+        if($nMonth <= 11 && $nYear == 2020 ) { 
+            $oec3Xic = $this->oec3['xic'];
+            $oec3Xem = $this->oec3['xem'];
+            $oec3Xb = $this->oec3['xb'];
+            $oec3Xp = $this->oec3['xp'];
+            $oec3Xorgt = $this->oec3['xorgt'];
+        } else {
+            $oec3Xic = $this->oec3New['xic'];
+            $oec3Xem = $this->oec3New['xem'];
+            $oec3Xb = $this->oec3New['xb'];
+            $oec3Xp = $this->oec3New['xp'];
+            $oec3Xorgt = $this->oec3New['xorgt'];
+            
+        }
         $objPHPExcel->getActiveSheet()->setCellValue('K6', $precio * $oec3Xic);
         $objPHPExcel->getActiveSheet()->setCellValue('K8', $precio * $oec3Xem);
         $objPHPExcel->getActiveSheet()->setCellValue('K10', $precio * $oec3Xb);
