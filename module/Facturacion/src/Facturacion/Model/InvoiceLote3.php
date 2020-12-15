@@ -52,6 +52,7 @@ class InvoiceLote3 extends AbstractTableGateway {
         elseif ($id>0) { // $this->getSede($id)
             
             $updateInfo = array(
+                'xarxa' => $invoiceLote3->getXarxa(),
                 'administrativo' => $invoiceLote3->getAdministrativo(),
                 'linea' => $invoiceLote3->getLinea(),
                 'ip' => $invoiceLote3->getIp(),
