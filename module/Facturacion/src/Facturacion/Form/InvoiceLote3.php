@@ -108,7 +108,7 @@ class InvoiceLote3 extends Form
              'name' => 'servicio',
              'options' => array(
                     'label' => 'Servicio',
-                    'value_options' => $this->getOptionsForServicio()
+                    'value_options' => array('0' => 'Seleccione una opción') + $this->getOptionsForServicio()
              ),
             'attributes' => 
                 array(

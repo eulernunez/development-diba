@@ -80,7 +80,14 @@ class ProcessingBill extends Service {
         $this->backboneSan['xic'] = 0.015;
         $this->backboneSan['xp'] = 0.0;
         $this->backboneSan['xorgt'] = 0.0;
-                
+        
+        $this->backboneSanRegularizacion['xb'][0] = -6166.16;
+        $this->backboneSanRegularizacion['xb'][1] = '-6.166,16 €';
+        $this->backboneSanRegularizacion['xem'][0] = -2097.34;
+        $this->backboneSanRegularizacion['xem'][1] = '-2.097,34 €';
+        $this->backboneSanRegularizacion['xic'][0] = -125.84;
+        $this->backboneSanRegularizacion['xic'][1] = '-125,84 €';        
+        
         $this->backboneS['xb'] = 0.735;
         $this->backboneS['xem'] = 0.25;
         $this->backboneS['xic'] = 0.015;
@@ -1693,18 +1700,53 @@ class ProcessingBill extends Service {
         $backboneSan = $this->backboneSan[$centroCoste];
         $parameters = $this->proportionalityCalculateSan($periodo, 9); // Backbone -SAN
         if(empty($parameters)) {
-            $codigo = 'BACKBONE-SAN';
-            $descripcion = 'Xarxa SAN';
-            $precio = 0.00;
-        }else {
+            if(($nMonth == 12 && $nYear == 2020) && ("xic" == $centroCoste || "xem" == $centroCoste || "xb" == $centroCoste  )) {
+                
+                $codigo = 'BACKBONE-SAN';
+                $descripcion = 'Xarxa SAN';
+                
+                $precio = (float)$this->backboneSanRegularizacion[$centroCoste][0];
+                $precioFormateado = $this->backboneSanRegularizacion[$centroCoste][1];
+                $objRichText1 = new \PHPExcel_RichText();
+                $objRichText1->createText(" ");
+                $objCodigo = $objRichText1->createTextRun($codigo);
+                $objCodigo->getFont()->setBold(true);
+                $objCodigo->getFont()->setColor( new \PHPExcel_Style_Color(\PHPExcel_Style_Color::COLOR_RED  ) );
+            
+                $objRichText2 = new \PHPExcel_RichText();
+                $objRichText2->createText(" ");
+                $objDescripcion = $objRichText2->createTextRun($descripcion);
+                $objDescripcion->getFont()->setBold(true);
+                $objDescripcion->getFont()->setColor( new \PHPExcel_Style_Color(\PHPExcel_Style_Color::COLOR_RED  ) );
+
+                $objRichText3 = new \PHPExcel_RichText();
+                $objRichText3->createText(" ");
+                $objPrecio = $objRichText3->createTextRun($precioFormateado);
+                $objPrecio->getFont()->setBold(true);
+                $objPrecio->getFont()->setColor( new \PHPExcel_Style_Color(\PHPExcel_Style_Color::COLOR_RED  ) );
+            
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $objRichText1);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $objRichText2);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $objRichText3);
+            } else {
+                $codigo = 'BACKBONE-SAN';
+                $descripcion = 'Xarxa SAN';
+                $precio = 0.00;
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio);
+            }
+        } else {
             $codigo = $parameters['0']['servicio'];
             $descripcion = $parameters['0']['descripcion'];
             $precio = $parameters['0']['precio'];
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backboneSan);
+            $precio = $precio * $backboneSan;
         }
-        $objPHPExcel->getActiveSheet()->setCellValue('C' . $row, $codigo);
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . $row, $descripcion);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $row, $precio * $backboneSan); // See top
-        $total = $total + $precio * $backboneSan;
+        
+        $total = $total + $precio;
 
         // Calculate BACKBONE-S
         $row = $row + 1;
@@ -1968,9 +2010,16 @@ class ProcessingBill extends Service {
         $backboneSanXp = $this->backboneSan['xp'];
         $backboneSanXorgt = $this->backboneSan['xorgt'];
         
-        $objPHPExcel->getActiveSheet()->setCellValue('H6', $precio * $backboneSanXic);
-        $objPHPExcel->getActiveSheet()->setCellValue('H8', $precio * $backboneSanXem);
-        $objPHPExcel->getActiveSheet()->setCellValue('H10', $precio * $backboneSanXb);
+        if($nMonth == 6 && $nYear == 2020) {
+            $objPHPExcel->getActiveSheet()->setCellValue('H6',  $this->backboneSanRegularizacion['xic'][0]);
+            $objPHPExcel->getActiveSheet()->setCellValue('H8', $this->backboneSanRegularizacion['xem'][0]);
+            $objPHPExcel->getActiveSheet()->setCellValue('H10', $this->backboneSanRegularizacion['xb'][0]);
+        } else {
+            $objPHPExcel->getActiveSheet()->setCellValue('H6', $precio * $backboneSanXic);
+            $objPHPExcel->getActiveSheet()->setCellValue('H8', $precio * $backboneSanXem);
+            $objPHPExcel->getActiveSheet()->setCellValue('H10', $precio * $backboneSanXb);
+        }
+        
         $objPHPExcel->getActiveSheet()->setCellValue('H12', $precio * $backboneSanXp);
         
         $objPHPExcel->getActiveSheet()->setCellValue('H18', $precio * $backboneSanXorgt);
