@@ -2010,7 +2010,7 @@ class ProcessingBill extends Service {
         $backboneSanXp = $this->backboneSan['xp'];
         $backboneSanXorgt = $this->backboneSan['xorgt'];
         
-        if($nMonth == 6 && $nYear == 2020) {
+        if($nMonth == 12 && $nYear == 2020) {
             $objPHPExcel->getActiveSheet()->setCellValue('H6',  $this->backboneSanRegularizacion['xic'][0]);
             $objPHPExcel->getActiveSheet()->setCellValue('H8', $this->backboneSanRegularizacion['xem'][0]);
             $objPHPExcel->getActiveSheet()->setCellValue('H10', $this->backboneSanRegularizacion['xb'][0]);
