@@ -207,7 +207,7 @@
                             </div>
                         </form>
                     </div>-->
-
+                        <?php $this->isValilatedPeriod = true; ?>
                         <button id='preview-global' type="button" class="btn btn-primary" title="Descarga del borrador de facturación global de la Diputación Barcelona" style="float: right; margin-left: 2px;" data-toggle="modal" data-target="#previewGlobalDataModal" <?= ($this->isValilatedPeriod)?'disabled':'';?>>
                             <i class="glyphicon glyphicon-list"></i>
                         </button>
@@ -291,7 +291,8 @@
                     <td class="noWrap"><?= $item->linea; ?></td>-->
                     
                     <td class="noWrap">
-                        <a class="update" href="<?php echo $this->url('invoice-update') . '/' . $item->id; ?>" title="Consultar">
+                        <!--<a class="update" href="<?php //echo $this->url('invoice-update') . '/' . $item->id; ?>" title="Consultar">-->
+                        <a class="update" href="#>" title="Consultar">    
                             <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </td>
